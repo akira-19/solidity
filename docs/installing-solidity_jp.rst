@@ -74,7 +74,7 @@ nightlyバージョンは下記のコマンドでインストール可能です:
     sudo apt-get update
     sudo apt-get install solc
 
-`snap package <https://snapcraft.io/>`_もリリースしています。これは全ての`supported Linux distros <https://snapcraft.io/docs/core/install>`_でインストール可能です。solcの最新の安定バージョンは下記でインストールできます。
+`snap package <https://snapcraft.io/>`_もリリースしています。これは全ての`supported Linuxディストリビューション <https://snapcraft.io/docs/core/install>`_でインストール可能です。solcの最新の安定バージョンは下記でインストールできます。
 
 .. code-block:: bash
 
@@ -148,14 +148,14 @@ macOS用に最新バージョンの`Xcodeがインストールされている<ht
 
     sudo xcodebuild -license accept
 
-私たちのOS X buildsは外部のdependenciesをインストールするのに`Homebrew　package managerのインストール <http://brew.sh>`_を要求しています。もし初めから行いたい場合は、こちらが`Homebrewのアンインストール
+私たちのOS X buildsは外部のdependenciesをインストールするのに`Homebrew　package managerのインストール <http://brew.sh>`_を要求しています。もし始めから行いたい場合は、こちらが`Homebrewのアンインストール
 <https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/FAQ.md#how-do-i-uninstall-homebrew>`_方法です。
 
 
-Prerequisites - Windows
+必要条件 - Windows
 -----------------------
 
-Windows builds of Solidityに下記のdependenciesのインストールが必要です:
+SolidityのWindows buildsに下記のdependenciesのインストールが必要です:
 
 +-----------------------------------+-------------------------------------------------------+
 | Software                          | Notes                                                 |
@@ -186,10 +186,10 @@ Visual Studio 2017はIDEと必要なコンパイラとライブラリを提供�
 .. _Visual Studio 2017: https://www.visualstudio.com/vs/
 .. _Visual Studio 2017 Build Tools: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017
 
-Clone the Repository
+レポジトリをクローンする
 --------------------
 
-To clone the source code, execute the following command:
+ソースコードをクローンするのに下記のコマンドを実行して下さい:
 
 .. code-block:: bash
 
@@ -202,10 +202,10 @@ To clone the source code, execute the following command:
 
     git remote add personal git@github.com:[username]/solidity.git
 
-External Dependencies
+外部Dependencies
 ---------------------
 
-macOS、Windows、たくさんのLinux distrosで必要な全ての外部dependenciesをインストールするヘルパースクリプトがあります。
+macOS、Windows、多数のLinuxディストリビューションで必要な全ての外部dependenciesをインストールするヘルパースクリプトがあります。
 
 .. code-block:: bash
 
@@ -218,13 +218,13 @@ macOS、Windows、たくさんのLinux distrosで必要な全ての外部depende
     scripts\install_deps.bat
 
 
-Command-Line Build
+コマンドラインビルド
 ------------------
 
 **開発を始める前に外部dependenciesをインストールするのを忘れないでください（上記参照）。**
 
-SolidityプロジェクトはbuildをconfigureするためにCMakeを使っています。繰り返して行うbuildを高速化するためにccacheをインストールした方が良いでしょう。CMakeは自動的にccacheをpick upします。
-SolidityのbuildはLinux、macOSや他のUnice上ではほぼ同じです。
+Solidityプロジェクトはビルドを設定するためにCMakeを使っています。繰り返して行うbuildを高速化するためにccacheをインストールした方が良いでしょう。CMakeは自動的にccacheをピックアップします。
+SolidityのビルドはLinux、macOSや他のUniX上ではほぼ同じです。
 
 .. code-block:: bash
 
@@ -232,7 +232,7 @@ SolidityのbuildはLinux、macOSや他のUnice上ではほぼ同じです。
     cd build
     cmake .. && make
 
-もしくはもっと簡単です:
+もしくはもっと簡単に:
 
 .. code-block:: bash
 
@@ -247,9 +247,9 @@ SolidityのbuildはLinux、macOSや他のUnice上ではほぼ同じです。
     cd build
     cmake -G "Visual Studio 15 2017 Win64" ..
 
-後半のinstructionはbuildディレクトリに**solidity.sln**を作成します。これをダブルクリックするとVisual Studioが起動するはずです。**Release** configurationをbuildすることをお薦めしますが、他は全て動作します。
+後半のやり方ではbuildディレクトリに**solidity.sln**を作成します。これをダブルクリックするとVisual Studioが起動するはずです。**Release** configurationをビルドすることをお薦めしますが、他は全て動作します。
 
-他の方法として、Windowsのコマンドラインでもbuildできます:
+他の方法として、Windowsのコマンドラインでもビルドできます:
 
 .. code-block:: bash
 
@@ -264,9 +264,9 @@ CMake options
 
 SMT Solvers
 -----------
-Solidityはデフォルトでシステム内でそれがあれば、SMT solversにagainstしてbuildすることができます。`cmake`オプションで全てのsolverは無効にできます。
+Solidityはデフォルトでシステム内でSMT solversがあれば、それを使ってビルドすることができます（デフォルトで使用します）。`cmake`オプションで全てのsolverは無効にできます。
 
-*Note: いくつかの例においては潜在的にbuildの失敗を引き起こす場合があります。*
+*Note: いくつかの例においては潜在的にビルドの失敗を引き起こす場合があります。*
 
 
 デフォルトで有効になっていますが、buildフォルダ内ではsolverは無効にできます:

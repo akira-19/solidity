@@ -2,11 +2,6 @@
 Solidity in Depth
 #################
 
-This section should provide you with all you need to know about Solidity.
-If something is missing here, please contact us on
-`Gitter <https://gitter.im/ethereum/solidity>`_ or create a pull request on
-`Github <https://github.com/ethereum/solidity/pulls>`_.
-
 このセクションではSolidityに関してあなたが知りたいことを全て説明しているはずです。
 もし何かが抜けていたら`Gitter <https://gitter.im/ethereum/solidity>`_で連絡下さい。もしくは`Github <https://github.com/ethereum/solidity/pulls>`_でプルリクエストを送ってください。
 

@@ -3,7 +3,7 @@
 .. _contract_structure:
 
 ***********************
-Structure of a Contract
+コントラクトの構造
 ***********************
 
 Contracts in Solidity are similar to classes in object-oriented languages.

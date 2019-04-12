@@ -1,10 +1,8 @@
 ********************************
-Layout of a Solidity Source File
+Solidityソースファイルのレイアウト
 ********************************
 
-Source files can contain an arbitrary number of
-:ref:`contract definitions<contract_structure>`, import_ directives
-and :ref:`pragma directives<pragma>`.
+ソースファイルは任意の数の:ref:`コントラクトの定義<contract_structure>`、import_ の指示、:ref:`pragmaの指示<pragma>`を含むことができます。
 
 .. index:: ! pragma
 
@@ -13,125 +11,80 @@ and :ref:`pragma directives<pragma>`.
 Pragmas
 =======
 
-The ``pragma`` keyword can be used to enable certain compiler features
-or checks. A pragma directive is always local to a source file, so
-you have to add the pragma to all your files if you want enable it
-in all of your project. If you :ref:`import<import>` another file, the pragma
-from that file will not automatically apply to the importing file.
+``pragma``というキーワードは特定のコンパイラの機能を使用可能にするもしくはコンパイラのバージョンをチェックするのに使用することができます。pragma指示は常にローカルのソースファイルにあるので、プロジェクト全体で使用可能にしたい場合にはpragmaを全てのファイルに追加する必要があります。もし他のファイルを:ref:`インポート<import>`してもそのファイルから得たpragmaは自動的にはインポートしているファイルには適用されません。
 
 .. index:: ! pragma, version
 
 .. _version_pragma:
 
-Version Pragma
+バージョンPragma
 --------------
 
-Source files can (and should) be annotated with a so-called version pragma to reject
-being compiled with future compiler versions that might introduce incompatible
-changes. We try to keep such changes to an absolute minimum and especially
-introduce changes in a way that changes in semantics will also require changes
-in the syntax, but this is of course not always possible. Because of that, it is always
-a good idea to read through the changelog at least for releases that contain
-breaking changes, those releases will always have versions of the form
-``0.x.0`` or ``x.0.0``.
+互換性がない可能性がある未来のコンパイラでのコンパイルを避けるために、ソースファイルはいわゆるバージョンPragmaの注記をつけることができます（そしてつけるべきです）。私たちはこの様な変更を最小限にする努力をしていますし、特にセマンティクス上の変更がシンタックスの変更も必要とする様な変更は通知しています。しかし、もちろん常にできる訳ではないので、少なくともブレーキングチェンジを含む様な大きな変更があるときは変更のログを見ることは良いことです。この様な大きな変更がある場合にはバージョンは``0.x.0``もしくは``x.0.0``の様になります。
 
-The version pragma is used as follows::
+バージョンPragmaは下記の様に使用されます::
 
   pragma solidity ^0.5.2;
 
-Such a source file will not compile with a compiler earlier than version 0.5.2
-and it will also not work on a compiler starting from version 0.6.0 (this
-second condition is added by using ``^``). The idea behind this is that
-there will be no breaking changes until version ``0.6.0``, so we can always
-be sure that our code will compile the way we intended it to. We do not fix
-the exact version of the compiler, so that bugfix releases are still possible.
+この様なソースファイルはバージョン0.5.2より低いバージョンのコンパイラでコンパイルすることはありませんし、0.6.0以上のコンパイラでコンパイルすることもありません（後者の条件は``^``を使うことで追加しています）。このアイデアの根本はバージョン``0.6.0``まで大きな変更（ブレーキングチェンジ）がなく、コードが意図した通りにコンパイルされるということを保証されるというものです。コンパイラのバージョンを固定しないので、bugfixされたバージョンも使用可能です。
 
-It is possible to specify much more complex rules for the compiler version,
-the expression follows those used by `npm <https://docs.npmjs.com/misc/semver>`_.
+もっと複雑なコンパイラのバージョンのルールを指定することもできます。`npm <https://docs.npmjs.com/misc/semver>`_を使った方法に準拠します。
 
 .. note::
-  Using the version pragma will *not* change the version of the compiler.
-  It will also *not* enable or disable features of the compiler. It will just
-  instruct the compiler to check whether its version matches the one
-  required by the pragma. If it does not match, the compiler will issue
-  an error.
+  version pragmaを使ってもコンパイラのバージョンを変えることはできません。また、コンパイラの機能を有効にしたり無効にしたりもできません。ただコンパイラにpragmaで要求されたバージョンと合っているかチェックさせるだけです。合っていなければコンパイラはエラーを出します。
 
 .. index:: ! pragma, experimental
 
 .. _experimental_pragma:
 
-Experimental Pragma
+実験的なpragma
 -------------------
 
-The second pragma is the experimental pragma. It can be used to enable
-features of the compiler or language that are not yet enabled by default.
-The following experimental pragmas are currently supported:
+2つ目のpragmaは実験的なpragmaです。これはコンパイラや言語のまだデフォルトで有効になっていない機能を有効にするのに使うことができます。下記の実験的なpragmaは現在サポートされています。
 
 
 ABIEncoderV2
 ~~~~~~~~~~~~
 
-The new ABI encoder is able to encode and decode arbitrarily nested
-arrays and structs. It produces less optimal code (the optimizer
-for this part of the code is still under development) and has not
-received as much testing as the old encoder. You can activate it
-using ``pragma experimental ABIEncoderV2;``.
+新しいABI encoderは任意にネストされた配列と構造体をエンコード、デコードできます。これはあまり最適化されていないコードを生成します。（この部分のオプティマイザは未だ開発中です。）そして、古いエンコーダほどテストがされていません。``pragma experimental ABIEncoderV2;``を使うことでこれを有効化できます。
 
 .. _smt_checker:
 
 SMTChecker
 ~~~~~~~~~~
 
-This component has to be enabled when the Solidity compiler is built
-and therefore it is not available in all Solidity binaries.
-The :ref:`build instructions<smt_solvers_build>` explain how to activate this option.
-It is activated for the Ubuntu PPA releases in most versions,
-but not for solc-js, the Docker images, Windows binaries or the
-statically-built Linux binaries.
+このコンポーネントはSolidityのコンパイラが組まれているときに有効でなければならない。そのためSolidityのバイナリでは利用できない。:ref:`build instructions<smt_solvers_build>`はどの様にこのオプションを有効にしているか説明しています。
+これはほとんどのバージョンのUbuntu PPAのリリースのために有効化されるが、solc-js、Dockerイメージ、 Windowsバイナリやstatically-built Linuxバイナリのためではありません。
 
-If you use
-``pragma experimental SMTChecker;``, then you get additional
-safety warnings which are obtained by querying an SMT solver.
-The component does not yet support all features of the Solidity language
-and likely outputs many warnings. In case it reports unsupported
-features, the analysis may not be fully sound.
+もし``pragma experimental SMTChecker;``を使うなら、SMT solverにクエリすることで取得される追加の安全警告を受け取ります。このコンポーネントはまだ全てのSolidityの機能をサポートしていないので、たくさんの警告を発する可能性が高いです。もしサポートされていない機能がレポートされた場合でも、その分析は完璧ではないかもしれません。
 
 .. index:: source file, ! import
 
 .. _import:
 
-Importing other Source Files
+他のソースファイルをインポート
 ============================
 
-Syntax and Semantics
+SyntaxとSemantics
 --------------------
 
-Solidity supports import statements that are very similar to those available in JavaScript
-(from ES6 on), although Solidity does not know the concept of a "default export".
+"default export"はありませんが、SolidityはJavascript（ES6）の様なimportの宣言をサポートしています。
 
-At a global level, you can use import statements of the following form:
+グローバルのレベルで、下記の様なimportの宣言ができます。
 
 ::
 
   import "filename";
 
-This statement imports all global symbols from "filename" (and symbols imported there) into the
-current global scope (different than in ES6 but backwards-compatible for Solidity).
-This simple form is not recommended for use, because it pollutes the namespace in an
-unpredictable way: If you add new top-level items inside "filename", they will automatically
-appear in all files that import like this from "filename". It is better to import specific
-symbols explicitly.
+この宣言は全てのグローバルな記号を"filename" (とそこにインポートされた記号)から現在のグローバルスコープ（ES6とは違いますがSolidityに後方互換性があります）にインポートします。 この単純な使い方は推奨されません。なぜなら、名前空間を予期せぬ方法で汚してしまうからです。もし"filename"内でトップレベルのアイテムを追加したら、"filename"からインポートした全てのファイルで自動的にそのアイテムが現れます。特定の記号だけを明示的にインポートした方が良いです。
 
-The following example creates a new global symbol ``symbolName`` whose members are all
-the global symbols from ``"filename"``.
+下記の例では全ての要素が``"filename"``から来たグローバルな記号である新しいグローバルな記号``symbolName``が作られます。
 
 ::
 
   import * as symbolName from "filename";
 
-If there is a naming collision, you can also rename symbols while importing.
-This code
-creates new global symbols ``alias`` and ``symbol2`` which reference ``symbol1`` and ``symbol2`` from inside ``"filename"``, respectively.
+もし名前の重複があった場合には、インポートの際に名前を変えることができます。次のコードでは新しいグローバルな記号``alias``と``symbol2``を作ります。それぞれ``"filename"``の中の``symbol1``と``symbol2``を参照しています。
 
 ::
 
@@ -139,80 +92,55 @@ creates new global symbols ``alias`` and ``symbol2`` which reference ``symbol1``
 
 
 
-Another syntax is not part of ES6, but probably convenient:
+次の例はES6の一部ではありませんが、おそらく便利でしょう。
 
 ::
 
   import "filename" as symbolName;
 
-which is equivalent to ``import * as symbolName from "filename";``.
+これは``import * as symbolName from "filename";``と等価です。
 
 .. note::
-  If you use `import "filename.sol" as moduleName;`, you access a contract called `C`
-  from inside `"filename.sol"` as `moduleName.C` and not by using `C` directly.
+  もし`import "filename.sol" as moduleName;`を使うのであれば、`"filename.sol"`の中から`moduleName.C`として`C`と呼ばれるコントラクトにアクセスしてください。`C`は直接使わないでください。
 
-Paths
+パス
 -----
 
-In the above, ``filename`` is always treated as a path with ``/`` as directory separator,
-``.`` as the current and ``..`` as the parent directory.  When ``.`` or ``..`` is followed by a character except ``/``,
-it is not considered as the current or the parent directory.
-All path names are treated as absolute paths unless they start with the current ``.`` or the parent directory ``..``.
+上では、``filename``は常にディレクトリのセパレータとしての``/``、現在のディレクトリとしての``.``、親ディレクトリとしての``..``と一緒にパスとして使われていました。``.``と``..``は``/``の後に続かなければ、現在もしくは親ディレクトリとしては扱われません。全てのパスは``.``もしくは``..``で始まらなければ絶対パスとして扱われます。
 
-To import a file ``x`` from the same directory as the current file, use ``import "./x" as x;``.
-If you use ``import "x" as x;`` instead, a different file could be referenced
-(in a global "include directory").
+現在のファイルと同じディレクトリにあるファイル``x``をインポートするためには、``import "./x" as x;``を使ってください。
 
-It depends on the compiler (see below) how to actually resolve the paths.
-In general, the directory hierarchy does not need to strictly map onto your local
-filesystem, it can also map to resources discovered via e.g. ipfs, http or git.
+実際にどの様にパスが読み込まれるかはコンパイラによります（下記参照）。一般的に、ディレクトリ構造はローカルに限定されません。例えばipfs、httpやgitを通じて得たリソースを指定することも可能です。
 
 .. note::
-    Always use relative imports like ``import "./filename.sol";`` and avoid
-    using ``..`` in path specifiers. In the latter case, it is probably better to use
-    global paths and set up remappings as explained below.
+    常に``import "./filename.sol";``の様な相対パスを使ってください。また、パスを指定するのに``..``を使うのは避けてください。後のケースではおそらくグローバルパスを使い、下記で説明するリマッピングをセットアップするのが良いでしょう。
 
-Use in Actual Compilers
+実際のコンパイラで使用する
 -----------------------
 
-When invoking the compiler, you can specify how to discover the first element
-of a path, and also path prefix remappings. For
-example you can setup a remapping so that everything imported from the virtual
-directory ``github.com/ethereum/dapp-bin/library`` would actually be read from
-your local directory ``/usr/local/dapp-bin/library``.
-If multiple remappings apply, the one with the longest key is tried first.
-An empty prefix is not allowed. The remappings can depend on a context,
-which allows you to configure packages to import e.g., different versions of a
-library of the same name.
+コンパイラを呼び出す時に、パスの最初の要素とパスのプレフィックスのリマッピングをどの様に指定するか決めることができます。例えば、あるリマッピングをセットアップしたら、仮のディレクトリ``github.com/ethereum/dapp-bin/library``からインポートしたもの全てが実際にはローカルのディレクトリ``/usr/local/dapp-bin/library``から読み込まれているといった様なことができます。
+もし複数のリマッピングを使うと、一番長いキーをもつリマッピングが最初に適用されます。
+空のプレフィックスは使えません。リマッピングはコンテキストに依存します。そのため、例えば同じ名前の異なるバージョンのライブラリをインポートするためにパッケージを設計できます。
 
 **solc**:
 
-For solc (the commandline compiler), you provide these path remappings as
-``context:prefix=target`` arguments, where both the ``context:`` and the
-``=target`` parts are optional (``target`` defaults to ``prefix`` in this
-case). All remapping values that are regular files are compiled (including
-their dependencies).
+solc（コマンドラインコンパイラ）に、``context:prefix=target``属性としてパスのリマッピングを渡します。``context:``と``=target``のパートはオプションです（この場合``target``が``prefix``のデフォルトとなります）。通常ファイルの全てのリマッピング値はコンパイルされます（それらの依存関係も含めて）。
 
-This mechanism is backwards-compatible (as long
-as no filename contains ``=`` or ``:``) and thus not a breaking change. All
-files in or below the ``context`` directory that import a file that starts with
-``prefix`` are redirected by replacing ``prefix`` by ``target``.
+このメカニズムは後方互換性をもち（ファイル名に``=``もしくは``:``を含んでいない限り）、そのためブレーキングチェンジにはなりません。``prefix``で始まるファイルをインポートする``context``ディレクトリの中もしくは以下にある全てのファイルは ``prefix``を``target``に変更することでリダイレクトされます。
 
-For example, if you clone ``github.com/ethereum/dapp-bin/`` locally to
-``/usr/local/dapp-bin``, you can use the following in your source file:
+例えば、もし``github.com/ethereum/dapp-bin/``をローカルの``/usr/local/dapp-bin``にコピーしたら、ソースファイル内で以下が使える様になります。
 
 ::
 
   import "github.com/ethereum/dapp-bin/library/iterable_mapping.sol" as it_mapping;
 
-Then run the compiler:
+そしてコンパイラを使用してください:
 
 .. code-block:: bash
 
   solc github.com/ethereum/dapp-bin/=/usr/local/dapp-bin/ source.sol
 
-As a more complex example, suppose you rely on a module that uses an old
-version of dapp-bin that you checked out to ``/usr/local/dapp-bin_old``, then you can run:
+もっと複雑な例として、もし``/usr/local/dapp-bin_old``を参照している古いバージョンのdapp-binを使っているモジュールを使っているとしたら、次のコードを使用することができます。
 
 .. code-block:: bash
 
@@ -220,63 +148,47 @@ version of dapp-bin that you checked out to ``/usr/local/dapp-bin_old``, then yo
        module2:github.com/ethereum/dapp-bin/=/usr/local/dapp-bin_old/ \
        source.sol
 
-This means that all imports in ``module2`` point to the old version but imports
-in ``module1`` point to the new version.
+上記は``module2``の中の全てのインポートは古いバージョンで使われるが、``module1``は新しいバージョンで使われるという意味です。
 
 .. note::
 
-  ``solc`` only allows you to include files from certain directories. They have
-  to be in the directory (or subdirectory) of one of the explicitly specified
-  source files or in the directory (or subdirectory) of a remapping target. If
-  you want to allow direct absolute includes, add the remapping ``/=/``.
+  ``solc``は特定のディレクトリからのファイルを含めるのを許可するだけです。そのファイルははっきりと明示されたソースファイルの1つ、もしくはリマッピングのターゲットのディレクトリ（もしくはサブディレクトリ）の中にある必要があります。もし直接的に含めたい場合にはリマッピングに``/=/``を追加して下さい。
 
-If there are multiple remappings that lead to a valid file, the remapping
-with the longest common prefix is chosen.
+もし有効なファイルを参照する複数のリマッピングがあった場合には、一番長い共通のプレフィックスがついているリマッピングが選択されます。
 
 **Remix**:
 
-`Remix <https://remix.ethereum.org/>`_ provides an automatic remapping for
-GitHub and automatically retrieves the file over the network. You can import
-the iterable mapping as above,  e.g.
+`Remix <https://remix.ethereum.org/>`_は自動的にGithubにリマッピングし、自動的にネットワークを通じてファイルを引っ張ってきます。上記の様な繰り返し可能なマッピングをインポートできます。例えば、
 
 ::
   import "github.com/ethereum/dapp-bin/library/iterable_mapping.sol" as it_mapping;
 
-Remix may add other source code providers in the future.
+Remixはおそらく将来的に他のソースコードプロバイダを追加するかもしれません。
 
 .. index:: ! comment, natspec
 
-Comments
+コメント
 ========
 
-Single-line comments (``//``) and multi-line comments (``/*...*/``) are possible.
+1行コメント(``//``)と複数行コメント(``/*...*/``)が使用可能です。
 
 ::
 
-  // This is a single-line comment.
+  // これは1行コメントです。
 
   /*
-  This is a
-  multi-line comment.
+  これは複数行
+  コメントです。
   */
 
 .. note::
-  A single-line comment is terminated by any unicode line terminator
-  (LF, VF, FF, CR, NEL, LS or PS) in utf8 encoding. The terminator is still part of
-  the source code after the comment, so if it is not an ascii symbol
-  (these are NEL, LS and PS), it will lead to a parser error.
+  1行コメントはutf8エンコードにおいてどのunicode方式のラインブレーク(LF, VF, FF, CR, NEL, LS, PS)でも終了します。ラインブレークはコメントの後でもソースコードの一部となっているため、ascii記号（NEL, LS, PS）でない場合にはパーサーエラーを起こします。
 
-Additionally, there is another type of comment called a natspec comment,
-which is detailed in the :ref:`style guide<natspec>`. They are written with a
-triple slash (``///``) or a double asterisk block(``/** ... */``) and
-they should be used directly above function declarations or statements.
-You can use `Doxygen <https://en.wikipedia.org/wiki/Doxygen>`_-style tags inside these comments to document
-functions, annotate conditions for formal verification, and provide a
-**confirmation text** which is shown to users when they attempt to invoke a
-function.
+さらに別のタイプのnatspecコメントというコメントがあります。これは:ref:`style guide<natspec>`で詳細を確認できます。これはトリプルスラッシュ(``///``)かダブルアスタリスクブロック(``/** ... */``)で書かれ、ファンクションの宣言の直前に書かれます。
 
-In the following example we document the title of the contract, the explanation
-for the two function parameters and two return variables.
+ファンクションを付記したり、形式を検証するための条件を注記したり、ユーザーがファンクションを実行する時に表示される**confirmation text**を追加するために、このコメントの中の`Doxygen <https://en.wikipedia.org/wiki/Doxygen>`_-styleタグを使うことができます。
+
+次の例の中ではコントラクトのタイトル、2つのファンクションのパラメータの説明、2つの返り値が示されています。
 
 ::
 

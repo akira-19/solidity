@@ -1,10 +1,10 @@
 **************************************
-Units and Globally Available Variables
+単位とグローバル変数
 **************************************
 
 .. index:: wei, finney, szabo, ether
 
-Ether Units
+Etherの単位
 ===========
 
 A literal number can take a suffix of ``wei``, ``finney``, ``szabo`` or ``ether`` to specify a subdenomination of Ether, where Ether numbers without a postfix are assumed to be Wei.

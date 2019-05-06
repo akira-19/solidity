@@ -3,72 +3,56 @@
 .. _known_bugs:
 
 ##################
-List of Known Bugs
+既知のバグ
 ##################
 
-Below, you can find a JSON-formatted list of some of the known security-relevant bugs in the
-Solidity compiler. The file itself is hosted in the `Github repository
-<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_.
-The list stretches back as far as version 0.3.0, bugs known to be present only
-in versions preceding that are not listed.
+以下でSolidityコンパイラのセキュリティに関連したバグのリストがJSON形式で取得できます。
+このファイル自身は`Github repository
+<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_内に格納されています。
+このリストはバージョン0.3.0まで遡って管理されますが、それより前のバージョンにのみ存在するバグについては記載されません。
 
-There is another file called `bugs_by_version.json
-<https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_,
-which can be used to check which bugs affect a specific version of the compiler.
+`bugs_by_version.json <https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_という別のファイルもあります。
+これは、コンパイラの特定のバージョンに影響するバグをチェックするために使われます。
 
-Contract source verification tools and also other tools interacting with
-contracts should consult this list according to the following criteria:
+コントラクトソース検証ツールやコントラクトとやり取りするツールは、以下の基準に従いこのリストを参照する必要があります。
 
- - It is mildly suspicious if a contract was compiled with a nightly
-   compiler version instead of a released version. This list does not keep
-   track of unreleased or nightly versions.
- - It is also mildly suspicious if a contract was compiled with a version that was
-   not the most recent at the time the contract was created. For contracts
-   created from other contracts, you have to follow the creation chain
-   back to a transaction and use the date of that transaction as creation date.
- - It is highly suspicious if a contract was compiled with a compiler that
-   contains a known bug and the contract was created at a time where a newer
-   compiler version containing a fix was already released.
+ - リリースバージョンではなくnightlyビルドのコンパイラでコンパイルされたコントラクトは疑わしいです。
+   このリストはリリースされてないバージョンやnightlyビルドのバージョンは追随していないです
+ - コントラクトが作成された時の最新バージョンでコンパイルされていないコントラクトもまた、疑わしいです。
+   他のコントラクトから作成されたコントラクトには、creation chainを辿ってトランザクションまで戻り、creation dateとしてトランザクションの日付を使わなければいけません。
+ - 既知のバグが含まれたコンパイラでコンパイルされたコントラクトや、すでにリリースされた修正済みバグを含む新しいコンパイラで作られたコントラクトは非常に疑わしいです。
 
-The JSON file of known bugs below is an array of objects, one for each bug,
-with the following keys:
+既知のバグのJSONファイルはオブジェクトの配列になっており、それぞれのバグが以下のキーを持つ1つのオブジェクトです。
 
 name
-    Unique name given to the bug
+    バグに振られるユニークな名前
 summary
-    Short description of the bug
+    バグの短い説明
 description
-    Detailed description of the bug
+    バグの詳細な説明
 link
-    URL of a website with more detailed information, optional
+    より詳細な説明があるサイトのURL(任意)
 introduced
-    The first published compiler version that contained the bug, optional
+    バグを含む最初に公開されたコンパイラのバージョン(任意)
 fixed
-    The first published compiler version that did not contain the bug anymore
+    バグを含まない最初に公開されたコンパイラのバージョン(任意)
 publish
-    The date at which the bug became known publicly, optional
+    バグが公けに知られた日付(任意)
 severity
-    Severity of the bug: very low, low, medium, high. Takes into account
-    discoverability in contract tests, likelihood of occurrence and
-    potential damage by exploits.
+    バグの緊急度: very low, low, medium, high
+    コントラクトのテストでの発見可能性、発生頻度、悪用時に潜在被害を考慮する 
 conditions
-    Conditions that have to be met to trigger the bug. Currently, this
-    is an object that can contain a boolean value ``optimizer``, which
-    means that the optimizer has to be switched on to enable the bug.
-    If no conditions are given, assume that the bug is present.
+    バグの発生条件。現在、booleanの``optimizer``を含められるオブジェクトです。
+    これはオプティマイザがバグを有効にするために切り替えられなければならない、という意味です。
+    conditionsが記載されていない場合、バグが存在するとみなされます。
 check
-    This field contains different checks that report whether the smart contract
-    contains the bug or not. The first type of check are Javascript regular
-    expressions that are to be matched against the source code ("source-regex")
-    if the bug is present.  If there is no match, then the bug is very likely
-    not present. If there is a match, the bug might be present.  For improved
-    accuracy, the checks should be applied to the source code after stripping
-    comments.
-    The second type of check are patterns to be checked on the compact AST of
-    the Solidity program ("ast-compact-json-path"). The specified search query
-    is a `JsonPath <https://github.com/json-path/JsonPath>`_ expression.
-    If at least one path of the Solidity AST matches the query, the bug is
-    likely present.
+    このフィールドは、スマートコントラクトがバグを含むかそうでないかを報告する様々なチェックを含みます。
+    最初のチェックタイプはJavascriptの正規表現です。これは、バグが存在するときにソースコード("source-regex")にたいして照合されるものです。
+    もし一致するものがなければ、そのバグはほとんど発生しない可能性があります。
+    より正確にするため、チェックはコメントを取り除いた後のソースコードに適用されるべきです。
+    ２番めのチェックタイプは、Solidityプログラム("ast-compact-json-path")のcompact ASTにチェックされるパターンです。
+    検索Queryは、`JsonPath <https://github.com/json-path/JsonPath>`_ 式です。
+    もし、少なくともthe Solidity ASTのパスが1つでもクエリに一致した場合、そのバグは発生します。
 
 .. literalinclude:: bugs.json
    :language: js

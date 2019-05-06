@@ -1,26 +1,37 @@
 ############
-Contributing
+貢献
 ############
 
+貢献はいつでも歓迎します
 Help is always appreciated!
 
+始めるには、まず、Solidityのコンポーネントとビルドプロセスを理解するため、:ref:`building-from-source` を確認してください。
+また、Solidityでスマートコントラクトを書くことに精通することも役立つでしょう。
 To get started, you can try :ref:`building-from-source` in order to familiarize
 yourself with the components of Solidity and the build process. Also, it may be
 useful to become well-versed at writing smart-contracts in Solidity.
 
+以下の領域が特に手助けが必要です。
 In particular, we need help in the following areas:
 
+* ドキュメントを改善する
 * Improving the documentation
+* `StackExchange <https://ethereum.stackexchange.com>`_ や `Solidity Gitter <https://gitter.im/ethereum/solidity>`_ に投稿されたユーザーからの質問に答える
 * Responding to questions from other users on `StackExchange
   <https://ethereum.stackexchange.com>`_ and the `Solidity Gitter
   <https://gitter.im/ethereum/solidity>`_
+* `Solidity's GitHub issues <https://github.com/ethereum/solidity/issues>`_ に投稿されたissueに回答し修正する。
+　 特にこのタグがついた `good first issue <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ ものは外部貢献者のための入門的なissueになります。
 * Fixing and responding to `Solidity's GitHub issues
   <https://github.com/ethereum/solidity/issues>`_, especially those tagged as
   `good first issue <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ which are
   meant as introductory issues for external contributors.
 
+このプロジェクト(issues, pull requests, Gitter channels含む) は`Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ でリリースされていることに注意してください。
+あなたはこの規約に同意します。
 Please note that this project is released with a `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_. By participating in this project - in the issues, pull requests, or Gitter channels - you agree to abide by its terms.
 
+Issueの報告方法
 How to Report Issues
 ====================
 

@@ -7,76 +7,59 @@ Help is always appreciated!
 
 始めるには、まず、Solidityのコンポーネントとビルドプロセスを理解するため、:ref:`building-from-source` を確認してください。
 また、Solidityでスマートコントラクトを書くことに精通することも役立つでしょう。
-To get started, you can try :ref:`building-from-source` in order to familiarize
-yourself with the components of Solidity and the build process. Also, it may be
-useful to become well-versed at writing smart-contracts in Solidity.
 
 以下の領域が特に手助けが必要です。
-In particular, we need help in the following areas:
 
 * ドキュメントを改善する
-* Improving the documentation
 * `StackExchange <https://ethereum.stackexchange.com>`_ や `Solidity Gitter <https://gitter.im/ethereum/solidity>`_ に投稿されたユーザーからの質問に答える
-* Responding to questions from other users on `StackExchange
-  <https://ethereum.stackexchange.com>`_ and the `Solidity Gitter
-  <https://gitter.im/ethereum/solidity>`_
-* `Solidity's GitHub issues <https://github.com/ethereum/solidity/issues>`_ に投稿されたissueに回答し修正する。
-　 特にこのタグがついた `good first issue <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ ものは外部貢献者のための入門的なissueになります。
-* Fixing and responding to `Solidity's GitHub issues
-  <https://github.com/ethereum/solidity/issues>`_, especially those tagged as
-  `good first issue <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ which are
-  meant as introductory issues for external contributors.
+* `Solidity's GitHub issues <https://github.com/ethereum/solidity/issues>`_ に投稿されたissueに回答し修正する。特にこのタグがついた `good first issue <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ ものは外部貢献者のための入門的なissueになります。
 
-このプロジェクト(issues, pull requests, Gitter channels含む) は`Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ でリリースされていることに注意してください。
-あなたはこの規約に同意します。
-Please note that this project is released with a `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_. By participating in this project - in the issues, pull requests, or Gitter channels - you agree to abide by its terms.
+このプロジェクト(issues, pull requests, Gitter channels含む) は `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ でリリースされていることに注意してください。
+あなたはこの規約に同意することになります。
 
-Issueの報告方法
-How to Report Issues
+issueの報告方法
 ====================
 
-To report an issue, please use the
-`GitHub issues tracker <https://github.com/ethereum/solidity/issues>`_. When
-reporting issues, please mention the following details:
+issueの報告には、
+`GitHub issues tracker <https://github.com/ethereum/solidity/issues>`_
+を使って、以下の項目を含めるようにしてください。
 
-* Which version of Solidity you are using
-* What was the source code (if applicable)
-* Which platform are you running on
-* How to reproduce the issue
-* What was the result of the issue
-* What the expected behaviour is
+* どのSolidityバージョンをつかっているのか
+* どんなソースコードだったのか(可能であれば)
+* どのプラットフォームで実行していたか
+* 再現方法
+* issueの結果はどのようなものか
+* 期待する動作はどのようなものか
 
-Reducing the source code that caused the issue to a bare minimum is always
-very helpful and sometimes even clarifies a misunderstanding.
+issueを再現するために最低限のソースコードにするのは有用で、誤解を明らかにします。
 
-Workflow for Pull Requests
+Pull Requestsのためのワークフロー
 ==========================
 
-In order to contribute, please fork off of the ``develop`` branch and make your
-changes there. Your commit messages should detail *why* you made your change
-in addition to *what* you did (unless it is a tiny change).
+貢献するために、 ``develop`` ブランチをフォークし、あなたの変更をそこにいれてください。
+コミットメッセージには、あなたの変更(小さな変更でなければ)の *what* に加えて *why* を詳細にいれるべきです。
 
-If you need to pull in any changes from ``develop`` after making your fork (for
-example, to resolve potential merge conflicts), please avoid using ``git merge``
-and instead, ``git rebase`` your branch. This will help us review your change
-more easily.
+もしあなたが変更を加えた後に ``develop`` からpullする必要がある場合(例えばコンフリクトのマージする)、
+私たちがあなたの変更のレビューをするのを簡単にするため、
+``git merge`` を使うことは避けて、 ``git rebase`` を使ってください。
 
-Additionally, if you are writing a new feature, please ensure you add appropriate
-test cases under ``test/`` (see below).
+また、追加の機能を実装している場合、適切なテストケースを ``test/`` に追加してください。(下記参照)
 
-However, if you are making a larger change, please consult with the `Solidity Development Gitter channel
-<https://gitter.im/ethereum/solidity-dev>`_ (different from the one mentioned above, this one is
-focused on compiler and language development instead of language use) first.
+しかし、もし大きな変更をする場合、まず、
+`Solidity Development Gitter channel
+<https://gitter.im/ethereum/solidity-dev>`_
+に相談してください。
+(上記で参照したものとは異なり、こちらはコンパイラと言語開発用です)
 
-New features and bugfixes should be added to the ``Changelog.md`` file: please
-follow the style of previous entries, when applicable.
+新機能とバグ修正は ``Changelog.md`` に追加されるべきです。
+前回のエントリーのスタイルにしたがってください。
 
-Finally, please make sure you respect the `coding style
+最後に、このプロジェクトでは、`coding style
 <https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md>`_
-for this project. Also, even though we do CI testing, please test your code and
-ensure that it builds locally before submitting a pull request.
+を尊重してください。
+私たちがCIテストを実行してはいますが、pull requestsを送る前にはローカルでテストしビルドするようにしてください。
 
-Thank you for your help!
+あなたの貢献を感謝します。
 
 Running the compiler tests
 ==========================

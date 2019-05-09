@@ -1,6 +1,5 @@
 ###########################
-Frequently Asked Questions
+よくある質問
 ###########################
 
-If your question is not answered here, please talk to us on
-`gitter <https://gitter.im/ethereum/solidity>`_ or file an `issue <https://github.com/ethereum/solidity/issues>`_.
+ここにあなたの質問に対する回答がなければ、ぜひ `gitter <https://gitter.im/ethereum/solidity>`_ で私たちに質問するか `issue <https://github.com/ethereum/solidity/issues>`_ を上げてください。

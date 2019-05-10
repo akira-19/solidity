@@ -3,7 +3,6 @@
 ############
 
 貢献はいつでも歓迎します
-Help is always appreciated!
 
 始めるには、まず、Solidityのコンポーネントとビルドプロセスを理解するため、:ref:`building-from-source` を確認してください。
 また、Solidityでスマートコントラクトを書くことに精通することも役立つでしょう。
@@ -62,43 +61,75 @@ Pull Requestsのためのワークフロー
 あなたの貢献を感謝します。
 
 Running the compiler tests
+コンパイラテストの実行
 ==========================
+
+``./scripts/tests.sh`` スクリプトはほとんどのSolidityテストを実行し、``aleth`` を走らせます。
+``aleth`` がパスに見つかる場合は実行しますが、ダウンロードは行いませんので、最初にインストールしておく必要があります。
+詳細を確認してください。
 
 The ``./scripts/tests.sh`` script executes most Solidity tests and
 runs ``aleth`` automatically if it is in the path, but does not download it,
 so you need to install it first. Please read on for the details.
 
+Solidityは様々なテストを含んでおり、ほとんどが ``soltest`` アプリケーションに同包されています。
+それらのいくつかはテストモードで　``aleth`` クライアントを必要とし、``libz3`` を必要とするものもあります。
 Solidity includes different types of tests, most of them bundled into the ``soltest``
 application. Some of them require the ``aleth`` client in testing mode, others require ``libz3``.
 
+``aleth`` も ``libz3`` も必要としない基本的なテストセットを実行するには、
+``./scripts/soltest.sh --no-ipc --no-smt`` を実行します。
+このスクリプトは ``./build/test/soltest`` を内部的に走らせます。
 To run a basic set of tests that require neither ``aleth`` nor ``libz3``, run
 ``./scripts/soltest.sh --no-ipc --no-smt``. This script runs ``./build/test/soltest``
 internally.
 
 .. note ::
 
+    Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
+    ``./build/test/Release/soltest.exe -- --no-ipc --no-smt`` このコマンドを実行する必要があるでしょう。
     Those working in a Windows environment wanting to run the above basic sets without aleth or libz3 in Git Bash, you would have to do: ``./build/test/Release/soltest.exe -- --no-ipc --no-smt``.
+    もし標準のコマンドプロンプトで実行する場合は、 ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt`` を実行します。
     If you're running this in plain Command Prompt, use ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt``.
 
+``--no-smt`` オプションは ``libz3`` を必要とするテストを無効にし、 ``--no-ipc`` オプションは ``aleth`` を必要とするテストを無効にします。
 The option ``--no-smt`` disables the tests that require ``libz3`` and
 ``--no-ipc`` disables those that require ``aleth``.
 
+ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
+`aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_
+をインストールします。
+その後、テストモードで実行します。 
+``aleth --db memorydb --test -d /tmp/testeth``
 If you want to run the ipc tests (that test the semantics of the generated code),
-you need to install `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_ and run it in testing mode: ``aleth --db memorydb --test -d /tmp/testeth``.
+you need to install `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_ 
+and run it in testing mode: ``aleth --db memorydb --test -d /tmp/testeth``.
 
+実際のテストを実行するには、 ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc`` を使います。
 To run the actual tests, use: ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc``.
 
+テストの一部を実行する場合は、フィルタを使います。
+``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``
+``TestName`` はワイルドカードを指定できます。 ``*`` 
 To run a subset of tests, you can use filters:
 ``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``,
 where ``TestName`` can be a wildcard ``*``.
 
+例えば、実行したテストがあるとして、
+``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``
+を実行すると、disambiguatorの全てのテストが実行されます。
 For example, here's an example test you might run;
 ``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``.
 This will test all the tests for the disambiguator.
 
+全てテストを確認するには、
+``./build/test/soltest --list_content=HRF -- --ipcpath /tmp/irrelevant``
+を使います。
 To get a list of all tests, use
 ``./build/test/soltest --list_content=HRF -- --ipcpath /tmp/irrelevant``.
 
+もしGDBでデバッグしたい場合は、通常とは異なる方法でビルドしていることが必要です。
+以下のコマンドを ``build`` フォルダで実行します。
 If you want to debug using GDB, make sure you build differently than the "usual".
 For example, you could run the following command in your ``build`` folder:
 ::
@@ -106,29 +137,47 @@ For example, you could run the following command in your ``build`` folder:
    cmake -DCMAKE_BUILD_TYPE=Debug ..
    make
 
-This will create symbols such that when you debug a test using the ``--debug`` flag, you will have access to functions and variables in which you can break or print with.
 
+これは、あなたが ``--debug`` フラグを使いテストをデバッグする際のシンボルを生成します。
+これで、関数や変数をbreakしたりprintで表示したりすることができるようになります。
+This will create symbols such that when you debug a test using the ``--debug`` 
+flag, you will have access to functions and variables in which you can break 
+or print with.
 
+``./scripts/tests.sh`` スクリプトも、``soltest`` で見つかったテストに加えて、コマンドラインテストを実行しテストをコンパイルします。
 The script ``./scripts/tests.sh`` also runs commandline tests and compilation tests
 in addition to those found in ``soltest``.
 
-The CI runs additional tests (including ``solc-js`` and testing third party Solidity frameworks) that require compiling the Emscripten target.
+CIはEmscriptenのコンパイルを必要とする追加のテスト( ``solc-js`` やサードパーティのSolidityフレームワークのテストを含みます)を実行します。
+The CI runs additional tests 
+(including ``solc-js`` and testing third party Solidity frameworks) 
+that require compiling the Emscripten target.
 
 .. note ::
 
+    いくつかの ``aleth`` のバージョンはテストに使うことはできません。
+    SolidityのCIで使っているものと同じバージョンを使うことを推奨します。
+    現在CIはバージョン ``aleth`` の ``1.5.0-alpha.7`` を使っています。
     Some versions of ``aleth`` can not be used for testing. We suggest using
     the same version that the Solidity continuous integration tests use.
     Currently the CI uses version ``1.5.0-alpha.7`` of ``aleth``.
 
 Writing and running syntax tests
+構文テストの実装と実行
 --------------------------------
 
-Syntax tests check that the compiler generates the correct error messages for invalid code
+構文テストは、コンパイラが無効なコードに正しいエラーメッセージを生成し、適切に有効なコードを受け入れることをチェックします。
+それらは ``tests/libsolidity/syntaxTests`` フォルダ内へ個別のファイルに格納されます。
+それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
+テストスイートは、正しい結果に対してチェックしコンパイルします。
+Syntax tests check that the compiler generates the correct error 
+messages for invalid code
 and properly accepts valid code.
 They are stored in individual files inside the ``tests/libsolidity/syntaxTests`` folder.
 These files must contain annotations, stating the expected result(s) of the respective test.
 The test suite compiles and checks them against the given expectations.
 
+例えば、 ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol`` では、
 For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol``
 
 ::
@@ -140,15 +189,28 @@ For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.s
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
-A syntax test must contain at least the contract under test itself, followed by the separator ``// ----``. The comments that follow the separator are used to describe the
-expected compiler errors or warnings. The number range denotes the location in the source where the error occurred.
+構文テストは、少なくともセパレータ ``// ----`` に続くテスト自身のコントラクトを含まなければいけません。
+A syntax test must contain at least the contract under test itself, 
+followed by the separator ``// ----``. 
+セパレータに続くコメントは、正しいコンパイラエラーやワーニングを記述するのに使われます。
+The comments that follow the separator are used to describe the
+expected compiler errors or warnings. 
+数字の範囲は、エラーが発生したソースコードの場所を指定しています。
+The number range denotes the location in the source where the error occurred.
+コントラクトにエラーやワーニングなしでコンパイルしたい場合、セパレータとコメントを削除することができます。
 If you want the contract to compile without any errors or warning you can leave
 out the separator and the comments that follow it.
 
-In the above example, the state variable ``variable`` was declared twice, which is not allowed. This results in a ``DeclarationError`` stating that the identifier was already declared.
+上記の例だと、``variable``変数は２度宣言されてます。
+これは、すでに宣言されていますという識別子の ``DeclarationError`` となります。
+In the above example, the state variable ``variable`` was declared twice, 
+which is not allowed. 
+This results in a ``DeclarationError`` stating 
+that the identifier was already declared.
 
 The ``isoltest`` tool is used for these tests and you can find it under ``./build/test/tools/``. It is an interactive tool which allows
-editing of failing contracts using your preferred text editor. Let's try to break this test by removing the second declaration of ``variable``:
+editing of failing contracts using your preferred text editor. 
+Let's try to break this test by removing the second declaration of ``variable``:
 
 ::
 

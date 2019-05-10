@@ -7,18 +7,18 @@
 ##################
 
 以下でSolidityコンパイラのセキュリティに関連したバグのリストがJSON形式で取得できます。
-このファイル自身は`Github repository
-<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_内に格納されています。
+このファイル自身は `Github repository
+<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_ 内に格納されています。
 このリストはバージョン0.3.0まで遡って管理されますが、それより前のバージョンにのみ存在するバグについては記載されません。
 
-`bugs_by_version.json <https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_という別のファイルもあります。
+`bugs_by_version.json <https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_ という別のファイルもあります。
 これは、コンパイラの特定のバージョンに影響するバグをチェックするために使われます。
 
 コントラクトソース検証ツールやコントラクトとやり取りするツールは、以下の基準に従いこのリストを参照する必要があります。
 
  - リリースバージョンではなくnightlyビルドのコンパイラでコンパイルされたコントラクトは疑わしいです。
-   このリストはリリースされてないバージョンやnightlyビルドのバージョンは追随していないです
- - コントラクトが作成された時の最新バージョンでコンパイルされていないコントラクトもまた、疑わしいです。
+   このリストはリリースされてないバージョンやnightlyビルドのバージョンは追随していないです。
+ - コントラクトが作成された時に、最新バージョンでコンパイルされていないコントラクトもまた、疑わしいです。
    他のコントラクトから作成されたコントラクトには、creation chainを辿ってトランザクションまで戻り、creation dateとしてトランザクションの日付を使わなければいけません。
  - 既知のバグが含まれたコンパイラでコンパイルされたコントラクトや、すでにリリースされた修正済みバグを含む新しいコンパイラで作られたコントラクトは非常に疑わしいです。
 
@@ -40,19 +40,19 @@ publish
     バグが公けに知られた日付(任意)
 severity
     バグの緊急度: very low, low, medium, high
-    コントラクトのテストでの発見可能性、発生頻度、悪用時に潜在被害を考慮する 
+    コントラクトのテストでの発見可能性、発生頻度、悪用時に潜在被害を考慮してください。
 conditions
-    バグの発生条件。現在、booleanの``optimizer``を含められるオブジェクトです。
+    バグの発生条件。現在、booleanの ``optimizer`` を含められるオブジェクトです。
     これはオプティマイザがバグを有効にするために切り替えられなければならない、という意味です。
     conditionsが記載されていない場合、バグが存在するとみなされます。
 check
     このフィールドは、スマートコントラクトがバグを含むかそうでないかを報告する様々なチェックを含みます。
     最初のチェックタイプはJavascriptの正規表現です。これは、バグが存在するときにソースコード("source-regex")にたいして照合されるものです。
-    もし一致するものがなければ、そのバグはほとんど発生しない可能性があります。
+    もし一致するものがなければ、このバグはほとんど発生しない可能性があります。
     より正確にするため、チェックはコメントを取り除いた後のソースコードに適用されるべきです。
-    ２番めのチェックタイプは、Solidityプログラム("ast-compact-json-path")のcompact ASTにチェックされるパターンです。
-    検索Queryは、`JsonPath <https://github.com/json-path/JsonPath>`_ 式です。
-    もし、少なくともthe Solidity ASTのパスが1つでもクエリに一致した場合、そのバグは発生します。
+    2番目のチェックタイプは、Solidityプログラム ("ast-compact-json-path") のcompact ASTにチェックされるパターンです。
+    検索クエリは、`JsonPath <https://github.com/json-path/JsonPath>`_ 式です。
+    もし、少なくともthe Solidity ASTのパスが1つでもクエリに一致した場合、このバグはおそらく存在します。
 
 .. literalinclude:: bugs.json
    :language: js

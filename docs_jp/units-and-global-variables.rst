@@ -7,7 +7,7 @@
 Etherの単位
 ===========
 
-A literal number can take a suffix of ``wei``, ``finney``, ``szabo`` or ``ether`` to specify a subdenomination of Ether, where Ether numbers without a postfix are assumed to be Wei.
+リテラルの数値はEhterの貨幣の単位として``wei``、``finney``、``szabo``もしくは``ether``を接尾辞として取れます。接尾辞がないEtherはWeiであるとみなされます。
 
 ::
 
@@ -16,17 +16,14 @@ A literal number can take a suffix of ``wei``, ``finney``, ``szabo`` or ``ether`
     assert(1 finney == 1e15);
     assert(1 ether == 1e18);
 
-The only effect of the subdenomination suffix is a multiplication by a power of ten.
-
+貨幣の単位を表す接尾辞は10の累乗を乗ずるだけです。
 
 .. index:: time, seconds, minutes, hours, days, weeks, years
 
-Time Units
+時間の単位
 ==========
 
-Suffixes like ``seconds``, ``minutes``, ``hours``, ``days`` and ``weeks``
-after literal numbers can be used to specify units of time where seconds are the base
-unit and units are considered naively in the following way:
+リテラルの数値の後の``seconds``、``minutes``、``hours``、``days``、``weeks``の様な接尾辞は時間の単位を指定するのに使用されます。秒を基準として単位は単純に下記の様に決められます。
 
  * ``1 == 1 seconds``
  * ``1 minutes == 60 seconds``
@@ -34,17 +31,12 @@ unit and units are considered naively in the following way:
  * ``1 days == 24 hours``
  * ``1 weeks == 7 days``
 
-Take care if you perform calendar calculations using these units, because
-not every year equals 365 days and not even every day has 24 hours
-because of `leap seconds <https://en.wikipedia.org/wiki/Leap_second>`_.
-Due to the fact that leap seconds cannot be predicted, an exact calendar
-library has to be updated by an external oracle.
+これらの単位を使ってカレンダーの計算をするのであれば気を付けてください。`うるう秒 <https://en.wikipedia.org/wiki/Leap_second>`_のせいで、1年は毎年365日というわけではなく、1日は必ずしも24時間ではありません。うるう秒は予想できないので、カレンダーライブラリは外部のオラクルによってアップデートされる必要があります。
 
 .. note::
-    The suffix ``years`` has been removed in version 0.5.0 due to the reasons above.
+    上記の理由により``years``という接尾辞はバージョン0.5.0で削除されました。
 
-These suffixes cannot be applied to variables. For example, if you want to
-interpret a function parameter in days, you can in the following way::
+これらの接尾辞は変数には使えません。例えばもしファンクションのパラメータをdaysにしたい場合には下記の方法で変換できます::
 
     function f(uint start, uint daysAfter) public {
         if (now >= start + daysAfter * 1 days) {
@@ -52,225 +44,186 @@ interpret a function parameter in days, you can in the following way::
         }
     }
 
-Special Variables and Functions
+特別な変数とファンクション
 ===============================
 
-There are special variables and functions which always exist in the global
-namespace and are mainly used to provide information about the blockchain
-or are general-use utility functions.
+グローバルな名前空間にあり、主にブロックチェーンに関する情報や一般的な用途で使うユーティリティのファンクションを提供する特別な変数とファンクションがあります。
 
 .. index:: abi, block, coinbase, difficulty, encode, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, now, gas price, origin
 
 
-Block and Transaction Properties
+ブロックとトランザクションのプロパティ
 --------------------------------
 
-- ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block - only works for 256 most recent, excluding current, blocks
-- ``block.coinbase`` (``address payable``): current block miner's address
-- ``block.difficulty`` (``uint``): current block difficulty
-- ``block.gaslimit`` (``uint``): current block gaslimit
-- ``block.number`` (``uint``): current block number
-- ``block.timestamp`` (``uint``): current block timestamp as seconds since unix epoch
-- ``gasleft() returns (uint256)``: remaining gas
-- ``msg.data`` (``bytes calldata``): complete calldata
-- ``msg.sender`` (``address payable``): sender of the message (current call)
-- ``msg.sig`` (``bytes4``): first four bytes of the calldata (i.e. function identifier)
-- ``msg.value`` (``uint``): number of wei sent with the message
-- ``now`` (``uint``): current block timestamp (alias for ``block.timestamp``)
-- ``tx.gasprice`` (``uint``): gas price of the transaction
-- ``tx.origin`` (``address payable``): sender of the transaction (full call chain)
+- ``blockhash(uint blockNumber) returns (bytes32)``: 与えられたブロックのハッシュ - 現在のブロックを除いた直近256個のブロックのみで有効
+- ``block.coinbase`` (``address payable``): 現在のブロックのマイナーのアドレス
+- ``block.difficulty`` (``uint``): 現在のブロックのdifficulty
+- ``block.gaslimit`` (``uint``): 現在のブロックのガスリミット
+- ``block.number`` (``uint``): 現在のブロックナンバー
+- ``block.timestamp`` (``uint``): 現在のunixのタイムスタンプ（秒）
+- ``gasleft() returns (uint256)``: 残ガス
+- ``msg.data`` (``bytes calldata``): コールデータ
+- ``msg.sender`` (``address payable``): メッセージの送信者
+- ``msg.sig`` (``bytes4``): コールデータの始め4byte（例：ファンクションの識別子）
+- ``msg.value`` (``uint``): メッセージと一緒に送られたweiの量
+- ``now`` (``uint``): 現在のブロックのタイムスタンプ (``block.timestamp``のエイリアス)
+- ``tx.gasprice`` (``uint``): トランザクションのガスプライス
+- ``tx.origin`` (``address payable``): トランザクションの送信者 (フルコールチェーン)
 
 .. note::
-    The values of all members of ``msg``, including ``msg.sender`` and
-    ``msg.value`` can change for every **external** function call.
-    This includes calls to library functions.
+    ``msg.sender``と``msg.value``を含んだ``msg``の値は**external**のファンクションのコールごとに変えることができます。これはライブラリのファンクションでも同様です。
 
 .. note::
-    Do not rely on ``block.timestamp``, ``now`` and ``blockhash`` as a source of randomness,
-    unless you know what you are doing.
+    自分のコードで何をしているか把握していない限り、``block.timestamp``、``now``と ``blockhash``を乱数のソースとして信用しないでください。
 
-    Both the timestamp and the block hash can be influenced by miners to some degree.
-    Bad actors in the mining community can for example run a casino payout function on a chosen hash
-    and just retry a different hash if they did not receive any money.
+    タイムスタンプとブロックハッシュはある程度マイナーによって影響されます。悪意を持ったマイナーは例えばあるハッシュでカジノの支払いファンクションを呼び出し、もしお金を受け取れなかったら、また別のハッシュでそのファンクションを呼び出すことができます。
 
-    The current block timestamp must be strictly larger than the timestamp of the last block,
-    but the only guarantee is that it will be somewhere between the timestamps of two
-    consecutive blocks in the canonical chain.
+    現在のブロックのタイムスタンプは最後のブロックより確実に大きい必要がありますが、保証されているのはタイムスタンプは2つの連続する標準ブロックの間であるということだけです。
 
 .. note::
-    The block hashes are not available for all blocks for scalability reasons.
-    You can only access the hashes of the most recent 256 blocks, all other
-    values will be zero.
+    ブロックハッシュはスケーラビリティの理由から全てのブロックに対して利用可能という訳ではありません。最新256ブロックのハッシュにのみアクセス可能で、それ以前の値はゼロになります。
 
 .. note::
-    The function ``blockhash`` was previously known as ``block.blockhash``, which was deprecated in
-    version 0.4.22 and removed in version 0.5.0.
+    ``blockhash``ファンクションは以前は``block.blockhash``でしたが、バージョン0.4.22で非推奨になり、バージョン0.5.0で削除されました。
 
 .. note::
-    The function ``gasleft`` was previously known as ``msg.gas``, which was deprecated in
-    version 0.4.21 and removed in version 0.5.0.
+    ``gasleft``ファンクションは以前は``msg.gas``でしたが、バージョン0.4.21で非推奨になり、バージョン0.5.0で削除されました。
 
 .. index:: abi, encoding, packed
 
-ABI Encoding and Decoding Functions
+ABIエンコーディング、デコーディングファンクション
 -----------------------------------
 
-- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: ABI-decodes the given data, while the types are given in parentheses as second argument. Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
-- ``abi.encode(...) returns (bytes memory)``: ABI-encodes the given arguments
-- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of the given arguments
-- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
-- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)```
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: 与えられたデータをABIデコードする。第二引数として型を括弧付きで与えます。例: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)``: 引数をABIエンコードします。
+- ``abi.encodePacked(...) returns (bytes memory)``: 与えられた引数で :ref:`packed encoding <abi_packed_mode>` を行います。
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: 与えられた引数を二番目からABIエンコードし、その前に与えられた4バイトのセレクタを追加します。
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``` と同じです。
 
 .. note::
-    These encoding functions can be used to craft data for external function calls without actually
-    calling an external function. Furthermore, ``keccak256(abi.encodePacked(a, b))`` is a way
-    to compute the hash of structured data (although be aware that it is possible to
-    craft a "hash collision" using different function parameter types).
+    これらのエンコーディングのファンクションは実際に外部のファンクションを呼ぶことなく外部のファンクション用のデータを作るために使われます。さらに、``keccak256(abi.encodePacked(a, b))`` は構造化されたデータのハッシュを計算する方法です。（異なるファンクションのパラメータの型を使ってもハッシュ衝突を起こす可能性があることに気をつけてください。）
 
-See the documentation about the :ref:`ABI <ABI>` and the
-:ref:`tightly packed encoding <abi_packed_mode>` for details about the encoding.
+エンコーディングの詳細は公式ドキュメントの :ref:`ABI <ABI>` と
+:ref:`tightly packed encoding <abi_packed_mode>` を参照ください。
 
 .. index:: assert, revert, require
 
-Error Handling
+エラーハンドリング
 --------------
 
-See the dedicated section on :ref:`assert and require<assert-and-require>` for
-more details on error handling and when to use which function.
+エラーハンドリングに対する細かな詳細と、どのファンクションをいつ使うに関しては:ref:`assert  require<assert-and-require>` にあるそれらに特化したセクションを参照ください。
 
 ``assert(bool condition)``:
-    causes an invalid opcode and thus state change reversion if the condition is not met - to be used for internal errors.
+    条件を満たしていないと、invalid opcodeを発生させ、その結果state change reversionが起きます - 内部エラーに使用されます。
 ``require(bool condition)``:
-    reverts if the condition is not met - to be used for errors in inputs or external components.
+    条件を満たしていないと、revertします - 入力か外部要素に対してのエラーに使用されます。
 ``require(bool condition, string memory message)``:
-    reverts if the condition is not met - to be used for errors in inputs or external components. Also provides an error message.
+    条件を満たしていないと、revertします - 入力か外部要素に対してのエラーに使用されます。加えてエラーメッセージも出力されます。
 ``revert()``:
-    abort execution and revert state changes
+    実行を中断し、stateの変化を元に戻します。
 ``revert(string memory reason)``:
-    abort execution and revert state changes, providing an explanatory string
+    説明付きで実行を中断し、stateの変化を元に戻します。
 
 .. index:: keccak256, ripemd160, sha256, ecrecover, addmod, mulmod, cryptography,
 
-Mathematical and Cryptographic Functions
+数学的、暗号学的なファンクション
 ----------------------------------------
 
 ``addmod(uint x, uint y, uint k) returns (uint)``:
-    compute ``(x + y) % k`` where the addition is performed with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
+    任意の精度で``(x + y) % k`` の加算を行い、``2**256`` でラップアラウンドしません。バージョン0.5.0からは``k != 0`` のアサーションを行います。
 ``mulmod(uint x, uint y, uint k) returns (uint)``:
-    compute ``(x * y) % k`` where the multiplication is performed with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
+    任意の精度で``(x * y) % k`` の加算を行い、``2**256`` でラップアラウンドしません。バージョン0.5.0からは``k != 0`` のアサーションを行います。
 ``keccak256(bytes memory) returns (bytes32)``:
-    compute the Keccak-256 hash of the input
+    入力に対してKeccak-256のハッシュを計算します。
 ``sha256(bytes memory) returns (bytes32)``:
-    compute the SHA-256 hash of the input
+    入力に対してSHA-256のハッシュを計算します。
 ``ripemd160(bytes memory) returns (bytes20)``:
-    compute RIPEMD-160 hash of the input
+    入力に対してRIPEMD-160のハッシュを計算します。
 ``ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)``:
-    recover the address associated with the public key from elliptic curve signature or return zero on error
-    (`example usage <https://ethereum.stackexchange.com/q/1777/222>`_)
+    楕円曲線の署名から公開鍵に関連したアドレスを復元する、もしくはエラーでゼロを返します。(`使用例 <https://ethereum.stackexchange.com/q/1777/222>`_)
 
 .. note::
-   Function ``ecrecover`` returns an ``address``, and not an ``address
-   payable``. See :ref:`address payable<address>` for conversion, in case you need
-   to transfer funds to the recovered address.
+   ``ecrecover``は``address``を返し、``address
+   payable``は返しません。復元されたアドレスで送金を行いたい場合には、変換するために:ref:`address payable<address>` を参照ください。
 
-It might be that you run into Out-of-Gas for ``sha256``, ``ripemd160`` or ``ecrecover`` on a *private blockchain*. The reason for this is that those are implemented as so-called precompiled contracts and these contracts only really exist after they received the first message (although their contract code is hardcoded). Messages to non-existing contracts are more expensive and thus the execution runs into an Out-of-Gas error. A workaround for this problem is to first send e.g. 1 Wei to each of the contracts before you use them in your actual contracts. This is not an issue on the official or test net.
+*プライベートなブロックチェーン*上では``sha256``、``ripemd160``もしくは``ecrecover``でガス不足になるかもしれません。理由としては、これらはいわゆるプレコンパイルされたコントラクトとして実行され、そのコントラクトが本当に存在するのは、最初のメッセージを受け取った後だからです（そのコントラクトはハードコードですが）。存在しないコントラクトへのメッセージは高価なため、ガス不足になります。この問題の回避策としては例えば実際のコントラクトでそのファンクションを使う前に最初に1Weiをそのコントラクトに送ることです。メインネットやテストネットではこの問題は起こりません。
 
 .. note::
-    There used to be an alias for ``keccak256`` called ``sha3``, which was removed in version 0.5.0.
+    ``sha3``と呼ばれる``keccak256``のエイリアスがありましたが、バージョン0.5.0で削除されました。
 
 .. index:: balance, send, transfer, call, callcode, delegatecall, staticcall
 .. _address_related:
 
-Members of Address Types
+アドレス型のメンバ
 ------------------------
 
 ``<address>.balance`` (``uint256``):
-    balance of the :ref:`address` in Wei
+    :ref:`address` のバランス（Wei）
 ``<address payable>.transfer(uint256 amount)``:
-    send given amount of Wei to :ref:`address`, reverts on failure, forwards 2300 gas stipend, not adjustable
+    与えられたWeiを:ref:`address`に送ります。失敗するとリバートし、固定で2300ガスを送ります。 （変更不可です。）
 ``<address payable>.send(uint256 amount) returns (bool)``:
-    send given amount of Wei to :ref:`address`, returns ``false`` on failure, forwards 2300 gas stipend, not adjustable
+    与えられたWeiを:ref:`address`に送ります。失敗すると``false``を返し、固定で2300ガスを送ります。 （変更不可です。）
 ``<address>.call(bytes memory) returns (bool, bytes memory)``:
-    issue low-level ``CALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    低レベルの``CALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 ``<address>.delegatecall(bytes memory) returns (bool, bytes memory)``:
-    issue low-level ``DELEGATECALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    低レベルの``DELEGATECALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 ``<address>.staticcall(bytes memory) returns (bool, bytes memory)``:
-    issue low-level ``STATICCALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    低レベルの``STATICCALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 
-For more information, see the section on :ref:`address`.
+詳細は:ref:`address` を参照ください。
+
+.. 警告::
+    タイプチェックやファンクションの存在チェック、引数のパッキングをバイパスするため、他のコントラクトのファンクションを実行する際には極力``.call()``の使用を避けてください。
 
 .. warning::
-    You should avoid using ``.call()`` whenever possible when executing another contract function as it bypasses type checking,
-    function existence check, and argument packing.
-
-.. warning::
-    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
-    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
-    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
-    Use a pattern where the recipient withdraws the money.
+    ``send``を使うことにはいくつかの危険があります: コールスタックの深さが1024で送金は失敗します（これは呼び出し元によっていつも強制されます）。そして、受領者のガスが不足した際にも送金は失敗します。そのため、安全にEtherを送るために、常に``send``の返り値を確認する、もしくは``transfer``を使用してください。もっと良い手段は受領者がお金を引き出す時のパターンを使用することです。
 
 .. note::
-   Prior to version 0.5.0, Solidity allowed address members to be accessed by a contract instance, for example ``this.balance``.
-   This is now forbidden and an explicit conversion to address must be done: ``address(this).balance``.
+   バージョン0.5.0以前では、例えば``this.balance``の様にコントラクトインスタンスからアドレス型のメンバにアクセス可能でした。現在ではこれは禁止されており、明示的にアドレス型に変換する必要があります：``address(this).balance`
 
 .. note::
-   If state variables are accessed via a low-level delegatecall, the storage layout of the two contracts
-   must align in order for the called contract to correctly access the storage variables of the calling contract by name.
-   This is of course not the case if storage pointers are passed as function arguments as in the case for
-   the high-level libraries.
+   もし状態変数が低レベルdelegatecallを通じてアクセスされた場合、呼び出されたコントラクトが呼び出したコントラクトのストレージ変数に名前で正しくアクセスできる様に2つのコントラクトのストレージの配置は揃ってなければいけません。
+   これはもちろんストレージのポインタがファンクションの引数で渡される場合ではなく、高レベルのライブラリの場合です。
 
 .. note::
-    Prior to version 0.5.0, ``.call``, ``.delegatecall`` and ``.staticcall`` only returned the
-    success condition and not the return data.
+    バージョン0.5.0以前では, ``.call``、``.delegatecall``、``.staticcall``は成否だけ返し、データは返しません。
 
 .. note::
-    Prior to version 0.5.0, there was a member called ``callcode`` with similar but slightly different
-    semantics than ``delegatecall``.
+    バージョン0.5.0以前では, ``callcode``と呼ばれる``delegatecall``に似ていますが、微妙に異なるメンバがあります。
 
 
 .. index:: this, selfdestruct
 
-Contract Related
+コントラクト関連
 ----------------
 
-``this`` (current contract's type):
-    the current contract, explicitly convertible to :ref:`address`
+``this`` (現在のコントラクトの型):
+    現在のコントラクト、明示的に:ref:`address`と変換可能です。
 
 ``selfdestruct(address payable recipient)``:
-    destroy the current contract, sending its funds to the given :ref:`address`
+    現在のコントラクトを破壊し、与えられた:ref:`address`にファンドを送ります。
 
-Furthermore, all functions of the current contract are callable directly including the current function.
+さらに、現在のコントラクトの全てのファンクションは現在のファンクションを含めて直接呼ぶことができます。
 
 .. note::
-    Prior to version 0.5.0, there was a function called ``suicide`` with the same
-    semantics as ``selfdestruct``.
+    バージョン0.5.0以前では、``selfdestruct``と同じ意味の``suicide``というファンクションがあります。
 
 .. index:: type, creationCode, runtimeCode
 
 .. _meta-type:
 
-Type Information
+型情報
 ----------------
 
-The expression ``type(X)`` can be used to retrieve information about the
-type ``X``. Currently, there is limited support for this feature, but
-it might be expanded in the future. The following properties are
-available for a contract type ``C``:
+``type(X)``という表現は``X``型についての情報を引き出すのに使用可能です。現在、この機能について限定的なサポートしかありませんが、将来拡張されるかもしれません。以下のプロパティはコントラクト型``C``で使用可能です。
+
 
 ``type(C).creationCode``:
-    Memory byte array that contains the creation bytecode of the contract.
-    This can be used in inline assembly to build custom creation routines,
-    especially by using the ``create2`` opcode.
-    This property can **not** be accessed in the contract itself or any
-    derived contract. It causes the bytecode to be included in the bytecode
-    of the call site and thus circular references like that are not possible.
+    コントラクトのバイトコードの生成を含んでいるメモリーバイト配列
+    カスタムクリエーションルーティンを作るためにインラインアッセンブリで使用できます（特に``create2`` opcodeを使って）。
+    このプロパティはコントラクト自体、もしくは継承元のコントラクトからは呼び出すことができません。そのため、呼び出し元のバイトコードにこのバイトコードが含まれ、その結果循環参照が不可能になります。
 
 ``type(C).runtimeCode``:
-    Memory byte array that contains the runtime bytecode of the contract.
-    This is the code that is usually deployed by the constructor of ``C``.
-    If ``C`` has a constructor that uses inline assembly, this might be
-    different from the actually deployed bytecode. Also note that libraries
-    modify their runtime bytecode at time of deployment to guard against
-    regular calls.
-    The same restrictions as with ``.creationCode`` also apply for this
-    property.
+    コントラクトのランタイムバイトコードを含んでいるメモリーバイト配列
+    これは通常、``C``のコンストラクタによってデプロイされるコードです。もし``C``がインラインアセンブリを使うコンストラクタを持っていたら、実際のデプロイされるバイトコードとは異なるかもしれません。通常の呼び出しから保護するために、デプロイ時にライブラリがランタイムバイトコードを修正するということを覚えておいてください。
+    同じ制限が``.creationCode``と同様にこのプロパティに適用されます。

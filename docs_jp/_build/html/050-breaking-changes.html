@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Solidity v0.5.0 Breaking Changes &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Security Considerations" href="security-considerations.html" />
+    <link rel="prev" title="Miscellaneous" href="miscellaneous.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Solidity v0.5.0 Breaking Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#semantic-only-changes">Semantic Only Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semantic-and-syntactic-changes">Semantic and Syntactic Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#explicitness-requirements">Explicitness Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated-elements">Deprecated Elements</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#command-line-and-json-interfaces">Command Line and JSON Interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constructors">Constructors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conversions">Conversions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#literals-and-suffixes">Literals and Suffixes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variables">Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#syntax">Syntax</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#interoperability-with-older-contracts">Interoperability With Older Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Solidity v0.5.0 Breaking Changes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/050-breaking-changes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="solidity-v0-5-0-breaking-changes">
+<h1>Solidity v0.5.0 Breaking Changes<a class="headerlink" href="#solidity-v0-5-0-breaking-changes" title="Permalink to this headline">¶</a></h1>
+<p>This section highlights the main breaking changes introduced in Solidity
+version 0.5.0, along with the reasoning behind the changes and how to update
+affected code.
+For the full list check
+<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.5.0">the release changelog</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Contracts compiled with Solidity v0.5.0 can still interface with contracts
+and even libraries compiled with older versions without recompiling or
+redeploying them.  Changing the interfaces to include data locations and
+visibility and mutability specifiers suffices. See the
+<a class="reference internal" href="#interoperability"><span class="std std-ref">Interoperability With Older Contracts</span></a> section below.</p>
+</div>
+<div class="section" id="semantic-only-changes">
+<h2>Semantic Only Changes<a class="headerlink" href="#semantic-only-changes" title="Permalink to this headline">¶</a></h2>
+<p>This section lists the changes that are semantic-only, thus potentially
+hiding new and different behavior in existing code.</p>
+<ul class="simple">
+<li>Signed right shift now uses proper arithmetic shift, i.e. rounding towards
+negative infinity, instead of rounding towards zero.  Signed and unsigned
+shift will have dedicated opcodes in Constantinople, and are emulated by
+Solidity for the moment.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">continue</span></code> statement in a <code class="docutils literal notranslate"><span class="pre">do...while</span></code> loop now jumps to the
+condition, which is the common behavior in such cases. It used to jump to the
+loop body. Thus, if the condition is false, the loop terminates.</li>
+<li>The functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> do not
+pad anymore when given a single <code class="docutils literal notranslate"><span class="pre">bytes</span></code> parameter.</li>
+<li>Pure and view functions are now called using the opcode <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code>
+instead of <code class="docutils literal notranslate"><span class="pre">CALL</span></code> if the EVM version is Byzantium or later. This
+disallows state changes on the EVM level.</li>
+<li>The ABI encoder now properly pads byte arrays and strings from calldata
+(<code class="docutils literal notranslate"><span class="pre">msg.data</span></code> and external function parameters) when used in external
+function calls and in <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code>. For unpadded encoding, use
+<code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code>.</li>
+<li>The ABI decoder reverts in the beginning of functions and in
+<code class="docutils literal notranslate"><span class="pre">abi.decode()</span></code> if passed calldata is too short or points out of bounds.
+Note that dirty higher order bits are still simply ignored.</li>
+<li>Forward all available gas with external function calls starting from
+Tangerine Whistle.</li>
+</ul>
+</div>
+<div class="section" id="semantic-and-syntactic-changes">
+<h2>Semantic and Syntactic Changes<a class="headerlink" href="#semantic-and-syntactic-changes" title="Permalink to this headline">¶</a></h2>
+<p>This section highlights changes that affect syntax and semantics.</p>
+<ul class="simple">
+<li>The functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>, <code class="docutils literal notranslate"><span class="pre">staticcall()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">keccak256()</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256()</span></code> and <code class="docutils literal notranslate"><span class="pre">ripemd160()</span></code> now accept only a single
+<code class="docutils literal notranslate"><span class="pre">bytes</span></code> argument. Moreover, the argument is not padded. This was changed to
+make more explicit and clear how the arguments are concatenated. Change every
+<code class="docutils literal notranslate"><span class="pre">.call()</span></code> (and family) to a <code class="docutils literal notranslate"><span class="pre">.call(&quot;&quot;)</span></code> and every <code class="docutils literal notranslate"><span class="pre">.call(signature,</span> <span class="pre">a,</span>
+<span class="pre">b,</span> <span class="pre">c)</span></code> to use <code class="docutils literal notranslate"><span class="pre">.call(abi.encodeWithSignature(signature,</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code> (the
+last one only works for value types).  Change every <code class="docutils literal notranslate"><span class="pre">keccak256(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">keccak256(abi.encodePacked(a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code>. Even though it is not a breaking
+change, it is suggested that developers change
+<code class="docutils literal notranslate"><span class="pre">x.call(bytes4(keccak256(&quot;f(uint256)&quot;),</span> <span class="pre">a,</span> <span class="pre">b)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">x.call(abi.encodeWithSignature(&quot;f(uint256)&quot;,</span> <span class="pre">a,</span> <span class="pre">b))</span></code>.</li>
+<li>Functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> now return
+<code class="docutils literal notranslate"><span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code> to provide access to the return data.  Change
+<code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">success</span> <span class="pre">=</span> <span class="pre">otherContract.call(&quot;f&quot;)</span></code> to <code class="docutils literal notranslate"><span class="pre">(bool</span> <span class="pre">success,</span> <span class="pre">bytes</span> <span class="pre">memory</span>
+<span class="pre">data)</span> <span class="pre">=</span> <span class="pre">otherContract.call(&quot;f&quot;)</span></code>.</li>
+<li>Solidity now implements C99-style scoping rules for function local
+variables, that is, variables can only be used after they have been
+declared and only in the same or nested scopes. Variables declared in the
+initialization block of a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop are valid at any point inside the
+loop.</li>
+</ul>
+</div>
+<div class="section" id="explicitness-requirements">
+<h2>Explicitness Requirements<a class="headerlink" href="#explicitness-requirements" title="Permalink to this headline">¶</a></h2>
+<p>This section lists changes where the code now needs to be more explicit.
+For most of the topics the compiler will provide suggestions.</p>
+<ul class="simple">
+<li>Explicit function visibility is now mandatory.  Add <code class="docutils literal notranslate"><span class="pre">public</span></code> to every
+function and constructor, and <code class="docutils literal notranslate"><span class="pre">external</span></code> to every fallback or interface
+function that does not specify its visibility already.</li>
+<li>Explicit data location for all variables of struct, array or mapping types is
+now mandatory. This is also applied to function parameters and return
+variables.  For example, change <code class="docutils literal notranslate"><span class="pre">uint[]</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">m_x</span></code> to <code class="docutils literal notranslate"><span class="pre">uint[]</span> <span class="pre">storage</span> <span class="pre">x</span> <span class="pre">=</span>
+<span class="pre">m_x</span></code>, and <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">x)</span></code> to <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">memory</span> <span class="pre">x)</span></code>
+where <code class="docutils literal notranslate"><span class="pre">memory</span></code> is the data location and might be replaced by <code class="docutils literal notranslate"><span class="pre">storage</span></code> or
+<code class="docutils literal notranslate"><span class="pre">calldata</span></code> accordingly.  Note that <code class="docutils literal notranslate"><span class="pre">external</span></code> functions require
+parameters with a data location of <code class="docutils literal notranslate"><span class="pre">calldata</span></code>.</li>
+<li>Contract types do not include <code class="docutils literal notranslate"><span class="pre">address</span></code> members anymore in
+order to separate the namespaces.  Therefore, it is now necessary to
+explicitly convert values of contract type to addresses before using an
+<code class="docutils literal notranslate"><span class="pre">address</span></code> member.  Example: if <code class="docutils literal notranslate"><span class="pre">c</span></code> is a contract, change
+<code class="docutils literal notranslate"><span class="pre">c.transfer(...)</span></code> to <code class="docutils literal notranslate"><span class="pre">address(c).transfer(...)</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">c.balance</span></code> to <code class="docutils literal notranslate"><span class="pre">address(c).balance</span></code>.</li>
+<li>Explicit conversions between unrelated contract types are now disallowed. You can only
+convert from a contract type to one of its base or ancestor types. If you are sure that
+a contract is compatible with the contract type you want to convert to, although it does not
+inherit from it, you can work around this by converting to <code class="docutils literal notranslate"><span class="pre">address</span></code> first.
+Example: if <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are contract types, <code class="docutils literal notranslate"><span class="pre">B</span></code> does not inherit from <code class="docutils literal notranslate"><span class="pre">A</span></code> and
+<code class="docutils literal notranslate"><span class="pre">b</span></code> is a contract of type <code class="docutils literal notranslate"><span class="pre">B</span></code>, you can still convert <code class="docutils literal notranslate"><span class="pre">b</span></code> to type <code class="docutils literal notranslate"><span class="pre">A</span></code> using <code class="docutils literal notranslate"><span class="pre">A(address(b))</span></code>.
+Note that you still need to watch out for matching payable fallback functions, as explained below.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">address</span></code> type  was split into <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>,
+where only <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> provides the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function.  An
+<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> can be directly converted to an <code class="docutils literal notranslate"><span class="pre">address</span></code>, but the
+other way around is not allowed. Converting <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span>
+<span class="pre">payable</span></code> is possible via conversion through <code class="docutils literal notranslate"><span class="pre">uint160</span></code>. If <code class="docutils literal notranslate"><span class="pre">c</span></code> is a
+contract, <code class="docutils literal notranslate"><span class="pre">address(c)</span></code> results in <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> only if <code class="docutils literal notranslate"><span class="pre">c</span></code> has a
+payable fallback function. If you use the <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdraw pattern</span></a>,
+you most likely do not have to change your code because <code class="docutils literal notranslate"><span class="pre">transfer</span></code>
+is only used on <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> instead of stored addresses and <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>
+is an <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</li>
+<li>Conversions between <code class="docutils literal notranslate"><span class="pre">bytesX</span></code> and <code class="docutils literal notranslate"><span class="pre">uintY</span></code> of different size are now
+disallowed due to <code class="docutils literal notranslate"><span class="pre">bytesX</span></code> padding on the right and <code class="docutils literal notranslate"><span class="pre">uintY</span></code> padding on
+the left which may cause unexpected conversion results.  The size must now be
+adjusted within the type before the conversion.  For example, you can convert
+a <code class="docutils literal notranslate"><span class="pre">bytes4</span></code> (4 bytes) to a <code class="docutils literal notranslate"><span class="pre">uint64</span></code> (8 bytes) by first converting the
+<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> variable to <code class="docutils literal notranslate"><span class="pre">bytes8</span></code> and then to <code class="docutils literal notranslate"><span class="pre">uint64</span></code>. You get the
+opposite padding when converting through <code class="docutils literal notranslate"><span class="pre">uint32</span></code>.</li>
+<li>Using <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> in non-payable functions (or introducing it via a
+modifier) is disallowed as a security feature. Turn the function into
+<code class="docutils literal notranslate"><span class="pre">payable</span></code> or create a new internal function for the program logic that
+uses <code class="docutils literal notranslate"><span class="pre">msg.value</span></code>.</li>
+<li>For clarity reasons, the command line interface now requires <code class="docutils literal notranslate"><span class="pre">-</span></code> if the
+standard input is used as source.</li>
+</ul>
+</div>
+<div class="section" id="deprecated-elements">
+<h2>Deprecated Elements<a class="headerlink" href="#deprecated-elements" title="Permalink to this headline">¶</a></h2>
+<p>This section lists changes that deprecate prior features or syntax.  Note that
+many of these changes were already enabled in the experimental mode
+<code class="docutils literal notranslate"><span class="pre">v0.5.0</span></code>.</p>
+<div class="section" id="command-line-and-json-interfaces">
+<h3>Command Line and JSON Interfaces<a class="headerlink" href="#command-line-and-json-interfaces" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The command line option <code class="docutils literal notranslate"><span class="pre">--formal</span></code> (used to generate Why3 output for
+further formal verification) was deprecated and is now removed.  A new
+formal verification module, the SMTChecker, is enabled via <code class="docutils literal notranslate"><span class="pre">pragma</span>
+<span class="pre">experimental</span> <span class="pre">SMTChecker;</span></code>.</li>
+<li>The command line option <code class="docutils literal notranslate"><span class="pre">--julia</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">--yul</span></code> due to the
+renaming of the intermediate language <code class="docutils literal notranslate"><span class="pre">Julia</span></code> to <code class="docutils literal notranslate"><span class="pre">Yul</span></code>.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">--clone-bin</span></code> and <code class="docutils literal notranslate"><span class="pre">--combined-json</span> <span class="pre">clone-bin</span></code> command line options
+were removed.</li>
+<li>Remappings with empty prefix are disallowed.</li>
+<li>The JSON AST fields <code class="docutils literal notranslate"><span class="pre">constant</span></code> and <code class="docutils literal notranslate"><span class="pre">payable</span></code> were removed. The
+information is now present in the <code class="docutils literal notranslate"><span class="pre">stateMutability</span></code> field.</li>
+<li>The JSON AST field <code class="docutils literal notranslate"><span class="pre">isConstructor</span></code> of the <code class="docutils literal notranslate"><span class="pre">FunctionDefinition</span></code>
+node was replaced by a field called <code class="docutils literal notranslate"><span class="pre">kind</span></code> which can have the
+value <code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>.</li>
+<li>In unlinked binary hex files, library address placeholders are now
+the first 36 hex characters of the keccak256 hash of the fully qualified
+library name, surrounded by <code class="docutils literal notranslate"><span class="pre">$...$</span></code>. Previously,
+just the fully qualified library name was used.
+This reduces the chances of collisions, especially when long paths are used.
+Binary files now also contain a list of mappings from these placeholders
+to the fully qualified names.</li>
+</ul>
+</div>
+<div class="section" id="constructors">
+<h3>Constructors<a class="headerlink" href="#constructors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Constructors must now be defined using the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> keyword.</li>
+<li>Calling base constructors without parentheses is now disallowed.</li>
+<li>Specifying base constructor arguments multiple times in the same inheritance
+hierarchy is now disallowed.</li>
+<li>Calling a constructor with arguments but with wrong argument count is now
+disallowed.  If you only want to specify an inheritance relation without
+giving arguments, do not provide parentheses at all.</li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Function <code class="docutils literal notranslate"><span class="pre">callcode</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>). It
+is still possible to use it via inline assembly.</li>
+<li><code class="docutils literal notranslate"><span class="pre">suicide</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">sha3</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">throw</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">revert</span></code>, <code class="docutils literal notranslate"><span class="pre">require</span></code> and
+<code class="docutils literal notranslate"><span class="pre">assert</span></code>).</li>
+</ul>
+</div>
+<div class="section" id="conversions">
+<h3>Conversions<a class="headerlink" href="#conversions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Explicit and implicit conversions from decimal literals to <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> types
+is now disallowed.</li>
+<li>Explicit and implicit conversions from hex literals to <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> types
+of different size is now disallowed.</li>
+</ul>
+</div>
+<div class="section" id="literals-and-suffixes">
+<h3>Literals and Suffixes<a class="headerlink" href="#literals-and-suffixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The unit denomination <code class="docutils literal notranslate"><span class="pre">years</span></code> is now disallowed due to complications and
+confusions about leap years.</li>
+<li>Trailing dots that are not followed by a number are now disallowed.</li>
+<li>Combining hex numbers with unit denominations (e.g. <code class="docutils literal notranslate"><span class="pre">0x1e</span> <span class="pre">wei</span></code>) is now
+disallowed.</li>
+<li>The prefix <code class="docutils literal notranslate"><span class="pre">0X</span></code> for hex numbers is disallowed, only <code class="docutils literal notranslate"><span class="pre">0x</span></code> is possible.</li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Declaring empty structs is now disallowed for clarity.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">var</span></code> keyword is now disallowed to favor explicitness.</li>
+<li>Assignments between tuples with different number of components is now
+disallowed.</li>
+<li>Values for constants that are not compile-time constants are disallowed.</li>
+<li>Multi-variable declarations with mismatching number of values are now
+disallowed.</li>
+<li>Uninitialized storage variables are now disallowed.</li>
+<li>Empty tuple components are now disallowed.</li>
+<li>Detecting cyclic dependencies in variables and structs is limited in
+recursion to 256.</li>
+<li>Fixed-size arrays with a length of zero are now disallowed.</li>
+</ul>
+</div>
+<div class="section" id="syntax">
+<h3>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Using <code class="docutils literal notranslate"><span class="pre">constant</span></code> as function state mutability modifier is now disallowed.</li>
+<li>Boolean expressions cannot use arithmetic operations.</li>
+<li>The unary <code class="docutils literal notranslate"><span class="pre">+</span></code> operator is now disallowed.</li>
+<li>Literals cannot anymore be used with <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> without prior
+conversion to an explicit type.</li>
+<li>Empty return statements for functions with one or more return values are now
+disallowed.</li>
+<li>The “loose assembly” syntax is now disallowed entirely, that is, jump labels,
+jumps and non-functional instructions cannot be used anymore. Use the new
+<code class="docutils literal notranslate"><span class="pre">while</span></code>, <code class="docutils literal notranslate"><span class="pre">switch</span></code> and <code class="docutils literal notranslate"><span class="pre">if</span></code> constructs instead.</li>
+<li>Functions without implementation cannot use modifiers anymore.</li>
+<li>Function types with named return values are now disallowed.</li>
+<li>Single statement variable declarations inside if/while/for bodies that are
+not blocks are now disallowed.</li>
+<li>New keywords: <code class="docutils literal notranslate"><span class="pre">calldata</span></code> and <code class="docutils literal notranslate"><span class="pre">constructor</span></code>.</li>
+<li>New reserved keywords: <code class="docutils literal notranslate"><span class="pre">alias</span></code>, <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">copyof</span></code>,
+<code class="docutils literal notranslate"><span class="pre">define</span></code>, <code class="docutils literal notranslate"><span class="pre">immutable</span></code>, <code class="docutils literal notranslate"><span class="pre">implements</span></code>, <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">mutable</span></code>,
+<code class="docutils literal notranslate"><span class="pre">override</span></code>, <code class="docutils literal notranslate"><span class="pre">partial</span></code>, <code class="docutils literal notranslate"><span class="pre">promise</span></code>, <code class="docutils literal notranslate"><span class="pre">reference</span></code>, <code class="docutils literal notranslate"><span class="pre">sealed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sizeof</span></code>, <code class="docutils literal notranslate"><span class="pre">supports</span></code>, <code class="docutils literal notranslate"><span class="pre">typedef</span></code> and <code class="docutils literal notranslate"><span class="pre">unchecked</span></code>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="interoperability-with-older-contracts">
+<span id="interoperability"></span><h2>Interoperability With Older Contracts<a class="headerlink" href="#interoperability-with-older-contracts" title="Permalink to this headline">¶</a></h2>
+<p>It is still possible to interface with contracts written for Solidity versions prior to
+v0.5.0 (or the other way around) by defining interfaces for them.
+Consider you have the following pre-0.5.0 contract already deployed:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// This will not compile with the current version of the compiler</span>
+<span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">25</span><span class="p">;</span>
+<span class="kd">contract</span> <span class="n">OldContract</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">someOldFunction</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//...</span>
+   <span class="p">}</span>
+   <span class="kd">function</span> <span class="n">anotherOldFunction</span><span class="p">()</span> <span class="kr">constant</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//...</span>
+   <span class="p">}</span>
+   <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will no longer compile with Solidity v0.5.0. However, you can define a compatible interface for it:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="kd">interface</span> <span class="n">OldContract</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">someOldFunction</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="kr">external</span><span class="p">;</span>
+   <span class="kd">function</span> <span class="n">anotherOldFunction</span><span class="p">()</span> <span class="kr">external</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that we did not declare <code class="docutils literal notranslate"><span class="pre">anotherOldFunction</span></code> to be <code class="docutils literal notranslate"><span class="pre">view</span></code>, despite it being declared <code class="docutils literal notranslate"><span class="pre">constant</span></code> in the original
+contract. This is due to the fact that starting with Solidity v0.5.0 <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> is used to call <code class="docutils literal notranslate"><span class="pre">view</span></code> functions.
+Prior to v0.5.0 the <code class="docutils literal notranslate"><span class="pre">constant</span></code> keyword was not enforced, so calling a function declared <code class="docutils literal notranslate"><span class="pre">constant</span></code> with <code class="docutils literal notranslate"><span class="pre">staticcall</span></code>
+may still revert, since the <code class="docutils literal notranslate"><span class="pre">constant</span></code> function may still attempt to modify storage. Consequently, when defining an
+interface for older contracts, you should only use <code class="docutils literal notranslate"><span class="pre">view</span></code> in place of <code class="docutils literal notranslate"><span class="pre">constant</span></code> in case you are absolutely sure that
+the function will work with <code class="docutils literal notranslate"><span class="pre">staticcall</span></code>.</p>
+<p>Given the interface defined above, you can now easily use the already deployed pre-0.5.0 contract:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">interface</span> <span class="n">OldContract</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">someOldFunction</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="kr">external</span><span class="p">;</span>
+   <span class="kd">function</span> <span class="n">anotherOldFunction</span><span class="p">()</span> <span class="kr">external</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">NewContract</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">doSomething</span><span class="p">(</span><span class="n">OldContract</span> <span class="n">a</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">a</span><span class="p">.</span><span class="n">someOldFunction</span><span class="p">(</span><span class="mh">0x42</span><span class="p">);</span>
+      <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">anotherOldFunction</span><span class="p">();</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Similarly, pre-0.5.0 libraries can be used by defining the functions of the library without implementation and
+supplying the address of the pre-0.5.0 library during linking (see <a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a> for how to use the
+commandline compiler for linking):</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">OldLibrary</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">someFunction</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span><span class="p">(</span><span class="kt">bool</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">NewContract</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">OldLibrary</span><span class="p">.</span><span class="n">someFunction</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows a contract and its updated version for Solidity
+v0.5.0 with some of the changes listed in this section.</p>
+<p>Old version:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// This will not compile</span>
+<span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">25</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">OtherContract</span> <span class="p">{</span>
+   <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+   <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="kr">external</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="kd">function</span><span class="p">()</span> <span class="kr">payable</span> <span class="kr">external</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Old</span> <span class="p">{</span>
+   <span class="n">OtherContract</span> <span class="n">other</span><span class="p">;</span>
+   <span class="kt">uint</span> <span class="n">myNumber</span><span class="p">;</span>
+
+   <span class="c1">// Function mutability not provided, not an error.</span>
+   <span class="kd">function</span> <span class="n">someInteger</span><span class="p">()</span> <span class="kr">internal</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+
+   <span class="c1">// Function visibility not provided, not an error.</span>
+   <span class="c1">// Function mutability not provided, not an error.</span>
+   <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Var is fine in this version.</span>
+      <span class="kd">var</span> <span class="n">z</span> <span class="o">=</span> <span class="n">someInteger</span><span class="p">();</span>
+      <span class="n">x</span> <span class="o">+=</span> <span class="n">z</span><span class="p">;</span>
+      <span class="c1">// Throw is fine in this version.</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span>
+         <span class="k">throw</span><span class="p">;</span>
+      <span class="kt">bytes</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="c1">// y == -1 (wrong, should be -2)</span>
+      <span class="k">do</span> <span class="p">{</span>
+         <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+         <span class="c1">// &#39;Continue&#39; causes an infinite loop.</span>
+      <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">);</span>
+      <span class="c1">// Call returns only a Bool.</span>
+      <span class="kt">bool</span> <span class="n">success</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="n">other</span><span class="p">).</span><span class="nf">call</span><span class="p">(</span><span class="s">&quot;f&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+         <span class="nf">revert</span><span class="p">();</span>
+      <span class="k">else</span> <span class="p">{</span>
+         <span class="c1">// Local variables could be declared after their use.</span>
+         <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="c1">// No need for an explicit data location for &#39;arr&#39;</span>
+   <span class="kd">function</span> <span class="n">g</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">bytes8</span> <span class="n">x</span><span class="p">,</span> <span class="n">OtherContract</span> <span class="n">otherContract</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+      <span class="n">otherContract</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">);</span>
+
+      <span class="c1">// Since uint32 (4 bytes) is smaller than bytes8 (8 bytes),</span>
+      <span class="c1">// the first 4 bytes of x will be lost. This might lead to</span>
+      <span class="c1">// unexpected behavior since bytesX are right padded.</span>
+      <span class="kt">uint32</span> <span class="n">y</span> <span class="o">=</span> <span class="kt">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+      <span class="n">myNumber</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">+</span> <span class="nb">msg.value</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>New version:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">OtherContract</span> <span class="p">{</span>
+   <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+   <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="kr">external</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="kd">function</span><span class="p">()</span> <span class="kr">payable</span> <span class="kr">external</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">New</span> <span class="p">{</span>
+   <span class="n">OtherContract</span> <span class="n">other</span><span class="p">;</span>
+   <span class="kt">uint</span> <span class="n">myNumber</span><span class="p">;</span>
+
+   <span class="c1">// Function mutability must be specified.</span>
+   <span class="kd">function</span> <span class="n">someInteger</span><span class="p">()</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+
+   <span class="c1">// Function visibility must be specified.</span>
+   <span class="c1">// Function mutability must be specified.</span>
+   <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes</span> <span class="kr">memory</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// The type must now be explicitly given.</span>
+      <span class="kt">uint</span> <span class="n">z</span> <span class="o">=</span> <span class="n">someInteger</span><span class="p">();</span>
+      <span class="n">x</span> <span class="o">+=</span> <span class="n">z</span><span class="p">;</span>
+      <span class="c1">// Throw is now disallowed.</span>
+      <span class="nf">require</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">);</span>
+      <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="c1">// y == -2 (correct)</span>
+      <span class="k">do</span> <span class="p">{</span>
+         <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+         <span class="c1">// &#39;Continue&#39; jumps to the condition below.</span>
+      <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">);</span>
+
+      <span class="c1">// Call returns (bool, bytes).</span>
+      <span class="c1">// Data location must be specified.</span>
+      <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">data</span><span class="p">)</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="n">other</span><span class="p">).</span><span class="nf">call</span><span class="p">(</span><span class="s">&quot;f&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+         <span class="nf">revert</span><span class="p">();</span>
+      <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="kn">using</span> <span class="n">address_make_payable</span> <span class="k">for</span> <span class="kt">address</span><span class="p">;</span>
+   <span class="c1">// Data location for &#39;arr&#39; must be specified</span>
+   <span class="kd">function</span> <span class="n">g</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">bytes8</span> <span class="n">x</span><span class="p">,</span> <span class="n">OtherContract</span> <span class="n">otherContract</span><span class="p">,</span> <span class="kt">address</span> <span class="n">unknownContract</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+      <span class="c1">// &#39;otherContract.transfer&#39; is not provided.</span>
+      <span class="c1">// Since the code of &#39;OtherContract&#39; is known and has the fallback</span>
+      <span class="c1">// function, address(otherContract) has type &#39;address payable&#39;.</span>
+      <span class="kt">address</span><span class="p">(</span><span class="n">otherContract</span><span class="p">).</span><span class="nf">transfer</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">);</span>
+
+      <span class="c1">// &#39;unknownContract.transfer&#39; is not provided.</span>
+      <span class="c1">// &#39;address(unknownContract).transfer&#39; is not provided</span>
+      <span class="c1">// since &#39;address(unknownContract)&#39; is not &#39;address payable&#39;.</span>
+      <span class="c1">// If the function takes an &#39;address&#39; which you want to send</span>
+      <span class="c1">// funds to, you can convert it to &#39;address payable&#39; via &#39;uint160&#39;.</span>
+      <span class="c1">// Note: This is not recommended and the explicit type</span>
+      <span class="c1">// &#39;address payable&#39; should be used whenever possible.</span>
+      <span class="c1">// To increase clarity, we suggest the use of a library for</span>
+      <span class="c1">// the conversion (provided after the contract in this example).</span>
+      <span class="kt">address</span> <span class="kr">payable</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">unknownContract</span><span class="p">.</span><span class="n">make_payable</span><span class="p">();</span>
+      <span class="nf">require</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">));</span>
+
+      <span class="c1">// Since uint32 (4 bytes) is smaller than bytes8 (8 bytes),</span>
+      <span class="c1">// the conversion is not allowed.</span>
+      <span class="c1">// We need to convert to a common size first:</span>
+      <span class="kt">bytes4</span> <span class="n">x4</span> <span class="o">=</span> <span class="kt">bytes4</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="c1">// Padding happens on the right</span>
+      <span class="kt">uint32</span> <span class="n">y</span> <span class="o">=</span> <span class="kt">uint32</span><span class="p">(</span><span class="n">x4</span><span class="p">);</span> <span class="c1">// Conversion is consistent</span>
+      <span class="c1">// &#39;msg.value&#39; cannot be used in a &#39;non-payable&#39; function.</span>
+      <span class="c1">// We need to make the function payable</span>
+      <span class="n">myNumber</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">+</span> <span class="nb">msg.value</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// We can define a library for explicitly converting ``address``</span>
+<span class="c1">// to ``address payable`` as a workaround.</span>
+<span class="kd">library</span> <span class="n">address_make_payable</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">make_payable</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span> <span class="kr">payable</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kt">address</span><span class="p">(</span><span class="kt">uint160</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="security-considerations.html" class="btn btn-neutral float-right" title="Security Considerations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="miscellaneous.html" class="btn btn-neutral float-left" title="Miscellaneous" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

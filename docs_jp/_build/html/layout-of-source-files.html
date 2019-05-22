@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Layout of a Solidity Source File &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="コントラクトの構造" href="structure-of-a-contract.html" />
+    <link rel="prev" title="Solidity in Depth" href="solidity-in-depth.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Layout of a Solidity Source File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pragmas">Pragmas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#version-pragma">Version Pragma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#experimental-pragma">Experimental Pragma</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-other-source-files">Importing other Source Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#syntax-and-semantics">Syntax and Semantics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#paths">Paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-in-actual-compilers">Use in Actual Compilers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#comments">Comments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Layout of a Solidity Source File</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/layout-of-source-files.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="layout-of-a-solidity-source-file">
+<h1>Layout of a Solidity Source File<a class="headerlink" href="#layout-of-a-solidity-source-file" title="Permalink to this headline">¶</a></h1>
+<p>ソースファイルは任意の数の <a class="reference internal" href="structure-of-a-contract.html#contract-structure"><span class="std std-ref">コントラクトの定義</span></a>、<a class="reference internal" href="#import">import</a> の指示、<a class="reference internal" href="#pragma"><span class="std std-ref">pragmaの指示</span></a> を含むことができます。</p>
+<div class="section" id="pragmas">
+<span id="pragma"></span><span id="index-0"></span><h2>Pragmas<a class="headerlink" href="#pragmas" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pragma</span></code> というキーワードは特定のコンパイラの機能を使用可能にするもしくはコンパイラのバージョンをチェックするのに使用することができます。pragma指示は常にローカルのソースファイルにあるので、プロジェクト全体で使用可能にしたい場合にはpragmaを全てのファイルに追加する必要があります。もし他のファイルを <a class="reference internal" href="#import"><span class="std std-ref">インポート</span></a> してもそのファイルから得たpragmaは自動的にはインポートしているファイルには適用されません。</p>
+<div class="section" id="version-pragma">
+<span id="index-1"></span><span id="id1"></span><h3>Version Pragma<a class="headerlink" href="#version-pragma" title="Permalink to this headline">¶</a></h3>
+<p>互換性がない可能性がある未来のコンパイラでのコンパイルを避けるために、ソースファイルはいわゆるバージョンPragmaの注記をつけることができます（そしてつけるべきです）。私たちはこの様な変更を最小限にする努力をしていますし、特にセマンティクス上の変更がシンタックスの変更も必要とする様な変更は通知しています。しかし、もちろん常にできる訳ではないので、少なくともブレーキングチェンジを含む様な大きな変更があるときは変更のログを見ることは良いことです。この様な大きな変更がある場合にはバージョンは <code class="docutils literal notranslate"><span class="pre">0.x.0</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">x.0.0</span></code> の様になります。</p>
+<p>バージョンPragmaは下記の様に使用されます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>この様なソースファイルはバージョン0.5.2より低いバージョンのコンパイラでコンパイルすることはありませんし、0.6.0以上のコンパイラでコンパイルすることもありません（後者の条件は <code class="docutils literal notranslate"><span class="pre">^</span></code> を使うことで追加しています）。このアイデアの根本はバージョン <code class="docutils literal notranslate"><span class="pre">0.6.0</span></code> まで大きな変更（ブレーキングチェンジ）がなく、コードが意図した通りにコンパイルされるということを保証されるというものです。コンパイラのバージョンを固定しないので、bugfixされたバージョンも使用可能です。</p>
+<p>もっと複雑なコンパイラのバージョンのルールを指定することもできます。<a class="reference external" href="https://docs.npmjs.com/misc/semver">npm</a> を使った方法に準拠します。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">version pragmaを使ってもコンパイラのバージョンを変えることはできません。また、コンパイラの機能を有効にしたり無効にしたりもできません。ただコンパイラにpragmaで要求されたバージョンと合っているかチェックさせるだけです。合っていなければコンパイラはエラーを出します。</p>
+</div>
+</div>
+<div class="section" id="experimental-pragma">
+<span id="index-2"></span><span id="id2"></span><h3>Experimental Pragma<a class="headerlink" href="#experimental-pragma" title="Permalink to this headline">¶</a></h3>
+<p>2つ目のpragmaは実験的なpragmaです。これはコンパイラや言語のまだデフォルトで有効になっていない機能を有効にするのに使うことができます。下記の実験的なpragmaは現在サポートされています。</p>
+<div class="section" id="abiencoderv2">
+<h4>ABIEncoderV2<a class="headerlink" href="#abiencoderv2" title="Permalink to this headline">¶</a></h4>
+<p>新しいABI encoderは任意にネストされた配列と構造体をエンコード、デコードできます。これはあまり最適化されていないコードを生成します。（この部分のオプティマイザは未だ開発中です。）そして、古いエンコーダほどテストがされていません。<code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">ABIEncoderV2;</span></code> を使うことでこれを有効化できます。</p>
+</div>
+<div class="section" id="smtchecker">
+<span id="smt-checker"></span><h4>SMTChecker<a class="headerlink" href="#smtchecker" title="Permalink to this headline">¶</a></h4>
+<p>このコンポーネントはSolidityのコンパイラが組まれているときに有効でなければならない。そのためSolidityのバイナリでは利用できない。<a class="reference internal" href="installing-solidity.html#smt-solvers-build"><span class="std std-ref">build instructions</span></a> はどの様にこのオプションを有効にしているか説明しています。
+これはほとんどのバージョンのUbuntu PPAのリリースのために有効化されるが、solc-js、Dockerイメージ、 Windowsバイナリやstatically-built Linuxバイナリのためではありません。</p>
+<p>もし <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">SMTChecker;</span></code> を使うなら、SMT solverにクエリすることで取得される追加の安全警告を受け取ります。このコンポーネントはまだ全てのSolidityの機能をサポートしていないので、たくさんの警告を発する可能性が高いです。もしサポートされていない機能がレポートされた場合でも、その分析は完璧ではないかもしれません。</p>
+</div>
+</div>
+</div>
+<div class="section" id="importing-other-source-files">
+<span id="import"></span><span id="index-3"></span><h2>Importing other Source Files<a class="headerlink" href="#importing-other-source-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="syntax-and-semantics">
+<h3>Syntax and Semantics<a class="headerlink" href="#syntax-and-semantics" title="Permalink to this headline">¶</a></h3>
+<p>“default export”はありませんが、SolidityはJavascript（ES6）の様なimportの宣言をサポートしています。</p>
+<p>グローバルのレベルで、下記の様なimportの宣言ができます。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="s">&quot;filename&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>この宣言は全てのグローバルな記号を”filename” (とそこにインポートされた記号)から現在のグローバルスコープ（ES6とは違いますがSolidityに後方互換性があります）にインポートします。 この単純な使い方は推奨されません。なぜなら、名前空間を予期せぬ方法で汚してしまうからです。もし”filename”内でトップレベルのアイテムを追加したら、”filename”からインポートした全てのファイルで自動的にそのアイテムが現れます。特定の記号だけを明示的にインポートした方が良いです。</p>
+<p>下記の例では全ての要素が <code class="docutils literal notranslate"><span class="pre">&quot;filename&quot;</span></code> から来たグローバルな記号である新しいグローバルな記号 <code class="docutils literal notranslate"><span class="pre">symbolName</span></code> が作られます。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="n">symbolName</span> <span class="kr">from</span> <span class="s">&quot;filename&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>もし名前の重複があった場合には、インポートの際に名前を変えることができます。次のコードでは新しいグローバルな記号 <code class="docutils literal notranslate"><span class="pre">alias</span></code> と <code class="docutils literal notranslate"><span class="pre">symbol2</span></code> を作ります。それぞれ <code class="docutils literal notranslate"><span class="pre">&quot;filename&quot;</span></code> の中の <code class="docutils literal notranslate"><span class="pre">symbol1</span></code> と <code class="docutils literal notranslate"><span class="pre">symbol2</span></code> を参照しています。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="p">{</span><span class="n">symbol1</span> <span class="kr">as</span> <span class="n">alias</span><span class="p">,</span> <span class="n">symbol2</span><span class="p">}</span> <span class="kr">from</span> <span class="s">&quot;filename&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>次の例はES6の一部ではありませんが、おそらく便利でしょう。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="s">&quot;filename&quot;</span> <span class="kr">as</span> <span class="n">symbolName</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>これは <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">*</span> <span class="pre">as</span> <span class="pre">symbolName</span> <span class="pre">from</span> <span class="pre">&quot;filename&quot;;</span></code> と等価です。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">もし <cite>import “filename.sol” as moduleName;</cite> を使うのであれば、<cite>”filename.sol”</cite> の中から <cite>moduleName.C</cite> として <cite>C</cite> と呼ばれるコントラクトにアクセスしてください。<cite>C</cite> は直接使わないでください。</p>
+</div>
+</div>
+<div class="section" id="paths">
+<h3>Paths<a class="headerlink" href="#paths" title="Permalink to this headline">¶</a></h3>
+<p>上では、<code class="docutils literal notranslate"><span class="pre">filename</span></code> は常にディレクトリのセパレータとしての <code class="docutils literal notranslate"><span class="pre">/</span></code>、現在のディレクトリとしての <code class="docutils literal notranslate"><span class="pre">.</span></code>、親ディレクトリとしての <code class="docutils literal notranslate"><span class="pre">..</span></code> と一緒にパスとして使われていました。<code class="docutils literal notranslate"><span class="pre">.</span></code> と <code class="docutils literal notranslate"><span class="pre">..</span></code> は <code class="docutils literal notranslate"><span class="pre">/</span></code> の後に続かなければ、現在もしくは親ディレクトリとしては扱われません。全てのパスは <code class="docutils literal notranslate"><span class="pre">.</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">..</span></code> で始まらなければ絶対パスとして扱われます。</p>
+<p>現在のファイルと同じディレクトリにあるファイル <code class="docutils literal notranslate"><span class="pre">x</span></code> をインポートするためには、<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;./x&quot;</span> <span class="pre">as</span> <span class="pre">x;</span></code> を使ってください。</p>
+<p>実際にどの様にパスが読み込まれるかはコンパイラによります（下記参照）。一般的に、ディレクトリ構造はローカルに限定されません。例えばipfs、httpやgitを通じて得たリソースを指定することも可能です。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">常に <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;./filename.sol&quot;;</span></code> の様な相対パスを使ってください。また、パスを指定するのに <code class="docutils literal notranslate"><span class="pre">..</span></code> を使うのは避けてください。後のケースではおそらくグローバルパスを使い、下記で説明するリマッピングをセットアップするのが良いでしょう。</p>
+</div>
+</div>
+<div class="section" id="use-in-actual-compilers">
+<h3>Use in Actual Compilers<a class="headerlink" href="#use-in-actual-compilers" title="Permalink to this headline">¶</a></h3>
+<p>コンパイラを呼び出す時に、パスの最初の要素とパスのプレフィックスのリマッピングをどの様に指定するか決めることができます。例えば、あるリマッピングをセットアップしたら、仮のディレクトリ <code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/library</span></code> からインポートしたもの全てが実際にはローカルのディレクトリ <code class="docutils literal notranslate"><span class="pre">/usr/local/dapp-bin/library</span></code> から読み込まれているといった様なことができます。
+もし複数のリマッピングを使うと、一番長いキーをもつリマッピングが最初に適用されます。
+空のプレフィックスは使えません。リマッピングはコンテキストに依存します。そのため、例えば同じ名前の異なるバージョンのライブラリをインポートするためにパッケージを設計できます。</p>
+<p><strong>solc</strong>:</p>
+<p>solc（コマンドラインコンパイラ）に、<code class="docutils literal notranslate"><span class="pre">context:prefix=target</span></code> 属性としてパスのリマッピングを渡します。<code class="docutils literal notranslate"><span class="pre">context:</span></code> と <code class="docutils literal notranslate"><span class="pre">=target</span></code> のパートはオプションです（この場合 <code class="docutils literal notranslate"><span class="pre">target</span></code> が <code class="docutils literal notranslate"><span class="pre">prefix</span></code> のデフォルトとなります）。通常ファイルの全てのリマッピング値はコンパイルされます（それらの依存関係も含めて）。</p>
+<p>このメカニズムは後方互換性をもち（ファイル名に <code class="docutils literal notranslate"><span class="pre">=</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">:</span></code> を含んでいない限り）、そのためブレーキングチェンジにはなりません。<code class="docutils literal notranslate"><span class="pre">prefix</span></code> で始まるファイルをインポートする <code class="docutils literal notranslate"><span class="pre">context</span></code> ディレクトリの中もしくは以下にある全てのファイルは <code class="docutils literal notranslate"><span class="pre">prefix</span></code> を <code class="docutils literal notranslate"><span class="pre">target</span></code> に変更することでリダイレクトされます。</p>
+<p>例えば、もし <code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/</span></code> をローカルの <code class="docutils literal notranslate"><span class="pre">/usr/local/dapp-bin</span></code> にコピーしたら、ソースファイル内で以下が使える様になります。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="s">&quot;github.com/ethereum/dapp-bin/library/iterable_mapping.sol&quot;</span> <span class="kr">as</span> <span class="n">it_mapping</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>そしてコンパイラを使用してください:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc github.com/ethereum/dapp-bin/<span class="o">=</span>/usr/local/dapp-bin/ source.sol
+</pre></div>
+</div>
+<p>もっと複雑な例として、もし <code class="docutils literal notranslate"><span class="pre">/usr/local/dapp-bin_old</span></code> を参照している古いバージョンのdapp-binを使っているモジュールを使っているとしたら、次のコードを使用することができます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc module1:github.com/ethereum/dapp-bin/<span class="o">=</span>/usr/local/dapp-bin/ <span class="se">\</span>
+     module2:github.com/ethereum/dapp-bin/<span class="o">=</span>/usr/local/dapp-bin_old/ <span class="se">\</span>
+     source.sol
+</pre></div>
+</div>
+<p>上記は <code class="docutils literal notranslate"><span class="pre">module2</span></code> の中の全てのインポートは古いバージョンで使われるが、<code class="docutils literal notranslate"><span class="pre">module1</span></code> は新しいバージョンで使われるという意味です。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">solc</span></code> は特定のディレクトリからのファイルを含めるのを許可するだけです。そのファイルははっきりと明示されたソースファイルの1つ、もしくはリマッピングのターゲットのディレクトリ（もしくはサブディレクトリ）の中にある必要があります。もし直接的に含めたい場合にはリマッピングに <code class="docutils literal notranslate"><span class="pre">/=/</span></code> を追加して下さい。</p>
+</div>
+<p>もし有効なファイルを参照する複数のリマッピングがあった場合には、一番長い共通のプレフィックスがついているリマッピングが選択されます。</p>
+<p><strong>Remix</strong>:</p>
+<p><a class="reference external" href="https://remix.ethereum.org/">Remix</a> は自動的にGithubにリマッピングし、自動的にネットワークを通じてファイルを引っ張ってきます。上記の様な繰り返し可能なマッピングをインポートできます。例えば、</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>import “github.com/ethereum/dapp-bin/library/iterable_mapping.sol” as it_mapping;</dd>
+</dl>
+<p>Remixはおそらく将来的に他のソースコードプロバイダを追加するかもしれません。</p>
+</div>
+</div>
+<div class="section" id="comments">
+<span id="index-4"></span><h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>1行コメント(<code class="docutils literal notranslate"><span class="pre">//</span></code>)と複数行コメント(<code class="docutils literal notranslate"><span class="pre">/*...*/</span></code>)が使用可能です。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// これは1行コメントです。</span>
+
+<span class="cm">/*</span>
+<span class="cm">これは複数行</span>
+<span class="cm">コメントです。</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">1行コメントはutf8エンコードにおいてどのunicode方式のラインブレーク(LF, VF, FF, CR, NEL, LS, PS)でも終了します。ラインブレークはコメントの後でもソースコードの一部となっているため、ascii記号（NEL, LS, PS）でない場合にはパーサーエラーを起こします。</p>
+</div>
+<p>さらに別のタイプのnatspecコメントというコメントがあります。これは <a class="reference internal" href="style-guide.html#natspec"><span class="std std-ref">style guide</span></a> で詳細を確認できます。これはトリプルスラッシュ(<code class="docutils literal notranslate"><span class="pre">///</span></code>)かダブルアスタリスクブロック(<code class="docutils literal notranslate"><span class="pre">/**</span> <span class="pre">...</span> <span class="pre">*/</span></code>)で書かれ、ファンクションの宣言の直前に書かれます。</p>
+<p>ファンクションを付記したり、形式を検証するための条件を注記したり、ユーザーがファンクションを実行する時に表示される <strong>confirmation text</strong> を追加するために、このコメントの中の <a class="reference external" href="https://en.wikipedia.org/wiki/Doxygen">Doxygen</a>-styleタグを使うことができます。</p>
+<p>次の例の中ではコントラクトのタイトル、2つのファンクションのパラメータの説明、2つの返り値が示されています。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="cm">/** </span><span class="cs">@title</span><span class="cm"> Shape calculator. */</span>
+<span class="kd">contract</span> <span class="n">ShapeCalculator</span> <span class="p">{</span>
+    <span class="cm">/** </span><span class="cs">@dev</span><span class="cm"> Calculates a rectangle&#39;s surface and perimeter.</span>
+<span class="cm">      * </span><span class="cs">@param</span><span class="cm"> w Width of the rectangle.</span>
+<span class="cm">      * </span><span class="cs">@param</span><span class="cm"> h Height of the rectangle.</span>
+<span class="cm">      * </span><span class="cs">@return</span><span class="cm"> s The calculated surface.</span>
+<span class="cm">      * </span><span class="cs">@return</span><span class="cm"> p The calculated perimeter.</span>
+<span class="cm">      */</span>
+    <span class="kd">function</span> <span class="n">rectangle</span><span class="p">(</span><span class="kt">uint</span> <span class="n">w</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">h</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">s</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">h</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="structure-of-a-contract.html" class="btn btn-neutral float-right" title="コントラクトの構造" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="solidity-in-depth.html" class="btn btn-neutral float-left" title="Solidity in Depth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

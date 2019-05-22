@@ -1,0 +1,910 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Miscellaneous &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Solidity v0.5.0 Breaking Changes" href="050-breaking-changes.html" />
+    <link rel="prev" title="Solidity Assembly" href="assembly.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Miscellaneous</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#layout-of-state-variables-in-storage">Layout of State Variables in Storage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mappings-and-dynamic-arrays">Mappings and Dynamic Arrays</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#layout-in-memory">Layout in Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#layout-of-call-data">Layout of Call Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internals-cleaning-up-variables">Internals - Cleaning Up Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internals-the-optimiser">Internals - The Optimiser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-mappings">Source Mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cheatsheet">Cheatsheet</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#order-of-precedence-of-operators">Order of Precedence of Operators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-variables">Global Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-visibility-specifiers">Function Visibility Specifiers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modifiers">Modifiers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reserved-keywords">Reserved Keywords</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#language-grammar">Language Grammar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Miscellaneous</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/miscellaneous.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="miscellaneous">
+<h1>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="layout-of-state-variables-in-storage">
+<span id="index-0"></span><h2>Layout of State Variables in Storage<a class="headerlink" href="#layout-of-state-variables-in-storage" title="Permalink to this headline">¶</a></h2>
+<p>Statically-sized variables (everything except mapping and dynamically-sized array types) are laid out contiguously in storage starting from position <code class="docutils literal notranslate"><span class="pre">0</span></code>. Multiple, contiguous items that need less than 32 bytes are packed into a single storage slot if possible, according to the following rules:</p>
+<ul class="simple">
+<li>The first item in a storage slot is stored lower-order aligned.</li>
+<li>Elementary types use only that many bytes that are necessary to store them.</li>
+<li>If an elementary type does not fit the remaining part of a storage slot, it is moved to the next storage slot.</li>
+<li>Structs and array data always start a new slot and occupy whole slots (but items inside a struct or array are packed tightly according to these rules).</li>
+</ul>
+<p>For contracts that use inheritance, the ordering of state variables is determined by the
+C3-linearized order of contracts starting with the most base-ward contract. If allowed
+by the above rules, state variables from different contracts do share the same storage slot.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<blockquote>
+<div><p>When using elements that are smaller than 32 bytes, your contract’s gas usage may be higher.
+This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller
+than that, the EVM must use more operations in order to reduce the size of the element from 32
+bytes to the desired size.</p>
+<p>It is only beneficial to use reduced-size arguments if you are dealing with storage values
+because the compiler will pack multiple elements into one storage slot, and thus, combine
+multiple reads or writes into a single operation. When dealing with function arguments or memory
+values, there is no inherent benefit because the compiler does not pack these values.</p>
+<p>Finally, in order to allow the EVM to optimize for this, ensure that you try to order your
+storage variables and <code class="docutils literal notranslate"><span class="pre">struct</span></code> members such that they can be packed tightly. For example,
+declaring your storage variables in the order of <code class="docutils literal notranslate"><span class="pre">uint128,</span> <span class="pre">uint128,</span> <span class="pre">uint256</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">uint128,</span> <span class="pre">uint256,</span> <span class="pre">uint128</span></code>, as the former will only take up two slots of storage whereas the
+latter will take up three.</p>
+</div></blockquote>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The layout of state variables in storage is considered to be part of the external interface
+of Solidity due to the fact that storage pointers can be passed to libraries. This means that
+any change to the rules outlined in this section is considered a breaking change
+of the language and due to its critical nature should be considered very carefully before
+being executed.</p>
+</div>
+</div>
+<p>The elements of structs and arrays are stored after each other, just as if they were given explicitly.</p>
+<div class="section" id="mappings-and-dynamic-arrays">
+<h3>Mappings and Dynamic Arrays<a class="headerlink" href="#mappings-and-dynamic-arrays" title="Permalink to this headline">¶</a></h3>
+<p>Due to their unpredictable size, mapping and dynamically-sized array types use a Keccak-256 hash
+computation to find the starting position of the value or the array data. These starting positions are always full stack slots.</p>
+<p>The mapping or the dynamic array itself occupies a slot in storage at some position <code class="docutils literal notranslate"><span class="pre">p</span></code>
+according to the above rule (or by recursively applying this rule for mappings of mappings or arrays of arrays). For dynamic arrays,
+this slot stores the number of elements in the array (byte arrays and strings are an exception, see <a class="reference internal" href="#bytes-and-string"><span class="std std-ref">below</span></a>).
+For mappings, the slot is unused (but it is needed so that two equal mappings after each other will use a different
+hash distribution). Array data is located at <code class="docutils literal notranslate"><span class="pre">keccak256(p)</span></code> and the value corresponding to a mapping key
+<code class="docutils literal notranslate"><span class="pre">k</span></code> is located at <code class="docutils literal notranslate"><span class="pre">keccak256(k</span> <span class="pre">.</span> <span class="pre">p)</span></code> where <code class="docutils literal notranslate"><span class="pre">.</span></code> is concatenation. If the value is again a
+non-elementary type, the positions are found by adding an offset of <code class="docutils literal notranslate"><span class="pre">keccak256(k</span> <span class="pre">.</span> <span class="pre">p)</span></code>.</p>
+<p>So for the following contract snippet:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+  <span class="kd">struct</span> <span class="n">s</span> <span class="p">{</span> <span class="kt">uint</span> <span class="n">a</span><span class="p">;</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+  <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+  <span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="n">s</span><span class="p">))</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The position of <code class="docutils literal notranslate"><span class="pre">data[4][9].b</span></code> is at <code class="docutils literal notranslate"><span class="pre">keccak256(uint256(9)</span> <span class="pre">.</span> <span class="pre">keccak256(uint256(4)</span> <span class="pre">.</span> <span class="pre">uint256(1)))</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p>
+<div class="section" id="bytes-and-string">
+<span id="id1"></span><h4><code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#bytes-and-string" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code> are encoded identically. For short byte arrays, they store their data in the same
+slot where the length is also stored. In particular: if the data is at most <code class="docutils literal notranslate"><span class="pre">31</span></code> bytes long, it is stored
+in the higher-order bytes (left aligned) and the lowest-order byte stores <code class="docutils literal notranslate"><span class="pre">length</span> <span class="pre">*</span> <span class="pre">2</span></code>.
+For byte arrays that store data which is <code class="docutils literal notranslate"><span class="pre">32</span></code> or more bytes long, the main slot stores <code class="docutils literal notranslate"><span class="pre">length</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code> and the data is
+stored as usual in <code class="docutils literal notranslate"><span class="pre">keccak256(slot)</span></code>. This means that you can distinguish a short array from a long array
+by checking if the lowest bit is set: short (not set) and long (set).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Handling invalidly encoded slots is currently not supported but may be added in the future.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="layout-in-memory">
+<h2>Layout in Memory<a class="headerlink" href="#layout-in-memory" title="Permalink to this headline">¶</a></h2>
+<p>Solidity reserves four 32-byte slots, with specific byte ranges (inclusive of endpoints) being used as follows:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">0x00</span></code> - <code class="docutils literal notranslate"><span class="pre">0x3f</span></code> (64 bytes): scratch space for hashing methods</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x40</span></code> - <code class="docutils literal notranslate"><span class="pre">0x5f</span></code> (32 bytes): currently allocated memory size (aka. free memory pointer)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x60</span></code> - <code class="docutils literal notranslate"><span class="pre">0x7f</span></code> (32 bytes): zero slot</li>
+</ul>
+<p>Scratch space can be used between statements (i.e. within inline assembly). The zero slot
+is used as initial value for dynamic memory arrays and should never be written to
+(the free memory pointer points to <code class="docutils literal notranslate"><span class="pre">0x80</span></code> initially).</p>
+<p>Solidity always places new objects at the free memory pointer and memory is never freed (this might change in the future).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>There are some operations in Solidity that need a temporary memory area larger than 64 bytes and therefore will not fit into the scratch space. They will be placed where the free memory points to, but given their short lifetime, the pointer is not updated. The memory may or may not be zeroed out. Because of this, one shouldn’t expect the free memory to point to zeroed out memory.</p>
+<p class="last">While it may seem like a good idea to use <code class="docutils literal notranslate"><span class="pre">msize</span></code> to arrive at a definitely zeroed out memory area, using such a pointer non-temporarily without updating the free memory pointer can have adverse results.</p>
+</div>
+</div>
+<div class="section" id="layout-of-call-data">
+<h2>Layout of Call Data<a class="headerlink" href="#layout-of-call-data" title="Permalink to this headline">¶</a></h2>
+<p>The input data for a function call is assumed to be in the format defined by the <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI
+specification</span></a>. Among others, the ABI specification requires arguments to be padded to multiples of 32
+bytes. The internal function calls use a different convention.</p>
+<p>Arguments for the constructor of a contract are directly appended at the end of the
+contract’s code, also in ABI encoding. The constructor will access them through a hard-coded offset, and
+not by using the <code class="docutils literal notranslate"><span class="pre">codesize</span></code> opcode, since this of course changes when appending
+data to the code.</p>
+</div>
+<div class="section" id="internals-cleaning-up-variables">
+<h2>Internals - Cleaning Up Variables<a class="headerlink" href="#internals-cleaning-up-variables" title="Permalink to this headline">¶</a></h2>
+<p>When a value is shorter than 256-bit, in some cases the remaining bits
+must be cleaned.
+The Solidity compiler is designed to clean such remaining bits before any operations
+that might be adversely affected by the potential garbage in the remaining bits.
+For example, before writing a value to the memory, the remaining bits need
+to be cleared because the memory contents can be used for computing
+hashes or sent as the data of a message call.  Similarly, before
+storing a value in the storage, the remaining bits need to be cleaned
+because otherwise the garbled value can be observed.</p>
+<p>On the other hand, we do not clean the bits if the immediately
+following operation is not affected.  For instance, since any non-zero
+value is considered <code class="docutils literal notranslate"><span class="pre">true</span></code> by <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> instruction, we do not clean
+the boolean values before they are used as the condition for
+<code class="docutils literal notranslate"><span class="pre">JUMPI</span></code>.</p>
+<p>In addition to the design principle above, the Solidity compiler
+cleans input data when it is loaded onto the stack.</p>
+<p>Different types have different rules for cleaning up invalid values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="31%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Type</th>
+<th class="head">Valid Values</th>
+<th class="head">Invalid Values Mean</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>enum of n
+members</td>
+<td>0 until n - 1</td>
+<td>exception</td>
+</tr>
+<tr class="row-odd"><td>bool</td>
+<td>0 or 1</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>signed integers</td>
+<td>sign-extended
+word</td>
+<td>currently silently
+wraps; in the
+future exceptions
+will be thrown</td>
+</tr>
+<tr class="row-odd"><td>unsigned
+integers</td>
+<td>higher bits
+zeroed</td>
+<td>currently silently
+wraps; in the
+future exceptions
+will be thrown</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="internals-the-optimiser">
+<span id="index-1"></span><h2>Internals - The Optimiser<a class="headerlink" href="#internals-the-optimiser" title="Permalink to this headline">¶</a></h2>
+<p>The Solidity optimiser operates on assembly so that other languages can use it. It splits the sequence of instructions into basic blocks at <code class="docutils literal notranslate"><span class="pre">JUMPs</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPDESTs</span></code>. Inside these blocks, the optimiser analyses the instructions and records every modification to the stack, memory, or storage as an expression which consists of an instruction and a list of arguments which are pointers to other expressions. The optimiser uses a component called “CommonSubexpressionEliminator” that amongst other tasks, finds expressions that are always equal (on every input) and combines them into an expression class. The optimiser first tries to find each new expression in a list of already known expressions. If this does not work, it simplifies the expression according to rules like <code class="docutils literal notranslate"><span class="pre">constant</span> <span class="pre">+</span> <span class="pre">constant</span> <span class="pre">=</span> <span class="pre">sum_of_constants</span></code> or <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">=</span> <span class="pre">X</span></code>. Since this is a recursive process, we can also apply the latter rule if the second factor is a more complex expression where we know that it always evaluates to one. Modifications to storage and memory locations have to erase knowledge about storage and memory locations which are not known to be different. If we first write to location x and then to location y and both are input variables, the second could overwrite the first, so we do not know what is stored at x after we wrote to y. If simplification of the expression x - y evaluates to a non-zero constant, we know that we can keep our knowledge about what is stored at x.</p>
+<p>After this process, we know which expressions have to be on the stack at the end, and have a list of modifications to memory and storage. This information is stored together with the basic blocks and is used to link them. Furthermore, knowledge about the stack, storage and memory configuration is forwarded to the next block(s). If we know the targets of all <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> instructions, we can build a complete control flow graph of the program. If there is only one target we do not know (this can happen as in principle, jump targets can be computed from inputs), we have to erase all knowledge about the input state of a block as it can be the target of the unknown <code class="docutils literal notranslate"><span class="pre">JUMP</span></code>. If the optimiser finds a <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> whose condition evaluates to a constant, it transforms it to an unconditional jump.</p>
+<p>As the last step, the code in each block is re-generated. The optimiser creates a dependency graph from the expressions on the stack at the end of the block, and it drops every operation that is not part of this graph. It generates code that applies the modifications to memory and storage in the order they were made in the original code (dropping modifications which were found not to be needed). Finally, it generates all values that are required to be on the stack in the correct place.</p>
+<p>These steps are applied to each basic block and the newly generated code is used as replacement if it is smaller. If a basic block is split at a <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> and during the analysis, the condition evaluates to a constant, the <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> is replaced depending on the value of the constant. Thus code like</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">else</span>
+  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>still simplifies to code which you can compile even though the instructions contained
+a jump in the beginning of the process:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source-mappings">
+<span id="index-2"></span><h2>Source Mappings<a class="headerlink" href="#source-mappings" title="Permalink to this headline">¶</a></h2>
+<p>As part of the AST output, the compiler provides the range of the source
+code that is represented by the respective node in the AST. This can be
+used for various purposes ranging from static analysis tools that report
+errors based on the AST and debugging tools that highlight local variables
+and their uses.</p>
+<p>Furthermore, the compiler can also generate a mapping from the bytecode
+to the range in the source code that generated the instruction. This is again
+important for static analysis tools that operate on bytecode level and
+for displaying the current position in the source code inside a debugger
+or for breakpoint handling.</p>
+<p>Both kinds of source mappings use integer identifiers to refer to source files.
+The identifier of a source file is stored in
+<code class="docutils literal notranslate"><span class="pre">output['sources'][sourceName]['id']</span></code> where <code class="docutils literal notranslate"><span class="pre">output</span></code> is the output of the
+standard-json compiler interface parsed as JSON.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the case of instructions that are not associated with any particular source file,
+the source mapping assigns an integer identifier of <code class="docutils literal notranslate"><span class="pre">-1</span></code>. This may happen for
+bytecode sections stemming from compiler-generated inline assembly statements.</p>
+</div>
+<p>The source mappings inside the AST use the following
+notation:</p>
+<p><code class="docutils literal notranslate"><span class="pre">s:l:f</span></code></p>
+<p>Where <code class="docutils literal notranslate"><span class="pre">s</span></code> is the byte-offset to the start of the range in the source file,
+<code class="docutils literal notranslate"><span class="pre">l</span></code> is the length of the source range in bytes and <code class="docutils literal notranslate"><span class="pre">f</span></code> is the source
+index mentioned above.</p>
+<p>The encoding in the source mapping for the bytecode is more complicated:
+It is a list of <code class="docutils literal notranslate"><span class="pre">s:l:f:j</span></code> separated by <code class="docutils literal notranslate"><span class="pre">;</span></code>. Each of these
+elements corresponds to an instruction, i.e. you cannot use the byte offset
+but have to use the instruction offset (push instructions are longer than a single byte).
+The fields <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code> are as above and <code class="docutils literal notranslate"><span class="pre">j</span></code> can be either
+<code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">o</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> signifying whether a jump instruction goes into a
+function, returns from a function or is a regular jump as part of e.g. a loop.</p>
+<p>In order to compress these source mappings especially for bytecode, the
+following rules are used:</p>
+<blockquote>
+<div><ul class="simple">
+<li>If a field is empty, the value of the preceding element is used.</li>
+<li>If a <code class="docutils literal notranslate"><span class="pre">:</span></code> is missing, all following fields are considered empty.</li>
+</ul>
+</div></blockquote>
+<p>This means the following source mappings represent the same information:</p>
+<p><code class="docutils literal notranslate"><span class="pre">1:2:1;1:9:1;2:1:2;2:1:2;2:1:2</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">1:2:1;:9;2:1:2;;</span></code></p>
+</div>
+<div class="section" id="tips-and-tricks">
+<h2>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Use <code class="docutils literal notranslate"><span class="pre">delete</span></code> on arrays to delete all its elements.</li>
+<li>Use shorter types for struct elements and sort them such that short types are grouped together. This can lower the gas costs as multiple <code class="docutils literal notranslate"><span class="pre">SSTORE</span></code> operations might be combined into a single (<code class="docutils literal notranslate"><span class="pre">SSTORE</span></code> costs 5000 or 20000 gas, so this is what you want to optimise). Use the gas price estimator (with optimiser enabled) to check!</li>
+<li>Make your state variables public - the compiler will create <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">getters</span></a> for you automatically.</li>
+<li>If you end up checking conditions on input or state a lot at the beginning of your functions, try using <a class="reference internal" href="contracts.html#modifiers"><span class="std std-ref">Function Modifiers</span></a>.</li>
+<li>Initialize storage structs with a single assignment: <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">MyStruct({a:</span> <span class="pre">1,</span> <span class="pre">b:</span> <span class="pre">2});</span></code></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the storage struct has tightly packed properties, initialize it with separate assignments: <code class="docutils literal notranslate"><span class="pre">x.a</span> <span class="pre">=</span> <span class="pre">1;</span> <span class="pre">x.b</span> <span class="pre">=</span> <span class="pre">2;</span></code>. In this way it will be easier for the optimizer to update storage in one go, thus making assignment cheaper.</p>
+</div>
+</div>
+<div class="section" id="cheatsheet">
+<h2>Cheatsheet<a class="headerlink" href="#cheatsheet" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="order-of-precedence-of-operators">
+<span id="order"></span><span id="index-3"></span><h3>Order of Precedence of Operators<a class="headerlink" href="#order-of-precedence-of-operators" title="Permalink to this headline">¶</a></h3>
+<p>The following is the order of precedence for operators, listed in order of evaluation.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="40%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Precedence</th>
+<th class="head">Description</th>
+<th class="head">Operator</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="6"><em>1</em></td>
+<td>Postfix increment and decrement</td>
+<td><code class="docutils literal notranslate"><span class="pre">++</span></code>, <code class="docutils literal notranslate"><span class="pre">--</span></code></td>
+</tr>
+<tr class="row-odd"><td>New expression</td>
+<td><code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">&lt;typename&gt;</span></code></td>
+</tr>
+<tr class="row-even"><td>Array subscripting</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;array&gt;[&lt;index&gt;]</span></code></td>
+</tr>
+<tr class="row-odd"><td>Member access</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;object&gt;.&lt;member&gt;</span></code></td>
+</tr>
+<tr class="row-even"><td>Function-like call</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;func&gt;(&lt;args...&gt;)</span></code></td>
+</tr>
+<tr class="row-odd"><td>Parentheses</td>
+<td><code class="docutils literal notranslate"><span class="pre">(&lt;statement&gt;)</span></code></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><em>2</em></td>
+<td>Prefix increment and decrement</td>
+<td><code class="docutils literal notranslate"><span class="pre">++</span></code>, <code class="docutils literal notranslate"><span class="pre">--</span></code></td>
+</tr>
+<tr class="row-odd"><td>Unary minus</td>
+<td><code class="docutils literal notranslate"><span class="pre">-</span></code></td>
+</tr>
+<tr class="row-even"><td>Unary operations</td>
+<td><code class="docutils literal notranslate"><span class="pre">delete</span></code></td>
+</tr>
+<tr class="row-odd"><td>Logical NOT</td>
+<td><code class="docutils literal notranslate"><span class="pre">!</span></code></td>
+</tr>
+<tr class="row-even"><td>Bitwise NOT</td>
+<td><code class="docutils literal notranslate"><span class="pre">~</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>3</em></td>
+<td>Exponentiation</td>
+<td><code class="docutils literal notranslate"><span class="pre">**</span></code></td>
+</tr>
+<tr class="row-even"><td><em>4</em></td>
+<td>Multiplication, division and modulo</td>
+<td><code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>5</em></td>
+<td>Addition and subtraction</td>
+<td><code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code></td>
+</tr>
+<tr class="row-even"><td><em>6</em></td>
+<td>Bitwise shift operators</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>7</em></td>
+<td>Bitwise AND</td>
+<td><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></td>
+</tr>
+<tr class="row-even"><td><em>8</em></td>
+<td>Bitwise XOR</td>
+<td><code class="docutils literal notranslate"><span class="pre">^</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>9</em></td>
+<td>Bitwise OR</td>
+<td><code class="docutils literal notranslate"><span class="pre">|</span></code></td>
+</tr>
+<tr class="row-even"><td><em>10</em></td>
+<td>Inequality operators</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>11</em></td>
+<td>Equality operators</td>
+<td><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code></td>
+</tr>
+<tr class="row-even"><td><em>12</em></td>
+<td>Logical AND</td>
+<td><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>13</em></td>
+<td>Logical OR</td>
+<td><code class="docutils literal notranslate"><span class="pre">||</span></code></td>
+</tr>
+<tr class="row-even"><td><em>14</em></td>
+<td>Ternary operator</td>
+<td><code class="docutils literal notranslate"><span class="pre">&lt;conditional&gt;</span> <span class="pre">?</span> <span class="pre">&lt;if-true&gt;</span> <span class="pre">:</span> <span class="pre">&lt;if-false&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><em>15</em></td>
+<td>Assignment operators</td>
+<td><code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">|=</span></code>, <code class="docutils literal notranslate"><span class="pre">^=</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;&lt;=</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&gt;&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code>,
+<code class="docutils literal notranslate"><span class="pre">%=</span></code></td>
+</tr>
+<tr class="row-even"><td><em>16</em></td>
+<td>Comma operator</td>
+<td><code class="docutils literal notranslate"><span class="pre">,</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="global-variables">
+<span id="index-4"></span><h3>Global Variables<a class="headerlink" href="#global-variables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">abi.decode(bytes</span> <span class="pre">memory</span> <span class="pre">encodedData,</span> <span class="pre">(...))</span> <span class="pre">returns</span> <span class="pre">(...)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-decodes the provided data. The types are given in parentheses as second argument. Example: <code class="docutils literal notranslate"><span class="pre">(uint</span> <span class="pre">a,</span> <span class="pre">uint[2]</span> <span class="pre">memory</span> <span class="pre">b,</span> <span class="pre">bytes</span> <span class="pre">memory</span> <span class="pre">c)</span> <span class="pre">=</span> <span class="pre">abi.decode(data,</span> <span class="pre">(uint,</span> <span class="pre">uint[2],</span> <span class="pre">bytes))</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">abi.encode(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-encodes the given arguments</li>
+<li><code class="docutils literal notranslate"><span class="pre">abi.encodePacked(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: Performs <a class="reference internal" href="abi-spec.html#abi-packed-mode"><span class="std std-ref">packed encoding</span></a> of the given arguments</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4</span> <span class="pre">selector,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-encodes the given arguments</dt>
+<dd>starting from the second and prepends the given four-byte selector</dd>
+</dl>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature(string</span> <span class="pre">memory</span> <span class="pre">signature,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: Equivalent to <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4(keccak256(bytes(signature)),</span> <span class="pre">...)`</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">block.coinbase</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): current block miner’s address</li>
+<li><code class="docutils literal notranslate"><span class="pre">block.difficulty</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block difficulty</li>
+<li><code class="docutils literal notranslate"><span class="pre">block.gaslimit</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block gaslimit</li>
+<li><code class="docutils literal notranslate"><span class="pre">block.number</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block number</li>
+<li><code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block timestamp</li>
+<li><code class="docutils literal notranslate"><span class="pre">gasleft()</span> <span class="pre">returns</span> <span class="pre">(uint256)</span></code>: remaining gas</li>
+<li><code class="docutils literal notranslate"><span class="pre">msg.data</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span></code>): complete calldata</li>
+<li><code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): sender of the message (current call)</li>
+<li><code class="docutils literal notranslate"><span class="pre">msg.value</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): number of wei sent with the message</li>
+<li><code class="docutils literal notranslate"><span class="pre">now</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block timestamp (alias for <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">tx.gasprice</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): gas price of the transaction</li>
+<li><code class="docutils literal notranslate"><span class="pre">tx.origin</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): sender of the transaction (full call chain)</li>
+<li><code class="docutils literal notranslate"><span class="pre">assert(bool</span> <span class="pre">condition)</span></code>: abort execution and revert state changes if condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use for internal error)</li>
+<li><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition)</span></code>: abort execution and revert state changes if condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use for malformed input or error in external component)</li>
+<li><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition,</span> <span class="pre">string</span> <span class="pre">memory</span> <span class="pre">message)</span></code>: abort execution and revert state changes if condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use for malformed input or error in external component). Also provide error message.</li>
+<li><code class="docutils literal notranslate"><span class="pre">revert()</span></code>: abort execution and revert state changes</li>
+<li><code class="docutils literal notranslate"><span class="pre">revert(string</span> <span class="pre">memory</span> <span class="pre">message)</span></code>: abort execution and revert state changes providing an explanatory string</li>
+<li><code class="docutils literal notranslate"><span class="pre">blockhash(uint</span> <span class="pre">blockNumber)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: hash of the given block - only works for 256 most recent blocks</li>
+<li><code class="docutils literal notranslate"><span class="pre">keccak256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: compute the Keccak-256 hash of the input</li>
+<li><code class="docutils literal notranslate"><span class="pre">sha256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: compute the SHA-256 hash of the input</li>
+<li><code class="docutils literal notranslate"><span class="pre">ripemd160(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes20)</span></code>: compute the RIPEMD-160 hash of the input</li>
+<li><code class="docutils literal notranslate"><span class="pre">ecrecover(bytes32</span> <span class="pre">hash,</span> <span class="pre">uint8</span> <span class="pre">v,</span> <span class="pre">bytes32</span> <span class="pre">r,</span> <span class="pre">bytes32</span> <span class="pre">s)</span> <span class="pre">returns</span> <span class="pre">(address)</span></code>: recover address associated with the public key from elliptic curve signature, return zero on error</li>
+<li><code class="docutils literal notranslate"><span class="pre">addmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code>: compute <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">+</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> where the addition is performed with arbitrary precision and does not wrap around at <code class="docutils literal notranslate"><span class="pre">2**256</span></code>. Assert that <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> starting from version 0.5.0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">mulmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code>: compute <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">*</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> where the multiplication is performed with arbitrary precision and does not wrap around at <code class="docutils literal notranslate"><span class="pre">2**256</span></code>. Assert that <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> starting from version 0.5.0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">this</span></code> (current contract’s type): the current contract, explicitly convertible to <code class="docutils literal notranslate"><span class="pre">address</span></code> or <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">super</span></code>: the contract one level higher in the inheritance hierarchy</li>
+<li><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code>: destroy the current contract, sending its funds to the given address</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.balance</span></code> (<code class="docutils literal notranslate"><span class="pre">uint256</span></code>): balance of the <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> in Wei</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.send(uint256</span> <span class="pre">amount)</span> <span class="pre">returns</span> <span class="pre">(bool)</span></code>: send given amount of Wei to <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a>, returns <code class="docutils literal notranslate"><span class="pre">false</span></code> on failure</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.transfer(uint256</span> <span class="pre">amount)</span></code>: send given amount of Wei to <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a>, throws on failure</li>
+<li><code class="docutils literal notranslate"><span class="pre">type(C).creationCode</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>): creation bytecode of the given contract, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">type(C).runtimeCode</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>): runtime bytecode of the given contract, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Do not rely on <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">now</span></code> and <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> as a source of randomness,
+unless you know what you are doing.</p>
+<p>Both the timestamp and the block hash can be influenced by miners to some degree.
+Bad actors in the mining community can for example run a casino payout function on a chosen hash
+and just retry a different hash if they did not receive any money.</p>
+<p class="last">The current block timestamp must be strictly larger than the timestamp of the last block,
+but the only guarantee is that it will be somewhere between the timestamps of two
+consecutive blocks in the canonical chain.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The block hashes are not available for all blocks for scalability reasons.
+You can only access the hashes of the most recent 256 blocks, all other
+values will be zero.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In version 0.5.0, the following aliases were removed: <code class="docutils literal notranslate"><span class="pre">suicide</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>,
+<code class="docutils literal notranslate"><span class="pre">msg.gas</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">gasleft</span></code>, <code class="docutils literal notranslate"><span class="pre">block.blockhash</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> and
+<code class="docutils literal notranslate"><span class="pre">sha3</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>.</p>
+</div>
+</div>
+<div class="section" id="function-visibility-specifiers">
+<span id="index-5"></span><h3>Function Visibility Specifiers<a class="headerlink" href="#function-visibility-specifiers" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">myFunction</span><span class="p">()</span> <span class="o">&lt;</span><span class="n">visibility</span> <span class="n">specifier</span><span class="o">&gt;</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">public</span></code>: visible externally and internally (creates a <a class="reference internal" href="contracts.html#getter-functions"><span class="std std-ref">getter function</span></a> for storage/state variables)</li>
+<li><code class="docutils literal notranslate"><span class="pre">private</span></code>: only visible in the current contract</li>
+<li><code class="docutils literal notranslate"><span class="pre">external</span></code>: only visible externally (only for functions) - i.e. can only be message-called (via <code class="docutils literal notranslate"><span class="pre">this.func</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">internal</span></code>: only visible internally</li>
+</ul>
+</div>
+<div class="section" id="modifiers">
+<span id="index-6"></span><h3>Modifiers<a class="headerlink" href="#modifiers" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">pure</span></code> for functions: Disallows modification or access of state.</li>
+<li><code class="docutils literal notranslate"><span class="pre">view</span></code> for functions: Disallows modification of state.</li>
+<li><code class="docutils literal notranslate"><span class="pre">payable</span></code> for functions: Allows them to receive Ether together with a call.</li>
+<li><code class="docutils literal notranslate"><span class="pre">constant</span></code> for state variables: Disallows assignment (except initialisation), does not occupy storage slot.</li>
+<li><code class="docutils literal notranslate"><span class="pre">anonymous</span></code> for events: Does not store event signature as topic.</li>
+<li><code class="docutils literal notranslate"><span class="pre">indexed</span></code> for event parameters: Stores the parameter as topic.</li>
+</ul>
+</div>
+<div class="section" id="reserved-keywords">
+<h3>Reserved Keywords<a class="headerlink" href="#reserved-keywords" title="Permalink to this headline">¶</a></h3>
+<p>These keywords are reserved in Solidity. They might become part of the syntax in the future:</p>
+<p><code class="docutils literal notranslate"><span class="pre">abstract</span></code>, <code class="docutils literal notranslate"><span class="pre">after</span></code>, <code class="docutils literal notranslate"><span class="pre">alias</span></code>, <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">case</span></code>, <code class="docutils literal notranslate"><span class="pre">catch</span></code>, <code class="docutils literal notranslate"><span class="pre">copyof</span></code>, <code class="docutils literal notranslate"><span class="pre">default</span></code>,
+<code class="docutils literal notranslate"><span class="pre">define</span></code>, <code class="docutils literal notranslate"><span class="pre">final</span></code>, <code class="docutils literal notranslate"><span class="pre">immutable</span></code>, <code class="docutils literal notranslate"><span class="pre">implements</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code>, <code class="docutils literal notranslate"><span class="pre">inline</span></code>, <code class="docutils literal notranslate"><span class="pre">let</span></code>, <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">match</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mutable</span></code>, <code class="docutils literal notranslate"><span class="pre">null</span></code>, <code class="docutils literal notranslate"><span class="pre">of</span></code>, <code class="docutils literal notranslate"><span class="pre">override</span></code>, <code class="docutils literal notranslate"><span class="pre">partial</span></code>, <code class="docutils literal notranslate"><span class="pre">promise</span></code>, <code class="docutils literal notranslate"><span class="pre">reference</span></code>, <code class="docutils literal notranslate"><span class="pre">relocatable</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sealed</span></code>, <code class="docutils literal notranslate"><span class="pre">sizeof</span></code>, <code class="docutils literal notranslate"><span class="pre">static</span></code>, <code class="docutils literal notranslate"><span class="pre">supports</span></code>, <code class="docutils literal notranslate"><span class="pre">switch</span></code>, <code class="docutils literal notranslate"><span class="pre">try</span></code>, <code class="docutils literal notranslate"><span class="pre">typedef</span></code>, <code class="docutils literal notranslate"><span class="pre">typeof</span></code>,
+<code class="docutils literal notranslate"><span class="pre">unchecked</span></code>.</p>
+</div>
+<div class="section" id="language-grammar">
+<h3>Language Grammar<a class="headerlink" href="#language-grammar" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SourceUnit = (PragmaDirective | ImportDirective | ContractDefinition)*
+
+// Pragma actually parses anything up to the trailing &#39;;&#39; to be fully forward-compatible.
+PragmaDirective = &#39;pragma&#39; Identifier ([^;]+) &#39;;&#39;
+
+ImportDirective = &#39;import&#39; StringLiteral (&#39;as&#39; Identifier)? &#39;;&#39;
+        | &#39;import&#39; (&#39;*&#39; | Identifier) (&#39;as&#39; Identifier)? &#39;from&#39; StringLiteral &#39;;&#39;
+        | &#39;import&#39; &#39;{&#39; Identifier (&#39;as&#39; Identifier)? ( &#39;,&#39; Identifier (&#39;as&#39; Identifier)? )* &#39;}&#39; &#39;from&#39; StringLiteral &#39;;&#39;
+
+ContractDefinition = ( &#39;contract&#39; | &#39;library&#39; | &#39;interface&#39; ) Identifier
+                     ( &#39;is&#39; InheritanceSpecifier (&#39;,&#39; InheritanceSpecifier )* )?
+                     &#39;{&#39; ContractPart* &#39;}&#39;
+
+ContractPart = StateVariableDeclaration | UsingForDeclaration
+             | StructDefinition | ModifierDefinition | FunctionDefinition | EventDefinition | EnumDefinition
+
+InheritanceSpecifier = UserDefinedTypeName ( &#39;(&#39; Expression ( &#39;,&#39; Expression )* &#39;)&#39; )?
+
+StateVariableDeclaration = TypeName ( &#39;public&#39; | &#39;internal&#39; | &#39;private&#39; | &#39;constant&#39; )* Identifier (&#39;=&#39; Expression)? &#39;;&#39;
+UsingForDeclaration = &#39;using&#39; Identifier &#39;for&#39; (&#39;*&#39; | TypeName) &#39;;&#39;
+StructDefinition = &#39;struct&#39; Identifier &#39;{&#39;
+                     ( VariableDeclaration &#39;;&#39; (VariableDeclaration &#39;;&#39;)* ) &#39;}&#39;
+
+ModifierDefinition = &#39;modifier&#39; Identifier ParameterList? Block
+ModifierInvocation = Identifier ( &#39;(&#39; ExpressionList? &#39;)&#39; )?
+
+FunctionDefinition = &#39;function&#39; Identifier? ParameterList
+                     ( ModifierInvocation | StateMutability | &#39;external&#39; | &#39;public&#39; | &#39;internal&#39; | &#39;private&#39; )*
+                     ( &#39;returns&#39; ParameterList )? ( &#39;;&#39; | Block )
+EventDefinition = &#39;event&#39; Identifier EventParameterList &#39;anonymous&#39;? &#39;;&#39;
+
+EnumValue = Identifier
+EnumDefinition = &#39;enum&#39; Identifier &#39;{&#39; EnumValue? (&#39;,&#39; EnumValue)* &#39;}&#39;
+
+ParameterList = &#39;(&#39; ( Parameter (&#39;,&#39; Parameter)* )? &#39;)&#39;
+Parameter = TypeName StorageLocation? Identifier?
+
+EventParameterList = &#39;(&#39; ( EventParameter (&#39;,&#39; EventParameter )* )? &#39;)&#39;
+EventParameter = TypeName &#39;indexed&#39;? Identifier?
+
+FunctionTypeParameterList = &#39;(&#39; ( FunctionTypeParameter (&#39;,&#39; FunctionTypeParameter )* )? &#39;)&#39;
+FunctionTypeParameter = TypeName StorageLocation?
+
+// semantic restriction: mappings and structs (recursively) containing mappings
+// are not allowed in argument lists
+VariableDeclaration = TypeName StorageLocation? Identifier
+
+TypeName = ElementaryTypeName
+         | UserDefinedTypeName
+         | Mapping
+         | ArrayTypeName
+         | FunctionTypeName
+         | ( &#39;address&#39; &#39;payable&#39; )
+
+UserDefinedTypeName = Identifier ( &#39;.&#39; Identifier )*
+
+Mapping = &#39;mapping&#39; &#39;(&#39; ElementaryTypeName &#39;=&gt;&#39; TypeName &#39;)&#39;
+ArrayTypeName = TypeName &#39;[&#39; Expression? &#39;]&#39;
+FunctionTypeName = &#39;function&#39; FunctionTypeParameterList ( &#39;internal&#39; | &#39;external&#39; | StateMutability )*
+                   ( &#39;returns&#39; FunctionTypeParameterList )?
+StorageLocation = &#39;memory&#39; | &#39;storage&#39; | &#39;calldata&#39;
+StateMutability = &#39;pure&#39; | &#39;view&#39; | &#39;payable&#39;
+
+Block = &#39;{&#39; Statement* &#39;}&#39;
+Statement = IfStatement | WhileStatement | ForStatement | Block | InlineAssemblyStatement |
+            ( DoWhileStatement | PlaceholderStatement | Continue | Break | Return |
+              Throw | EmitStatement | SimpleStatement ) &#39;;&#39;
+
+ExpressionStatement = Expression
+IfStatement = &#39;if&#39; &#39;(&#39; Expression &#39;)&#39; Statement ( &#39;else&#39; Statement )?
+WhileStatement = &#39;while&#39; &#39;(&#39; Expression &#39;)&#39; Statement
+PlaceholderStatement = &#39;_&#39;
+SimpleStatement = VariableDefinition | ExpressionStatement
+ForStatement = &#39;for&#39; &#39;(&#39; (SimpleStatement)? &#39;;&#39; (Expression)? &#39;;&#39; (ExpressionStatement)? &#39;)&#39; Statement
+InlineAssemblyStatement = &#39;assembly&#39; StringLiteral? AssemblyBlock
+DoWhileStatement = &#39;do&#39; Statement &#39;while&#39; &#39;(&#39; Expression &#39;)&#39;
+Continue = &#39;continue&#39;
+Break = &#39;break&#39;
+Return = &#39;return&#39; Expression?
+Throw = &#39;throw&#39;
+EmitStatement = &#39;emit&#39; FunctionCall
+VariableDefinition = (VariableDeclaration | &#39;(&#39; VariableDeclaration? (&#39;,&#39; VariableDeclaration? )* &#39;)&#39; ) ( &#39;=&#39; Expression )?
+
+// Precedence by order (see github.com/ethereum/solidity/pull/732)
+Expression
+  = Expression (&#39;++&#39; | &#39;--&#39;)
+  | NewExpression
+  | IndexAccess
+  | MemberAccess
+  | FunctionCall
+  | &#39;(&#39; Expression &#39;)&#39;
+  | (&#39;!&#39; | &#39;~&#39; | &#39;delete&#39; | &#39;++&#39; | &#39;--&#39; | &#39;+&#39; | &#39;-&#39;) Expression
+  | Expression &#39;**&#39; Expression
+  | Expression (&#39;*&#39; | &#39;/&#39; | &#39;%&#39;) Expression
+  | Expression (&#39;+&#39; | &#39;-&#39;) Expression
+  | Expression (&#39;&lt;&lt;&#39; | &#39;&gt;&gt;&#39;) Expression
+  | Expression &#39;&amp;&#39; Expression
+  | Expression &#39;^&#39; Expression
+  | Expression &#39;|&#39; Expression
+  | Expression (&#39;&lt;&#39; | &#39;&gt;&#39; | &#39;&lt;=&#39; | &#39;&gt;=&#39;) Expression
+  | Expression (&#39;==&#39; | &#39;!=&#39;) Expression
+  | Expression &#39;&amp;&amp;&#39; Expression
+  | Expression &#39;||&#39; Expression
+  | Expression &#39;?&#39; Expression &#39;:&#39; Expression
+  | Expression (&#39;=&#39; | &#39;|=&#39; | &#39;^=&#39; | &#39;&amp;=&#39; | &#39;&lt;&lt;=&#39; | &#39;&gt;&gt;=&#39; | &#39;+=&#39; | &#39;-=&#39; | &#39;*=&#39; | &#39;/=&#39; | &#39;%=&#39;) Expression
+  | PrimaryExpression
+
+PrimaryExpression = BooleanLiteral
+                  | NumberLiteral
+                  | HexLiteral
+                  | StringLiteral
+                  | TupleExpression
+                  | Identifier
+                  | ElementaryTypeNameExpression
+
+ExpressionList = Expression ( &#39;,&#39; Expression )*
+NameValueList = Identifier &#39;:&#39; Expression ( &#39;,&#39; Identifier &#39;:&#39; Expression )*
+
+FunctionCall = Expression &#39;(&#39; FunctionCallArguments &#39;)&#39;
+FunctionCallArguments = &#39;{&#39; NameValueList? &#39;}&#39;
+                      | ExpressionList?
+
+NewExpression = &#39;new&#39; TypeName
+MemberAccess = Expression &#39;.&#39; Identifier
+IndexAccess = Expression &#39;[&#39; Expression? &#39;]&#39;
+
+BooleanLiteral = &#39;true&#39; | &#39;false&#39;
+NumberLiteral = ( HexNumber | DecimalNumber ) (&#39; &#39; NumberUnit)?
+NumberUnit = &#39;wei&#39; | &#39;szabo&#39; | &#39;finney&#39; | &#39;ether&#39;
+           | &#39;seconds&#39; | &#39;minutes&#39; | &#39;hours&#39; | &#39;days&#39; | &#39;weeks&#39; | &#39;years&#39;
+HexLiteral = &#39;hex&#39; (&#39;&quot;&#39; ([0-9a-fA-F]{2})* &#39;&quot;&#39; | &#39;\&#39;&#39; ([0-9a-fA-F]{2})* &#39;\&#39;&#39;)
+StringLiteral = &#39;&quot;&#39; ([^&quot;\r\n\\] | &#39;\\&#39; .)* &#39;&quot;&#39;
+Identifier = [a-zA-Z_$] [a-zA-Z_$0-9]*
+
+HexNumber = &#39;0x&#39; [0-9a-fA-F]+
+DecimalNumber = [0-9]+ ( &#39;.&#39; [0-9]* )? ( [eE] [0-9]+ )?
+
+TupleExpression = &#39;(&#39; ( Expression? ( &#39;,&#39; Expression? )*  )? &#39;)&#39;
+                | &#39;[&#39; ( Expression  ( &#39;,&#39; Expression  )*  )? &#39;]&#39;
+
+ElementaryTypeNameExpression = ElementaryTypeName
+
+ElementaryTypeName = &#39;address&#39; | &#39;bool&#39; | &#39;string&#39; | Int | Uint | Byte | Fixed | Ufixed
+
+Int = &#39;int&#39; | &#39;int8&#39; | &#39;int16&#39; | &#39;int24&#39; | &#39;int32&#39; | &#39;int40&#39; | &#39;int48&#39; | &#39;int56&#39; | &#39;int64&#39; | &#39;int72&#39; | &#39;int80&#39; | &#39;int88&#39; | &#39;int96&#39; | &#39;int104&#39; | &#39;int112&#39; | &#39;int120&#39; | &#39;int128&#39; | &#39;int136&#39; | &#39;int144&#39; | &#39;int152&#39; | &#39;int160&#39; | &#39;int168&#39; | &#39;int176&#39; | &#39;int184&#39; | &#39;int192&#39; | &#39;int200&#39; | &#39;int208&#39; | &#39;int216&#39; | &#39;int224&#39; | &#39;int232&#39; | &#39;int240&#39; | &#39;int248&#39; | &#39;int256&#39;
+
+Uint = &#39;uint&#39; | &#39;uint8&#39; | &#39;uint16&#39; | &#39;uint24&#39; | &#39;uint32&#39; | &#39;uint40&#39; | &#39;uint48&#39; | &#39;uint56&#39; | &#39;uint64&#39; | &#39;uint72&#39; | &#39;uint80&#39; | &#39;uint88&#39; | &#39;uint96&#39; | &#39;uint104&#39; | &#39;uint112&#39; | &#39;uint120&#39; | &#39;uint128&#39; | &#39;uint136&#39; | &#39;uint144&#39; | &#39;uint152&#39; | &#39;uint160&#39; | &#39;uint168&#39; | &#39;uint176&#39; | &#39;uint184&#39; | &#39;uint192&#39; | &#39;uint200&#39; | &#39;uint208&#39; | &#39;uint216&#39; | &#39;uint224&#39; | &#39;uint232&#39; | &#39;uint240&#39; | &#39;uint248&#39; | &#39;uint256&#39;
+
+Byte = &#39;byte&#39; | &#39;bytes&#39; | &#39;bytes1&#39; | &#39;bytes2&#39; | &#39;bytes3&#39; | &#39;bytes4&#39; | &#39;bytes5&#39; | &#39;bytes6&#39; | &#39;bytes7&#39; | &#39;bytes8&#39; | &#39;bytes9&#39; | &#39;bytes10&#39; | &#39;bytes11&#39; | &#39;bytes12&#39; | &#39;bytes13&#39; | &#39;bytes14&#39; | &#39;bytes15&#39; | &#39;bytes16&#39; | &#39;bytes17&#39; | &#39;bytes18&#39; | &#39;bytes19&#39; | &#39;bytes20&#39; | &#39;bytes21&#39; | &#39;bytes22&#39; | &#39;bytes23&#39; | &#39;bytes24&#39; | &#39;bytes25&#39; | &#39;bytes26&#39; | &#39;bytes27&#39; | &#39;bytes28&#39; | &#39;bytes29&#39; | &#39;bytes30&#39; | &#39;bytes31&#39; | &#39;bytes32&#39;
+
+Fixed = &#39;fixed&#39; | ( &#39;fixed&#39; [0-9]+ &#39;x&#39; [0-9]+ )
+
+Ufixed = &#39;ufixed&#39; | ( &#39;ufixed&#39; [0-9]+ &#39;x&#39; [0-9]+ )
+
+
+AssemblyBlock = &#39;{&#39; AssemblyStatement* &#39;}&#39;
+
+AssemblyStatement = AssemblyBlock
+                  | AssemblyFunctionDefinition
+                  | AssemblyVariableDeclaration
+                  | AssemblyAssignment
+                  | AssemblyIf
+                  | AssemblyExpression
+                  | AssemblySwitch
+                  | AssemblyForLoop
+                  | AssemblyBreakContinue
+AssemblyFunctionDefinition =
+    &#39;function&#39; Identifier &#39;(&#39; AssemblyIdentifierList? &#39;)&#39;
+    ( &#39;-&gt;&#39; AssemblyIdentifierList )? AssemblyBlock
+AssemblyVariableDeclaration = &#39;let&#39; AssemblyIdentifierList ( &#39;:=&#39; AssemblyExpression )?
+AssemblyAssignment = AssemblyIdentifierList &#39;:=&#39; AssemblyExpression
+AssemblyExpression = AssemblyFunctionCall | Identifier | Literal
+AssemblyIf = &#39;if&#39; AssemblyExpression AssemblyBlock
+AssemblySwitch = &#39;switch&#39; AssemblyExpression ( Case+ AssemblyDefault? | AssemblyDefault )
+AssemblyCase = &#39;case&#39; Literal AssemblyBlock
+AssemblyDefault = &#39;default&#39; AssemblyBlock
+AssemblyForLoop = &#39;for&#39; AssemblyBlock AssemblyExpression AssemblyBlock AssemblyBlock
+AssemblyBreakContinue = &#39;break&#39; | &#39;continue&#39;
+AssemblyFunctionCall = Identifier &#39;(&#39; ( AssemblyExpression ( &#39;,&#39; AssemblyExpression )* )? &#39;)&#39;
+
+AssemblyIdentifierList = Identifier ( &#39;,&#39; Identifier )*
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="050-breaking-changes.html" class="btn btn-neutral float-right" title="Solidity v0.5.0 Breaking Changes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="assembly.html" class="btn btn-neutral float-left" title="Solidity Assembly" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

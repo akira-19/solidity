@@ -1,7 +1,7 @@
 .. index:: purchase, remote purchase, escrow
 
 ********************
-安全なリモートでの購入
+Safe Remote Purchase
 ********************
 
 ::

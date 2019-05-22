@@ -4,33 +4,15 @@
 Mapping Types
 =============
 
-You declare mapping types with the syntax ``mapping(_KeyType => _ValueType)``.
-The ``_KeyType`` can be any elementary type. This means it can be any of
-the built-in value types plus ``bytes`` and ``string``. User-defined
-or complex types like contract types, enums, mappings, structs and any array type
-apart from ``bytes`` and ``string`` are not allowed.
-``_ValueType`` can be any type, including mappings.
+マッピング型は ``mapping(_KeyType => _ValueType)`` という構文で宣言します。``_KeyType`` はどの基本型でも入ります。つまりどのビルトインの型に加え、``bytes`` と ``string`` が使えます。ユーザー定義、もしくはコントラクト型、enum、マッピング、構造体、``bytes`` と ``string`` を除いた配列は使用できません。``_ValueType`` はマッピングを含めて、どの型でもとることができます。
 
-You can think of mappings as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_, which are virtually initialised
-such that every possible key exists and is mapped to a value whose
-byte-representation is all zeros, a type's :ref:`default value <default-value>`. The similarity ends there, the key data is not stored in a
-mapping, only its ``keccak256`` hash is used to look up the value.
+マッピングはどんなキーも存在し、そのバイト表現は全てゼロ（型の :ref:`デフォルト値 <default-value>`）で実質的に初期化されている `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_ の様に考えることができます。ただ似ているのはそれだけで、キーデータはマッピングには保存されず、その ``keccak256`` ハッシュだけが値を検索するのに使用されます。
 
-Because of this, mappings do not have a length or a concept of a key or
-value being set.
+そのため、マッピングは長さを持たず、キーの概念やセットする値などはありません。
 
-Mappings can only have a data location of ``storage`` and thus
-are allowed for state variables, as storage reference types
-in functions, or as parameters for library functions.
-They cannot be used as parameters or return parameters
-of contract functions that are publicly visible.
+マッピングは ``storage`` にのみデータを置けるため、ファンクション内のstorage参照型、もしくはライブラリファンクションのパラメータとしての状態変数として使用されます。パラメータやパブリックにアクセスできるコントラクトファンクションの返り値としては使用できません。
 
-You can mark variables of mapping type as ``public`` and Solidity creates a
-:ref:`getter <visibility-and-getters>` for you. The ``_KeyType`` becomes a
-parameter for the getter. If ``_ValueType`` is a value type or a struct,
-the getter returns ``_ValueType``.
-If ``_ValueType`` is an array or a mapping, the getter has one parameter for
-each ``_KeyType``, recursively. For example with a mapping:
+マッピングタイプに ``public`` 修飾子をつけることができます。Solidityはそれにより :ref:`getter <visibility-and-getters>` を生成します。``_KeyType`` はゲッターのパラメータになります。もし ``_ValueType`` が値型か構造体の場合、ゲッターは ``_ValueType`` を返します。もし ``_ValueType`` が配列かマッピングであれば、ゲッターは各 ``_KeyType`` に対して一つのパラメータを再帰的に持ちます。以下マッピングの例です:
 
 ::
 
@@ -54,5 +36,4 @@ each ``_KeyType``, recursively. For example with a mapping:
 
 
 .. note::
-  Mappings are not iterable, but it is possible to implement a data structure
-  on top of them. For an example, see `iterable mapping <https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol>`_.
+  マッピングはiterableではありませんが、マッピング上のデータ構造を実装することは可能です。具体例は `iterable mapping <https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol>`_ を参照ください。

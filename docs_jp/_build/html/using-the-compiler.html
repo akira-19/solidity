@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using the compiler &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="コントラクトメタデータ" href="metadata.html" />
+    <link rel="prev" title="Resources" href="resources.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-commandline-compiler">Using the Commandline Compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-the-evm-version-to-target">Setting the EVM version to target</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#target-options">Target options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-input-and-output-json-description">Compiler Input and Output JSON Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-description">Input Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-description">Output Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#error-types">Error types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Using the compiler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/using-the-compiler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-the-compiler">
+<h1>Using the compiler<a class="headerlink" href="#using-the-compiler" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-the-commandline-compiler">
+<span id="commandline-compiler"></span><span id="index-0"></span><h2>Using the Commandline Compiler<a class="headerlink" href="#using-the-commandline-compiler" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section does not apply to <a class="reference internal" href="installing-solidity.html#solcjs"><span class="std std-ref">solcjs</span></a>, not even if it is used in commandline mode.</p>
+</div>
+<p>One of the build targets of the Solidity repository is <code class="docutils literal notranslate"><span class="pre">solc</span></code>, the solidity commandline compiler.
+Using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--help</span></code> provides you with an explanation of all options. The compiler can produce various outputs, ranging from simple binaries and assembly over an abstract syntax tree (parse tree) to estimations of gas usage.
+If you only want to compile a single file, you run it as <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code> and it will print the binary. If you want to get some of the more advanced output variants of <code class="docutils literal notranslate"><span class="pre">solc</span></code>, it is probably better to tell it to output everything to separate files using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">-o</span> <span class="pre">outputDirectory</span> <span class="pre">--bin</span> <span class="pre">--ast</span> <span class="pre">--asm</span> <span class="pre">sourceFile.sol</span></code>.</p>
+<p>Before you deploy your contract, activate the optimizer when compiling using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--optimize</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code>.
+By default, the optimizer will optimize the contract assuming it is called 200 times across its lifetime.
+If you want the initial contract deployment to be cheaper and the later function executions to be more expensive,
+set it to <code class="docutils literal notranslate"><span class="pre">--optimize-runs=1</span></code>. If you expect many transactions and do not care for higher deployment cost and
+output size, set <code class="docutils literal notranslate"><span class="pre">--optimize-runs</span></code> to a high number.</p>
+<p>The commandline compiler will automatically read imported files from the filesystem, but
+it is also possible to provide path redirects using <code class="docutils literal notranslate"><span class="pre">prefix=path</span></code> in the following way:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">solc</span> <span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">ethereum</span><span class="o">/</span><span class="n">dapp</span><span class="o">-</span><span class="n">bin</span><span class="o">/=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dapp</span><span class="o">-</span><span class="n">bin</span><span class="o">/</span> <span class="n">file</span><span class="p">.</span><span class="n">sol</span>
+</pre></div>
+</div>
+<p>This essentially instructs the compiler to search for anything starting with
+<code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/</span></code> under <code class="docutils literal notranslate"><span class="pre">/usr/local/lib/dapp-bin</span></code>.
+<code class="docutils literal notranslate"><span class="pre">solc</span></code> will not read files from the filesystem that lie outside of
+the remapping targets and outside of the directories where explicitly specified source
+files reside, so things like <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;/etc/passwd&quot;;</span></code> only work if you add <code class="docutils literal notranslate"><span class="pre">/=/</span></code> as a remapping.</p>
+<p>An empty remapping prefix is not allowed.</p>
+<p>If there are multiple matches due to remappings, the one with the longest common prefix is selected.</p>
+<p>For security reasons the compiler has restrictions what directories it can access. Paths (and their subdirectories) of source files specified on the commandline and paths defined by remappings are allowed for import statements, but everything else is rejected. Additional paths (and their subdirectories) can be allowed via the <code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">/sample/path,/another/sample/path</span></code> switch.</p>
+<p>If your contracts use <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">libraries</span></a>, you will notice that the bytecode contains substrings of the form <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>. These are placeholders for the actual library addresses.
+The placeholder is a 34 character prefix of the hex encoding of the keccak256 hash of the fully qualified library name.
+The bytecode file will also contain lines of the form <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">&lt;placeholder&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;fq</span> <span class="pre">library</span> <span class="pre">name&gt;</span></code> at the end to help
+identify which libraries the placeholders represent. Note that the fully qualified library name
+is the path of its source file and the library name separated by <code class="docutils literal notranslate"><span class="pre">:</span></code>.
+You can use <code class="docutils literal notranslate"><span class="pre">solc</span></code> as a linker meaning that it will insert the library addresses for you at those points:</p>
+<p>Either add <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">&quot;file.sol:Math:0x1234567890123456789012345678901234567890</span> <span class="pre">file.sol:Heap:0xabCD567890123456789012345678901234567890&quot;</span></code> to your command to provide an address for each library or store the string in a file (one library per line) and run <code class="docutils literal notranslate"><span class="pre">solc</span></code> using <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">fileName</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--link</span></code>, all input files are interpreted to be unlinked binaries (hex-encoded) in the <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>-format given above and are linked in-place (if the input is read from stdin, it is written to stdout). All options except <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> are ignored (including <code class="docutils literal notranslate"><span class="pre">-o</span></code>) in this case.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--standard-json</span></code>, it will expect a JSON input (as explained below) on the standard input, and return a JSON output on the standard output. This is the recommended interface for more complex and especially automated uses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The library placeholder used to be the fully qualified name of the library itself
+instead of the hash of it. This format is still supported by <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--link</span></code> but
+the compiler will no longer output it. This change was made to reduce
+the likelihood of a collision between libraries, since only the first 36 characters
+of the fully qualified library name could be used.</p>
+</div>
+<span class="target" id="evm-version"></span></div>
+<div class="section" id="setting-the-evm-version-to-target">
+<span id="index-1"></span><h2>Setting the EVM version to target<a class="headerlink" href="#setting-the-evm-version-to-target" title="Permalink to this headline">¶</a></h2>
+<p>When you compile your contract code you can specify the Ethereum virtual machine
+version to compile for to avoid particular features or behaviours.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Compiling for the wrong EVM version can result in wrong, strange and failing
+behaviour. Please ensure, especially if running a private chain, that you
+use matching EVM versions.</p>
+</div>
+<p>On the command line, you can select the EVM version as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>solc --evm-version &lt;VERSION&gt; contract.sol
+</pre></div>
+</div>
+<p>In the <a class="reference internal" href="#compiler-api"><span class="std std-ref">standard JSON interface</span></a>, use the <code class="docutils literal notranslate"><span class="pre">&quot;evmVersion&quot;</span></code>
+key in the <code class="docutils literal notranslate"><span class="pre">&quot;settings&quot;</span></code> field:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
+  &quot;sources&quot;: { ... },
+  &quot;settings&quot;: {
+    &quot;optimizer&quot;: { ... },
+    &quot;evmVersion&quot;: &quot;&lt;VERSION&gt;&quot;
+  }
+}
+</pre></div>
+</div>
+<div class="section" id="target-options">
+<h3>Target options<a class="headerlink" href="#target-options" title="Permalink to this headline">¶</a></h3>
+<p>Below is a list of target EVM versions and the compiler-relevant changes introduced
+at each version. Backward compatibility is not guaranteed between each version.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">homestead</span></code> (oldest version)</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">tangerineWhistle</span></code></dt>
+<dd><ul class="first last">
+<li>gas cost for access to other accounts increased, relevant for gas estimation and the optimizer.</li>
+<li>all gas sent by default for external calls, previously a certain amount had to be retained.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">spuriousDragon</span></code></dt>
+<dd><ul class="first last">
+<li>gas cost for the <code class="docutils literal notranslate"><span class="pre">exp</span></code> opcode increased, relevant for gas estimation and the optimizer.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">byzantium</span></code> (<strong>default</strong>)</dt>
+<dd><ul class="first last">
+<li>opcodes <code class="docutils literal notranslate"><span class="pre">returndatacopy</span></code>, <code class="docutils literal notranslate"><span class="pre">returndatasize</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are available in assembly.</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> opcode is used when calling non-library view or pure functions, which prevents the functions from modifying state at the EVM level, i.e., even applies when you use invalid type conversions.</li>
+<li>it is possible to access dynamic data returned from function calls.</li>
+<li><code class="docutils literal notranslate"><span class="pre">revert</span></code> opcode introduced, which means that <code class="docutils literal notranslate"><span class="pre">revert()</span></code> will not waste gas.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">constantinople</span></code> (still in progress)</dt>
+<dd><ul class="first last">
+<li>opcodes <code class="docutils literal notranslate"><span class="pre">shl</span></code>, <code class="docutils literal notranslate"><span class="pre">shr</span></code> and <code class="docutils literal notranslate"><span class="pre">sar</span></code> are available in assembly.</li>
+<li>shifting operators use shifting opcodes and thus need less gas.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="compiler-input-and-output-json-description">
+<span id="compiler-api"></span><h2>Compiler Input and Output JSON Description<a class="headerlink" href="#compiler-input-and-output-json-description" title="Permalink to this headline">¶</a></h2>
+<p>The recommended way to interface with the Solidity compiler especially for
+more complex and automated setups is the so-called JSON-input-output interface.
+The same interface is provided by all distributions of the compiler.</p>
+<p>The fields are generally subject to change,
+some are optional (as noted), but we try to only make backwards compatible changes.</p>
+<p>The compiler API expects a JSON formatted input and outputs the compilation result in a JSON formatted output.</p>
+<p>The following subsections describe the format through an example.
+Comments are of course not permitted and used here only for explanatory purposes.</p>
+<div class="section" id="input-description">
+<h3>Input Description<a class="headerlink" href="#input-description" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
+  // Required: Source code language, such as &quot;Solidity&quot;, &quot;Vyper&quot;, &quot;lll&quot;, &quot;assembly&quot;, etc.
+  language: &quot;Solidity&quot;,
+  // Required
+  sources:
+  {
+    // The keys here are the &quot;global&quot; names of the source files,
+    // imports can use other files via remappings (see below).
+    &quot;myFile.sol&quot;:
+    {
+      // Optional: keccak256 hash of the source file
+      // It is used to verify the retrieved content if imported via URLs.
+      &quot;keccak256&quot;: &quot;0x123...&quot;,
+      // Required (unless &quot;content&quot; is used, see below): URL(s) to the source file.
+      // URL(s) should be imported in this order and the result checked against the
+      // keccak256 hash (if available). If the hash doesn&#39;t match or none of the
+      // URL(s) result in success, an error should be raised.
+      &quot;urls&quot;:
+      [
+        &quot;bzzr://56ab...&quot;,
+        &quot;ipfs://Qma...&quot;,
+        // If files are used, their directories should be added to the command line via
+        // `--allow-paths &lt;path&gt;`.
+        &quot;file:///tmp/path/to/file.sol&quot;
+      ]
+    },
+    &quot;mortal&quot;:
+    {
+      // Optional: keccak256 hash of the source file
+      &quot;keccak256&quot;: &quot;0x234...&quot;,
+      // Required (unless &quot;urls&quot; is used): literal contents of the source file
+      &quot;content&quot;: &quot;contract mortal is owned { function kill() { if (msg.sender == owner) selfdestruct(owner); } }&quot;
+    }
+  },
+  // Optional
+  settings:
+  {
+    // Optional: Sorted list of remappings
+    remappings: [ &quot;:g/dir&quot; ],
+    // Optional: Optimizer settings
+    optimizer: {
+      // disabled by default
+      enabled: true,
+      // Optimize for how many times you intend to run the code.
+      // Lower values will optimize more for initial deployment cost, higher values will optimize more for high-frequency usage.
+      runs: 200
+    },
+    evmVersion: &quot;byzantium&quot;, // Version of the EVM to compile for. Affects type checking and code generation. Can be homestead, tangerineWhistle, spuriousDragon, byzantium or constantinople
+    // Metadata settings (optional)
+    metadata: {
+      // Use only literal content and not URLs (false by default)
+      useLiteralContent: true
+    },
+    // Addresses of the libraries. If not all libraries are given here, it can result in unlinked objects whose output data is different.
+    libraries: {
+      // The top level key is the the name of the source file where the library is used.
+      // If remappings are used, this source file should match the global path after remappings were applied.
+      // If this key is an empty string, that refers to a global level.
+      &quot;myFile.sol&quot;: {
+        &quot;MyLib&quot;: &quot;0x123123...&quot;
+      }
+    }
+    // The following can be used to select desired outputs based
+    // on file and contract names.
+    // If this field is omitted, then the compiler loads and does type checking,
+    // but will not generate any outputs apart from errors.
+    // The first level key is the file name and the second level key is the contract name.
+    // An empty contract name is used for outputs that are not tied to a contract
+    // but to the whole source file like the AST.
+    // A star as contract name refers to all contracts in the file.
+    // Similarly, a star as a file name matches all files.
+    // To select all outputs the compiler can possibly generate, use
+    // &quot;outputSelection: { &quot;*&quot;: { &quot;*&quot;: [ &quot;*&quot; ], &quot;&quot;: [ &quot;*&quot; ] } }&quot;
+    // but note that this might slow down the compilation process needlessly.
+    //
+    // The available output types are as follows:
+    //
+    // File level (needs empty string as contract name):
+    //   ast - AST of all source files
+    //   legacyAST - legacy AST of all source files
+    //
+    // Contract level (needs the contract name or &quot;*&quot;):
+    //   abi - ABI
+    //   devdoc - Developer documentation (natspec)
+    //   userdoc - User documentation (natspec)
+    //   metadata - Metadata
+    //   ir - New assembly format before desugaring
+    //   evm.assembly - New assembly format after desugaring
+    //   evm.legacyAssembly - Old-style assembly format in JSON
+    //   evm.bytecode.object - Bytecode object
+    //   evm.bytecode.opcodes - Opcodes list
+    //   evm.bytecode.sourceMap - Source mapping (useful for debugging)
+    //   evm.bytecode.linkReferences - Link references (if unlinked object)
+    //   evm.deployedBytecode* - Deployed bytecode (has the same options as evm.bytecode)
+    //   evm.methodIdentifiers - The list of function hashes
+    //   evm.gasEstimates - Function gas estimates
+    //   ewasm.wast - eWASM S-expressions format (not supported atm)
+    //   ewasm.wasm - eWASM binary format (not supported atm)
+    //
+    // Note that using a using `evm`, `evm.bytecode`, `ewasm`, etc. will select every
+    // target part of that output. Additionally, `*` can be used as a wildcard to request everything.
+    //
+    outputSelection: {
+      // Enable the metadata and bytecode outputs of every single contract.
+      &quot;*&quot;: {
+        &quot;*&quot;: [ &quot;metadata&quot;, &quot;evm.bytecode&quot; ]
+      },
+      // Enable the abi and opcodes output of MyContract defined in file def.
+      &quot;def&quot;: {
+        &quot;MyContract&quot;: [ &quot;abi&quot;, &quot;evm.bytecode.opcodes&quot; ]
+      },
+      // Enable the source map output of every single contract.
+      &quot;*&quot;: {
+        &quot;*&quot;: [ &quot;evm.bytecode.sourceMap&quot; ]
+      },
+      // Enable the legacy AST output of every single file.
+      &quot;*&quot;: {
+        &quot;&quot;: [ &quot;legacyAST&quot; ]
+      }
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="output-description">
+<h3>Output Description<a class="headerlink" href="#output-description" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
+  // Optional: not present if no errors/warnings were encountered
+  errors: [
+    {
+      // Optional: Location within the source file.
+      sourceLocation: {
+        file: &quot;sourceFile.sol&quot;,
+        start: 0,
+        end: 100
+      ],
+      // Mandatory: Error type, such as &quot;TypeError&quot;, &quot;InternalCompilerError&quot;, &quot;Exception&quot;, etc.
+      // See below for complete list of types.
+      type: &quot;TypeError&quot;,
+      // Mandatory: Component where the error originated, such as &quot;general&quot;, &quot;ewasm&quot;, etc.
+      component: &quot;general&quot;,
+      // Mandatory (&quot;error&quot; or &quot;warning&quot;)
+      severity: &quot;error&quot;,
+      // Mandatory
+      message: &quot;Invalid keyword&quot;
+      // Optional: the message formatted with source location
+      formattedMessage: &quot;sourceFile.sol:100: Invalid keyword&quot;
+    }
+  ],
+  // This contains the file-level outputs. In can be limited/filtered by the outputSelection settings.
+  sources: {
+    &quot;sourceFile.sol&quot;: {
+      // Identifier of the source (used in source maps)
+      id: 1,
+      // The AST object
+      ast: {},
+      // The legacy AST object
+      legacyAST: {}
+    }
+  },
+  // This contains the contract-level outputs. It can be limited/filtered by the outputSelection settings.
+  contracts: {
+    &quot;sourceFile.sol&quot;: {
+      // If the language used has no contract names, this field should equal to an empty string.
+      &quot;ContractName&quot;: {
+        // The Ethereum Contract ABI. If empty, it is represented as an empty array.
+        // See https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
+        abi: [],
+        // See the Metadata Output documentation (serialised JSON string)
+        metadata: &quot;{...}&quot;,
+        // User documentation (natspec)
+        userdoc: {},
+        // Developer documentation (natspec)
+        devdoc: {},
+        // Intermediate representation (string)
+        ir: &quot;&quot;,
+        // EVM-related outputs
+        evm: {
+          // Assembly (string)
+          assembly: &quot;&quot;,
+          // Old-style assembly (object)
+          legacyAssembly: {},
+          // Bytecode and related details.
+          bytecode: {
+            // The bytecode as a hex string.
+            object: &quot;00fe&quot;,
+            // Opcodes list (string)
+            opcodes: &quot;&quot;,
+            // The source mapping as a string. See the source mapping definition.
+            sourceMap: &quot;&quot;,
+            // If given, this is an unlinked object.
+            linkReferences: {
+              &quot;libraryFile.sol&quot;: {
+                // Byte offsets into the bytecode. Linking replaces the 20 bytes located there.
+                &quot;Library1&quot;: [
+                  { start: 0, length: 20 },
+                  { start: 200, length: 20 }
+                ]
+              }
+            }
+          },
+          // The same layout as above.
+          deployedBytecode: { },
+          // The list of function hashes
+          methodIdentifiers: {
+            &quot;delegate(address)&quot;: &quot;5c19a95c&quot;
+          },
+          // Function gas estimates
+          gasEstimates: {
+            creation: {
+              codeDepositCost: &quot;420000&quot;,
+              executionCost: &quot;infinite&quot;,
+              totalCost: &quot;infinite&quot;
+            },
+            external: {
+              &quot;delegate(address)&quot;: &quot;25000&quot;
+            },
+            internal: {
+              &quot;heavyLifting()&quot;: &quot;infinite&quot;
+            }
+          }
+        },
+        // eWASM related outputs
+        ewasm: {
+          // S-expressions format
+          wast: &quot;&quot;,
+          // Binary format (hex string)
+          wasm: &quot;&quot;
+        }
+      }
+    }
+  }
+}
+</pre></div>
+</div>
+<div class="section" id="error-types">
+<h4>Error types<a class="headerlink" href="#error-types" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">JSONError</span></code>: JSON input doesn’t conform to the required format, e.g. input is not a JSON object, the language is not supported, etc.</li>
+<li><code class="docutils literal notranslate"><span class="pre">IOError</span></code>: IO and import processing errors, such as unresolvable URL or hash mismatch in supplied sources.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ParserError</span></code>: Source code doesn’t conform to the language rules.</li>
+<li><code class="docutils literal notranslate"><span class="pre">DocstringParsingError</span></code>: The NatSpec tags in the comment block cannot be parsed.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: Syntactical error, such as <code class="docutils literal notranslate"><span class="pre">continue</span></code> is used outside of a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop.</li>
+<li><code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code>: Invalid, unresolvable or clashing identifier names. e.g. <code class="docutils literal notranslate"><span class="pre">Identifier</span> <span class="pre">not</span> <span class="pre">found</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>: Error within the type system, such as invalid type conversions, invalid assignments, etc.</li>
+<li><code class="docutils literal notranslate"><span class="pre">UnimplementedFeatureError</span></code>: Feature is not supported by the compiler, but is expected to be supported in future versions.</li>
+<li><code class="docutils literal notranslate"><span class="pre">InternalCompilerError</span></code>: Internal bug triggered in the compiler - this should be reported as an issue.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Exception</span></code>: Unknown failure during compilation - this should be reported as an issue.</li>
+<li><code class="docutils literal notranslate"><span class="pre">CompilerError</span></code>: Invalid use of the compiler stack - this should be reported as an issue.</li>
+<li><code class="docutils literal notranslate"><span class="pre">FatalError</span></code>: Fatal error not processed correctly - this should be reported as an issue.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Warning</span></code>: A warning, which didn’t stop the compilation, but should be addressed if possible.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="metadata.html" class="btn btn-neutral float-right" title="コントラクトメタデータ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="resources.html" class="btn btn-neutral float-left" title="Resources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

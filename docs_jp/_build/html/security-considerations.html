@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Security Considerations &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Resources" href="resources.html" />
+    <link rel="prev" title="Solidity v0.5.0 Breaking Changes" href="050-breaking-changes.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Security Considerations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pitfalls">Pitfalls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#private-information-and-randomness">Private Information and Randomness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#re-entrancy">Re-Entrancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gas-limit-and-loops">Gas Limit and Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sending-and-receiving-ether">Sending and Receiving Ether</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#callstack-depth">Callstack Depth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tx-origin">tx.origin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#two-s-complement-underflows-overflows">Two’s Complement / Underflows / Overflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minor-details">Minor Details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#recommendations">Recommendations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#take-warnings-seriously">Take Warnings Seriously</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restrict-the-amount-of-ether">Restrict the Amount of Ether</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keep-it-small-and-modular">Keep it Small and Modular</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-the-checks-effects-interactions-pattern">Use the Checks-Effects-Interactions Pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-a-fail-safe-mode">Include a Fail-Safe Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ask-for-peer-review">Ask for Peer Review</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#formal-verification">Formal Verification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Security Considerations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/security-considerations.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="security-considerations">
+<span id="id1"></span><h1>Security Considerations<a class="headerlink" href="#security-considerations" title="Permalink to this headline">¶</a></h1>
+<p>While it is usually quite easy to build software that works as expected,
+it is much harder to check that nobody can use it in a way that was <strong>not</strong> anticipated.</p>
+<p>In Solidity, this is even more important because you can use smart contracts
+to handle tokens or, possibly, even more valuable things. Furthermore, every
+execution of a smart contract happens in public and, in addition to that,
+the source code is often available.</p>
+<p>Of course you always have to consider how much is at stake:
+You can compare a smart contract with a web service that is open to the
+public (and thus, also to malicious actors) and perhaps even open source.
+If you only store your grocery list on that web service, you might not have
+to take too much care, but if you manage your bank account using that web service,
+you should be more careful.</p>
+<p>This section will list some pitfalls and general security recommendations but
+can, of course, never be complete. Also, keep in mind that even if your
+smart contract code is bug-free, the compiler or the platform itself might
+have a bug. A list of some publicly known security-relevant bugs of the compiler
+can be found in the
+<a class="reference internal" href="bugs.html#known-bugs"><span class="std std-ref">list of known bugs</span></a>, which is also machine-readable. Note
+that there is a bug bounty program that covers the code generator of the
+Solidity compiler.</p>
+<p>As always, with open source documentation, please help us extend this section
+(especially, some examples would not hurt)!</p>
+<div class="section" id="pitfalls">
+<h2>Pitfalls<a class="headerlink" href="#pitfalls" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="private-information-and-randomness">
+<h3>Private Information and Randomness<a class="headerlink" href="#private-information-and-randomness" title="Permalink to this headline">¶</a></h3>
+<p>Everything you use in a smart contract is publicly visible, even
+local variables and state variables marked <code class="docutils literal notranslate"><span class="pre">private</span></code>.</p>
+<p>Using random numbers in smart contracts is quite tricky if you do not want
+miners to be able to cheat.</p>
+</div>
+<div class="section" id="re-entrancy">
+<h3>Re-Entrancy<a class="headerlink" href="#re-entrancy" title="Permalink to this headline">¶</a></h3>
+<p>Any interaction from a contract (A) with another contract (B) and any transfer
+of Ether hands over control to that contract (B). This makes it possible for B
+to call back into A before this interaction is completed. To give an example,
+the following code contains a bug (it is just a snippet and not a
+complete contract):</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// THIS CONTRACT CONTAINS A BUG - DO NOT USE</span>
+<span class="kd">contract</span> <span class="n">Fund</span> <span class="p">{</span>
+    <span class="c1">/// Mapping of ether shares of the contract.</span>
+    <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">shares</span><span class="p">;</span>
+    <span class="c1">/// Withdraw your share.</span>
+    <span class="kd">function</span> <span class="n">withdraw</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]))</span>
+            <span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The problem is not too serious here because of the limited gas as part
+of <code class="docutils literal notranslate"><span class="pre">send</span></code>, but it still exposes a weakness: Ether transfer can always
+include code execution, so the recipient could be a contract that calls
+back into <code class="docutils literal notranslate"><span class="pre">withdraw</span></code>. This would let it get multiple refunds and
+basically retrieve all the Ether in the contract. In particular, the
+following contract will allow an attacker to refund multiple times
+as it uses <code class="docutils literal notranslate"><span class="pre">call</span></code> which forwards all remaining gas by default:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// THIS CONTRACT CONTAINS A BUG - DO NOT USE</span>
+<span class="kd">contract</span> <span class="n">Fund</span> <span class="p">{</span>
+    <span class="c1">/// Mapping of ether shares of the contract.</span>
+    <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">shares</span><span class="p">;</span>
+    <span class="c1">/// Withdraw your share.</span>
+    <span class="kd">function</span> <span class="n">withdraw</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,)</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">.</span><span class="nf">call</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">])(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span>
+            <span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To avoid re-entrancy, you can use the Checks-Effects-Interactions pattern as
+outlined further below:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Fund</span> <span class="p">{</span>
+    <span class="c1">/// Mapping of ether shares of the contract.</span>
+    <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">shares</span><span class="p">;</span>
+    <span class="c1">/// Withdraw your share.</span>
+    <span class="kd">function</span> <span class="n">withdraw</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">share</span> <span class="o">=</span> <span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">];</span>
+        <span class="n">shares</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nb">msg.sender</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="n">share</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that re-entrancy is not only an effect of Ether transfer but of any
+function call on another contract. Furthermore, you also have to take
+multi-contract situations into account. A called contract could modify the
+state of another contract you depend on.</p>
+</div>
+<div class="section" id="gas-limit-and-loops">
+<h3>Gas Limit and Loops<a class="headerlink" href="#gas-limit-and-loops" title="Permalink to this headline">¶</a></h3>
+<p>Loops that do not have a fixed number of iterations, for example, loops that depend on storage values, have to be used carefully:
+Due to the block gas limit, transactions can only consume a certain amount of gas. Either explicitly or just due to
+normal operation, the number of iterations in a loop can grow beyond the block gas limit which can cause the complete
+contract to be stalled at a certain point. This may not apply to <code class="docutils literal notranslate"><span class="pre">view</span></code> functions that are only executed
+to read data from the blockchain. Still, such functions may be called by other contracts as part of on-chain operations
+and stall those. Please be explicit about such cases in the documentation of your contracts.</p>
+</div>
+<div class="section" id="sending-and-receiving-ether">
+<h3>Sending and Receiving Ether<a class="headerlink" href="#sending-and-receiving-ether" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Neither contracts nor “external accounts” are currently able to prevent that someone sends them Ether.
+Contracts can react on and reject a regular transfer, but there are ways
+to move Ether without creating a message call. One way is to simply “mine to”
+the contract address and the second way is using <code class="docutils literal notranslate"><span class="pre">selfdestruct(x)</span></code>.</li>
+<li>If a contract receives Ether (without a function being called), the fallback function is executed.
+If it does not have a fallback function, the Ether will be rejected (by throwing an exception).
+During the execution of the fallback function, the contract can only rely
+on the “gas stipend” it is passed (2300 gas) being available to it at that time. This stipend is not enough to modify storage
+(do not take this for granted though, the stipend might change with future hard forks).
+To be sure that your contract can receive Ether in that way, check the gas requirements of the fallback function
+(for example in the “details” section in Remix).</li>
+<li>There is a way to forward more gas to the receiving contract using
+<code class="docutils literal notranslate"><span class="pre">addr.call.value(x)(&quot;&quot;)</span></code>. This is essentially the same as <code class="docutils literal notranslate"><span class="pre">addr.transfer(x)</span></code>,
+only that it forwards all remaining gas and opens up the ability for the
+recipient to perform more expensive actions (and it returns a failure code
+instead of automatically propagating the error). This might include calling back
+into the sending contract or other state changes you might not have thought of.
+So it allows for great flexibility for honest users but also for malicious actors.</li>
+<li>If you want to send Ether using <code class="docutils literal notranslate"><span class="pre">address.transfer</span></code>, there are certain details to be aware of:<ol class="arabic">
+<li>If the recipient is a contract, it causes its fallback function to be executed which can, in turn, call back the sending contract.</li>
+<li>Sending Ether can fail due to the call depth going above 1024. Since the caller is in total control of the call
+depth, they can force the transfer to fail; take this possibility into account or use <code class="docutils literal notranslate"><span class="pre">send</span></code> and make sure to always check its return value. Better yet,
+write your contract using a pattern where the recipient can withdraw Ether instead.</li>
+<li>Sending Ether can also fail because the execution of the recipient contract
+requires more than the allotted amount of gas (explicitly by using <code class="docutils literal notranslate"><span class="pre">require</span></code>,
+<code class="docutils literal notranslate"><span class="pre">assert</span></code>, <code class="docutils literal notranslate"><span class="pre">revert</span></code>, <code class="docutils literal notranslate"><span class="pre">throw</span></code> or
+because the operation is just too expensive) - it “runs out of gas” (OOG).
+If you use <code class="docutils literal notranslate"><span class="pre">transfer</span></code> or <code class="docutils literal notranslate"><span class="pre">send</span></code> with a return value check, this might provide a
+means for the recipient to block progress in the sending contract. Again, the best practice here is to use
+a <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">“withdraw” pattern instead of a “send” pattern</span></a>.</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="callstack-depth">
+<h3>Callstack Depth<a class="headerlink" href="#callstack-depth" title="Permalink to this headline">¶</a></h3>
+<p>External function calls can fail any time because they exceed the maximum
+call stack of 1024. In such situations, Solidity throws an exception.
+Malicious actors might be able to force the call stack to a high value
+before they interact with your contract.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">.send()</span></code> does <strong>not</strong> throw an exception if the call stack is
+depleted but rather returns <code class="docutils literal notranslate"><span class="pre">false</span></code> in that case. The low-level functions
+<code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.callcode()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> behave
+in the same way.</p>
+</div>
+<div class="section" id="tx-origin">
+<h3>tx.origin<a class="headerlink" href="#tx-origin" title="Permalink to this headline">¶</a></h3>
+<p>Never use tx.origin for authorization. Let’s say you have a wallet contract like this:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// THIS CONTRACT CONTAINS A BUG - DO NOT USE</span>
+<span class="kd">contract</span> <span class="n">TxUserWallet</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="n">owner</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">transferTo</span><span class="p">(</span><span class="kt">address</span> <span class="kr">payable</span> <span class="n">dest</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span><span class="nb">tx.origin</span> <span class="o">==</span> <span class="n">owner</span><span class="p">);</span>
+        <span class="n">dest</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="n">amount</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now someone tricks you into sending ether to the address of this attack wallet:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">interface</span> <span class="n">TxUserWallet</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">transferTo</span><span class="p">(</span><span class="kt">address</span> <span class="kr">payable</span> <span class="n">dest</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="kr">external</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">TxAttackWallet</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="n">owner</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
+        <span class="n">TxUserWallet</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">).</span><span class="n">transferTo</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="nb">msg.sender</span><span class="p">.</span><span class="nb">balance</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If your wallet had checked <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> for authorization, it would get the address of the attack wallet, instead of the owner address. But by checking <code class="docutils literal notranslate"><span class="pre">tx.origin</span></code>, it gets the original address that kicked off the transaction, which is still the owner address. The attack wallet instantly drains all your funds.</p>
+</div>
+<div class="section" id="two-s-complement-underflows-overflows">
+<span id="underflow-overflow"></span><h3>Two’s Complement / Underflows / Overflows<a class="headerlink" href="#two-s-complement-underflows-overflows" title="Permalink to this headline">¶</a></h3>
+<p>As in many programming languages, Solidity’s integer types are not actually integers.
+They resemble integers when the values are small, but behave differently if the numbers are larger.
+For example, the following is true: <code class="docutils literal notranslate"><span class="pre">uint8(255)</span> <span class="pre">+</span> <span class="pre">uint8(1)</span> <span class="pre">==</span> <span class="pre">0</span></code>. This situation is called
+an <em>overflow</em>. It occurs when an operation is performed that requires a fixed size variable
+to store a number (or piece of data) that is outside the range of the variable’s data type.
+An <em>underflow</em> is the converse situation: <code class="docutils literal notranslate"><span class="pre">uint8(0)</span> <span class="pre">-</span> <span class="pre">uint8(1)</span> <span class="pre">==</span> <span class="pre">255</span></code>.</p>
+<p>In general, read about the limits of two’s complement representation, which even has some
+more special edge cases for signed numbers.</p>
+<p>Try to use <code class="docutils literal notranslate"><span class="pre">require</span></code> to limit the size of inputs to a reasonable range and use the
+<a class="reference internal" href="layout-of-source-files.html#smt-checker"><span class="std std-ref">SMT checker</span></a> to find potential overflows, or
+use a library like
+<a class="reference external" href="https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol">SafeMath</a>
+if you want all overflows to cause a revert.</p>
+<p>Code such as <code class="docutils literal notranslate"><span class="pre">require((balanceOf[_to]</span> <span class="pre">+</span> <span class="pre">_value)</span> <span class="pre">&gt;=</span> <span class="pre">balanceOf[_to])</span></code> can also help you check if values are what you expect.</p>
+</div>
+<div class="section" id="minor-details">
+<h3>Minor Details<a class="headerlink" href="#minor-details" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Types that do not occupy the full 32 bytes might contain “dirty higher order bits”.
+This is especially important if you access <code class="docutils literal notranslate"><span class="pre">msg.data</span></code> - it poses a malleability risk:
+You can craft transactions that call a function <code class="docutils literal notranslate"><span class="pre">f(uint8</span> <span class="pre">x)</span></code> with a raw byte argument
+of <code class="docutils literal notranslate"><span class="pre">0xff000001</span></code> and with <code class="docutils literal notranslate"><span class="pre">0x00000001</span></code>. Both are fed to the contract and both will
+look like the number <code class="docutils literal notranslate"><span class="pre">1</span></code> as far as <code class="docutils literal notranslate"><span class="pre">x</span></code> is concerned, but <code class="docutils literal notranslate"><span class="pre">msg.data</span></code> will
+be different, so if you use <code class="docutils literal notranslate"><span class="pre">keccak256(msg.data)</span></code> for anything, you will get different results.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="recommendations">
+<h2>Recommendations<a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="take-warnings-seriously">
+<h3>Take Warnings Seriously<a class="headerlink" href="#take-warnings-seriously" title="Permalink to this headline">¶</a></h3>
+<p>If the compiler warns you about something, you should better change it.
+Even if you do not think that this particular warning has security
+implications, there might be another issue buried beneath it.
+Any compiler warning we issue can be silenced by slight changes to the
+code.</p>
+<p>Always use the latest version of the compiler to be notified about all recently
+introduced warnings.</p>
+</div>
+<div class="section" id="restrict-the-amount-of-ether">
+<h3>Restrict the Amount of Ether<a class="headerlink" href="#restrict-the-amount-of-ether" title="Permalink to this headline">¶</a></h3>
+<p>Restrict the amount of Ether (or other tokens) that can be stored in a smart
+contract. If your source code, the compiler or the platform has a bug, these
+funds may be lost. If you want to limit your loss, limit the amount of Ether.</p>
+</div>
+<div class="section" id="keep-it-small-and-modular">
+<h3>Keep it Small and Modular<a class="headerlink" href="#keep-it-small-and-modular" title="Permalink to this headline">¶</a></h3>
+<p>Keep your contracts small and easily understandable. Single out unrelated
+functionality in other contracts or into libraries. General recommendations
+about source code quality of course apply: Limit the amount of local variables,
+the length of functions and so on. Document your functions so that others
+can see what your intention was and whether it is different than what the code does.</p>
+</div>
+<div class="section" id="use-the-checks-effects-interactions-pattern">
+<h3>Use the Checks-Effects-Interactions Pattern<a class="headerlink" href="#use-the-checks-effects-interactions-pattern" title="Permalink to this headline">¶</a></h3>
+<p>Most functions will first perform some checks (who called the function,
+are the arguments in range, did they send enough Ether, does the person
+have tokens, etc.). These checks should be done first.</p>
+<p>As the second step, if all checks passed, effects to the state variables
+of the current contract should be made. Interaction with other contracts
+should be the very last step in any function.</p>
+<p>Early contracts delayed some effects and waited for external function
+calls to return in a non-error state. This is often a serious mistake
+because of the re-entrancy problem explained above.</p>
+<p>Note that, also, calls to known contracts might in turn cause calls to
+unknown contracts, so it is probably better to just always apply this pattern.</p>
+</div>
+<div class="section" id="include-a-fail-safe-mode">
+<h3>Include a Fail-Safe Mode<a class="headerlink" href="#include-a-fail-safe-mode" title="Permalink to this headline">¶</a></h3>
+<p>While making your system fully decentralised will remove any intermediary,
+it might be a good idea, especially for new code, to include some kind
+of fail-safe mechanism:</p>
+<p>You can add a function in your smart contract that performs some
+self-checks like “Has any Ether leaked?”,
+“Is the sum of the tokens equal to the balance of the contract?” or similar things.
+Keep in mind that you cannot use too much gas for that, so help through off-chain
+computations might be needed there.</p>
+<p>If the self-check fails, the contract automatically switches into some kind
+of “failsafe” mode, which, for example, disables most of the features, hands over
+control to a fixed and trusted third party or just converts the contract into
+a simple “give me back my money” contract.</p>
+</div>
+<div class="section" id="ask-for-peer-review">
+<h3>Ask for Peer Review<a class="headerlink" href="#ask-for-peer-review" title="Permalink to this headline">¶</a></h3>
+<p>The more people examine a piece of code, the more issues are found.
+Asking people to review your code also helps as a cross-check to find out whether your code
+is easy to understand - a very important criterion for good smart contracts.</p>
+</div>
+</div>
+<div class="section" id="formal-verification">
+<h2>Formal Verification<a class="headerlink" href="#formal-verification" title="Permalink to this headline">¶</a></h2>
+<p>Using formal verification, it is possible to perform an automated mathematical
+proof that your source code fulfills a certain formal specification.
+The specification is still formal (just as the source code), but usually much
+simpler.</p>
+<p>Note that formal verification itself can only help you understand the
+difference between what you did (the specification) and how you did it
+(the actual implementation). You still need to check whether the specification
+is what you wanted and that you did not miss any unintended effects of it.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="resources.html" class="btn btn-neutral float-right" title="Resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="050-breaking-changes.html" class="btn btn-neutral float-left" title="Solidity v0.5.0 Breaking Changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

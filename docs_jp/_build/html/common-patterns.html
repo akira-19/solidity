@@ -1,0 +1,570 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Common Patterns &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="既知のバグ" href="bugs.html" />
+    <link rel="prev" title="Style Guide" href="style-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Common Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#withdrawal-from-contracts">Withdrawal from Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restricting-access">Restricting Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-machine">State Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Common Patterns</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/common-patterns.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="common-patterns">
+<h1>Common Patterns<a class="headerlink" href="#common-patterns" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="withdrawal-from-contracts">
+<span id="withdrawal-pattern"></span><span id="index-0"></span><h2>Withdrawal from Contracts<a class="headerlink" href="#withdrawal-from-contracts" title="Permalink to this headline">¶</a></h2>
+<p>The recommended method of sending funds after an effect
+is using the withdrawal pattern. Although the most intuitive
+method of sending Ether, as a result of an effect, is a
+direct <code class="docutils literal notranslate"><span class="pre">transfer</span></code> call, this is not recommended as it
+introduces a potential security risk. You may read
+more about this on the <a class="reference internal" href="security-considerations.html#security-considerations"><span class="std std-ref">Security Considerations</span></a> page.</p>
+<p>The following is an example of the withdrawal pattern in practice in
+a contract where the goal is to send the most money to the
+contract in order to become the “richest”, inspired by
+<a class="reference external" href="https://www.kingoftheether.com/">King of the Ether</a>.</p>
+<p>In the following contract, if you are usurped as the richest,
+you will receive the funds of the person who has gone on to
+become the new richest.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">WithdrawalContract</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="kr">public</span> <span class="n">richest</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">mostSent</span><span class="p">;</span>
+
+    <span class="kd">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">pendingWithdrawals</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="n">richest</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+        <span class="n">mostSent</span> <span class="o">=</span> <span class="nb">msg.value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">becomeRichest</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.value</span> <span class="o">&gt;</span> <span class="n">mostSent</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pendingWithdrawals</span><span class="p">[</span><span class="n">richest</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">msg.value</span><span class="p">;</span>
+            <span class="n">richest</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+            <span class="n">mostSent</span> <span class="o">=</span> <span class="nb">msg.value</span><span class="p">;</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">withdraw</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">pendingWithdrawals</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">];</span>
+        <span class="c1">// Remember to zero the pending refund before</span>
+        <span class="c1">// sending to prevent re-entrancy attacks</span>
+        <span class="n">pendingWithdrawals</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nb">msg.sender</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="n">amount</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This is as opposed to the more intuitive sending pattern:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">SendContract</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="kr">public</span> <span class="n">richest</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">mostSent</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="n">richest</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+        <span class="n">mostSent</span> <span class="o">=</span> <span class="nb">msg.value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">becomeRichest</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.value</span> <span class="o">&gt;</span> <span class="n">mostSent</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// This line can cause problems (explained below).</span>
+            <span class="n">richest</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="nb">msg.value</span><span class="p">);</span>
+            <span class="n">richest</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+            <span class="n">mostSent</span> <span class="o">=</span> <span class="nb">msg.value</span><span class="p">;</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Notice that, in this example, an attacker could trap the
+contract into an unusable state by causing <code class="docutils literal notranslate"><span class="pre">richest</span></code> to be
+the address of a contract that has a fallback function
+which fails (e.g. by using <code class="docutils literal notranslate"><span class="pre">revert()</span></code> or by just
+consuming more than the 2300 gas stipend transferred to them). That way,
+whenever <code class="docutils literal notranslate"><span class="pre">transfer</span></code> is called to deliver funds to the
+“poisoned” contract, it will fail and thus also <code class="docutils literal notranslate"><span class="pre">becomeRichest</span></code>
+will fail, with the contract being stuck forever.</p>
+<p>In contrast, if you use the “withdraw” pattern from the first example,
+the attacker can only cause his or her own withdraw to fail and not the
+rest of the contract’s workings.</p>
+</div>
+<div class="section" id="restricting-access">
+<span id="index-1"></span><h2>Restricting Access<a class="headerlink" href="#restricting-access" title="Permalink to this headline">¶</a></h2>
+<p>Restricting access is a common pattern for contracts.
+Note that you can never restrict any human or computer
+from reading the content of your transactions or
+your contract’s state. You can make it a bit harder
+by using encryption, but if your contract is supposed
+to read the data, so will everyone else.</p>
+<p>You can restrict read access to your contract’s state
+by <strong>other contracts</strong>. That is actually the default
+unless you declare your state variables <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p>
+<p>Furthermore, you can restrict who can make modifications
+to your contract’s state or call your contract’s
+functions and this is what this section is about.</p>
+<p id="index-2">The use of <strong>function modifiers</strong> makes these
+restrictions highly readable.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">AccessRestriction</span> <span class="p">{</span>
+    <span class="c1">// These will be assigned at the construction</span>
+    <span class="c1">// phase, where `msg.sender` is the account</span>
+    <span class="c1">// creating this contract.</span>
+    <span class="kt">address</span> <span class="kr">public</span> <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">creationTime</span> <span class="o">=</span> <span class="nb">now</span><span class="p">;</span>
+
+    <span class="c1">// Modifiers can be used to change</span>
+    <span class="c1">// the body of a function.</span>
+    <span class="c1">// If this modifier is used, it will</span>
+    <span class="c1">// prepend a check that only passes</span>
+    <span class="c1">// if the function is called from</span>
+    <span class="c1">// a certain address.</span>
+    <span class="kd">modifier</span> <span class="n">onlyBy</span><span class="p">(</span><span class="kt">address</span> <span class="n">_account</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">_account</span><span class="p">,</span>
+            <span class="s">&quot;Sender not authorized.&quot;</span>
+        <span class="p">);</span>
+        <span class="c1">// Do not forget the &quot;_;&quot;! It will</span>
+        <span class="c1">// be replaced by the actual function</span>
+        <span class="c1">// body when the modifier is used.</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// Make `_newOwner` the new owner of this</span>
+    <span class="c1">/// contract.</span>
+    <span class="kd">function</span> <span class="n">changeOwner</span><span class="p">(</span><span class="kt">address</span> <span class="n">_newOwner</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="n">onlyBy</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">_newOwner</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">modifier</span> <span class="n">onlyAfter</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_time</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="nb">now</span> <span class="o">&gt;=</span> <span class="n">_time</span><span class="p">,</span>
+            <span class="s">&quot;Function called too early.&quot;</span>
+        <span class="p">);</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// Erase ownership information.</span>
+    <span class="c1">/// May only be called 6 weeks after</span>
+    <span class="c1">/// the contract has been created.</span>
+    <span class="kd">function</span> <span class="n">disown</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="n">onlyBy</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="n">onlyAfter</span><span class="p">(</span><span class="n">creationTime</span> <span class="o">+</span> <span class="mi">6</span> <span class="kc">weeks</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">delete</span> <span class="n">owner</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This modifier requires a certain</span>
+    <span class="c1">// fee being associated with a function call.</span>
+    <span class="c1">// If the caller sent too much, he or she is</span>
+    <span class="c1">// refunded, but only after the function body.</span>
+    <span class="c1">// This was dangerous before Solidity version 0.4.0,</span>
+    <span class="c1">// where it was possible to skip the part after `_;`.</span>
+    <span class="kd">modifier</span> <span class="n">costs</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_amount</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="nb">msg.value</span> <span class="o">&gt;=</span> <span class="n">_amount</span><span class="p">,</span>
+            <span class="s">&quot;Not enough Ether provided.&quot;</span>
+        <span class="p">);</span>
+        <span class="kr">_</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.value</span> <span class="o">&gt;</span> <span class="n">_amount</span><span class="p">)</span>
+            <span class="nb">msg.sender</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="nb">msg.value</span> <span class="o">-</span> <span class="n">_amount</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">forceOwnerChange</span><span class="p">(</span><span class="kt">address</span> <span class="n">_newOwner</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="kr">payable</span>
+        <span class="n">costs</span><span class="p">(</span><span class="mi">200</span> <span class="kc">ether</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">_newOwner</span><span class="p">;</span>
+        <span class="c1">// just some example condition</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">0</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1">// This did not refund for Solidity</span>
+            <span class="c1">// before version 0.4.0.</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">// refund overpaid fees</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A more specialised way in which access to function
+calls can be restricted will be discussed
+in the next example.</p>
+</div>
+<div class="section" id="state-machine">
+<span id="index-3"></span><h2>State Machine<a class="headerlink" href="#state-machine" title="Permalink to this headline">¶</a></h2>
+<p>Contracts often act as a state machine, which means
+that they have certain <strong>stages</strong> in which they behave
+differently or in which different functions can
+be called. A function call often ends a stage
+and transitions the contract into the next stage
+(especially if the contract models <strong>interaction</strong>).
+It is also common that some stages are automatically
+reached at a certain point in <strong>time</strong>.</p>
+<p>An example for this is a blind auction contract which
+starts in the stage “accepting blinded bids”, then
+transitions to “revealing bids” which is ended by
+“determine auction outcome”.</p>
+<p id="index-4">Function modifiers can be used in this situation
+to model the states and guard against
+incorrect usage of the contract.</p>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>In the following example,
+the modifier <code class="docutils literal notranslate"><span class="pre">atStage</span></code> ensures that the function can
+only be called at a certain stage.</p>
+<p>Automatic timed transitions
+are handled by the modifier <code class="docutils literal notranslate"><span class="pre">timeTransitions</span></code>, which
+should be used for all functions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Modifier Order Matters</strong>.
+If atStage is combined
+with timedTransitions, make sure that you mention
+it after the latter, so that the new stage is
+taken into account.</p>
+</div>
+<p>Finally, the modifier <code class="docutils literal notranslate"><span class="pre">transitionNext</span></code> can be used
+to automatically go to the next stage when the
+function finishes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Modifier May be Skipped</strong>.
+This only applies to Solidity before version 0.4.0:
+Since modifiers are applied by simply replacing
+code and not by using a function call,
+the code in the transitionNext modifier
+can be skipped if the function itself uses
+return. If you want to do that, make sure
+to call nextStage manually from those functions.
+Starting with version 0.4.0, modifier code
+will run even if the function explicitly returns.</p>
+</div>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">StateMachine</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="n">Stages</span> <span class="p">{</span>
+        <span class="n">AcceptingBlindedBids</span><span class="p">,</span>
+        <span class="n">RevealBids</span><span class="p">,</span>
+        <span class="n">AnotherStage</span><span class="p">,</span>
+        <span class="n">AreWeDoneYet</span><span class="p">,</span>
+        <span class="n">Finished</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This is the current stage.</span>
+    <span class="n">Stages</span> <span class="kr">public</span> <span class="n">stage</span> <span class="o">=</span> <span class="n">Stages</span><span class="p">.</span><span class="n">AcceptingBlindedBids</span><span class="p">;</span>
+
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">creationTime</span> <span class="o">=</span> <span class="nb">now</span><span class="p">;</span>
+
+    <span class="kd">modifier</span> <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span> <span class="n">_stage</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="n">stage</span> <span class="o">==</span> <span class="n">_stage</span><span class="p">,</span>
+            <span class="s">&quot;Function cannot be called at this time.&quot;</span>
+        <span class="p">);</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">nextStage</span><span class="p">()</span> <span class="kr">internal</span> <span class="p">{</span>
+        <span class="n">stage</span> <span class="o">=</span> <span class="n">Stages</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Perform timed transitions. Be sure to mention</span>
+    <span class="c1">// this modifier first, otherwise the guards</span>
+    <span class="c1">// will not take the new stage into account.</span>
+    <span class="kd">modifier</span> <span class="n">timedTransitions</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">stage</span> <span class="o">==</span> <span class="n">Stages</span><span class="p">.</span><span class="n">AcceptingBlindedBids</span> <span class="o">&amp;&amp;</span>
+                    <span class="nb">now</span> <span class="o">&gt;=</span> <span class="n">creationTime</span> <span class="o">+</span> <span class="mi">10</span> <span class="kc">days</span><span class="p">)</span>
+            <span class="n">nextStage</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">stage</span> <span class="o">==</span> <span class="n">Stages</span><span class="p">.</span><span class="n">RevealBids</span> <span class="o">&amp;&amp;</span>
+                <span class="nb">now</span> <span class="o">&gt;=</span> <span class="n">creationTime</span> <span class="o">+</span> <span class="mi">12</span> <span class="kc">days</span><span class="p">)</span>
+            <span class="n">nextStage</span><span class="p">();</span>
+        <span class="c1">// The other stages transition by transaction</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Order of the modifiers matters here!</span>
+    <span class="kd">function</span> <span class="n">bid</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="kr">payable</span>
+        <span class="n">timedTransitions</span>
+        <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span><span class="p">.</span><span class="n">AcceptingBlindedBids</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// We will not implement that here</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">reveal</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="n">timedTransitions</span>
+        <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span><span class="p">.</span><span class="n">RevealBids</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="c1">// This modifier goes to the next stage</span>
+    <span class="c1">// after the function is done.</span>
+    <span class="kd">modifier</span> <span class="n">transitionNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kr">_</span><span class="p">;</span>
+        <span class="n">nextStage</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">g</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="n">timedTransitions</span>
+        <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span><span class="p">.</span><span class="n">AnotherStage</span><span class="p">)</span>
+        <span class="n">transitionNext</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">h</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="n">timedTransitions</span>
+        <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span><span class="p">.</span><span class="n">AreWeDoneYet</span><span class="p">)</span>
+        <span class="n">transitionNext</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">i</span><span class="p">()</span>
+        <span class="kr">public</span>
+        <span class="n">timedTransitions</span>
+        <span class="n">atStage</span><span class="p">(</span><span class="n">Stages</span><span class="p">.</span><span class="n">Finished</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bugs.html" class="btn btn-neutral float-right" title="既知のバグ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="style-guide.html" class="btn btn-neutral float-left" title="Style Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

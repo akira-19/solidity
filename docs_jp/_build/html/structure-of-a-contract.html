@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Structure of a Contract &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Types" href="types.html" />
+    <link rel="prev" title="Layout of a Solidity Source File" href="layout-of-source-files.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Layout of a Solidity Source File</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Structure of a Contract</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#state-variables">State Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-modifiers">Function Modifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#struct-types">Struct Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enum-types">Enum Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Structure of a Contract</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/structure-of-a-contract.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="structure-of-a-contract">
+<span id="contract-structure"></span><span id="index-0"></span><h1>Structure of a Contract<a class="headerlink" href="#structure-of-a-contract" title="Permalink to this headline">¶</a></h1>
+<p>Solidityのコントラクトはオブジェクト志向の言語のクラスに似ています。各コントラクトは <a class="reference internal" href="#structure-state-variables"><span class="std std-ref">State Variables</span></a>、<a class="reference internal" href="#structure-functions"><span class="std std-ref">Functions</span></a>、<a class="reference internal" href="#structure-function-modifiers"><span class="std std-ref">Function Modifiers</span></a>、<a class="reference internal" href="#structure-events"><span class="std std-ref">Events</span></a>、<a class="reference internal" href="#structure-struct-types"><span class="std std-ref">Struct Types</span></a>、<a class="reference internal" href="#structure-enum-types"><span class="std std-ref">Enum Types</span></a> の宣言を含んでいます。更に、コントラクトは他のコントラクトを継承できます。</p>
+<blockquote>
+<div><a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">ライブラリ</span></a> と <a class="reference internal" href="contracts.html#interfaces"><span class="std std-ref">インターフェース</span></a> と呼ばれる特別な種類のコントラクトもあります。</div></blockquote>
+<p><a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">コントラクト</span></a> に関するセクションはより詳細な説明があります。このセクションは簡単な全体像です。</p>
+<div class="section" id="state-variables">
+<span id="structure-state-variables"></span><h2>State Variables<a class="headerlink" href="#state-variables" title="Permalink to this headline">¶</a></h2>
+<p>状態変数とは値が永久的にコントラクトのストレージに保存される値です。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">SimpleStorage</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">storedData</span><span class="p">;</span> <span class="c1">// State variable</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>有効な状態変数のタイプは <a class="reference internal" href="types.html#types"><span class="std std-ref">Types</span></a> を、可視性の実行可能な選択肢については <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">Visibility and Getters</span></a> を参照ください。</p>
+</div>
+<div class="section" id="functions">
+<span id="structure-functions"></span><h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>ファンクションはコントラクト内にある実行可能なコードの一式です。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">SimpleAuction</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">bid</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span> <span class="c1">// Function</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="control-structures.html#function-calls"><span class="std std-ref">Function Calls</span></a> は内部でも外部でも行うことができ、他のコントラクトに対して異なったレベルの <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">visibility</span></a> を持ちます。パラメータや値を受け渡しするために、<a class="reference internal" href="contracts.html#functions"><span class="std std-ref">Functions</span></a> は <a class="reference internal" href="contracts.html#function-parameters-return-variables"><span class="std std-ref">parameters and return variables</span></a> を受け入れます。</p>
+</div>
+<div class="section" id="function-modifiers">
+<span id="structure-function-modifiers"></span><h2>Function Modifiers<a class="headerlink" href="#function-modifiers" title="Permalink to this headline">¶</a></h2>
+<p>ファンクションModifierは宣言的な方法でファンクションのセマンティクスを修正することができます(コントラクトセクションの <a class="reference internal" href="contracts.html#modifiers"><span class="std std-ref">Function Modifiers</span></a> を参照ください)。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Purchase</span> <span class="p">{</span>
+    <span class="kt">address</span> <span class="kr">public</span> <span class="n">seller</span><span class="p">;</span>
+
+    <span class="kd">modifier</span> <span class="n">onlySeller</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// Modifier</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">seller</span><span class="p">,</span>
+            <span class="s">&quot;Only seller can call this.&quot;</span>
+        <span class="p">);</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">abort</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="n">onlySeller</span> <span class="p">{</span> <span class="c1">// Modifier usage</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="events">
+<span id="structure-events"></span><h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>イベントはEVMのロギング機能で使われる便利なインターフェースです。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">21</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">SimpleAuction</span> <span class="p">{</span>
+    <span class="kd">event</span> <span class="n">HighestBidIncreased</span><span class="p">(</span><span class="kt">address</span> <span class="n">bidder</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">);</span> <span class="c1">// Event</span>
+
+    <span class="kd">function</span> <span class="n">bid</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+        <span class="kr">emit</span> <span class="n">HighestBidIncreased</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">,</span> <span class="nb">msg.value</span><span class="p">);</span> <span class="c1">// Triggering event</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>DApp内でイベントがどの様に宣言され、使用されるかはコントラクトセクションの <a class="reference internal" href="contracts.html#events"><span class="std std-ref">Events</span></a> を参照ください。</p>
+</div>
+<div class="section" id="struct-types">
+<span id="structure-struct-types"></span><h2>Struct Types<a class="headerlink" href="#struct-types" title="Permalink to this headline">¶</a></h2>
+<p>構造体は複数の変数をグループ化できるカスタム定義されたタイプです (タイプセクションの <a class="reference internal" href="types.html#structs"><span class="std std-ref">Structs</span></a> を参照下さい)。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Ballot</span> <span class="p">{</span>
+    <span class="kd">struct</span> <span class="n">Voter</span> <span class="p">{</span> <span class="c1">// Struct</span>
+        <span class="kt">uint</span> <span class="n">weight</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">voted</span><span class="p">;</span>
+        <span class="kt">address</span> <span class="n">delegate</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">vote</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enum-types">
+<span id="structure-enum-types"></span><h2>Enum Types<a class="headerlink" href="#enum-types" title="Permalink to this headline">¶</a></h2>
+<p>Enumsは有限個の’constant values’を持つカスタムタイプを作成するのに使用されます(タイプセクションの <a class="reference internal" href="types.html#enums"><span class="std std-ref">Enums</span></a> を参照ください)。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Purchase</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="n">State</span> <span class="p">{</span> <span class="n">Created</span><span class="p">,</span> <span class="n">Locked</span><span class="p">,</span> <span class="n">Inactive</span> <span class="p">}</span> <span class="c1">// Enum</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="types.html" class="btn btn-neutral float-right" title="Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="layout-of-source-files.html" class="btn btn-neutral float-left" title="Layout of a Solidity Source File" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

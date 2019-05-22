@@ -1,0 +1,1236 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Solidity Assembly &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Miscellaneous" href="miscellaneous.html" />
+    <link rel="prev" title="Contracts" href="contracts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Solidity Assembly</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inline-assembly">Inline Assembly</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#syntax">Syntax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#opcodes">Opcodes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#literals">Literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functional-style">Functional Style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#access-to-external-variables-functions-and-libraries">Access to External Variables, Functions and Libraries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#declaring-assembly-local-variables">Declaring Assembly-Local Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#assignments">Assignments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#if">If</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#switch">Switch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loops">Loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#things-to-avoid">Things to Avoid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conventions-in-solidity">Conventions in Solidity</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#standalone-assembly">Standalone Assembly</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#assembly-grammar">Assembly Grammar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Solidity Assembly</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/assembly.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="solidity-assembly">
+<h1>Solidity Assembly<a class="headerlink" href="#solidity-assembly" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Solidity defines an assembly language that you can use without Solidity and also
+as “inline assembly” inside Solidity source code. This guide starts with describing
+how to use inline assembly, how it differs from standalone assembly, and
+specifies assembly itself.</p>
+<div class="section" id="inline-assembly">
+<span id="id1"></span><h2>Inline Assembly<a class="headerlink" href="#inline-assembly" title="Permalink to this headline">¶</a></h2>
+<p>You can interleave Solidity statements with inline assembly in a language close
+to the one of the virtual machine. This gives you more fine-grained control,
+especially when you are enhancing the language by writing libraries.</p>
+<p>As the EVM is a stack machine, it is often hard to address the correct stack slot
+and provide arguments to opcodes at the correct point on the stack. Solidity’s inline
+assembly helps you do this, and with other issues that arise when writing manual assembly.</p>
+<p>Inline assembly has the following features:</p>
+<ul class="simple">
+<li>functional-style opcodes: <code class="docutils literal notranslate"><span class="pre">mul(1,</span> <span class="pre">add(2,</span> <span class="pre">3))</span></code></li>
+<li>assembly-local variables: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(2,</span> <span class="pre">3)</span>&#160; <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mload(0x40)</span>&#160; <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(x,</span> <span class="pre">y)</span></code></li>
+<li>access to external variables: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint</span> <span class="pre">x)</span> <span class="pre">public</span> <span class="pre">{</span> <span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
+<li>loops: <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span> <span class="pre">lt(i,</span> <span class="pre">x)</span> <span class="pre">{</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">add(i,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(2,</span> <span class="pre">y)</span> <span class="pre">}</span></code></li>
+<li>if statements: <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">slt(x,</span> <span class="pre">0)</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(0,</span> <span class="pre">x)</span> <span class="pre">}</span></code></li>
+<li>switch statements: <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">2)</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span></code></li>
+<li>function calls: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">y</span> <span class="pre">{</span> <span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">1</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">f(sub(x,</span> <span class="pre">1)))</span> <span class="pre">}</span>&#160;&#160; <span class="pre">}</span></code></li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Inline assembly is a way to access the Ethereum Virtual Machine
+at a low level. This bypasses several important safety
+features and checks of Solidity. You should only use it for
+tasks that need it, and only if you are confident with using it.</p>
+</div>
+<div class="section" id="syntax">
+<h3>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
+<p>Assembly parses comments, literals and identifiers in the same way as Solidity, so you can use the
+usual <code class="docutils literal notranslate"><span class="pre">//</span></code> and <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">*/</span></code> comments. Inline assembly is marked by <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> and inside
+these curly braces, you can use the following (see the later sections for more details):</p>
+<blockquote>
+<div><ul class="simple">
+<li>literals, i.e. <code class="docutils literal notranslate"><span class="pre">0x123</span></code>, <code class="docutils literal notranslate"><span class="pre">42</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (strings up to 32 characters)</li>
+<li>opcodes in functional style, e.g. <code class="docutils literal notranslate"><span class="pre">add(1,</span> <span class="pre">mlod(0))</span></code></li>
+<li>variable declarations, e.g. <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">7</span></code>, <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span></code> (initial value of empty (0) is assigned)</li>
+<li>identifiers (assembly-local variables and externals if used as inline assembly), e.g. <code class="docutils literal notranslate"><span class="pre">add(3,</span> <span class="pre">x)</span></code>, <code class="docutils literal notranslate"><span class="pre">sstore(x_slot,</span> <span class="pre">2)</span></code></li>
+<li>assignments, e.g. <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code></li>
+<li>blocks where local variables are scoped inside, e.g. <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">3</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">add(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
+</ul>
+</div></blockquote>
+<p>The following features are only available for standalone assembly:</p>
+<blockquote>
+<div><ul class="simple">
+<li>direct stack control via <code class="docutils literal notranslate"><span class="pre">dup1</span></code>, <code class="docutils literal notranslate"><span class="pre">swap1</span></code>, …</li>
+<li>direct stack assignments (in “instruction style”), e.g. <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">=:</span> <span class="pre">x</span></code></li>
+<li>labels, e.g. <code class="docutils literal notranslate"><span class="pre">name:</span></code></li>
+<li>jump opcodes</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Standalone assembly is supported for backwards compatibility but is not documented
+here anymore.</p>
+</div>
+<p>At the end of the <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> block, the stack must be balanced,
+unless you require it otherwise. If it is not balanced, the compiler generates
+a warning.</p>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>The following example provides library code to access the code of another contract and
+load it into a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> variable. This is not possible with “plain Solidity” and the
+idea is that assembly libraries will be used to enhance the Solidity language.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">GetCode</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">at</span><span class="p">(</span><span class="kt">address</span> <span class="n">_addr</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">o_code</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+            <span class="c1">// retrieve the size of the code, this needs assembly</span>
+            <span class="ow">let</span> <span class="nv">size</span> <span class="o">:=</span> <span class="nf">extcodesize</span><span class="p">(</span><span class="n">_addr</span><span class="p">)</span>
+            <span class="c1">// allocate output byte array - this could also be done without assembly</span>
+            <span class="c1">// by using o_code = new bytes(size)</span>
+            <span class="n">o_code</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="mh">0x40</span><span class="p">)</span>
+            <span class="c1">// new &quot;memory end&quot; including padding</span>
+            <span class="nf">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="nf">add</span><span class="p">(</span><span class="n">o_code</span><span class="p">,</span> <span class="nf">and</span><span class="p">(</span><span class="nf">add</span><span class="p">(</span><span class="nf">add</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">),</span> <span class="mh">0x1f</span><span class="p">),</span> <span class="nf">not</span><span class="p">(</span><span class="mh">0x1f</span><span class="p">))))</span>
+            <span class="c1">// store length in memory</span>
+            <span class="nf">mstore</span><span class="p">(</span><span class="n">o_code</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="c1">// actually retrieve the code, this needs assembly</span>
+            <span class="nf">extcodecopy</span><span class="p">(</span><span class="n">_addr</span><span class="p">,</span> <span class="nf">add</span><span class="p">(</span><span class="n">o_code</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Inline assembly is also beneficial in cases where the optimizer fails to produce
+efficient code, for example:</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">VectorSum</span> <span class="p">{</span>
+    <span class="c1">// This function is less efficient because the optimizer currently fails to</span>
+    <span class="c1">// remove the bounds checks in array access.</span>
+    <span class="kd">function</span> <span class="n">sumSolidity</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">_data</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">o_sum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_data</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">o_sum</span> <span class="o">+=</span> <span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">// We know that we only access the array in bounds, so we can avoid the check.</span>
+    <span class="c1">// 0x20 needs to be added to an array because the first slot contains the</span>
+    <span class="c1">// array length.</span>
+    <span class="kd">function</span> <span class="n">sumAsm</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">_data</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">o_sum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_data</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">assembly</span> <span class="p">{</span>
+                <span class="n">o_sum</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">o_sum</span><span class="p">,</span> <span class="nf">mload</span><span class="p">(</span><span class="nf">add</span><span class="p">(</span><span class="nf">add</span><span class="p">(</span><span class="n">_data</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">),</span> <span class="nf">mul</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">))))</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Same as above, but accomplish the entire code within inline assembly.</span>
+    <span class="kd">function</span> <span class="n">sumPureAsm</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">_data</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">o_sum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+           <span class="c1">// Load the length (first 32 bytes)</span>
+           <span class="ow">let</span> <span class="nv">len</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="n">_data</span><span class="p">)</span>
+
+           <span class="c1">// Skip over the length field.</span>
+           <span class="c1">//</span>
+           <span class="c1">// Keep temporary variable so it can be incremented in place.</span>
+           <span class="c1">//</span>
+           <span class="c1">// NOTE: incrementing _data would result in an unusable</span>
+           <span class="c1">//       _data variable after this assembly block</span>
+           <span class="ow">let</span> <span class="nv">data</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">_data</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+
+           <span class="c1">// Iterate until the bound is not met.</span>
+           <span class="nf">for</span>
+               <span class="p">{</span> <span class="ow">let</span> <span class="nv">end</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nf">mul</span><span class="p">(</span><span class="n">len</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">))</span> <span class="p">}</span>
+               <span class="nf">lt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+               <span class="p">{</span> <span class="n">data</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span> <span class="p">}</span>
+           <span class="p">{</span>
+               <span class="n">o_sum</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">o_sum</span><span class="p">,</span> <span class="nf">mload</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+           <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="opcodes">
+<span id="id2"></span><h3>Opcodes<a class="headerlink" href="#opcodes" title="Permalink to this headline">¶</a></h3>
+<p>This document does not want to be a full description of the Ethereum virtual machine, but the
+following list can be used as a reference of its opcodes.</p>
+<p>If an opcode takes arguments (always from the top of the stack), they are given in parentheses.
+Note that the order of arguments can be seen to be reversed in non-functional style (explained below).
+Opcodes marked with <code class="docutils literal notranslate"><span class="pre">-</span></code> do not push an item onto the stack (do not return a result),
+those marked with <code class="docutils literal notranslate"><span class="pre">*</span></code> are special and all others push exactly one item onto the stack (their “return value”).
+Opcodes marked with <code class="docutils literal notranslate"><span class="pre">F</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">B</span></code> or <code class="docutils literal notranslate"><span class="pre">C</span></code> are present since Frontier, Homestead, Byzantium or Constantinople, respectively.
+Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.</p>
+<p>In the following, <code class="docutils literal notranslate"><span class="pre">mem[a...b)</span></code> signifies the bytes of memory starting at position <code class="docutils literal notranslate"><span class="pre">a</span></code> up to
+but not including position <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">storage[p]</span></code> signifies the storage contents at position <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p>The opcodes <code class="docutils literal notranslate"><span class="pre">pushi</span></code> and <code class="docutils literal notranslate"><span class="pre">jumpdest</span></code> cannot be used directly.</p>
+<p>In the grammar, opcodes are represented as pre-defined identifiers.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="5%" />
+<col width="3%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Instruction</th>
+<th class="head">&#160;</th>
+<th class="head">&#160;</th>
+<th class="head">Explanation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="2">stop</td>
+<td rowspan="2"><cite>-</cite></td>
+<td rowspan="2">F</td>
+<td rowspan="2">stop execution, identical to return(0,0)</td>
+</tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"><td>add(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x + y</td>
+</tr>
+<tr class="row-odd"><td>sub(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x - y</td>
+</tr>
+<tr class="row-even"><td>mul(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x * y</td>
+</tr>
+<tr class="row-odd"><td>div(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x / y</td>
+</tr>
+<tr class="row-even"><td>sdiv(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x / y, for signed numbers in two’s complement</td>
+</tr>
+<tr class="row-odd"><td>mod(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x % y</td>
+</tr>
+<tr class="row-even"><td>smod(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x % y, for signed numbers in two’s complement</td>
+</tr>
+<tr class="row-odd"><td>exp(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>x to the power of y</td>
+</tr>
+<tr class="row-even"><td>not(x)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>~x, every bit of x is negated</td>
+</tr>
+<tr class="row-odd"><td>lt(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x &lt; y, 0 otherwise</td>
+</tr>
+<tr class="row-even"><td>gt(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x &gt; y, 0 otherwise</td>
+</tr>
+<tr class="row-odd"><td>slt(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x &lt; y, 0 otherwise, for signed numbers in two’s complement</td>
+</tr>
+<tr class="row-even"><td>sgt(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x &gt; y, 0 otherwise, for signed numbers in two’s complement</td>
+</tr>
+<tr class="row-odd"><td>eq(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x == y, 0 otherwise</td>
+</tr>
+<tr class="row-even"><td>iszero(x)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>1 if x == 0, 0 otherwise</td>
+</tr>
+<tr class="row-odd"><td>and(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>bitwise and of x and y</td>
+</tr>
+<tr class="row-even"><td>or(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>bitwise or of x and y</td>
+</tr>
+<tr class="row-odd"><td>xor(x, y)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>bitwise xor of x and y</td>
+</tr>
+<tr class="row-even"><td>byte(n, x)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>nth byte of x, where the most significant byte is the 0th byte</td>
+</tr>
+<tr class="row-odd"><td>shl(x, y)</td>
+<td>&#160;</td>
+<td>C</td>
+<td>logical shift left y by x bits</td>
+</tr>
+<tr class="row-even"><td>shr(x, y)</td>
+<td>&#160;</td>
+<td>C</td>
+<td>logical shift right y by x bits</td>
+</tr>
+<tr class="row-odd"><td>sar(x, y)</td>
+<td>&#160;</td>
+<td>C</td>
+<td>arithmetic shift right y by x bits</td>
+</tr>
+<tr class="row-even"><td>addmod(x, y, m)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>(x + y) % m with arbitrary precision arithmetic</td>
+</tr>
+<tr class="row-odd"><td>mulmod(x, y, m)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>(x * y) % m with arbitrary precision arithmetic</td>
+</tr>
+<tr class="row-even"><td>signextend(i, x)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>sign extend from (i*8+7)th bit counting from least significant</td>
+</tr>
+<tr class="row-odd"><td>keccak256(p, n)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>keccak(mem[p…(p+n)))</td>
+</tr>
+<tr class="row-even"><td>jump(label)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>jump to label / code position</td>
+</tr>
+<tr class="row-odd"><td>jumpi(label, cond)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>jump to label if cond is nonzero</td>
+</tr>
+<tr class="row-even"><td>pc</td>
+<td>&#160;</td>
+<td>F</td>
+<td>current position in code</td>
+</tr>
+<tr class="row-odd"><td>pop(x)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>remove the element pushed by x</td>
+</tr>
+<tr class="row-even"><td>dup1 … dup16</td>
+<td>&#160;</td>
+<td>F</td>
+<td>copy nth stack slot to the top (counting from top)</td>
+</tr>
+<tr class="row-odd"><td>swap1 … swap16</td>
+<td><cite>*</cite></td>
+<td>F</td>
+<td>swap topmost and nth stack slot below it</td>
+</tr>
+<tr class="row-even"><td>mload(p)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>mem[p…(p+32))</td>
+</tr>
+<tr class="row-odd"><td>mstore(p, v)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>mem[p…(p+32)) := v</td>
+</tr>
+<tr class="row-even"><td>mstore8(p, v)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>mem[p] := v &amp; 0xff (only modifies a single byte)</td>
+</tr>
+<tr class="row-odd"><td>sload(p)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>storage[p]</td>
+</tr>
+<tr class="row-even"><td>sstore(p, v)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>storage[p] := v</td>
+</tr>
+<tr class="row-odd"><td>msize</td>
+<td>&#160;</td>
+<td>F</td>
+<td>size of memory, i.e. largest accessed memory index</td>
+</tr>
+<tr class="row-even"><td>gas</td>
+<td>&#160;</td>
+<td>F</td>
+<td>gas still available to execution</td>
+</tr>
+<tr class="row-odd"><td>address</td>
+<td>&#160;</td>
+<td>F</td>
+<td>address of the current contract / execution context</td>
+</tr>
+<tr class="row-even"><td>balance(a)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>wei balance at address a</td>
+</tr>
+<tr class="row-odd"><td>caller</td>
+<td>&#160;</td>
+<td>F</td>
+<td>call sender (excluding <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>)</td>
+</tr>
+<tr class="row-even"><td>callvalue</td>
+<td>&#160;</td>
+<td>F</td>
+<td>wei sent together with the current call</td>
+</tr>
+<tr class="row-odd"><td>calldataload(p)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>call data starting from position p (32 bytes)</td>
+</tr>
+<tr class="row-even"><td>calldatasize</td>
+<td>&#160;</td>
+<td>F</td>
+<td>size of call data in bytes</td>
+</tr>
+<tr class="row-odd"><td>calldatacopy(t, f, s)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>copy s bytes from calldata at position f to mem at position t</td>
+</tr>
+<tr class="row-even"><td>codesize</td>
+<td>&#160;</td>
+<td>F</td>
+<td>size of the code of the current contract / execution context</td>
+</tr>
+<tr class="row-odd"><td>codecopy(t, f, s)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>copy s bytes from code at position f to mem at position t</td>
+</tr>
+<tr class="row-even"><td>extcodesize(a)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>size of the code at address a</td>
+</tr>
+<tr class="row-odd"><td>extcodecopy(a, t, f, s)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>like codecopy(t, f, s) but take code at address a</td>
+</tr>
+<tr class="row-even"><td>returndatasize</td>
+<td>&#160;</td>
+<td>B</td>
+<td>size of the last returndata</td>
+</tr>
+<tr class="row-odd"><td>returndatacopy(t, f, s)</td>
+<td><cite>-</cite></td>
+<td>B</td>
+<td>copy s bytes from returndata at position f to mem at position t</td>
+</tr>
+<tr class="row-even"><td>extcodehash(a)</td>
+<td>&#160;</td>
+<td>C</td>
+<td>code hash of address a</td>
+</tr>
+<tr class="row-odd"><td>create(v, p, n)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>create new contract with code mem[p…(p+n)) and send v wei
+and return the new address</td>
+</tr>
+<tr class="row-even"><td>create2(v, p, n, s)</td>
+<td>&#160;</td>
+<td>C</td>
+<td>create new contract with code mem[p…(p+n)) at address
+keccak256(0xff . this . s . keccak256(mem[p…(p+n)))
+and send v wei and return the new address, where <code class="docutils literal notranslate"><span class="pre">0xff</span></code> is a
+8 byte value, <code class="docutils literal notranslate"><span class="pre">this</span></code> is the current contract’s address
+as a 20 byte value and <code class="docutils literal notranslate"><span class="pre">s</span></code> is a big-endian 256-bit value</td>
+</tr>
+<tr class="row-odd"><td>call(g, a, v, in,
+insize, out, outsize)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>call contract at address a with input mem[in…(in+insize))
+providing g gas and v wei and output area
+mem[out…(out+outsize)) returning 0 on error (eg. out of gas)
+and 1 on success</td>
+</tr>
+<tr class="row-even"><td>callcode(g, a, v, in,
+insize, out, outsize)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>identical to <code class="docutils literal notranslate"><span class="pre">call</span></code> but only use the code from a and stay
+in the context of the current contract otherwise</td>
+</tr>
+<tr class="row-odd"><td>delegatecall(g, a, in,
+insize, out, outsize)</td>
+<td>&#160;</td>
+<td>H</td>
+<td>identical to <code class="docutils literal notranslate"><span class="pre">callcode</span></code> but also keep <code class="docutils literal notranslate"><span class="pre">caller</span></code>
+and <code class="docutils literal notranslate"><span class="pre">callvalue</span></code></td>
+</tr>
+<tr class="row-even"><td>staticcall(g, a, in,
+insize, out, outsize)</td>
+<td>&#160;</td>
+<td>B</td>
+<td>identical to <code class="docutils literal notranslate"><span class="pre">call(g,</span> <span class="pre">a,</span> <span class="pre">0,</span> <span class="pre">in,</span> <span class="pre">insize,</span> <span class="pre">out,</span> <span class="pre">outsize)</span></code> but do
+not allow state modifications</td>
+</tr>
+<tr class="row-odd"><td>return(p, s)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>end execution, return data mem[p…(p+s))</td>
+</tr>
+<tr class="row-even"><td>revert(p, s)</td>
+<td><cite>-</cite></td>
+<td>B</td>
+<td>end execution, revert state changes, return data mem[p…(p+s))</td>
+</tr>
+<tr class="row-odd"><td>selfdestruct(a)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>end execution, destroy current contract and send funds to a</td>
+</tr>
+<tr class="row-even"><td>invalid</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>end execution with invalid instruction</td>
+</tr>
+<tr class="row-odd"><td>log0(p, s)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>log without topics and data mem[p…(p+s))</td>
+</tr>
+<tr class="row-even"><td>log1(p, s, t1)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>log with topic t1 and data mem[p…(p+s))</td>
+</tr>
+<tr class="row-odd"><td>log2(p, s, t1, t2)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>log with topics t1, t2 and data mem[p…(p+s))</td>
+</tr>
+<tr class="row-even"><td>log3(p, s, t1, t2, t3)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>log with topics t1, t2, t3 and data mem[p…(p+s))</td>
+</tr>
+<tr class="row-odd"><td>log4(p, s, t1, t2, t3,
+t4)</td>
+<td><cite>-</cite></td>
+<td>F</td>
+<td>log with topics t1, t2, t3, t4 and data mem[p…(p+s))</td>
+</tr>
+<tr class="row-even"><td>origin</td>
+<td>&#160;</td>
+<td>F</td>
+<td>transaction sender</td>
+</tr>
+<tr class="row-odd"><td>gasprice</td>
+<td>&#160;</td>
+<td>F</td>
+<td>gas price of the transaction</td>
+</tr>
+<tr class="row-even"><td>blockhash(b)</td>
+<td>&#160;</td>
+<td>F</td>
+<td>hash of block nr b - only for last 256 blocks excluding current</td>
+</tr>
+<tr class="row-odd"><td>coinbase</td>
+<td>&#160;</td>
+<td>F</td>
+<td>current mining beneficiary</td>
+</tr>
+<tr class="row-even"><td>timestamp</td>
+<td>&#160;</td>
+<td>F</td>
+<td>timestamp of the current block in seconds since the epoch</td>
+</tr>
+<tr class="row-odd"><td>number</td>
+<td>&#160;</td>
+<td>F</td>
+<td>current block number</td>
+</tr>
+<tr class="row-even"><td>difficulty</td>
+<td>&#160;</td>
+<td>F</td>
+<td>difficulty of the current block</td>
+</tr>
+<tr class="row-odd"><td>gaslimit</td>
+<td>&#160;</td>
+<td>F</td>
+<td>block gas limit of the current block</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="literals">
+<h3>Literals<a class="headerlink" href="#literals" title="Permalink to this headline">¶</a></h3>
+<p>You can use integer constants by typing them in decimal or hexadecimal notation and an
+appropriate <code class="docutils literal notranslate"><span class="pre">PUSHi</span></code> instruction will automatically be generated. The following creates code
+to add 2 and 3 resulting in 5 and then computes the bitwise <code class="docutils literal notranslate"><span class="pre">AND</span></code> with the string “abc”.
+The final value is assigned to a local variable called <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+Strings are stored left-aligned and cannot be longer than 32 bytes.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">assembly</span> <span class="p">{</span> <span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="nf">and</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="nf">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="functional-style">
+<h3>Functional Style<a class="headerlink" href="#functional-style" title="Permalink to this headline">¶</a></h3>
+<p>For a sequence of opcodes, it is often hard to see what the actual
+arguments for certain opcodes are. In the following example,
+<code class="docutils literal notranslate"><span class="pre">3</span></code> is added to the contents in memory at position <code class="docutils literal notranslate"><span class="pre">0x80</span></code>.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="mi">3</span> <span class="mh">0x80</span> <span class="n">mload</span> <span class="n">add</span> <span class="mh">0x80</span> <span class="n">mstore</span>
+</pre></div>
+</div>
+<p>Solidity inline assembly has a “functional style” notation where the same code
+would be written as follows:</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">mstore</span><span class="p">(</span><span class="mh">0x80</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">mload</span><span class="p">(</span><span class="mh">0x80</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If you read the code from right to left, you end up with exactly the same
+sequence of constants and opcodes, but it is much clearer where the
+values end up.</p>
+<p>If you care about the exact stack layout, just note that the
+syntactically first argument for a function or opcode will be put at the
+top of the stack.</p>
+</div>
+<div class="section" id="access-to-external-variables-functions-and-libraries">
+<h3>Access to External Variables, Functions and Libraries<a class="headerlink" href="#access-to-external-variables-functions-and-libraries" title="Permalink to this headline">¶</a></h3>
+<p>You can access Solidity variables and other identifiers by using their name.
+For variables stored in the memory data location, this pushes the address, and not the value
+onto the stack. Variables stored in the storage data location are different, as they might not
+occupy a full storage slot, so their “address” is composed of a slot and a byte-offset
+inside that slot. To retrieve the slot pointed to by the variable <code class="docutils literal notranslate"><span class="pre">x</span></code>, you
+use <code class="docutils literal notranslate"><span class="pre">x_slot</span></code>, and to retrieve the byte-offset you use <code class="docutils literal notranslate"><span class="pre">x_offset</span></code>.</p>
+<p>Local Solidity variables are available for assignments, for example:</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+            <span class="n">r</span> <span class="o">:=</span> <span class="nf">mul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nf">sload</span><span class="p">(</span><span class="n">b_slot</span><span class="p">))</span> <span class="c1">// ignore the offset, we know it is zero</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you access variables of a type that spans less than 256 bits
+(for example <code class="docutils literal notranslate"><span class="pre">uint64</span></code>, <code class="docutils literal notranslate"><span class="pre">address</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes16</span></code> or <code class="docutils literal notranslate"><span class="pre">byte</span></code>),
+you cannot make any assumptions about bits not part of the
+encoding of the type. Especially, do not assume them to be zero.
+To be safe, always clear the data properly before you use it
+in a context where this is important:
+<code class="docutils literal notranslate"><span class="pre">uint32</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">f();</span> <span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">and(x,</span> <span class="pre">0xffffffff)</span> <span class="pre">/*</span> <span class="pre">now</span> <span class="pre">use</span> <span class="pre">x</span> <span class="pre">*/</span> <span class="pre">}</span></code>
+To clean signed types, you can use the <code class="docutils literal notranslate"><span class="pre">signextend</span></code> opcode.</p>
+</div>
+</div>
+<div class="section" id="labels">
+<h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+<p>Support for labels has been removed in version 0.5.0 of Solidity.
+Please use functions, loops, if or switch statements instead.</p>
+</div>
+<div class="section" id="declaring-assembly-local-variables">
+<h3>Declaring Assembly-Local Variables<a class="headerlink" href="#declaring-assembly-local-variables" title="Permalink to this headline">¶</a></h3>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">let</span></code> keyword to declare variables that are only visible in
+inline assembly and actually only in the current <code class="docutils literal notranslate"><span class="pre">{...}</span></code>-block. What happens
+is that the <code class="docutils literal notranslate"><span class="pre">let</span></code> instruction will create a new stack slot that is reserved
+for the variable and automatically removed again when the end of the block
+is reached. You need to provide an initial value for the variable which can
+be just <code class="docutils literal notranslate"><span class="pre">0</span></code>, but it can also be a complex functional-style expression.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">assembly</span> <span class="p">{</span>
+            <span class="ow">let</span> <span class="nv">v</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="nf">mstore</span><span class="p">(</span><span class="mh">0x80</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="ow">let</span> <span class="nv">y</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="nf">sload</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">b</span> <span class="o">:=</span> <span class="n">y</span>
+            <span class="p">}</span> <span class="c1">// y is &quot;deallocated&quot; here</span>
+            <span class="n">b</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="p">}</span> <span class="c1">// v is &quot;deallocated&quot; here</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assignments">
+<h3>Assignments<a class="headerlink" href="#assignments" title="Permalink to this headline">¶</a></h3>
+<p>Assignments are possible to assembly-local variables and to function-local
+variables. Take care that when you assign to variables that point to
+memory or storage, you will only change the pointer and not the data.</p>
+<p>Variables can only be assigned expressions that result in exactly one value.
+If you want to assign the values returned from a function that has
+multiple return parameters, you have to provide multiple variables.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">let</span> <span class="n">v</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="n">let</span> <span class="n">g</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">let</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">:=</span> <span class="n">f</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="if">
+<h3>If<a class="headerlink" href="#if" title="Permalink to this headline">¶</a></h3>
+<p>The if statement can be used for conditionally executing code.
+There is no “else” part, consider using “switch” (see below) if
+you need multiple alternatives.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="k">if</span> <span class="n">eq</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nf">revert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The curly braces for the body are required.</p>
+</div>
+<div class="section" id="switch">
+<h3>Switch<a class="headerlink" href="#switch" title="Permalink to this headline">¶</a></h3>
+<p>You can use a switch statement as a very basic version of “if/else”.
+It takes the value of an expression and compares it to several constants.
+The branch corresponding to the matching constant is taken. Contrary to the
+error-prone behaviour of some programming languages, control flow does
+not continue from one case to the next. There can be a fallback or default
+case called <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="n">switch</span> <span class="n">calldataload</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">case</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">:=</span> <span class="n">calldataload</span><span class="p">(</span><span class="mh">0x24</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kr">default</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">:=</span> <span class="n">calldataload</span><span class="p">(</span><span class="mh">0x44</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">sstore</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">div</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The list of cases does not require curly braces, but the body of a
+case does require them.</p>
+</div>
+<div class="section" id="loops">
+<h3>Loops<a class="headerlink" href="#loops" title="Permalink to this headline">¶</a></h3>
+<p>Assembly supports a simple for-style loop. For-style loops have
+a header containing an initializing part, a condition and a post-iteration
+part. The condition has to be a functional-style expression, while
+the other two are blocks. If the initializing part
+declares any variables, the scope of these variables is extended into the
+body (including the condition and the post-iteration part).</p>
+<p>The following example computes the sum of an area in memory.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="p">{</span> <span class="n">let</span> <span class="n">i</span> <span class="o">:=</span> <span class="mi">0</span> <span class="p">}</span> <span class="n">lt</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x100</span><span class="p">)</span> <span class="p">{</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span> <span class="p">}</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mload</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For loops can also be written so that they behave like while loops:
+Simply leave the initialization and post-iteration parts empty.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="n">let</span> <span class="n">i</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="p">{</span> <span class="p">}</span> <span class="n">lt</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x100</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span> <span class="p">{</span>     <span class="c1">// while(i &lt; 0x100)</span>
+        <span class="n">x</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mload</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">i</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<p>Assembly allows the definition of low-level functions. These take their
+arguments (and a return PC) from the stack and also put the results onto the
+stack. Calling a function looks the same way as executing a functional-style
+opcode.</p>
+<p>Functions can be defined anywhere and are visible in the block they are
+declared in. Inside a function, you cannot access local variables
+defined outside of that function. There is no explicit <code class="docutils literal notranslate"><span class="pre">return</span></code>
+statement.</p>
+<p>If you call a function that returns multiple values, you have to assign
+them to a tuple using <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code>.</p>
+<p>The following example implements the power function by square-and-multiply.</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="kd">function</span> <span class="n">power</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">result</span> <span class="p">{</span>
+        <span class="n">switch</span> <span class="n">exponent</span>
+        <span class="n">case</span> <span class="mi">0</span> <span class="p">{</span> <span class="n">result</span> <span class="o">:=</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="n">case</span> <span class="mi">1</span> <span class="p">{</span> <span class="n">result</span> <span class="o">:=</span> <span class="n">base</span> <span class="p">}</span>
+        <span class="kr">default</span> <span class="p">{</span>
+            <span class="n">result</span> <span class="o">:=</span> <span class="n">power</span><span class="p">(</span><span class="n">mul</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">base</span><span class="p">),</span> <span class="n">div</span><span class="p">(</span><span class="n">exponent</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">switch</span> <span class="n">mod</span><span class="p">(</span><span class="n">exponent</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">case</span> <span class="mi">1</span> <span class="p">{</span> <span class="n">result</span> <span class="o">:=</span> <span class="n">mul</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="things-to-avoid">
+<h3>Things to Avoid<a class="headerlink" href="#things-to-avoid" title="Permalink to this headline">¶</a></h3>
+<p>Inline assembly might have a quite high-level look, but it actually is extremely
+low-level. Function calls, loops, ifs and switches are converted by simple
+rewriting rules and after that, the only thing the assembler does for you is re-arranging
+functional-style opcodes, counting stack height for
+variable access and removing stack slots for assembly-local variables when the end
+of their block is reached.</p>
+</div>
+<div class="section" id="conventions-in-solidity">
+<h3>Conventions in Solidity<a class="headerlink" href="#conventions-in-solidity" title="Permalink to this headline">¶</a></h3>
+<p>In contrast to EVM assembly, Solidity knows types which are narrower than 256 bits,
+e.g. <code class="docutils literal notranslate"><span class="pre">uint24</span></code>. In order to make them more efficient, most arithmetic operations just
+treat them as 256-bit numbers and the higher-order bits are only cleaned at the
+point where it is necessary, i.e. just shortly before they are written to memory
+or before comparisons are performed. This means that if you access such a variable
+from within inline assembly, you might have to manually clean the higher order bits
+first.</p>
+<p>Solidity manages memory in a very simple way: There is a “free memory pointer”
+at position <code class="docutils literal notranslate"><span class="pre">0x40</span></code> in memory. If you want to allocate memory, just use the memory
+starting from where this pointer points at and update it accordingly.
+There is no guarantee that the memory has not been used before and thus
+you cannot assume that its contents are zero bytes.
+There is no built-in mechanism to release or free allocated memory.
+Here is an assembly snippet that can be used for allocating memory:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">allocate</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pos</span> <span class="p">{</span>
+  <span class="n">pos</span> <span class="o">:=</span> <span class="n">mload</span><span class="p">(</span><span class="mh">0x40</span><span class="p">)</span>
+  <span class="n">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The first 64 bytes of memory can be used as “scratch space” for short-term
+allocation. The 32 bytes after the free memory pointer (i.e. starting at <code class="docutils literal notranslate"><span class="pre">0x60</span></code>)
+is meant to be zero permanently and is used as the initial value for
+empty dynamic memory arrays.
+This means that the allocatable memory starts at <code class="docutils literal notranslate"><span class="pre">0x80</span></code>, which is the initial value
+of the free memory pointer.</p>
+<p>Elements in memory arrays in Solidity always occupy multiples of 32 bytes (yes, this is
+even true for <code class="docutils literal notranslate"><span class="pre">byte[]</span></code>, but not for <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>). Multi-dimensional memory
+arrays are pointers to memory arrays. The length of a dynamic array is stored at the
+first slot of the array and followed by the array elements.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Statically-sized memory arrays do not have a length field, but it might be added later
+to allow better convertibility between statically- and dynamically-sized arrays, so
+please do not rely on that.</p>
+</div>
+</div>
+</div>
+<div class="section" id="standalone-assembly">
+<h2>Standalone Assembly<a class="headerlink" href="#standalone-assembly" title="Permalink to this headline">¶</a></h2>
+<p>The assembly language described as inline assembly above can also be used
+standalone and in fact, the plan is to use it as an intermediate language
+for the Solidity compiler. In this form, it tries to achieve several goals:</p>
+<ol class="arabic simple">
+<li>Programs written in it should be readable, even if the code is generated by a compiler from Solidity.</li>
+<li>The translation from assembly to bytecode should contain as few “surprises” as possible.</li>
+<li>Control flow should be easy to detect to help in formal verification and optimization.</li>
+</ol>
+<p>In order to achieve the first and last goal, assembly provides high-level constructs
+like <code class="docutils literal notranslate"><span class="pre">for</span></code> loops, <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">switch</span></code> statements and function calls. It should be possible
+to write assembly programs that do not make use of explicit <code class="docutils literal notranslate"><span class="pre">SWAP</span></code>, <code class="docutils literal notranslate"><span class="pre">DUP</span></code>,
+<code class="docutils literal notranslate"><span class="pre">JUMP</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> statements, because the first two obfuscate the data flow
+and the last two obfuscate control flow. Furthermore, functional statements of
+the form <code class="docutils literal notranslate"><span class="pre">mul(add(x,</span> <span class="pre">y),</span> <span class="pre">7)</span></code> are preferred over pure opcode statements like
+<code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">y</span> <span class="pre">x</span> <span class="pre">add</span> <span class="pre">mul</span></code> because in the first form, it is much easier to see which
+operand is used for which opcode.</p>
+<p>The second goal is achieved by compiling the
+higher level constructs to bytecode in a very regular way.
+The only non-local operation performed
+by the assembler is name lookup of user-defined identifiers (functions, variables, …),
+which follow very simple and regular scoping rules and cleanup of local variables from the stack.</p>
+<p>Scoping: An identifier that is declared (label, variable, function, assembly)
+is only visible in the block where it was declared (including nested blocks
+inside the current block). It is not legal to access local variables across
+function borders, even if they would be in scope. Shadowing is not allowed.
+Local variables cannot be accessed before they were declared, but
+functions and assemblies can. Assemblies are special blocks that are used
+for e.g. returning runtime code or creating contracts. No identifier from an
+outer assembly is visible in a sub-assembly.</p>
+<p>If control flow passes over the end of a block, pop instructions are inserted
+that match the number of local variables declared in that block.
+Whenever a local variable is referenced, the code generator needs
+to know its current relative position in the stack and thus it needs to
+keep track of the current so-called stack height. Since all local variables
+are removed at the end of a block, the stack height before and after the block
+should be the same. If this is not the case, compilation fails.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">switch</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code> and functions, it should be possible to write
+complex code without using <code class="docutils literal notranslate"><span class="pre">jump</span></code> or <code class="docutils literal notranslate"><span class="pre">jumpi</span></code> manually. This makes it much
+easier to analyze the control flow, which allows for improved formal
+verification and optimization.</p>
+<p>Furthermore, if manual jumps are allowed, computing the stack height is rather complicated.
+The position of all local variables on the stack needs to be known, otherwise
+neither references to local variables nor removing local variables automatically
+from the stack at the end of a block will work properly.</p>
+<p>Example:</p>
+<p>We will follow an example compilation from Solidity to assembly.
+We consider the runtime bytecode of the following Solidity program:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">y</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following assembly will be generated:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="n">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">)</span> <span class="c1">// store the &quot;free memory pointer&quot;</span>
+  <span class="c1">// function dispatcher</span>
+  <span class="n">switch</span> <span class="n">div</span><span class="p">(</span><span class="n">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">226</span><span class="p">))</span>
+  <span class="n">case</span> <span class="mh">0xb3de648b</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">r</span> <span class="o">:=</span> <span class="n">f</span><span class="p">(</span><span class="n">calldataload</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">let</span> <span class="n">ret</span> <span class="o">:=</span> <span class="err">$</span><span class="n">allocate</span><span class="p">(</span><span class="mh">0x20</span><span class="p">)</span>
+    <span class="n">mstore</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kr">default</span> <span class="p">{</span> <span class="nf">revert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
+  <span class="c1">// memory allocator</span>
+  <span class="kd">function</span> <span class="err">$</span><span class="n">allocate</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pos</span> <span class="p">{</span>
+    <span class="n">pos</span> <span class="o">:=</span> <span class="n">mload</span><span class="p">(</span><span class="mh">0x40</span><span class="p">)</span>
+    <span class="n">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+  <span class="p">}</span>
+  <span class="c1">// the contract function</span>
+  <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">y</span> <span class="p">{</span>
+    <span class="n">y</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="p">{</span> <span class="n">let</span> <span class="n">i</span> <span class="o">:=</span> <span class="mi">0</span> <span class="p">}</span> <span class="n">lt</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">}</span> <span class="p">{</span>
+      <span class="n">y</span> <span class="o">:=</span> <span class="n">mul</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="assembly-grammar">
+<h3>Assembly Grammar<a class="headerlink" href="#assembly-grammar" title="Permalink to this headline">¶</a></h3>
+<p>The tasks of the parser are the following:</p>
+<ul class="simple">
+<li>Turn the byte stream into a token stream, discarding C++-style comments
+(a special comment exists for source references, but we will not explain it here).</li>
+<li>Turn the token stream into an AST according to the grammar below</li>
+<li>Register identifiers with the block they are defined in (annotation to the
+AST node) and note from which point on, variables can be accessed.</li>
+</ul>
+<p>The assembly lexer follows the one defined by Solidity itself.</p>
+<p>Whitespace is used to delimit tokens and it consists of the characters
+Space, Tab and Linefeed. Comments are regular JavaScript/C++ comments and
+are interpreted in the same way as Whitespace.</p>
+<p>Grammar:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">AssemblyBlock</span> <span class="o">=</span> <span class="s">&#39;{&#39;</span> <span class="n">AssemblyItem</span><span class="o">*</span> <span class="s">&#39;}&#39;</span>
+<span class="n">AssemblyItem</span> <span class="o">=</span>
+    <span class="n">Identifier</span> <span class="o">|</span>
+    <span class="n">AssemblyBlock</span> <span class="o">|</span>
+    <span class="n">AssemblyExpression</span> <span class="o">|</span>
+    <span class="n">AssemblyLocalDefinition</span> <span class="o">|</span>
+    <span class="n">AssemblyAssignment</span> <span class="o">|</span>
+    <span class="n">AssemblyStackAssignment</span> <span class="o">|</span>
+    <span class="n">LabelDefinition</span> <span class="o">|</span>
+    <span class="n">AssemblyIf</span> <span class="o">|</span>
+    <span class="n">AssemblySwitch</span> <span class="o">|</span>
+    <span class="n">AssemblyFunctionDefinition</span> <span class="o">|</span>
+    <span class="n">AssemblyFor</span> <span class="o">|</span>
+    <span class="s">&#39;break&#39;</span> <span class="o">|</span>
+    <span class="s">&#39;continue&#39;</span> <span class="o">|</span>
+    <span class="n">SubAssembly</span>
+<span class="n">AssemblyExpression</span> <span class="o">=</span> <span class="n">AssemblyCall</span> <span class="o">|</span> <span class="n">Identifier</span> <span class="o">|</span> <span class="n">AssemblyLiteral</span>
+<span class="n">AssemblyLiteral</span> <span class="o">=</span> <span class="n">NumberLiteral</span> <span class="o">|</span> <span class="n">StringLiteral</span> <span class="o">|</span> <span class="n">HexLiteral</span>
+<span class="n">Identifier</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">zA</span><span class="o">-</span><span class="n">Z_</span><span class="err">$</span><span class="p">]</span> <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">zA</span><span class="o">-</span><span class="n">Z_0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">*</span>
+<span class="n">AssemblyCall</span> <span class="o">=</span> <span class="n">Identifier</span> <span class="s">&#39;(&#39;</span> <span class="p">(</span> <span class="n">AssemblyExpression</span> <span class="p">(</span> <span class="s">&#39;,&#39;</span> <span class="n">AssemblyExpression</span> <span class="p">)</span><span class="o">*</span> <span class="p">)</span><span class="o">?</span> <span class="s">&#39;)&#39;</span>
+<span class="n">AssemblyLocalDefinition</span> <span class="o">=</span> <span class="s">&#39;let&#39;</span> <span class="n">IdentifierOrList</span> <span class="p">(</span> <span class="s">&#39;:=&#39;</span> <span class="n">AssemblyExpression</span> <span class="p">)</span><span class="o">?</span>
+<span class="n">AssemblyAssignment</span> <span class="o">=</span> <span class="n">IdentifierOrList</span> <span class="s">&#39;:=&#39;</span> <span class="n">AssemblyExpression</span>
+<span class="n">IdentifierOrList</span> <span class="o">=</span> <span class="n">Identifier</span> <span class="o">|</span> <span class="s">&#39;(&#39;</span> <span class="n">IdentifierList</span> <span class="s">&#39;)&#39;</span>
+<span class="n">IdentifierList</span> <span class="o">=</span> <span class="n">Identifier</span> <span class="p">(</span> <span class="s">&#39;,&#39;</span> <span class="n">Identifier</span><span class="p">)</span><span class="o">*</span>
+<span class="n">AssemblyStackAssignment</span> <span class="o">=</span> <span class="s">&#39;=:&#39;</span> <span class="n">Identifier</span>
+<span class="n">LabelDefinition</span> <span class="o">=</span> <span class="n">Identifier</span> <span class="s">&#39;:&#39;</span>
+<span class="n">AssemblyIf</span> <span class="o">=</span> <span class="s">&#39;if&#39;</span> <span class="n">AssemblyExpression</span> <span class="n">AssemblyBlock</span>
+<span class="n">AssemblySwitch</span> <span class="o">=</span> <span class="s">&#39;switch&#39;</span> <span class="n">AssemblyExpression</span> <span class="n">AssemblyCase</span><span class="o">*</span>
+    <span class="p">(</span> <span class="s">&#39;default&#39;</span> <span class="n">AssemblyBlock</span> <span class="p">)</span><span class="o">?</span>
+<span class="n">AssemblyCase</span> <span class="o">=</span> <span class="s">&#39;case&#39;</span> <span class="n">AssemblyExpression</span> <span class="n">AssemblyBlock</span>
+<span class="n">AssemblyFunctionDefinition</span> <span class="o">=</span> <span class="s">&#39;function&#39;</span> <span class="n">Identifier</span> <span class="s">&#39;(&#39;</span> <span class="n">IdentifierList</span><span class="o">?</span> <span class="s">&#39;)&#39;</span>
+    <span class="p">(</span> <span class="s">&#39;-&gt;&#39;</span> <span class="s">&#39;(&#39;</span> <span class="n">IdentifierList</span> <span class="s">&#39;)&#39;</span> <span class="p">)</span><span class="o">?</span> <span class="n">AssemblyBlock</span>
+<span class="n">AssemblyFor</span> <span class="o">=</span> <span class="s">&#39;for&#39;</span> <span class="p">(</span> <span class="n">AssemblyBlock</span> <span class="o">|</span> <span class="n">AssemblyExpression</span> <span class="p">)</span>
+    <span class="n">AssemblyExpression</span> <span class="p">(</span> <span class="n">AssemblyBlock</span> <span class="o">|</span> <span class="n">AssemblyExpression</span> <span class="p">)</span> <span class="n">AssemblyBlock</span>
+<span class="n">SubAssembly</span> <span class="o">=</span> <span class="s">&#39;assembly&#39;</span> <span class="n">Identifier</span> <span class="n">AssemblyBlock</span>
+<span class="n">NumberLiteral</span> <span class="o">=</span> <span class="n">HexNumber</span> <span class="o">|</span> <span class="n">DecimalNumber</span>
+<span class="n">HexLiteral</span> <span class="o">=</span> <span class="s">&#39;hex&#39;</span> <span class="p">(</span><span class="s">&#39;&quot;&#39;</span> <span class="p">([</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="n">a</span><span class="o">-</span><span class="n">fA</span><span class="o">-</span><span class="n">F</span><span class="p">]{</span><span class="mi">2</span><span class="p">})</span><span class="o">*</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">|</span> <span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">&#39;</span> <span class="p">([</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="n">a</span><span class="o">-</span><span class="n">fA</span><span class="o">-</span><span class="n">F</span><span class="p">]{</span><span class="mi">2</span><span class="p">})</span><span class="o">*</span> <span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">StringLiteral</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="p">([</span><span class="o">^</span><span class="s">&quot;</span><span class="se">\r\n\\</span><span class="s">] | &#39;</span><span class="se">\\</span><span class="s">&#39; .)* &#39;&quot;&#39;</span>
+<span class="n">HexNumber</span> <span class="o">=</span> <span class="s">&#39;0x&#39;</span> <span class="p">[</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="n">a</span><span class="o">-</span><span class="n">fA</span><span class="o">-</span><span class="n">F</span><span class="p">]</span><span class="o">+</span>
+<span class="n">DecimalNumber</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="miscellaneous.html" class="btn btn-neutral float-right" title="Miscellaneous" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="contracts.html" class="btn btn-neutral float-left" title="Contracts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction to Smart Contracts &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Solidityをインストールする" href="installing-solidity.html" />
+    <link rel="prev" title="Solidity" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to Smart Contracts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-smart-contract">A Simple Smart Contract</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#storage">Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subcurrency-example">Subcurrency Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#blockchain-basics">Blockchain Basics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#transactions">Transactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blocks">Blocks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-6">The Ethereum Virtual Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accounts">Accounts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-8">Transactions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gas">Gas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#storage-memory-and-the-stack">Storage, Memory and the Stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instruction-set">Instruction Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#message-calls">Message Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delegatecall-callcode-and-libraries">Delegatecall / Callcode and Libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logs">Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create">Create</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deactivate-and-self-destruct">Deactivate and Self-destruct</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction to Smart Contracts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/introduction-to-smart-contracts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction-to-smart-contracts">
+<h1>Introduction to Smart Contracts<a class="headerlink" href="#introduction-to-smart-contracts" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-simple-smart-contract">
+<span id="simple-smart-contract"></span><h2>A Simple Smart Contract<a class="headerlink" href="#a-simple-smart-contract" title="Permalink to this headline">¶</a></h2>
+<p>まずは値をセットし、他のコントラクトから呼び出せるような基本的なコントラクトの例から始めましょう。今は全てを理解する必要はありません。後ほど細かく説明します。</p>
+<div class="section" id="storage">
+<h3>Storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">SimpleStorage</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">storedData</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">set</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">storedData</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">get</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">storedData</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>最初の行はこのソースコードがSolidity 0.4.0もしくはそれより新しい機能を損なわず動作するバージョンで書かれていることを示しています。（0.6.0未満のバージョンまで）。これはこのコントラクトが新しい(互換性のない)バージョンのコンパイラでは異なる挙動をする恐れがあるため、コンパイルできないことを明らかにするためです。Pragmaはソースコードをどの様に取り扱うかコンパイラに指示するための一般的な命令です（例：<a class="reference external" href="https://en.wikipedia.org/wiki/Pragma_once">pragma once</a>）。</p>
+<p>Solidity上でのコントラクトというのはコード（その <em>function</em> たち）とEthereumブロックチェーン上の特定のアドレスに存在するデータ（その <em>状態</em> ）の集合です。 <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">storedData;</span></code> の行では <code class="docutils literal notranslate"><span class="pre">uint</span></code> （256bitの符号無し整数）型の <code class="docutils literal notranslate"><span class="pre">storedData</span></code> という状態変数を宣言しています。
+データベース上で検索可能かつある機能を呼び出すことによって変更可能なデータの様なものだと思ってください。Ethereumの場合、コントラクトが常にそのデータを所有しています。今回の場合、 <code class="docutils literal notranslate"><span class="pre">set</span></code> 関数と <code class="docutils literal notranslate"><span class="pre">get</span></code> 関数は変数の値を修正もしくは取得する場合に使用することができます。
+状態変数にアクセスするのに他の言語でよく使われる <code class="docutils literal notranslate"><span class="pre">this.</span></code> は必要ありません。
+このコントラクトでは世界中誰でも数値を格納することが可能ということ以外には機能はありません。そしてあなたにはそれを防ぐ手段はありません。誰でも <code class="docutils literal notranslate"><span class="pre">set</span></code> を呼び出して好きな数字を上書きができます。しかし一度セットされた値はブロックチェーン上に残ります。あなただけが数値を変更できる様な制限を加える方法は後ほど説明します。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">全ての識別子（コントラクト名、function名、変数名）はASCII文字に制限されています。UTF-8コードデータを文字列型に格納することは可能です。</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">似た様な見た目のUnicodeテキストを使う際には注意してください。異なったバイト配列としてエンコードされてしまいます。</p>
+</div>
+</div>
+<div class="section" id="subcurrency-example">
+<span id="index-0"></span><h3>Subcurrency Example<a class="headerlink" href="#subcurrency-example" title="Permalink to this headline">¶</a></h3>
+<p>以下のコントラクトは最も単純な仮想通貨を扱います。コインを0から生成することは可能ですが、コントラクトの作成者だけが実行可能です（異なる発行スキームの実行は簡単です）。さらにユーザー名やパスワードの登録無しに誰でもお互いにコインを送ることができます。必要なのはEthereumのキーペアだけです。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="kd">contract</span> <span class="n">Coin</span> <span class="p">{</span>
+    <span class="c1">// &quot;public&quot; というキーワードは値を</span>
+    <span class="c1">// 外部から読み込み可能にさせます。</span>
+    <span class="kt">address</span> <span class="kr">public</span> <span class="n">minter</span><span class="p">;</span>
+    <span class="kd">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="n">balances</span><span class="p">;</span>
+    <span class="c1">// イベントは軽量クライアントが変更に対する反応を</span>
+    <span class="c1">// 効率的に行うことを可能にします。</span>
+    <span class="kd">event</span> <span class="n">Sent</span><span class="p">(</span><span class="kt">address</span> <span class="kr">from</span><span class="p">,</span> <span class="kt">address</span> <span class="n">to</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">);</span>
+    <span class="c1">// これはコントラクトが作られた時にだけ動作する</span>
+    <span class="c1">// コンストラクタです。</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">minter</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">mint</span><span class="p">(</span><span class="kt">address</span> <span class="n">receiver</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">minter</span><span class="p">);</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">1e60</span><span class="p">);</span>
+        <span class="n">balances</span><span class="p">[</span><span class="n">receiver</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amount</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nf">send</span><span class="p">(</span><span class="kt">address</span> <span class="n">receiver</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">amount</span> <span class="o">&lt;=</span> <span class="n">balances</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">],</span> <span class="s">&quot;Insufficient balance.&quot;</span><span class="p">);</span>
+        <span class="n">balances</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amount</span><span class="p">;</span>
+        <span class="n">balances</span><span class="p">[</span><span class="n">receiver</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amount</span><span class="p">;</span>
+        <span class="kr">emit</span> <span class="n">Sent</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">amount</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>このコントラクトはいくつかの新しい機能が備わっていますので、一つずつ見ていきましょう。</p>
+<p><code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">public</span> <span class="pre">minter;</span></code> と書いてある行はパブリックにアクセス可能なアドレス型の変数を宣言しています。<code class="docutils literal notranslate"><span class="pre">address</span></code> 型は160ビットの算術演算不可の値です。これはコントラクトのアドレスか外部の人間が持っているキーペアを保存するのに適しています。<code class="docutils literal notranslate"><span class="pre">public</span></code> というキーワードは自動的にコントラクトの外側から現在の状態変数の中身にアクセスできる様にする機能を生成します（つまりgetterを生成します）。
+このキーワードなしでは他のコントラクトからはこの変数にアクセスできません。
+コンパイラで生成されたこの機能は下記のコードとほぼイコールです（今は <code class="docutils literal notranslate"><span class="pre">external</span></code> と <code class="docutils literal notranslate"><span class="pre">view</span></code> は無視してください）:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">minter</span><span class="p">()</span> <span class="kr">external</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">minter</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>もちろんファンクション名と状態変数が同じ名前のためこの様なファンクションを追加しても動きませんが、コンパイラがこの様に解釈するということを理解して頂けると幸いです。</p>
+<p id="index-1">次の行の <code class="docutils literal notranslate"><span class="pre">mapping</span> <span class="pre">(address</span> <span class="pre">=&gt;</span> <span class="pre">uint)</span> <span class="pre">public</span> <span class="pre">balances;</span></code> は同様にパブリックな状態変数を生成しますが、もう少し複雑なデータタイプです。
+これはaddressに符号無しのinteger型を割り当てます。Mappingは <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">hash table</a> として扱うことができます。そしてそれは事実上初期化され、そのため全てのpossible keyは最初から存在し、バイト表現で0となる値に割り当てられます。しかしhash tableと全く同じではありません。mappingではキーや値のリストを取得することはできません。そのため、何をmappingに追加したか覚えておいてください（もしくはリストを保存するか他の高度なデータタイプを使ってください）。もしくはそんなことをしなくて済む様な場合において使用して下さい。</p>
+<p>今回の場合 <code class="docutils literal notranslate"><span class="pre">public</span></code> で作られた <a class="reference internal" href="contracts.html#getter-functions"><span class="std std-ref">getter function</span></a> はもう少し複雑でおおまかには下記の様になります:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">balances</span><span class="p">(</span><span class="kt">address</span> <span class="n">_account</span><span class="p">)</span> <span class="kr">external</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">balances</span><span class="p">[</span><span class="n">_account</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>見ての通り、あるアカウントの残高をクエリするのにこのfunctionが利用できます。</p>
+<p id="index-2"><code class="docutils literal notranslate"><span class="pre">event</span> <span class="pre">Sent(address</span> <span class="pre">from,</span> <span class="pre">address</span> <span class="pre">to,</span> <span class="pre">uint</span> <span class="pre">amount);</span></code> の行は <code class="docutils literal notranslate"><span class="pre">send</span></code> ファンクションの最終行でemitされています、いわゆる”event”を宣言しています。ユーザーインターフェース（ともちろんサーバーサイドのアプリケーション）は多くのコストを支払わずにブロックチェーン上でemitされたそれらのイベントをリッスンすることができます。emitされるとすぐにlistenerは <code class="docutils literal notranslate"><span class="pre">from</span></code> 、<code class="docutils literal notranslate"><span class="pre">to</span></code> そして <code class="docutils literal notranslate"><span class="pre">amount</span></code> を引数として受け取り、トランザクションをトラックするのに役立ちます。このイベントをリッスンするために下記のJavaScriptコードを使います（<code class="docutils literal notranslate"><span class="pre">Coin</span></code> はweb3.jsもしくは似た様なモジュールを用いて作られたコントラクトオブジェクトです。）:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Coin</span><span class="p">.</span><span class="n">Sent</span><span class="p">().</span><span class="n">watch</span><span class="p">({},</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;Coin transfer: &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">amount</span> <span class="o">+</span>
+            <span class="s">&quot; coins were sent from &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="kr">from</span> <span class="o">+</span>
+            <span class="s">&quot; to &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">to</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span><span class="p">);</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;Balances now:</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span>
+            <span class="s">&quot;Sender: &quot;</span> <span class="o">+</span> <span class="n">Coin</span><span class="p">.</span><span class="n">balances</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="kr">from</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s">&quot;Receiver: &quot;</span> <span class="o">+</span> <span class="n">Coin</span><span class="p">.</span><span class="n">balances</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">to</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">balances</span></code> ファンクションがユーザーインターフェースから自動的にどの様に呼ばれるか確認してください。</p>
+<p id="index-3">コンストラクタはコントラクトが作成される時に1回だけ呼ばれる特別なファンクションで、その後コンストラクタを呼ぶことはできません。このコンストラクタではコントラクトを作った人のアドレスを永久的に保存しています。<code class="docutils literal notranslate"><span class="pre">msg</span></code> （<code class="docutils literal notranslate"><span class="pre">tx</span></code> と <code class="docutils literal notranslate"><span class="pre">block</span></code> も同様に）は特別なグローバル変数で、ブロックチェーンにアクセスできるいくつかのプロパティを含んでいます。<code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> は外部からファンクションが呼んだアカウントのアドレスを常に返します。</p>
+<p>コントラクトの最後にあり、ユーザもしくはコントラクトによって呼び出される <code class="docutils literal notranslate"><span class="pre">mint</span></code> と <code class="docutils literal notranslate"><span class="pre">send</span></code> です。
+もし <code class="docutils literal notranslate"><span class="pre">mint</span></code> がコントラクトを作ったアカウント以外の誰かに呼ばれても何も起きません。これは特別なファンクション <code class="docutils literal notranslate"><span class="pre">require</span></code> によって保証されています。これは引数がfalseだった場合に全ての変更を元に戻す機能を持っています。
+2つ目の <code class="docutils literal notranslate"><span class="pre">require</span></code> は後にオーバーフローを起こす様な大量のコインがないことを保証しています。</p>
+<p>一方で、<code class="docutils literal notranslate"><span class="pre">send</span></code> は誰にでも（コインを持っていれば）コインを誰かに送ることができます。送るのに十分なコインを持っていなかった場合、<code class="docutils literal notranslate"><span class="pre">require</span></code> はプロセスを中止し、適切なエラーメッセージの文字列を返します。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">もしあなたがコインをどこかに送るためにこのコントラクトを使うのであれば、ブロックチェーンエクスプローラ上のアドレスを見ても何も詳細を見ることができません。これはあなたがコインを送り、残高が変わったという事実はこの特定のコインコントラクトのデータストレージにのみ保存されるためです。イベントを使うことで比較的簡単にトランザクションと残高ををトラックする”ブロックチェーンエクスプローラ”を作成することが可能ですが、コインオーナーではなく、コントラクト作成者のあなたがコインコントラクトを検査する必要があります。</p>
+</div>
+</div>
+</div>
+<div class="section" id="blockchain-basics">
+<span id="id1"></span><h2>Blockchain Basics<a class="headerlink" href="#blockchain-basics" title="Permalink to this headline">¶</a></h2>
+<p>ブロックチェーンのコンセプトを理解することはプログラマーにとってさほど難しいことではありません。その理由はほとんどの複雑なこと（mining, <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">hashing</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Elliptic_curve_cryptography">elliptic-curve cryptography</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer networks</a>, etc.）はただプラットフォームに機能と約束を与えているだけだからです。これらの機能をそういうものとして受け入れれば、内部のテクノロジーについて心配する必要はありません。（AmazonのAWSを使うのに内部でどの様に動作しているか知る必要ありますか？）</p>
+<div class="section" id="transactions">
+<span id="index-4"></span><h3>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h3>
+<p>ブロックチェーンはグローバルにシェアされたトランザクションのデータベースです。
+つまり誰でもネットワークに接続するだけでこのデータベース上の項目を読み込むことができます。もしデータベース上の何かを変えたいときはいわゆるトランザクションを発行し、他の全員の同意を得る必要があります。トランザクションという言葉はあなたがしたい変更が（例えばあなたが2つの値を同時に変えたいとすると）その両方ともが変わらないか、両方とも変更されることを意味しています。さらに、あなたのトランザクションがデータベースに登録されている最中に他のトランザクションはそのトランザクションを変更することはできません。</p>
+<p>例として、ある電子通貨の残高リストのテーブルを想像してください。もしあるアカウントから別のアカウントへの送金がリクエストされた際に、データベースのトランザクションの基本として、もしあるアカウントの残高から送金分が引かれたら、別のアカウントの残高には送金分が常に追加されなければいけません。何かの理由でその別のアカウント残高に送金分が追加されないのであれば、送金元のアカウントの残高も元のままでなければいけません。</p>
+<p>更にトランザクションは常に送信者（作成者）によって暗号学的に署名されます。これによりデータベースのある種の改ざんを防ぐことができます。電子通貨の例で言えば、単純なチェックでキーを持っている人だけがお金を送ることができます。</p>
+</div>
+<div class="section" id="blocks">
+<span id="index-5"></span><h3>Blocks<a class="headerlink" href="#blocks" title="Permalink to this headline">¶</a></h3>
+<p>解決しなければならない大きな問題の一つとして（Bitcoinの用語で）”二重支払い攻撃”があります。もしあるアカウントを空にする様な2つのトランザクションが同時に存在していたらどうなるでしょうか。基本的には最初に承認された最初のトランザクションのみが有効です。しかし問題は”最初の”というのはpeer-to-peerネットワークにおいて客観的ではないのです。</p>
+<p>理論的にはこの問題は気にする必要がありません。グローバルに承認された順番のトランザクションが選ばれ、このコンフリクトが解消します。いくつかのトランザクションはブロックと言われるもので一まとめにされ、全ての参加しているノードの間で処理されます。
+もし2つの矛盾したトランザクションがあった場合には、2つ目のトランザクションはリジェクトされブロックの一部として組み込まれることはありません。</p>
+<p>これらのブロックは一つのシーケンスを作るためブロックチェーンという名前がつけられました。ブロックは定期的に追加され、Ethereumでは約17秒ごとに1つ追加されます。</p>
+<p>順序選択メカニズム（マイニング）では、ブロックが取り消されることもあります。しかしこれはチェーンの先端でだけで起こり、ブロックが追加されるごとに取り消される可能性が減ります。そのため、あなたのトランザクションは取り消されるもしくは削除される可能性もありますが、長く待てば待つほどその可能性は低くなります。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>トランザクションは次のブロックやある特定の未来のブロックに組み込まれる保証はありません。これはトランザクションを送った人にではなく、マイナーにどのトランザクションをブロックに組み込むかの権限があるためです。</p>
+<p class="last">もしあなたのコントラクトである未来の時間でコールしたい場合には <a class="reference external" href="http://www.ethereum-alarm-clock.com/">alarm clock</a> もしくは似た様なoracleのサービスが使用可能です。</p>
+</div>
+<span class="target" id="the-ethereum-virtual-machine"></span></div>
+</div>
+<div class="section" id="index-6">
+<span id="id2"></span><h2>The Ethereum Virtual Machine<a class="headerlink" href="#index-6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p>Ethereum Virtual Machine（EVM）はEthereum上のスマートこコントラクトのためのruntime環境です。サンドボックス化されているだけでなく、実際には完全に独立しています。つまりEVM内部のコードはネットワークやファイルシステム、または他のプロセスにアクセスしません。
+スマートコントラクトですら他のスマートコントラクトへのアクセスは制限されています。</p>
+</div>
+<div class="section" id="accounts">
+<span id="index-7"></span><h3>Accounts<a class="headerlink" href="#accounts" title="Permalink to this headline">¶</a></h3>
+<p>Ethereumには2種類のアカウントがあります。両方とも同じアドレスを共有しています。<strong>外部アカウント</strong> は公開・秘密鍵のペアで管理されており、<strong>コントラクトアカウント</strong> はアカウントと一緒に保存されたコードによってコントロールされています。</p>
+<p>外部アカウントのアドレスは公開鍵から決まる一方で、コントラクトのアドレスはコントラクトが作られた時に決まります。（コントラクトの作成者のアドレスと送られたトランザクションの数いわゆる”nonce”によって決まります。）</p>
+<p>アカウントがコードを保存するかどうかに関わらず、EVMはこの2つのタイプを同様に扱います。</p>
+<p>全てのアカウントは <strong>storage</strong> という256ビットのワードにmappingされた256ビットのkey-valueを持っています。</p>
+<p>さらに、全てのアカウントは <strong>balance</strong> をEther（”Wei”でいうと <cite>1 ether</cite> は <cite>10**18 wei</cite> です）で持っており、Etherを含んだトランザクションを送ることでこの値は変化します。</p>
+</div>
+<div class="section" id="index-8">
+<span id="id3"></span><h3>Transactions<a class="headerlink" href="#index-8" title="Permalink to this headline">¶</a></h3>
+<p>トランザクションはあるアカウントから別のアカウント（これは同じアカウントもしくは空のアカウントの場合もある。下記をご参照ください）へのメッセージです。これはバイナリーデータ（”payload”と呼ばれます）とEtherを含んでいます。</p>
+<p>送信先のアカウントがコードを含んでいた場合、そのコードは実行され、payloadはインプットデータとして提供されます。</p>
+<p>もし送信先のアカウントがセットされていなかったら（トランザクションが受信者情報を持っていないか、受信者が <code class="docutils literal notranslate"><span class="pre">null</span></code> だった場合には）、トランザクションは <strong>新しいコントラクト</strong> を生成します。先にも言及した通り、コントラクトのアドレスはゼロアドレスではなく送信者やトランザクションの数（nonce）によって決まります。
+この様なコントラクト作成のトランザクションのpayloadはEVM bytecodeに変換され、実行されます。この実行のアウトプットデータはコントラクトのコードとして永久的に保存されます。
+これが意味するのはコントラクトを生成するために実際のコントラクトのコードを送るのではなく、コードが実行された時にそのコードを返すコードを送っています。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">コントラクトが作られている間、そのコードはまだ空です。そのため、コンストラクタの実行が終了するまで、作成中のこのコントラクトを呼ぶべきではありません。</p>
+</div>
+</div>
+<div class="section" id="gas">
+<span id="index-9"></span><h3>Gas<a class="headerlink" href="#gas" title="Permalink to this headline">¶</a></h3>
+<p>トランザクションの生成にあたり、各トランザクションはある量の <strong>gas</strong> を要求します。この目的は必要な処理の量を制限し、この処理に対しての報酬を同時に行うためです。EVMがトランザクションを実行している間、gasはあるルールに則り、徐々に減っていきます。</p>
+<p><strong>gas price</strong> とはトランザクションの作成者によってセットされる値であり、この作成者は <code class="docutils literal notranslate"><span class="pre">gas_price</span> <span class="pre">*</span> <span class="pre">gas</span></code> を送信するアカウントから支払う必要があります。もしトランザクションの実行後にgasが残っていたら、作成者に返金されます。</p>
+<p>もしgasはある値より多く使われたら（負の値になりえます）、gas不足の例外が投げられ、現在の呼び出されたフレーム内での変更は全て取り消されます。</p>
+</div>
+<div class="section" id="storage-memory-and-the-stack">
+<span id="index-10"></span><h3>Storage, Memory and the Stack<a class="headerlink" href="#storage-memory-and-the-stack" title="Permalink to this headline">¶</a></h3>
+<p>Ethereum Virtual Machineはデータを保存できる場所が3つあります。それはstorage、memory、stackです。以下で説明していきます。</p>
+<p>各アカウントは <strong>storage</strong> と呼ばれるデータエリアを持っており、functionの呼び出しからトランザクションまで残ります。
+Storageは256bitのワードを256bitのワードにマッピングしているkey-value storeです。
+コントラクト内ではstorageを列挙することはできません。また、storageの読み込みは比較的高価ですし、変更はさらに高価です。コントラクト外からstorageを読み書きすることはできません。</p>
+<p>2つ目のデータエリアは <strong>memory</strong> と呼ばれ、コントラクトは各メッセージの呼び出しに対してクリアされたインスタンスを取得します。memoryはバイトレベルのリニアアドレスですが、読み取りは256bitに制限され、書き込みは8bitもしくは256bitに制限されます。過去に変更がないmemoryの単語にアクセスした際にmemoryは256-bitの単語に拡張されます（例えば単語のオフセット）。拡張の際にはgasは支払われます。memoryは成長すればするほど高くなります。（二次関数的に大きくなります。）</p>
+<p>EVMは登録機械ではなくstack machineです。そのため全ての計算は <strong>stack</strong> と呼ばれるデータエリアで行われます。最大1024要素であり、256-bitの単語を含見ます。stackへのアクセスは下記のようにトップエンドに制限されます。
+トップの16要素の内の1要素を一番トップの要素にコピーするか、一番トップの要素をその下の16要素の内の一つと交換することができます。他のオペレーションはstackからトップ二つの要素（オペレーションによるが一つか二つ以上の場合もある）を取り出し、stackに追加します。
+もちろん、stackの深い要素にアクセスするために、stackの要素をstorageやmemoryに移動するのは可能です。
+しかし、stackのトップを最初に削除しないでstackの深いところにある任意の要素にアクセスすることはできません。</p>
+</div>
+<div class="section" id="instruction-set">
+<span id="index-11"></span><h3>Instruction Set<a class="headerlink" href="#instruction-set" title="Permalink to this headline">¶</a></h3>
+<p>EVMのインストラクションは間違った、もしくは矛盾したコンセンサス問題を起こしうる実行を避けるために最小限に保たれています。
+全てのインストラクションは基本的なデータタイプ、256-bitのワードもしくはmemory（もしくは他のバイト配列）の元で成り立っています。</p>
+<p>基本的な算術、ビット、論理、比較計算は使うことができます。条件付き分岐も可能です。更にコントラクトはブロック番号やタイムスタンプの様なプロパティにアクセスできます。</p>
+<p>完全な表は <a class="reference internal" href="assembly.html#opcodes"><span class="std std-ref">list of opcodes</span></a> をインラインアセンブリのドキュメントの一部として参照下さい。</p>
+</div>
+<div class="section" id="message-calls">
+<span id="index-12"></span><h3>Message Calls<a class="headerlink" href="#message-calls" title="Permalink to this headline">¶</a></h3>
+<p>コントラクトは他のコントラクトを呼び出したり、message callを使ってEtherをコントラクトアカウントではないアカウントに送ることができます。message callはソース、送信先、データpayload、Ether、gas、返り値がある点でトランザクションに似ています。実際に全てのトランザクションは次のメッセージコールを作るトップレベルメッセージコールで構成されています。</p>
+<p>コントラクトは残っている <strong>gas</strong> をどれだけ送るか、そしてどのくらい残すかを内部のmessage callで決めることができます。内部呼び出しでgas不足の例外（もしくは他の例外）が発生したら、スタックに追加されることによりエラーが伝えられます。この場合、呼び出しと一緒に送られたgasのみが使用されます。その様な状況においてSolidityではデフォルトでコントラクトの呼び出しは手動の例外を起こし、例外は呼び出しのスタックから呼び出されます。</p>
+<p>既に議論した様に、呼び出されたコントラクト（呼び出し元と同じになる場合もあります）はクリアされたmemoryのインスタンスを受け取り、<strong>calldata</strong> と呼ばれる別のエリアにあるコールpayloadにアクセスできます。
+このコントラクト実行後に、このコントラクトは呼び出し元が事前に割り振ったmemoryの場所に保存されていたデータを返します。
+これら全ての呼び出しは同時に起きます。</p>
+<p>呼び出しは1024の深さに <strong>制限</strong> されます。これが意味するのはもっと複雑な運用においてループ処理は再帰的な呼び出しより好まれるということです。更に、63/64番目のgasだけはmessage callの中に送られるため、実際には深さは1000より少し小さくなります。</p>
+</div>
+<div class="section" id="delegatecall-callcode-and-libraries">
+<span id="index-13"></span><h3>Delegatecall / Callcode and Libraries<a class="headerlink" href="#delegatecall-callcode-and-libraries" title="Permalink to this headline">¶</a></h3>
+<p><strong>delegatecall</strong> と呼ばれる特別なメッセージコールの変異型があります。これはメッセージコールと同じですが、送信先のアドレスのコードが呼び出し元のコントラクトのコンテキストで実行されるということと <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> と <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> はその値を変えません。</p>
+<p>つまりコントラクトは動的に違うアドレスからコードをロードできるということです。Storage、つまり現在のアドレスとバランスはまだ呼び出し元のコントラクトを参照していますが、コードだけは呼び出されたアドレスから取得されています。</p>
+<p>これはSolidityにおいて”ライブラリ”機能を実装可能としています。例えば複雑なデータ構造を実行するために、再利用可能なライブラリのコードをコントラクトのstorageに保存できます。</p>
+</div>
+<div class="section" id="logs">
+<span id="index-14"></span><h3>Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h3>
+<p>特別にインデックスされ、ブロックレベルで全てマッピングされたデータ構造の中にデータを保存することができます。この <strong>logs</strong> と呼ばれる機能は <a class="reference internal" href="contracts.html#events"><span class="std std-ref">events</span></a> を実行するためにSolidityによって使用されています。コントラクトは作成後はログデータにアクセスできませんがブロックチェーンの外側から効率的にアクセスできます。いくつかのログデータは <a class="reference external" href="https://en.wikipedia.org/wiki/Bloom_filter">bloom filters</a> に保存されるため、このデータは効率的かつ暗号学的に安全な方法で検索できます。そのためブロックチェーン全てをダウンロードしていないネットワーク上のpeer（いわゆる”light clients”）でもこれらのログを見つけることがきます。</p>
+</div>
+<div class="section" id="create">
+<span id="index-15"></span><h3>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
+<p>コントラクトは特別なopcodeを使って他のコントラクトを作ることもできます（コントラクトはトランザクションがする様に単純にゼロアドレスをコールしません）。これら <strong>create calls</strong> と通常のmessage callの唯一の違いはpayloadデータが実行され、結果がコードとして保存され、呼び出し元と作成者がスタック上にある新しいコントラクトのアドレスを受け取ります。</p>
+</div>
+<div class="section" id="deactivate-and-self-destruct">
+<span id="index-16"></span><h3>Deactivate and Self-destruct<a class="headerlink" href="#deactivate-and-self-destruct" title="Permalink to this headline">¶</a></h3>
+<p>ブロックチェーン からコードを削除する唯一の手段はコントラクトが <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> を実行する時のみです。そのアドレスに残っているEtherが設定されていた送信先に送られた時にstorageとコードは削除されます。コントラクトの削除は理論上は良いアイデアの様に聞こえますが、潜在的に危険を孕んでいます。誰かが削除されたコントラクトにEtherを送り、そのEtherは永遠に失われる様なことが起こり得ます。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">もしコントラクトのコードが <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> を含んでいなかったとしても、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">callcode</span></code> を使うことで実行可能です。</p>
+</div>
+<p>もしコントラクトを無効化したいのであれば、代わりに全てのfunctionを元に戻させる内部の状態（機能）を変更することでコントラクトを無効化すべきです。これによりコントラクトがEtherを返すとすぐにそのコントラクトを使えなくします。</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">もしコントラクトを”selfdestruct”で削除したとしても、ブロックチェーン上の履歴には残りますし、きっとほぼ全てのノードにより保持されます。つまり”selfdestruct”はハードディスクからデータを消すのとは異なるということです。</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installing-solidity.html" class="btn btn-neutral float-right" title="Solidityをインストールする" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Solidity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

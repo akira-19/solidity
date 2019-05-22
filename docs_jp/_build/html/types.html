@@ -1,0 +1,1426 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Types &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Units and Globally Available Variables" href="units-and-global-variables.html" />
+    <link rel="prev" title="Structure of a Contract" href="structure-of-a-contract.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Layout of a Solidity Source File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">Structure of a Contract</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#value-types">Value Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#booleans">Booleans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integers">Integers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fixed-point-numbers">Fixed Point Numbers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#address">Address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#contract-types">Contract Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fixed-size-byte-arrays">Fixed-size byte arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dynamically-sized-byte-array">Dynamically-sized byte array</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#address-literals">Address Literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rational-and-integer-literals">Rational and Integer Literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#string-literals-and-types">String Literals and Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hexadecimal-literals">Hexadecimal Literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-types">Function Types</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reference-types">Reference Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-location">Data location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#arrays">Arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structs">Structs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mapping-types">Mapping Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operators-involving-lvalues">Operators Involving LValues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#delete">delete</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conversions-between-elementary-types">Conversions between Elementary Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#implicit-conversions">Implicit Conversions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#explicit-conversions">Explicit Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conversions-between-literals-and-elementary-types">Conversions between Literals and Elementary Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#integer-types">Integer Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Fixed-Size Byte Arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#addresses">Addresses</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/types.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="types">
+<span id="index-0"></span><span id="id1"></span><h1>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h1>
+<p>Solidityは静的タイプの言語です。つまり各状態変数やローカルな変数のタイプは指定される必要があります。
+Solidityはいくつかの基本的なタイプを持ち、それらは結びつき複雑なタイプを構成することができます。</p>
+<p>加えて、オペレータを含む表現でタイプは互いに干渉することができます。変数のオペレータのクイックリファレンスは <a class="reference internal" href="miscellaneous.html#order"><span class="std std-ref">Order of Precedence of Operators</span></a> を参照ください。</p>
+<div class="section" id="value-types">
+<span id="index-1"></span><span id="id2"></span><h2>Value Types<a class="headerlink" href="#value-types" title="Permalink to this headline">¶</a></h2>
+<p>The following types are also called value types because variables of these
+types will always be passed by value, i.e. they are always copied when they
+are used as function arguments or in assignments.</p>
+<div class="section" id="booleans">
+<span id="index-2"></span><h3>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">bool</span></code>: The possible values are constants <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Operators:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">!</span></code> (logical negation)</li>
+<li><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> (logical conjunction, “and”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">||</span></code> (logical disjunction, “or”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">==</span></code> (equality)</li>
+<li><code class="docutils literal notranslate"><span class="pre">!=</span></code> (inequality)</li>
+</ul>
+<p>The operators <code class="docutils literal notranslate"><span class="pre">||</span></code> and <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> apply the common short-circuiting rules. This means that in the expression <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">||</span> <span class="pre">g(y)</span></code>, if <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">g(y)</span></code> will not be evaluated even if it may have side-effects.</p>
+</div>
+<div class="section" id="integers">
+<span id="index-3"></span><h3>Integers<a class="headerlink" href="#integers" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">uint</span></code>: Signed and unsigned integers of various sizes. Keywords <code class="docutils literal notranslate"><span class="pre">uint8</span></code> to <code class="docutils literal notranslate"><span class="pre">uint256</span></code> in steps of <code class="docutils literal notranslate"><span class="pre">8</span></code> (unsigned of 8 up to 256 bits) and <code class="docutils literal notranslate"><span class="pre">int8</span></code> to <code class="docutils literal notranslate"><span class="pre">int256</span></code>. <code class="docutils literal notranslate"><span class="pre">uint</span></code> and <code class="docutils literal notranslate"><span class="pre">int</span></code> are aliases for <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">int256</span></code>, respectively.</p>
+<p>Operators:</p>
+<ul class="simple">
+<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
+<li>Bit operators: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (bitwise exclusive or), <code class="docutils literal notranslate"><span class="pre">~</span></code> (bitwise negation)</li>
+<li>Shift operators: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (left shift), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (right shift)</li>
+<li>Arithmetic operators: <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, unary <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> (modulo), <code class="docutils literal notranslate"><span class="pre">**</span></code> (exponentiation)</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Integers in Solidity are restricted to a certain range. For example, with <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, this is <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">2**32</span> <span class="pre">-</span> <span class="pre">1</span></code>.
+If the result of some operation on those numbers does not fit inside this range, it is truncated. These truncations can have
+serious consequences that you should <a class="reference internal" href="security-considerations.html#underflow-overflow"><span class="std std-ref">be aware of and mitigate against</span></a>.</p>
+</div>
+<div class="section" id="comparisons">
+<h4>Comparisons<a class="headerlink" href="#comparisons" title="Permalink to this headline">¶</a></h4>
+<p>The value of a comparison is the one obtained by comparing the integer value.</p>
+</div>
+<div class="section" id="bit-operations">
+<h4>Bit operations<a class="headerlink" href="#bit-operations" title="Permalink to this headline">¶</a></h4>
+<p>Bit operations are performed on the two’s complement representation of the number.
+This means that, for example <code class="docutils literal notranslate"><span class="pre">~int256(0)</span> <span class="pre">==</span> <span class="pre">int256(-1)</span></code>.</p>
+</div>
+<div class="section" id="shifts">
+<h4>Shifts<a class="headerlink" href="#shifts" title="Permalink to this headline">¶</a></h4>
+<p>The result of a shift operation has the type of the left operand. The
+expression <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;&lt;</span> <span class="pre">y</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">2**y</span></code>, and, for positive integers,
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code>. For negative <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code>
+is equivalent to dividing by a power of <code class="docutils literal notranslate"><span class="pre">2</span></code> while rounding down (towards negative infinity).
+Shifting by a negative amount throws a runtime exception.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Before version <code class="docutils literal notranslate"><span class="pre">0.5.0</span></code> a right shift <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> for negative <code class="docutils literal notranslate"><span class="pre">x</span></code> was equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code>,
+i.e. right shifts used rounding towards zero instead of rounding towards negative infinity.</p>
+</div>
+</div>
+<div class="section" id="addition-subtraction-and-multiplication">
+<h4>Addition, Subtraction and Multiplication<a class="headerlink" href="#addition-subtraction-and-multiplication" title="Permalink to this headline">¶</a></h4>
+<p>Addition, subtraction and multiplication have the usual semantics.
+They wrap in two’s complement representation, meaning that
+for example <code class="docutils literal notranslate"><span class="pre">uint256(0)</span> <span class="pre">-</span> <span class="pre">uint256(1)</span> <span class="pre">==</span> <span class="pre">2**256</span> <span class="pre">-</span> <span class="pre">1</span></code>. You have to take these overflows
+into account when designing safe smart contracts.</p>
+<p>The expression <code class="docutils literal notranslate"><span class="pre">-x</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">(T(0)</span> <span class="pre">-</span> <span class="pre">x)</span></code> where
+<code class="docutils literal notranslate"><span class="pre">T</span></code> is the type of <code class="docutils literal notranslate"><span class="pre">x</span></code>. This means that <code class="docutils literal notranslate"><span class="pre">-x</span></code> will not be negative
+if the type of <code class="docutils literal notranslate"><span class="pre">x</span></code> is an unsigned integer type. Also, <code class="docutils literal notranslate"><span class="pre">-x</span></code> can be
+positive if <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative. There is another caveat also resulting
+from two’s complement representation:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="mi">255</span><span class="p">;</span>
+<span class="nf">assert</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This means that even if a number is negative, you cannot assume that
+its negation will be positive.</p>
+</div>
+<div class="section" id="division">
+<h4>Division<a class="headerlink" href="#division" title="Permalink to this headline">¶</a></h4>
+<p>Since the type of the result of an operation is always the type of one of
+the operands, division on integers always results in an integer.
+In Solidity, division rounds towards zero. This mean that <code class="docutils literal notranslate"><span class="pre">int256(-5)</span> <span class="pre">/</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(-2)</span></code>.</p>
+<p>Note that in contrast, division on <a class="reference internal" href="#rational-literals"><span class="std std-ref">literals</span></a> results in fractional values
+of arbitrary precision.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Division by zero causes a failing assert.</p>
+</div>
+</div>
+<div class="section" id="modulo">
+<h4>Modulo<a class="headerlink" href="#modulo" title="Permalink to this headline">¶</a></h4>
+<p>The modulo operation <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span></code> yields the remainder <code class="docutils literal notranslate"><span class="pre">r</span></code> after the division of the operand <code class="docutils literal notranslate"><span class="pre">a</span></code>
+by the operand <code class="docutils literal notranslate"><span class="pre">n</span></code>, where <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">=</span> <span class="pre">int(a</span> <span class="pre">/</span> <span class="pre">n)</span></code> and <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">-</span> <span class="pre">(n</span> <span class="pre">*</span> <span class="pre">q)</span></code>. This means that modulo
+results in the same sign as its left operand (or zero) and <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span> <span class="pre">==</span> <span class="pre">-(abs(a)</span> <span class="pre">%</span> <span class="pre">n)</span></code> holds for negative <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">int256(5)</span> <span class="pre">%</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(1)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">int256(5)</span> <span class="pre">%</span> <span class="pre">int256(-2)</span> <span class="pre">==</span> <span class="pre">int256(1)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">int256(-5)</span> <span class="pre">%</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(-1)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">int256(-5)</span> <span class="pre">%</span> <span class="pre">int256(-2)</span> <span class="pre">==</span> <span class="pre">int256(-1)</span></code></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Modulo with zero causes a failing assert.</p>
+</div>
+</div>
+<div class="section" id="exponentiation">
+<h4>Exponentiation<a class="headerlink" href="#exponentiation" title="Permalink to this headline">¶</a></h4>
+<p>Exponentiation is only available for unsigned types. Please take care that the types
+you are using are large enough to hold the result and prepare for potential wrapping behaviour.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that <code class="docutils literal notranslate"><span class="pre">0**0</span></code> is defined by the EVM as <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="fixed-point-numbers">
+<span id="index-4"></span><h3>Fixed Point Numbers<a class="headerlink" href="#fixed-point-numbers" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Fixed point numbers are not fully supported by Solidity yet. They can be declared, but
+cannot be assigned to or from.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fixed</span></code> / <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: Signed and unsigned fixed point number of various sizes. Keywords <code class="docutils literal notranslate"><span class="pre">ufixedMxN</span></code> and <code class="docutils literal notranslate"><span class="pre">fixedMxN</span></code>, where <code class="docutils literal notranslate"><span class="pre">M</span></code> represents the number of bits taken by
+the type and <code class="docutils literal notranslate"><span class="pre">N</span></code> represents how many decimal points are available. <code class="docutils literal notranslate"><span class="pre">M</span></code> must be divisible by 8 and goes from 8 to 256 bits. <code class="docutils literal notranslate"><span class="pre">N</span></code> must be between 0 and 80, inclusive.
+<code class="docutils literal notranslate"><span class="pre">ufixed</span></code> and <code class="docutils literal notranslate"><span class="pre">fixed</span></code> are aliases for <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> and <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code>, respectively.</p>
+<p>Operators:</p>
+<ul class="simple">
+<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
+<li>Arithmetic operators: <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, unary <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> (modulo)</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The main difference between floating point (<code class="docutils literal notranslate"><span class="pre">float</span></code> and <code class="docutils literal notranslate"><span class="pre">double</span></code> in many languages, more precisely IEEE 754 numbers) and fixed point numbers is
+that the number of bits used for the integer and the fractional part (the part after the decimal dot) is flexible in the former, while it is strictly
+defined in the latter. Generally, in floating point almost the entire space is used to represent the number, while only a small number of bits define
+where the decimal point is.</p>
+</div>
+</div>
+<div class="section" id="address">
+<span id="index-5"></span><span id="id3"></span><h3>Address<a class="headerlink" href="#address" title="Permalink to this headline">¶</a></h3>
+<p>The address type comes in two flavours, which are largely identical:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: Holds a 20 byte value (size of an Ethereum address).</li>
+<li><code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>: Same as <code class="docutils literal notranslate"><span class="pre">address</span></code>, but with the additional members <code class="docutils literal notranslate"><span class="pre">transfer</span></code> and <code class="docutils literal notranslate"><span class="pre">send</span></code>.</li>
+</ul>
+</div></blockquote>
+<p>The idea behind this distinction is that <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> is an address you can send Ether to,
+while a plain <code class="docutils literal notranslate"><span class="pre">address</span></code> cannot be sent Ether.</p>
+<p>Type conversions:</p>
+<p>Implicit conversions from <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span></code> are allowed, whereas conversions from <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> are
+not possible (the only way to perform such a conversion is by using an intermediate conversion to <code class="docutils literal notranslate"><span class="pre">uint160</span></code>).</p>
+<p><a class="reference internal" href="#address-literals"><span class="std std-ref">Address literals</span></a> can be implicitly converted to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
+<p>Explicit conversions to and from <code class="docutils literal notranslate"><span class="pre">address</span></code> are allowed for integers, integer literals, <code class="docutils literal notranslate"><span class="pre">bytes20</span></code> and contract types with the following
+caveat:
+Conversions of the form <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code> are not allowed. Instead the result of a conversion of the form <code class="docutils literal notranslate"><span class="pre">address(x)</span></code>
+has the type <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is of integer or fixed bytes type, a literal or a contract with a payable fallback function.
+If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a contract without payable fallback function, then <code class="docutils literal notranslate"><span class="pre">address(x)</span></code> will be of type <code class="docutils literal notranslate"><span class="pre">address</span></code>.
+In external function signatures <code class="docutils literal notranslate"><span class="pre">address</span></code> is used for both the <code class="docutils literal notranslate"><span class="pre">address</span></code> and the <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It might very well be that you do not need to care about the distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code>
+and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> and just use <code class="docutils literal notranslate"><span class="pre">address</span></code> everywhere. For example,
+if you are using the <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdrawal pattern</span></a>, you can (and should) store the
+address itself as <code class="docutils literal notranslate"><span class="pre">address</span></code>, because you invoke the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function on
+<code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>, which is an <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
+</div>
+<p>Operators:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;</span></code></li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>If you convert a type that uses a larger byte size to an <code class="docutils literal notranslate"><span class="pre">address</span></code>, for example <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>, then the <code class="docutils literal notranslate"><span class="pre">address</span></code> is truncated.
+To reduce conversion ambiguity version 0.4.24 and higher of the compiler force you make the truncation explicit in the conversion.
+Take for example the address <code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC</span></code>.</p>
+<p class="last">You can use <code class="docutils literal notranslate"><span class="pre">address(uint160(bytes20(b)))</span></code>, which results in <code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999aAaa</span></code>,
+or you can use <code class="docutils literal notranslate"><span class="pre">address(uint160(uint256(b)))</span></code>, which results in <code class="docutils literal notranslate"><span class="pre">0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> was introduced with version 0.5.0.
+Also starting from that version, contracts do not derive from the address type, but can still be explicitly converted to
+<code class="docutils literal notranslate"><span class="pre">address</span></code> or to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>, if they have a payable fallback function.</p>
+</div>
+<div class="section" id="members-of-addresses">
+<span id="id4"></span><h4>Members of Addresses<a class="headerlink" href="#members-of-addresses" title="Permalink to this headline">¶</a></h4>
+<p>For a quick reference of all members of address, see <a class="reference internal" href="units-and-global-variables.html#address-related"><span class="std std-ref">Members of Address Types</span></a>.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">balance</span></code> and <code class="docutils literal notranslate"><span class="pre">transfer</span></code></li>
+</ul>
+<p>It is possible to query the balance of an address using the property <code class="docutils literal notranslate"><span class="pre">balance</span></code>
+and to send Ether (in units of wei) to a payable address using the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span> <span class="kr">payable</span> <span class="n">x</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="mh">0x123</span><span class="p">);</span>
+<span class="kt">address</span> <span class="n">myAddress</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nb">balance</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">myAddress</span><span class="p">.</span><span class="nb">balance</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="n">x</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function fails if the balance of the current contract is not large enough
+or if the Ether transfer is rejected by the receiving account. The <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function
+reverts on failure.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a contract address, its code (more specifically: its <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">Fallback Function</span></a>, if present) will be executed together with the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> call (this is a feature of the EVM and cannot be prevented). If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.</p>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">send</span></code></li>
+</ul>
+<p>Send is the low-level counterpart of <code class="docutils literal notranslate"><span class="pre">transfer</span></code>. If the execution fails, the current contract will not stop with an exception, but <code class="docutils literal notranslate"><span class="pre">send</span></code> will return <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There are some dangers in using <code class="docutils literal notranslate"><span class="pre">send</span></code>: The transfer fails if the call stack depth is at 1024
+(this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
+to make safe Ether transfers, always check the return value of <code class="docutils literal notranslate"><span class="pre">send</span></code>, use <code class="docutils literal notranslate"><span class="pre">transfer</span></code> or even better:
+use a pattern where the recipient withdraws the money.</p>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code></li>
+</ul>
+<p>In order to interface with contracts that do not adhere to the ABI,
+or to get more direct control over the encoding,
+the functions <code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are provided.
+They all take a single <code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code> parameter and
+return the success condition (as a <code class="docutils literal notranslate"><span class="pre">bool</span></code>) and the returned data
+(<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>).
+The functions <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code>, <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code>, <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector</span></code>
+and <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature</span></code> can be used to encode structured data.</p>
+<p>Example:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">payload</span> <span class="o">=</span> <span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">);</span>
+<span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">(</span><span class="n">payload</span><span class="p">);</span>
+<span class="nf">require</span><span class="p">(</span><span class="n">success</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">All these functions are low-level functions and should be used with care.
+Specifically, any unknown contract might be malicious and if you call it, you
+hand over control to that contract which could in turn call back into
+your contract, so be prepared for changes to your state variables
+when the call returns. The regular way to interact with other contracts
+is to call a function on a contract object (<code class="docutils literal notranslate"><span class="pre">x.f()</span></code>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Previous versions of Solidity allowed these functions to receive
+arbitrary arguments and would also handle a first argument of type
+<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> differently. These edge cases were removed in version 0.5.0.</p>
+</div>
+<p>It is possible to adjust the supplied gas with the <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> modifier:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">gas</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Similarly, the supplied Ether value can be controlled too:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Lastly, these modifiers can be combined. Their order does not matter:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">gas</span><span class="p">(</span><span class="mi">1000000</span><span class="p">).</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>In a similar way, the function <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> can be used: the difference is that only the code of the given address is used, all other aspects (storage, balance, …) are taken from the current contract. The purpose of <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to homestead, only a limited variant called <code class="docutils literal notranslate"><span class="pre">callcode</span></code> was available that did not provide access to the original <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> and <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> values. This function was removed in version 0.5.0.</p>
+</div>
+<p>Since byzantium <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> can be used as well. This is basically the same as <code class="docutils literal notranslate"><span class="pre">call</span></code>, but will revert if the called function modifies the state in any way.</p>
+<p>All three functions <code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are very low-level functions and should only be used as a <em>last resort</em> as they break the type-safety of Solidity.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> option is available on all three methods, while the <code class="docutils literal notranslate"><span class="pre">.value()</span></code> option is not supported for <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All contracts can be converted to <code class="docutils literal notranslate"><span class="pre">address</span></code> type, so it is possible to query the balance of the
+current contract using <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="contract-types">
+<span id="index-6"></span><span id="id5"></span><h3>Contract Types<a class="headerlink" href="#contract-types" title="Permalink to this headline">¶</a></h3>
+<p>Every <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a> defines its own type.
+You can implicitly convert contracts to contracts they inherit from.
+Contracts can be explicitly converted to and from all other contract types
+and the <code class="docutils literal notranslate"><span class="pre">address</span></code> type.</p>
+<p>Explicit conversion to and from the <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type
+is only possible if the contract type has a payable fallback function.
+The conversion is still performed using <code class="docutils literal notranslate"><span class="pre">address(x)</span></code> and not
+using <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code>. You can find more information in the section about
+the <a class="reference internal" href="#address"><span class="std std-ref">address type</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before version 0.5.0, contracts directly derived from the address type
+and there was no distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
+</div>
+<p>If you declare a local variable of contract type (<cite>MyContract c</cite>), you can call
+functions on that contract. Take care to assign it from somewhere that is the
+same contract type.</p>
+<p>You can also instantiate contracts (which means they are newly created). You
+can find more details in the <a class="reference internal" href="control-structures.html#creating-contracts"><span class="std std-ref">‘Contracts via new’</span></a>
+section.</p>
+<p>The data representation of a contract is identical to that of the <code class="docutils literal notranslate"><span class="pre">address</span></code>
+type and this type is also used in the <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>.</p>
+<p>Contracts do not support any operators.</p>
+<p>The members of contract types are the external functions of the contract
+including public state variables.</p>
+<p>For a contract <code class="docutils literal notranslate"><span class="pre">C</span></code> you can use <code class="docutils literal notranslate"><span class="pre">type(C)</span></code> to access
+<a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">type information</span></a> about the contract.</p>
+</div>
+<div class="section" id="fixed-size-byte-arrays">
+<span id="index-7"></span><h3>Fixed-size byte arrays<a class="headerlink" href="#fixed-size-byte-arrays" title="Permalink to this headline">¶</a></h3>
+<p>The value types <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes2</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes3</span></code>, …, <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>
+hold a sequence of bytes from one to up to 32.
+<code class="docutils literal notranslate"><span class="pre">byte</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>.</p>
+<p>Operators:</p>
+<ul class="simple">
+<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
+<li>Bit operators: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (bitwise exclusive or), <code class="docutils literal notranslate"><span class="pre">~</span></code> (bitwise negation)</li>
+<li>Shift operators: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (left shift), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (right shift)</li>
+<li>Index access: If <code class="docutils literal notranslate"><span class="pre">x</span></code> is of type <code class="docutils literal notranslate"><span class="pre">bytesI</span></code>, then <code class="docutils literal notranslate"><span class="pre">x[k]</span></code> for <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">I</span></code> returns the <code class="docutils literal notranslate"><span class="pre">k</span></code> th byte (read-only).</li>
+</ul>
+<p>The shifting operator works with any integer type as right operand (but
+returns the type of the left operand), which denotes the number of bits to shift by.
+Shifting by a negative amount causes a runtime exception.</p>
+<p>Members:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">.length</span></code> yields the fixed length of the byte array (read-only).</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The type <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> is an array of bytes, but due to padding rules, it wastes
+31 bytes of space for each element (except in storage). It is better to use the <code class="docutils literal notranslate"><span class="pre">bytes</span></code>
+type instead.</p>
+</div>
+</div>
+<div class="section" id="dynamically-sized-byte-array">
+<h3>Dynamically-sized byte array<a class="headerlink" href="#dynamically-sized-byte-array" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">bytes</span></code>:</dt>
+<dd>Dynamically-sized byte array, see <a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a>. Not a value-type!</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">string</span></code>:</dt>
+<dd>Dynamically-sized UTF-8-encoded string, see <a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a>. Not a value-type!</dd>
+</dl>
+</div>
+<div class="section" id="address-literals">
+<span id="index-8"></span><span id="id6"></span><h3>Address Literals<a class="headerlink" href="#address-literals" title="Permalink to this headline">¶</a></h3>
+<p>Hexadecimal literals that pass the address checksum test, for example
+<code class="docutils literal notranslate"><span class="pre">0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF</span></code> are of <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type.
+Hexadecimal literals that are between 39 and 41 digits
+long and do not pass the checksum test produce
+a warning and are treated as regular rational number literals.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The mixed-case address checksum format is defined in <a class="reference external" href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md">EIP-55</a>.</p>
+</div>
+</div>
+<div class="section" id="rational-and-integer-literals">
+<span id="rational-literals"></span><span id="index-9"></span><h3>Rational and Integer Literals<a class="headerlink" href="#rational-and-integer-literals" title="Permalink to this headline">¶</a></h3>
+<p>Integer literals are formed from a sequence of numbers in the range 0-9.
+They are interpreted as decimals. For example, <code class="docutils literal notranslate"><span class="pre">69</span></code> means sixty nine.
+Octal literals do not exist in Solidity and leading zeros are invalid.</p>
+<p>Decimal fraction literals are formed by a <code class="docutils literal notranslate"><span class="pre">.</span></code> with at least one number on
+one side.  Examples include <code class="docutils literal notranslate"><span class="pre">1.</span></code>, <code class="docutils literal notranslate"><span class="pre">.1</span></code> and <code class="docutils literal notranslate"><span class="pre">1.3</span></code>.</p>
+<p>Scientific notation is also supported, where the base can have fractions, while the exponent cannot.
+Examples include <code class="docutils literal notranslate"><span class="pre">2e10</span></code>, <code class="docutils literal notranslate"><span class="pre">-2e10</span></code>, <code class="docutils literal notranslate"><span class="pre">2e-10</span></code>, <code class="docutils literal notranslate"><span class="pre">2.5e1</span></code>.</p>
+<p>Underscores can be used to separate the digits of a numeric literal to aid readability.
+For example, decimal <code class="docutils literal notranslate"><span class="pre">123_000</span></code>, hexadecimal <code class="docutils literal notranslate"><span class="pre">0x2eff_abde</span></code>, scientific decimal notation <code class="docutils literal notranslate"><span class="pre">1_2e345_678</span></code> are all valid.
+Underscores are only allowed between two digits and only one consecutive underscore is allowed.
+There is no additional semantic meaning added to a number literal containing underscores,
+the underscores are ignored.</p>
+<p>Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
+using them together with a non-literal expression or by explicit conversion).
+This means that computations do not overflow and divisions do not truncate
+in number literal expressions.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">(2**800</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">-</span> <span class="pre">2**800</span></code> results in the constant <code class="docutils literal notranslate"><span class="pre">1</span></code> (of type <code class="docutils literal notranslate"><span class="pre">uint8</span></code>)
+although intermediate results would not even fit the machine word size. Furthermore, <code class="docutils literal notranslate"><span class="pre">.5</span> <span class="pre">*</span> <span class="pre">8</span></code> results
+in the integer <code class="docutils literal notranslate"><span class="pre">4</span></code> (although non-integers were used in between).</p>
+<p>Any operator that can be applied to integers can also be applied to number literal expressions as
+long as the operands are integers. If any of the two is fractional, bit operations are disallowed
+and exponentiation is disallowed if the exponent is fractional (because that might result in
+a non-rational number).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Solidity has a number literal type for each rational number.
+Integer literals and rational number literals belong to number literal types.
+Moreover, all number literal expressions (i.e. the expressions that
+contain only number literals and operators) belong to number literal
+types.  So the number literal expressions <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code> both
+belong to the same number literal type for the rational number three.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Division on integer literals used to truncate in Solidity prior to version 0.4.0, but it now converts into a rational number, i.e. <code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">/</span> <span class="pre">2</span></code> is not equal to <code class="docutils literal notranslate"><span class="pre">2</span></code>, but to <code class="docutils literal notranslate"><span class="pre">2.5</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Number literal expressions are converted into a non-literal type as soon as they are used with non-literal
+expressions. Disregarding types, the value of the expression assigned to <code class="docutils literal notranslate"><span class="pre">b</span></code>
+below evaluates to an integer. Because <code class="docutils literal notranslate"><span class="pre">a</span></code> is of type <code class="docutils literal notranslate"><span class="pre">uint128</span></code>, the
+expression <code class="docutils literal notranslate"><span class="pre">2.5</span> <span class="pre">+</span> <span class="pre">a</span></code> has to have a proper type, though. Since there is no common type
+for the type of <code class="docutils literal notranslate"><span class="pre">2.5</span></code> and <code class="docutils literal notranslate"><span class="pre">uint128</span></code>, the Solidity compiler does not accept
+this code.</p>
+</div>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint128</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">uint128</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">2.5</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="string-literals-and-types">
+<span id="string-literals"></span><span id="index-10"></span><h3>String Literals and Types<a class="headerlink" href="#string-literals-and-types" title="Permalink to this headline">¶</a></h3>
+<p>String literals are written with either double or single-quotes (<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>).  They do not imply trailing zeroes as in C; <code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> represents three bytes, not four.  As with integer literals, their type can vary, but they are implicitly convertible to <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>, if they fit, to <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and to <code class="docutils literal notranslate"><span class="pre">string</span></code>.</p>
+<p>For example, with <code class="docutils literal notranslate"><span class="pre">bytes32</span> <span class="pre">samevar</span> <span class="pre">=</span> <span class="pre">&quot;stringliteral&quot;</span></code> the string literal is interpreted in its raw byte form when assigned to a <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> type.</p>
+<p>String literals support the following escape characters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">\&lt;newline&gt;</span></code> (escapes an actual newline)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\\</span></code> (backslash)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\'</span></code> (single quote)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\&quot;</span></code> (double quote)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\b</span></code> (backspace)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\f</span></code> (form feed)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\n</span></code> (newline)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\r</span></code> (carriage return)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\t</span></code> (tab)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\v</span></code> (vertical tab)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\xNN</span></code> (hex escape, see below)</li>
+<li><code class="docutils literal notranslate"><span class="pre">\uNNNN</span></code> (unicode escape, see below)</li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">\xNN</span></code> takes a hex value and inserts the appropriate byte, while <code class="docutils literal notranslate"><span class="pre">\uNNNN</span></code> takes a Unicode codepoint and inserts an UTF-8 sequence.</p>
+<p>The string in the following example has a length of ten bytes.
+It starts with a newline byte, followed by a double quote, a single
+quote a backslash character and then (without separator) the
+character sequence <code class="docutils literal notranslate"><span class="pre">abcdef</span></code>.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="se">\n\&quot;\&#39;\\</span><span class="s">abc</span><span class="se">\</span>
+<span class="s">def&quot;</span>
+</pre></div>
+</div>
+<p>Any unicode line terminator which is not a newline (i.e. LF, VF, FF, CR, NEL, LS, PS) is considered to
+terminate the string literal. Newline only terminates the string literal if it is not preceded by a <code class="docutils literal notranslate"><span class="pre">\</span></code>.</p>
+</div>
+<div class="section" id="hexadecimal-literals">
+<span id="index-11"></span><h3>Hexadecimal Literals<a class="headerlink" href="#hexadecimal-literals" title="Permalink to this headline">¶</a></h3>
+<p>Hexadecimal literals are prefixed with the keyword <code class="docutils literal notranslate"><span class="pre">hex</span></code> and are enclosed in double or single-quotes (<code class="docutils literal notranslate"><span class="pre">hex&quot;001122FF&quot;</span></code>). Their content must be a hexadecimal string and their value will be the binary representation of those values.</p>
+<p>Hexadecimal literals behave like <a class="reference internal" href="#string-literals"><span class="std std-ref">string literals</span></a> and have the same convertibility restrictions.</p>
+</div>
+<div class="section" id="enums">
+<span id="index-12"></span><span id="id7"></span><h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
+<p>Enums are one way to create a user-defined type in Solidity. They are explicitly convertible
+to and from all integer types but implicit conversion is not allowed.  The explicit conversion
+from integer checks at runtime that the value lies inside the range of the enum and causes a failing assert otherwise.
+Enums needs at least one member.</p>
+<p>The data representation is the same as for enums in C: The options are represented by
+subsequent unsigned integer values starting from <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="n">ActionChoices</span> <span class="p">{</span> <span class="n">GoLeft</span><span class="p">,</span> <span class="n">GoRight</span><span class="p">,</span> <span class="n">GoStraight</span><span class="p">,</span> <span class="n">SitStill</span> <span class="p">}</span>
+    <span class="n">ActionChoices</span> <span class="n">choice</span><span class="p">;</span>
+    <span class="n">ActionChoices</span> <span class="kr">constant</span> <span class="n">defaultChoice</span> <span class="o">=</span> <span class="n">ActionChoices</span><span class="p">.</span><span class="n">GoStraight</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">setGoStraight</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="n">ActionChoices</span><span class="p">.</span><span class="n">GoStraight</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Since enum types are not part of the ABI, the signature of &quot;getChoice&quot;</span>
+    <span class="c1">// will automatically be changed to &quot;getChoice() returns (uint8)&quot;</span>
+    <span class="c1">// for all matters external to Solidity. The integer type used is just</span>
+    <span class="c1">// large enough to hold all enum values, i.e. if you have more than 256 values,</span>
+    <span class="c1">// `uint16` will be used and so on.</span>
+    <span class="kd">function</span> <span class="n">getChoice</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="n">ActionChoices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">choice</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">getDefaultChoice</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">uint</span><span class="p">(</span><span class="n">defaultChoice</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-types">
+<span id="index-13"></span><span id="id8"></span><h3>Function Types<a class="headerlink" href="#function-types" title="Permalink to this headline">¶</a></h3>
+<p>Function types are the types of functions. Variables of function type
+can be assigned from functions and function parameters of function type
+can be used to pass functions to and return functions from function calls.
+Function types come in two flavours - <em>internal</em> and <em>external</em> functions:</p>
+<p>Internal functions can only be called inside the current contract (more specifically,
+inside the current code unit, which also includes internal library functions
+and inherited functions) because they cannot be executed outside of the
+context of the current contract. Calling an internal function is realized
+by jumping to its entry label, just like when calling a function of the current
+contract internally.</p>
+<p>External functions consist of an address and a function signature and they can
+be passed via and returned from external function calls.</p>
+<p>Function types are notated as follows:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">parameter</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span><span class="kr">internal</span><span class="o">|</span><span class="kr">external</span><span class="p">}</span> <span class="p">[</span><span class="kr">pure</span><span class="o">|</span><span class="kr">view</span><span class="o">|</span><span class="kr">payable</span><span class="p">]</span> <span class="p">[</span><span class="k">returns</span> <span class="p">(</span><span class="o">&lt;</span><span class="k">return</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>In contrast to the parameter types, the return types cannot be empty - if the
+function type should not return anything, the whole <code class="docutils literal notranslate"><span class="pre">returns</span> <span class="pre">(&lt;return</span> <span class="pre">types&gt;)</span></code>
+part has to be omitted.</p>
+<p>By default, function types are internal, so the <code class="docutils literal notranslate"><span class="pre">internal</span></code> keyword can be
+omitted. Note that this only applies to function types. Visibility has
+to be specified explicitly for functions defined in contracts, they
+do not have a default.</p>
+<p>Conversions:</p>
+<p>A value of external function type can be explicitly converted to <code class="docutils literal notranslate"><span class="pre">address</span></code>
+resulting in the address of the contract of the function.</p>
+<p>A function type <code class="docutils literal notranslate"><span class="pre">A</span></code> is implicitly convertible to a function type <code class="docutils literal notranslate"><span class="pre">B</span></code> if and only if
+their parameter types are identical, their return types are identical,
+their internal/external property is identical and the state mutability of <code class="docutils literal notranslate"><span class="pre">A</span></code>
+is not more restrictive than the state mutability of <code class="docutils literal notranslate"><span class="pre">B</span></code>. In particular:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">pure</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">view</span></code> and <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
+<li><code class="docutils literal notranslate"><span class="pre">view</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
+<li><code class="docutils literal notranslate"><span class="pre">payable</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
+</ul>
+</div></blockquote>
+<p>No other conversions between function types are possible.</p>
+<p>The rule about <code class="docutils literal notranslate"><span class="pre">payable</span></code> and <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> might be a little
+confusing, but in essence, if a function is <code class="docutils literal notranslate"><span class="pre">payable</span></code>, this means that it
+also accepts a payment of zero Ether, so it also is <code class="docutils literal notranslate"><span class="pre">non-payable</span></code>.
+On the other hand, a <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> function will reject Ether sent to it,
+so <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions cannot be converted to <code class="docutils literal notranslate"><span class="pre">payable</span></code> functions.</p>
+<p>If a function type variable is not initialised, calling it results
+in a failed assertion. The same happens if you call a function after using <code class="docutils literal notranslate"><span class="pre">delete</span></code>
+on it.</p>
+<p>If external function types are used outside of the context of Solidity,
+they are treated as the <code class="docutils literal notranslate"><span class="pre">function</span></code> type, which encodes the address
+followed by the function identifier together in a single <code class="docutils literal notranslate"><span class="pre">bytes24</span></code> type.</p>
+<p>Note that public functions of the current contract can be used both as an
+internal and as an external function. To use <code class="docutils literal notranslate"><span class="pre">f</span></code> as an internal function,
+just use <code class="docutils literal notranslate"><span class="pre">f</span></code>, if you want to use its external form, use <code class="docutils literal notranslate"><span class="pre">this.f</span></code>.</p>
+<p>Members:</p>
+<p>Public (or external) functions also have a special member called <code class="docutils literal notranslate"><span class="pre">selector</span></code>,
+which returns the <a class="reference internal" href="abi-spec.html#abi-function-selector"><span class="std std-ref">ABI function selector</span></a>:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Selector</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">this</span><span class="p">.</span><span class="n">f</span><span class="p">.</span><span class="nb">selector</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example that shows how to use internal function types:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">ArrayUtils</span> <span class="p">{</span>
+  <span class="c1">// internal functions can be used in internal library functions because</span>
+  <span class="c1">// they will be part of the same code context</span>
+  <span class="kd">function</span> <span class="n">map</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">self</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="n">f</span><span class="p">)</span>
+    <span class="kr">internal</span>
+    <span class="kr">pure</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">r</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="n">self</span><span class="p">.</span><span class="n">length</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">self</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">reduce</span><span class="p">(</span>
+    <span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">self</span><span class="p">,</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">)</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="n">f</span>
+  <span class="p">)</span>
+    <span class="kr">internal</span>
+    <span class="kr">pure</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">r</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">self</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">r</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">self</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">range</span><span class="p">(</span><span class="kt">uint</span> <span class="n">length</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="n">length</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Pyramid</span> <span class="p">{</span>
+  <span class="kn">using</span> <span class="n">ArrayUtils</span> <span class="k">for</span> <span class="o">*</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="n">pyramid</span><span class="p">(</span><span class="kt">uint</span> <span class="n">l</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ArrayUtils</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">l</span><span class="p">).</span><span class="n">map</span><span class="p">(</span><span class="n">square</span><span class="p">).</span><span class="n">reduce</span><span class="p">(</span><span class="n">sum</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">square</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">sum</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">y</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Another example that uses external function types:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Oracle</span> <span class="p">{</span>
+  <span class="kd">struct</span> <span class="n">Request</span> <span class="p">{</span>
+    <span class="kt">bytes</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kd">function</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">external</span> <span class="n">callback</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">Request</span><span class="p">[]</span> <span class="n">requests</span><span class="p">;</span>
+  <span class="kd">event</span> <span class="n">NewRequest</span><span class="p">(</span><span class="kt">uint</span><span class="p">);</span>
+  <span class="kd">function</span> <span class="n">query</span><span class="p">(</span><span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">external</span> <span class="n">callback</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">requests</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">Request</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">callback</span><span class="p">));</span>
+    <span class="kr">emit</span> <span class="n">NewRequest</span><span class="p">(</span><span class="n">requests</span><span class="p">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">reply</span><span class="p">(</span><span class="kt">uint</span> <span class="n">requestID</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">response</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="c1">// Here goes the check that the reply comes from a trusted source</span>
+    <span class="n">requests</span><span class="p">[</span><span class="n">requestID</span><span class="p">].</span><span class="n">callback</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">OracleUser</span> <span class="p">{</span>
+  <span class="n">Oracle</span> <span class="kr">constant</span> <span class="n">oracle</span> <span class="o">=</span> <span class="n">Oracle</span><span class="p">(</span><span class="mh">0x1234567</span><span class="p">);</span> <span class="c1">// known contract</span>
+  <span class="kt">uint</span> <span class="n">exchangeRate</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="n">buySomething</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">oracle</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="s">&quot;USD&quot;</span><span class="p">,</span> <span class="nb">this</span><span class="p">.</span><span class="n">oracleResponse</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="n">oracleResponse</span><span class="p">(</span><span class="kt">uint</span> <span class="n">response</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="nf">require</span><span class="p">(</span>
+        <span class="nb">msg.sender</span> <span class="o">==</span> <span class="kt">address</span><span class="p">(</span><span class="n">oracle</span><span class="p">),</span>
+        <span class="s">&quot;Only oracle can call this.&quot;</span>
+    <span class="p">);</span>
+    <span class="n">exchangeRate</span> <span class="o">=</span> <span class="n">response</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Lambda or inline functions are planned but not yet supported.</p>
+</div>
+</div>
+</div>
+<div class="section" id="reference-types">
+<span id="index-14"></span><span id="id9"></span><h2>Reference Types<a class="headerlink" href="#reference-types" title="Permalink to this headline">¶</a></h2>
+<p>参照型の値は複数の異なった名前で修正できます。値型の変数が使用される度に、独立したコピーをとった値型と比較してみて下さい。このことから参照型は値型より気をつけて扱う必要があります。現在、構造体、配列、マッピングは参照型です。もし参照型を使用しているのであれば、値が保存されるデータ領域を常に明示する必要があります: <code class="docutils literal notranslate"><span class="pre">memory</span></code> (ライフタイムはファンクションの呼び出し時のみに制限されます)、<code class="docutils literal notranslate"><span class="pre">storage</span></code> （状態変数が保存されている場所）、もしくは <code class="docutils literal notranslate"><span class="pre">calldata</span></code> （特別なデータロケーションで、ファンクションの引数を含み、externalのファンクションコールのパラメータでのみ使用可能です）。</p>
+<p>データロケーションを変える値の割り当てや型変換では常に自動でコピー操作が行われる一方で、
+同じデータロケーション内での値の割り当てはただコピーするだけです（いくつかの例ではstorage型で）。</p>
+<div class="section" id="data-location">
+<span id="id10"></span><h3>Data location<a class="headerlink" href="#data-location" title="Permalink to this headline">¶</a></h3>
+<p>Every reference type, i.e. <em>arrays</em> and <em>structs</em>, has an additional
+annotation, the “data location”, about where it is stored. There are three data locations:
+<code class="docutils literal notranslate"><span class="pre">memory</span></code>, <code class="docutils literal notranslate"><span class="pre">storage</span></code> and <code class="docutils literal notranslate"><span class="pre">calldata</span></code>. Calldata is only valid for parameters of external contract
+functions and is required for this type of parameter. Calldata is a non-modifiable,
+non-persistent area where function arguments are stored, and behaves mostly like memory.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to version 0.5.0 the data location could be omitted, and would default to different locations
+depending on the kind of variable, function type, etc., but all complex types must now give an explicit
+data location.</p>
+</div>
+<div class="section" id="data-location-and-assignment-behaviour">
+<span id="data-location-assignment"></span><h4>Data location and assignment behaviour<a class="headerlink" href="#data-location-and-assignment-behaviour" title="Permalink to this headline">¶</a></h4>
+<p>Data locations are not only relevant for persistency of data, but also for the semantics of assignments:</p>
+<ul class="simple">
+<li>Assignments between <code class="docutils literal notranslate"><span class="pre">storage</span></code> and <code class="docutils literal notranslate"><span class="pre">memory</span></code> (or from <code class="docutils literal notranslate"><span class="pre">calldata</span></code>) always create an independent copy.</li>
+<li>Assignments from <code class="docutils literal notranslate"><span class="pre">memory</span></code> to <code class="docutils literal notranslate"><span class="pre">memory</span></code> only create references. This means that changes to one memory variable are also visible in all other memory variables that refer to the same data.</li>
+<li>Assignments from <code class="docutils literal notranslate"><span class="pre">storage</span></code> to a local storage variable also only assign a reference.</li>
+<li>All other assignments to <code class="docutils literal notranslate"><span class="pre">storage</span></code> always copy. Examples for this case are assignments to state variables or to members of local variables of storage struct type, even if the local variable itself is just a reference.</li>
+</ul>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span><span class="p">[]</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// the data location of x is storage</span>
+
+    <span class="c1">// the data location of memoryArray is memory</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">memoryArray</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">memoryArray</span><span class="p">;</span> <span class="c1">// works, copies the whole array to storage</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="kr">storage</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// works, assigns a pointer, data location of y is storage</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span> <span class="c1">// fine, returns the 8th element</span>
+        <span class="n">y</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// fine, modifies x through y</span>
+        <span class="k">delete</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// fine, clears the array, also modifies y</span>
+        <span class="c1">// The following does not work; it would need to create a new temporary /</span>
+        <span class="c1">// unnamed array in storage, but storage is &quot;statically&quot; allocated:</span>
+        <span class="c1">// y = memoryArray;</span>
+        <span class="c1">// This does not work either, since it would &quot;reset&quot; the pointer, but there</span>
+        <span class="c1">// is no sensible location it could point to.</span>
+        <span class="c1">// delete y;</span>
+        <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="c1">// calls g, handing over a reference to x</span>
+        <span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="c1">// calls h and creates an independent, temporary copy in memory</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">g</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">storage</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="p">{}</span>
+    <span class="kd">function</span> <span class="n">h</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="arrays">
+<span id="index-15"></span><span id="id11"></span><h3>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h3>
+<p>Arrays can have a compile-time fixed size, or they can have a dynamic size.</p>
+<p>The type of an array of fixed size <code class="docutils literal notranslate"><span class="pre">k</span></code> and element type <code class="docutils literal notranslate"><span class="pre">T</span></code> is written as <code class="docutils literal notranslate"><span class="pre">T[k]</span></code>,
+and an array of dynamic size as <code class="docutils literal notranslate"><span class="pre">T[]</span></code>.</p>
+<p>For example, an array of 5 dynamic arrays of <code class="docutils literal notranslate"><span class="pre">uint</span></code> is written as
+<code class="docutils literal notranslate"><span class="pre">uint[][5]</span></code>. The notation is reversed compared to some other languages. In
+Solidity, <code class="docutils literal notranslate"><span class="pre">X[3]</span></code> is always an array containing three elements of type <code class="docutils literal notranslate"><span class="pre">X</span></code>,
+even if <code class="docutils literal notranslate"><span class="pre">X</span></code> is itself an array. This is not the case in other languages such
+as C.</p>
+<p>Indices are zero-based, and access is in the opposite direction of the
+declaration.</p>
+<p>For example, if you have a variable <code class="docutils literal notranslate"><span class="pre">uint[][5]</span> <span class="pre">x</span> <span class="pre">memory</span></code>, you access the
+second <code class="docutils literal notranslate"><span class="pre">uint</span></code> in the third dynamic array using <code class="docutils literal notranslate"><span class="pre">x[2][1]</span></code>, and to access the
+third dynamic array, use <code class="docutils literal notranslate"><span class="pre">x[2]</span></code>. Again,
+if you have an array <code class="docutils literal notranslate"><span class="pre">T[5]</span> <span class="pre">a</span></code> for a type <code class="docutils literal notranslate"><span class="pre">T</span></code> that can also be an array,
+then <code class="docutils literal notranslate"><span class="pre">a[2]</span></code> always has type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<p>Array elements can be of any type, including mapping or struct. The general
+restrictions for types apply, in that mappings can only be stored in the
+<code class="docutils literal notranslate"><span class="pre">storage</span></code> data location and publicly-visible functions need parameters that are <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI types</span></a>.</p>
+<p>It is possible to mark arrays <code class="docutils literal notranslate"><span class="pre">public</span></code> and have Solidity create a <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">getter</span></a>.
+The numeric index becomes a required parameter for the getter.</p>
+<p>Accessing an array past its end causes a failing assertion. You can use the <code class="docutils literal notranslate"><span class="pre">.push()</span></code> method to append a new element at the end or assign to the <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> to change the size (see below for caveats).
+method or increase the <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> to add elements.</p>
+<div class="section" id="bytes-and-strings-as-arrays">
+<h4><code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">strings</span></code> as Arrays<a class="headerlink" href="#bytes-and-strings-as-arrays" title="Permalink to this headline">¶</a></h4>
+<p>Variables of type <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code> are special arrays. A <code class="docutils literal notranslate"><span class="pre">bytes</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">byte[]</span></code>,
+but it is packed tightly in calldata and memory. <code class="docutils literal notranslate"><span class="pre">string</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">bytes</span></code> but does not allow
+length or index access.</p>
+<p>While Solidity does not have string manipulation functions, you can use
+this implicit conversion for equivalent functionality. For example to compare
+two strings <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encode(s1))</span> <span class="pre">==</span> <span class="pre">keccak256(abi.encode(s2))</span></code>, or to
+concatenate two strings already encoded with <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(s1,</span> <span class="pre">s2);</span></code>.</p>
+<p>You should use <code class="docutils literal notranslate"><span class="pre">bytes</span></code> over <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> because it is cheaper, since <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> adds 31 padding bytes between the elements. As a general rule,
+use <code class="docutils literal notranslate"><span class="pre">bytes</span></code> for arbitrary-length raw byte data and <code class="docutils literal notranslate"><span class="pre">string</span></code> for arbitrary-length
+string (UTF-8) data. If you can limit the length to a certain number of bytes,
+always use one of the value types <code class="docutils literal notranslate"><span class="pre">bytes1</span></code> to <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> because they are much cheaper.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to access the byte-representation of a string <code class="docutils literal notranslate"><span class="pre">s</span></code>, use
+<code class="docutils literal notranslate"><span class="pre">bytes(s).length</span></code> / <code class="docutils literal notranslate"><span class="pre">bytes(s)[7]</span> <span class="pre">=</span> <span class="pre">'x';</span></code>. Keep in mind
+that you are accessing the low-level bytes of the UTF-8 representation,
+and not the individual characters.</p>
+</div>
+</div>
+<div class="section" id="allocating-memory-arrays">
+<span id="index-16"></span><h4>Allocating Memory Arrays<a class="headerlink" href="#allocating-memory-arrays" title="Permalink to this headline">¶</a></h4>
+<p>You must use the <code class="docutils literal notranslate"><span class="pre">new</span></code> keyword to create arrays with a runtime-dependent length in memory.
+As opposed to storage arrays, it is <strong>not</strong> possible to resize memory arrays (e.g. by assigning to
+the <code class="docutils literal notranslate"><span class="pre">.length</span></code> member). You either have to calculate the required size in advance
+or create a new memory array and copy every element.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">len</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="mi">7</span><span class="p">);</span>
+        <span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bytes</span><span class="p">(</span><span class="n">len</span><span class="p">);</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">7</span><span class="p">);</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="n">len</span><span class="p">);</span>
+        <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="array-literals">
+<span id="index-17"></span><h4>Array Literals<a class="headerlink" href="#array-literals" title="Permalink to this headline">¶</a></h4>
+<p>An array literal is a comma-separated list of one or more expressions, enclosed
+in square brackets (<code class="docutils literal notranslate"><span class="pre">[...]</span></code>). For example <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">a,</span> <span class="pre">f(3)]</span></code>. There must be a
+common type all elements can be implicitly converted to. This is the elementary
+type of the array.</p>
+<p>Array literals are always statically-sized memory arrays.</p>
+<p>In the example below, the type of <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> is
+<code class="docutils literal notranslate"><span class="pre">uint8[3]</span> <span class="pre">memory</span></code>. Because the type of each of these constants is <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, if you want the result to be a <code class="docutils literal notranslate"><span class="pre">uint[3]</span> <span class="pre">memory</span></code> type, you need to convert the first element to <code class="docutils literal notranslate"><span class="pre">uint</span></code>.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="n">g</span><span class="p">([</span><span class="kt">uint</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">g</span><span class="p">(</span><span class="kt">uint</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="kr">memory</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Fixed size memory arrays cannot be assigned to dynamically-sized memory arrays, i.e. the following is not possible:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// This will not compile.</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// The next line creates a type error because uint[3] memory</span>
+        <span class="c1">// cannot be converted to uint[] memory.</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="kt">uint</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It is planned to remove this restriction in the future, but it creates some
+complications because of how arrays are passed in the ABI.</p>
+</div>
+<div class="section" id="array-members">
+<span id="index-18"></span><span id="id12"></span><h4>Array Members<a class="headerlink" href="#array-members" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><strong>length</strong>:</dt>
+<dd>Arrays have a <code class="docutils literal notranslate"><span class="pre">length</span></code> member that contains their number of elements.
+The length of memory arrays is fixed (but dynamic, i.e. it can depend on runtime parameters) once they are created.
+For dynamically-sized arrays (only available for storage), this member can be assigned to resize the array.
+Accessing elements outside the current length does not automatically resize the array and instead causes a failing assertion.
+Increasing the length adds new zero-initialised elements to the array.
+Reducing the length performs an implicit :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on each of the
+removed elements. If you try to resize a non-dynamic array that isn’t in
+storage, you receive a <code class="docutils literal notranslate"><span class="pre">Value</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">an</span> <span class="pre">lvalue</span></code> error.</dd>
+<dt><strong>push</strong>:</dt>
+<dd>Dynamic storage arrays and <code class="docutils literal notranslate"><span class="pre">bytes</span></code> (not <code class="docutils literal notranslate"><span class="pre">string</span></code>) have a member function called <code class="docutils literal notranslate"><span class="pre">push</span></code> that you can use to append an element at the end of the array. The element will be zero-initialised. The function returns the new length.</dd>
+<dt><strong>pop</strong>:</dt>
+<dd>Dynamic storage arrays and <code class="docutils literal notranslate"><span class="pre">bytes</span></code> (not <code class="docutils literal notranslate"><span class="pre">string</span></code>) have a member function called <code class="docutils literal notranslate"><span class="pre">pop</span></code> that you can use to remove an element from the end of the array. This also implicitly calls :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on the removed element.</dd>
+</dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you use <code class="docutils literal notranslate"><span class="pre">.length--</span></code> on an empty array, it causes an underflow and
+thus sets the length to <code class="docutils literal notranslate"><span class="pre">2**256-1</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Increasing the length of a storage array has constant gas costs because
+storage is assumed to be zero-initialised, while decreasing
+the length has at least linear cost (but in most cases worse than linear),
+because it includes explicitly clearing the removed
+elements similar to calling :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on them.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is not yet possible to use arrays of arrays in external functions
+(but they are supported in public functions).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In EVM versions before Byzantium, it was not possible to access
+dynamic arrays return from function calls. If you call functions
+that return dynamic arrays, make sure to use an EVM that is set to
+Byzantium mode.</p>
+</div>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">ArrayContract</span> <span class="p">{</span>
+    <span class="kt">uint</span><span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">]</span> <span class="n">m_aLotOfIntegers</span><span class="p">;</span>
+    <span class="c1">// Note that the following is not a pair of dynamic arrays but a</span>
+    <span class="c1">// dynamic array of pairs (i.e. of fixed size arrays of length two).</span>
+    <span class="c1">// Because of that, T[] is always a dynamic array of T, even if T</span>
+    <span class="c1">// itself is an array.</span>
+    <span class="c1">// Data location for all state variables is storage.</span>
+    <span class="kt">bool</span><span class="p">[</span><span class="mi">2</span><span class="p">][]</span> <span class="n">m_pairsOfFlags</span><span class="p">;</span>
+
+    <span class="c1">// newPairs is stored in memory - the only possibility</span>
+    <span class="c1">// for public contract function arguments</span>
+    <span class="kd">function</span> <span class="n">setAllFlagPairs</span><span class="p">(</span><span class="kt">bool</span><span class="p">[</span><span class="mi">2</span><span class="p">][]</span> <span class="kr">memory</span> <span class="n">newPairs</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// assignment to a storage array performs a copy of ``newPairs`` and</span>
+        <span class="c1">// replaces the complete array ``m_pairsOfFlags``.</span>
+        <span class="n">m_pairsOfFlags</span> <span class="o">=</span> <span class="n">newPairs</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">struct</span> <span class="n">StructType</span> <span class="p">{</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="n">contents</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">moreInfo</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">StructType</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">c</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// stores a reference to ``s`` in ``g``</span>
+        <span class="n">StructType</span> <span class="kr">storage</span> <span class="n">g</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="c1">// also changes ``s.moreInfo``.</span>
+        <span class="n">g</span><span class="p">.</span><span class="n">moreInfo</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="c1">// assigns a copy because ``g.contents``</span>
+        <span class="c1">// is not a local variable, but a member of</span>
+        <span class="c1">// a local variable.</span>
+        <span class="n">g</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">setFlagPair</span><span class="p">(</span><span class="kt">uint</span> <span class="n">index</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">flagA</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">flagB</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// access to a non-existing index will throw an exception</span>
+        <span class="n">m_pairsOfFlags</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">flagA</span><span class="p">;</span>
+        <span class="n">m_pairsOfFlags</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">flagB</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">changeFlagArraySize</span><span class="p">(</span><span class="kt">uint</span> <span class="n">newSize</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// if the new size is smaller, removed array elements will be cleared</span>
+        <span class="n">m_pairsOfFlags</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">newSize</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">clear</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// these clear the arrays completely</span>
+        <span class="k">delete</span> <span class="n">m_pairsOfFlags</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">m_aLotOfIntegers</span><span class="p">;</span>
+        <span class="c1">// identical effect here</span>
+        <span class="n">m_pairsOfFlags</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bytes</span> <span class="n">m_byteData</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">byteArrays</span><span class="p">(</span><span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">data</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// byte arrays (&quot;bytes&quot;) are different as they are stored without padding,</span>
+        <span class="c1">// but can be treated identical to &quot;uint8[]&quot;</span>
+        <span class="n">m_byteData</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">m_byteData</span><span class="p">.</span><span class="n">length</span> <span class="o">+=</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="n">m_byteData</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x08</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">m_byteData</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">addFlag</span><span class="p">(</span><span class="kt">bool</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="kr">memory</span> <span class="n">flag</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_pairsOfFlags</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">flag</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">createMemoryArray</span><span class="p">(</span><span class="kt">uint</span> <span class="n">size</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes</span> <span class="kr">memory</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Dynamic memory arrays are created using `new`:</span>
+        <span class="kt">uint</span><span class="p">[</span><span class="mi">2</span><span class="p">][]</span> <span class="kr">memory</span> <span class="n">arrayOfPairs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[</span><span class="mi">2</span><span class="p">][](</span><span class="n">size</span><span class="p">);</span>
+
+        <span class="c1">// Inline arrays are always statically-sized and if you only</span>
+        <span class="c1">// use literals, you have to provide at least one type.</span>
+        <span class="n">arrayOfPairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kt">uint</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">];</span>
+
+        <span class="c1">// Create a dynamic byte array:</span>
+        <span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bytes</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kt">byte</span><span class="p">(</span><span class="kt">uint8</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="structs">
+<span id="index-19"></span><span id="id13"></span><h3>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h3>
+<p>Solidity provides a way to define new types in the form of structs, which is
+shown in the following example:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">CrowdFunding</span> <span class="p">{</span>
+    <span class="c1">// Defines a new type with two fields.</span>
+    <span class="kd">struct</span> <span class="n">Funder</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">addr</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">amount</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">struct</span> <span class="n">Campaign</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="kr">payable</span> <span class="n">beneficiary</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">fundingGoal</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">numFunders</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">amount</span><span class="p">;</span>
+        <span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="n">Funder</span><span class="p">)</span> <span class="n">funders</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">uint</span> <span class="n">numCampaigns</span><span class="p">;</span>
+    <span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="n">Campaign</span><span class="p">)</span> <span class="n">campaigns</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">newCampaign</span><span class="p">(</span><span class="kt">address</span> <span class="kr">payable</span> <span class="n">beneficiary</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">goal</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">campaignID</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">campaignID</span> <span class="o">=</span> <span class="n">numCampaigns</span><span class="o">++</span><span class="p">;</span> <span class="c1">// campaignID is return variable</span>
+        <span class="c1">// Creates new struct in memory and copies it to storage.</span>
+        <span class="c1">// We leave out the mapping type, because it is not valid in memory.</span>
+        <span class="c1">// If structs are copied (even from storage to storage), mapping types</span>
+        <span class="c1">// are always omitted, because they cannot be enumerated.</span>
+        <span class="n">campaigns</span><span class="p">[</span><span class="n">campaignID</span><span class="p">]</span> <span class="o">=</span> <span class="n">Campaign</span><span class="p">(</span><span class="n">beneficiary</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">contribute</span><span class="p">(</span><span class="kt">uint</span> <span class="n">campaignID</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="n">Campaign</span> <span class="kr">storage</span> <span class="n">c</span> <span class="o">=</span> <span class="n">campaigns</span><span class="p">[</span><span class="n">campaignID</span><span class="p">];</span>
+        <span class="c1">// Creates a new temporary memory struct, initialised with the given values</span>
+        <span class="c1">// and copies it over to storage.</span>
+        <span class="c1">// Note that you can also use Funder(msg.sender, msg.value) to initialise.</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">funders</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">numFunders</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">Funder</span><span class="p">({</span><span class="n">addr</span><span class="o">:</span> <span class="nb">msg.sender</span><span class="p">,</span> <span class="n">amount</span><span class="o">:</span> <span class="nb">msg.value</span><span class="p">});</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">amount</span> <span class="o">+=</span> <span class="nb">msg.value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">checkGoalReached</span><span class="p">(</span><span class="kt">uint</span> <span class="n">campaignID</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span> <span class="n">reached</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Campaign</span> <span class="kr">storage</span> <span class="n">c</span> <span class="o">=</span> <span class="n">campaigns</span><span class="p">[</span><span class="n">campaignID</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">.</span><span class="n">fundingGoal</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">amount</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">amount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">beneficiary</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="n">amount</span><span class="p">);</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The contract does not provide the full functionality of a crowdfunding
+contract, but it contains the basic concepts necessary to understand structs.
+Struct types can be used inside mappings and arrays and they can itself
+contain mappings and arrays.</p>
+<p>It is not possible for a struct to contain a member of its own type,
+although the struct itself can be the value type of a mapping member
+or it can contain a dynamically-sized array of its type.
+This restriction is necessary, as the size of the struct has to be finite.</p>
+<p>Note how in all the functions, a struct type is assigned to a local variable
+with data location <code class="docutils literal notranslate"><span class="pre">storage</span></code>.
+This does not copy the struct but only stores a reference so that assignments to
+members of the local variable actually write to the state.</p>
+<p>Of course, you can also directly access the members of the struct without
+assigning it to a local variable, as in
+<code class="docutils literal notranslate"><span class="pre">campaigns[campaignID].amount</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
+</div>
+</div>
+<div class="section" id="mapping-types">
+<span id="index-20"></span><span id="id14"></span><h2>Mapping Types<a class="headerlink" href="#mapping-types" title="Permalink to this headline">¶</a></h2>
+<p>マッピング型は <code class="docutils literal notranslate"><span class="pre">mapping(_KeyType</span> <span class="pre">=&gt;</span> <span class="pre">_ValueType)</span></code> という構文で宣言します。<code class="docutils literal notranslate"><span class="pre">_KeyType</span></code> はどの基本型でも入ります。つまりどのビルトインの型に加え、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> が使えます。ユーザー定義、もしくはコントラクト型、enum、マッピング、構造体、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> を除いた配列は使用できません。<code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> はマッピングを含めて、どの型でもとることができます。</p>
+<p>マッピングはどんなキーも存在し、そのバイト表現は全てゼロ（型の <a class="reference internal" href="control-structures.html#default-value"><span class="std std-ref">デフォルト値</span></a>）で実質的に初期化されている <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">hash tables</a> の様に考えることができます。ただ似ているのはそれだけで、キーデータはマッピングには保存されず、その <code class="docutils literal notranslate"><span class="pre">keccak256</span></code> ハッシュだけが値を検索するのに使用されます。</p>
+<p>そのため、マッピングは長さを持たず、キーの概念やセットする値などはありません。</p>
+<p>マッピングは <code class="docutils literal notranslate"><span class="pre">storage</span></code> にのみデータを置けるため、ファンクション内のstorage参照型、もしくはライブラリファンクションのパラメータとしての状態変数として使用されます。パラメータやパブリックにアクセスできるコントラクトファンクションの返り値としては使用できません。</p>
+<p>マッピングタイプに <code class="docutils literal notranslate"><span class="pre">public</span></code> 修飾子をつけることができます。Solidityはそれにより <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">getter</span></a> を生成します。<code class="docutils literal notranslate"><span class="pre">_KeyType</span></code> はゲッターのパラメータになります。もし <code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> が値型か構造体の場合、ゲッターは <code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> を返します。もし <code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> が配列かマッピングであれば、ゲッターは各 <code class="docutils literal notranslate"><span class="pre">_KeyType</span></code> に対して一つのパラメータを再帰的に持ちます。以下マッピングの例です:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">MappingExample</span> <span class="p">{</span>
+    <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="n">balances</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">update</span><span class="p">(</span><span class="kt">uint</span> <span class="n">newBalance</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">balances</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="n">newBalance</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">MappingUser</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">MappingExample</span> <span class="n">m</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MappingExample</span><span class="p">();</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m</span><span class="p">.</span><span class="n">balances</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">マッピングはiterableではありませんが、マッピング上のデータ構造を実装することは可能です。具体例は <a class="reference external" href="https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol">iterable mapping</a> を参照ください。</p>
+</div>
+</div>
+<div class="section" id="operators-involving-lvalues">
+<span id="index-21"></span><h2>Operators Involving LValues<a class="headerlink" href="#operators-involving-lvalues" title="Permalink to this headline">¶</a></h2>
+<p>もし <code class="docutils literal notranslate"><span class="pre">a</span></code> がLValue（変数もしくは何か割り当てが行えるもの）であれば、以下の演算子が短縮記法として使えます:</p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+=</span> <span class="pre">e</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">+</span> <span class="pre">e</span></code> と等価です。 演算子 <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code>, <code class="docutils literal notranslate"><span class="pre">%=</span></code>, <code class="docutils literal notranslate"><span class="pre">|=</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;=</span></code>, <code class="docutils literal notranslate"><span class="pre">^=</span></code> も同様に定義されます。<code class="docutils literal notranslate"><span class="pre">a++</span></code> と <code class="docutils literal notranslate"><span class="pre">a--</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+=</span> <span class="pre">1</span></code> / <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">-=</span> <span class="pre">1</span></code> と等価ですがこの式自体は計算前の値 <code class="docutils literal notranslate"><span class="pre">a</span></code> です。一方、<code class="docutils literal notranslate"><span class="pre">--a</span></code> と <code class="docutils literal notranslate"><span class="pre">++a</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span></code> に対して同じ計算を行いますが、この式自体は計算後の値を持ちます。</p>
+<div class="section" id="delete">
+<h3>delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">a</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span></code> に初期値を割り当てます。例えば、整数型であれば <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code> に相当します。しかし、長さゼロの動的配列や全ての要素が初期値で同じ長さの静的配列も使用可能です。<code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">a[x]</span></code> はインデックス <code class="docutils literal notranslate"><span class="pre">x</span></code> の配列の要素を削除し、他のは残し配列の長さは変えません。つまり配列に空白を残します。もし要素を削除する予定であれば、おそらくマッピングの方がよいでしょう。</p>
+<p>構造体に対しては全ての要素をリセットした上で初期値を割り当てます。言い換えると、<code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">a</span></code>　の後は <code class="docutils literal notranslate"><span class="pre">a</span></code> があたかも値の代入されていないただ宣言されただけの <code class="docutils literal notranslate"><span class="pre">a</span></code> と同じ扱いができます。ただし、以下の様に注意が必要です:</p>
+<p><code class="docutils literal notranslate"><span class="pre">delete</span></code> はマッピングには効きません（マッピングのキーはおそらく任意であり、一般に未知のためです）。そのため、もし構造体を削除したら、マッピングではない全ての要素はリセットされ、マッピング以外の要素は再帰的に処理されます。しかし、個々のキーと、マッピングしたものは削除することができます: <code class="docutils literal notranslate"><span class="pre">a</span></code> がマッピングであれば、<code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">a[x]</span></code> で <code class="docutils literal notranslate"><span class="pre">x</span></code> に保存されている値は削除されます。</p>
+<p>覚えておきたいのは <code class="docutils literal notranslate"><span class="pre">delete</span> <span class="pre">a</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span></code> への値の代入の様に振舞うことです。<code class="docutils literal notranslate"><span class="pre">a</span></code> に新しいオブジェクトを保存します。この特徴は <code class="docutils literal notranslate"><span class="pre">a</span></code> が参照型の場合分かりやすいです: <code class="docutils literal notranslate"><span class="pre">a</span></code> そのものだけリセットし、元々参照していた値はリセットしません。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">DeleteExample</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">uint</span><span class="p">[]</span> <span class="n">dataArray</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// sets x to 0, does not affect data</span>
+        <span class="k">delete</span> <span class="n">data</span><span class="p">;</span> <span class="c1">// sets data to 0, does not affect x</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="kr">storage</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dataArray</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">dataArray</span><span class="p">;</span> <span class="c1">// this sets dataArray.length to zero, but as uint[] is a complex object, also</span>
+        <span class="c1">// y is affected which is an alias to the storage object</span>
+        <span class="c1">// On the other hand: &quot;delete y&quot; is not valid, as assignments to local variables</span>
+        <span class="c1">// referencing storage objects can only be made from existing storage objects.</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conversions-between-elementary-types">
+<span id="types-conversion-elementary-types"></span><span id="index-22"></span><h2>Conversions between Elementary Types<a class="headerlink" href="#conversions-between-elementary-types" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="implicit-conversions">
+<h3>Implicit Conversions<a class="headerlink" href="#implicit-conversions" title="Permalink to this headline">¶</a></h3>
+<p>もし演算子が違う型に使われた場合、コンパイラは暗黙のうちに演算対象の型を変換します（代入、割り当て時も同様です）。一般に、セマンティック的に同じ扱いができ、何の情報も失われないのであれば、暗黙の値型の変換は可能です: <code class="docutils literal notranslate"><span class="pre">uint8</span></code> は <code class="docutils literal notranslate"><span class="pre">uint16</span></code>　に、<code class="docutils literal notranslate"><span class="pre">int128</span></code> は <code class="docutils literal notranslate"><span class="pre">int256</span></code> に変換可能ですが、<cite>int8`</cite> は <code class="docutils literal notranslate"><span class="pre">uint256</span></code> に変換不可です（<code class="docutils literal notranslate"><span class="pre">uint256</span></code> は例えば <code class="docutils literal notranslate"><span class="pre">-1</span></code> を持てないからです）。</p>
+<p>詳細は型のセクションを参照してください。</p>
+</div>
+<div class="section" id="explicit-conversions">
+<h3>Explicit Conversions<a class="headerlink" href="#explicit-conversions" title="Permalink to this headline">¶</a></h3>
+<p>もしコンパイラが暗黙の型変換を行わず、しかしあなたが何をしようとしているのか自分で理解しているのであれば、明示的な型変換は可能な時もあります。しかし、これは予想しない挙動や、コンパイラのセキュリティ的な機能をバイパスする可能性もあるので、結果が予想通りになるかテストを行ってください。以下の例は、負の <code class="docutils literal notranslate"><span class="pre">int8</span></code> を <code class="docutils literal notranslate"><span class="pre">uint</span></code> に変換しています。</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">int8</span> <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+<span class="kt">uint</span> <span class="n">x</span> <span class="o">=</span> <span class="kt">uint</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>このコードスニペットの最後では <code class="docutils literal notranslate"><span class="pre">x</span></code> は <code class="docutils literal notranslate"><span class="pre">0xfffff..fd</span></code> (64文字の16進数)という値を持ち、これは256ビットの2の補数表現です。</p>
+<p>もしある整数が明示的に小さい型に変換された場合、上側のビットがカットされます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32</span> <span class="n">a</span> <span class="o">=</span> <span class="mh">0x12345678</span><span class="p">;</span>
+<span class="kt">uint16</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">uint16</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// b will be 0x5678 now</span>
+</pre></div>
+</div>
+<p>もしある整数が大きい型に明示的に変換され場合は、左側に（上側のビットに）パディングされます。変換後の結果と元の整数を比較した場合、それらは等しいものとして扱われます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint16</span> <span class="n">a</span> <span class="o">=</span> <span class="mh">0x1234</span><span class="p">;</span>
+<span class="kt">uint32</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">uint32</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// b will be 0x00001234 now</span>
+<span class="nf">assert</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>固定長のバイト型の変換は異なった挙動をします。個々のバイトのシーケンスとして扱われ、小さいサイズへの型変換時にはそのシーケンスがカットされます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mh">0x1234</span><span class="p">;</span>
+<span class="kt">bytes1</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">bytes1</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// b will be 0x12</span>
+</pre></div>
+</div>
+<p>もし固定サイズのバイト型が明示的に大きい型に変換された場合、右側がパディングされます。（もしインデックスが範囲内にあるのであれば）変換前後で同じインデックスで同じ値を返します:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mh">0x1234</span><span class="p">;</span>
+<span class="kt">bytes4</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">bytes4</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// b will be 0x12340000</span>
+<span class="nf">assert</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="nf">assert</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>切り取りやパディングの際に、整数と固定サイズのバイト配列は異なった挙動を示すため、整数と固定サイズのバイト配列の明示的な変換は二つが同じサイズである場合のみ許可されます。もし異なるサイズの整数と固定サイズのバイト配列を変換したい時は、理想的な切り取りやパディングルールを明示的にする中継的な変換を使用する必要があります:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mh">0x1234</span><span class="p">;</span>
+<span class="kt">uint32</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">uint16</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// b will be 0x00001234</span>
+<span class="kt">uint32</span> <span class="n">c</span> <span class="o">=</span> <span class="kt">uint32</span><span class="p">(</span><span class="kt">bytes4</span><span class="p">(</span><span class="n">a</span><span class="p">));</span> <span class="c1">// c will be 0x12340000</span>
+<span class="kt">uint8</span> <span class="n">d</span> <span class="o">=</span> <span class="kt">uint8</span><span class="p">(</span><span class="kt">uint16</span><span class="p">(</span><span class="n">a</span><span class="p">));</span> <span class="c1">// d will be 0x34</span>
+<span class="kt">uint8</span> <span class="n">e</span> <span class="o">=</span> <span class="kt">uint8</span><span class="p">(</span><span class="kt">bytes1</span><span class="p">(</span><span class="n">a</span><span class="p">));</span> <span class="c1">// e will be 0x12</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conversions-between-literals-and-elementary-types">
+<span id="types-conversion-literals"></span><h2>Conversions between Literals and Elementary Types<a class="headerlink" href="#conversions-between-literals-and-elementary-types" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="integer-types">
+<h3>Integer Types<a class="headerlink" href="#integer-types" title="Permalink to this headline">¶</a></h3>
+<p>切り捨てなしに表せるほど十分大きければ10進数と16進数のリテラルは暗黙的にどの整数型にも変換可能です:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint8</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">uint32</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">uint16</span> <span class="n">c</span> <span class="o">=</span> <span class="mh">0x123456</span><span class="p">;</span> <span class="c1">// fails, since it would have to truncate to 0x3456</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id15">
+<h3>Fixed-Size Byte Arrays<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<p>10進数の数字リテラルは暗黙的に固定サイズのバイト配列に変換できません。16進数の数字リテラルはバイト型のサイズと桁数がぴったり合っている場合のみ変換可能です。10進数、16進数両者の唯一の例外として、値が0であればどの固定サイズのバイト型に変換できます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">54321</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">b</span> <span class="o">=</span> <span class="mh">0x12</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">c</span> <span class="o">=</span> <span class="mh">0x123</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">d</span> <span class="o">=</span> <span class="mh">0x1234</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">bytes2</span> <span class="n">e</span> <span class="o">=</span> <span class="mh">0x0012</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">bytes4</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">bytes4</span> <span class="n">g</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span> <span class="c1">// fine</span>
+</pre></div>
+</div>
+<p>文字数とバイト型のサイズが合っていれば、文字列リテラルと16進数文字列リテラルは暗黙的に固定サイズバイト配列に変換できます:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="s">hex&quot;1234&quot;</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">bytes2</span> <span class="n">b</span> <span class="o">=</span> <span class="s">&quot;xy&quot;</span><span class="p">;</span> <span class="c1">// fine</span>
+<span class="kt">bytes2</span> <span class="n">c</span> <span class="o">=</span> <span class="s">hex&quot;12&quot;</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">d</span> <span class="o">=</span> <span class="s">hex&quot;123&quot;</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">e</span> <span class="o">=</span> <span class="s">&quot;x&quot;</span><span class="p">;</span> <span class="c1">// not allowed</span>
+<span class="kt">bytes2</span> <span class="n">f</span> <span class="o">=</span> <span class="s">&quot;xyz&quot;</span><span class="p">;</span> <span class="c1">// not allowed</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="addresses">
+<h3>Addresses<a class="headerlink" href="#addresses" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#address-literals"><span class="std std-ref">Address Literals</span></a> で説明したように、チェックサムテストが通る正しいサイズの16進数リテラルは <code class="docutils literal notranslate"><span class="pre">アドレス</span></code> 型です。他のリテラルは暗黙的に``アドレス`` 型への変換はできません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">bytes20</span></code> もしくは他の整数型から <code class="docutils literal notranslate"><span class="pre">address</span></code> への明示的な変換を行うと <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> になります。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="units-and-global-variables.html" class="btn btn-neutral float-right" title="Units and Globally Available Variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="structure-of-a-contract.html" class="btn btn-neutral float-left" title="Structure of a Contract" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

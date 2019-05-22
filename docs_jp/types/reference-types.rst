@@ -5,18 +5,10 @@
 Reference Types
 ===============
 
-Values of reference type can be modified through multiple different names.
-Contrast this with value types where you get an independent copy whenever
-a variable of value type is used. Because of that, reference types have to be handled
-more carefully than value types. Currently, reference types comprise structs,
-arrays and mappings. If you use a reference type, you always have to explicitly
-provide the data area where the type is stored: ``memory`` (whose lifetime is limited
-to a function call), ``storage`` (the location where the state variables are stored)
-or ``calldata`` (special data location that contains the function arguments,
-only available for external function call parameters).
+参照型の値は複数の異なった名前で修正できます。値型の変数が使用される度に、独立したコピーをとった値型と比較してみて下さい。このことから参照型は値型より気をつけて扱う必要があります。現在、構造体、配列、マッピングは参照型です。もし参照型を使用しているのであれば、値が保存されるデータ領域を常に明示する必要があります: ``memory`` (ライフタイムはファンクションの呼び出し時のみに制限されます)、``storage`` （状態変数が保存されている場所）、もしくは ``calldata`` （特別なデータロケーションで、ファンクションの引数を含み、externalのファンクションコールのパラメータでのみ使用可能です）。
 
-An assignment or type conversion that changes the data location will always incur an automatic copy operation,
-while assignments inside the same data location only copy in some cases for storage types.
+データロケーションを変える値の割り当てや型変換では常に自動でコピー操作が行われる一方で、
+同じデータロケーション内での値の割り当てはただコピーするだけです（いくつかの例ではstorage型で）。
 
 .. _data-location:
 

@@ -1,0 +1,1828 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contracts &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Solidity Assembly" href="assembly.html" />
+    <link rel="prev" title="Expressions and Control Structures" href="control-structures.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Contracts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-contracts">Creating Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visibility-and-getters">Visibility and Getters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#getter-functions">Getter Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#function-modifiers">Function Modifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constant-state-variables">Constant State Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#function-parameters-and-return-variables">Function Parameters and Return Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-functions">View Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pure-functions">Pure Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fallback-function">Fallback Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#function-overloading">Function Overloading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#events">Events</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#low-level-interface-to-logs">Low-Level Interface to Logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#additional-resources-for-understanding-events">Additional Resources for Understanding Events</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#inheritance">Inheritance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#constructors">Constructors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#arguments-for-base-constructors">Arguments for Base Constructors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multiple-inheritance-and-linearization">Multiple Inheritance and Linearization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inheriting-different-kinds-of-members-of-the-same-name">Inheriting Different Kinds of Members of the Same Name</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#abstract-contracts">Abstract Contracts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interfaces">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#libraries">Libraries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#call-protection-for-libraries">Call Protection For Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-for">Using For</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="solidity-in-depth.html">Solidity in Depth</a> &raquo;</li>
+        
+      <li>Contracts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/contracts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contracts">
+<span id="index-0"></span><span id="id1"></span><h1>Contracts<a class="headerlink" href="#contracts" title="Permalink to this headline">¶</a></h1>
+<p>Contracts in Solidity are similar to classes in object-oriented languages. They
+contain persistent data in state variables and functions that can modify these
+variables. Calling a function on a different contract (instance) will perform
+an EVM function call and thus switch the context such that state variables are
+inaccessible. A contract and its functions need to be called for anything to happen.
+There is no “cron” concept in Ethereum to call a function at a particular event automatically.</p>
+<div class="section" id="creating-contracts">
+<span id="index-1"></span><h2>Creating Contracts<a class="headerlink" href="#creating-contracts" title="Permalink to this headline">¶</a></h2>
+<p>Contracts can be created “from outside” via Ethereum transactions or from within Solidity contracts.</p>
+<p>IDEs, such as <a class="reference external" href="https://remix.ethereum.org/">Remix</a>, make the creation process seamless using UI elements.</p>
+<p>Creating contracts programmatically on Ethereum is best done via using the JavaScript API <a class="reference external" href="https://github.com/ethereum/web3.js">web3.js</a>.
+It has a function called <a class="reference external" href="https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract">web3.eth.Contract</a>
+to facilitate contract creation.</p>
+<p>When a contract is created, its <a class="reference internal" href="#constructor"><span class="std std-ref">constructor</span></a>  (a function declared with the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> keyword) is executed once.</p>
+<p>A constructor is optional. Only one constructor is allowed, which means
+overloading is not supported.</p>
+<p>After the constructor has executed, the final code of the contract is deployed to the
+blockchain. This code includes all public and external functions and all functions
+that are reachable from there through function calls. The deployed code does not
+include the constructor code or internal functions only called from the constructor.</p>
+<p id="index-2">Internally, constructor arguments are passed <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI encoded</span></a> after the code of
+the contract itself, but you do not have to care about this if you use <code class="docutils literal notranslate"><span class="pre">web3.js</span></code>.</p>
+<p>If a contract wants to create another contract, the source code
+(and the binary) of the created contract has to be known to the creator.
+This means that cyclic creation dependencies are impossible.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">OwnedToken</span> <span class="p">{</span>
+    <span class="c1">// `TokenCreator` is a contract type that is defined below.</span>
+    <span class="c1">// It is fine to reference it as long as it is not used</span>
+    <span class="c1">// to create a new contract.</span>
+    <span class="n">TokenCreator</span> <span class="n">creator</span><span class="p">;</span>
+    <span class="kt">address</span> <span class="n">owner</span><span class="p">;</span>
+    <span class="kt">bytes32</span> <span class="n">name</span><span class="p">;</span>
+
+    <span class="c1">// This is the constructor which registers the</span>
+    <span class="c1">// creator and the assigned name.</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">_name</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// State variables are accessed via their name</span>
+        <span class="c1">// and not via e.g. `this.owner`. Functions can</span>
+        <span class="c1">// be accessed directly or through `this.f`,</span>
+        <span class="c1">// but the latter provides an external view</span>
+        <span class="c1">// to the function. Especially in the constructor,</span>
+        <span class="c1">// you should not access functions externally,</span>
+        <span class="c1">// because the function does not exist yet.</span>
+        <span class="c1">// See the next section for details.</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+
+        <span class="c1">// We do an explicit type conversion from `address`</span>
+        <span class="c1">// to `TokenCreator` and assume that the type of</span>
+        <span class="c1">// the calling contract is `TokenCreator`, there is</span>
+        <span class="c1">// no real way to check that.</span>
+        <span class="n">creator</span> <span class="o">=</span> <span class="n">TokenCreator</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">);</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">_name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">changeName</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">newName</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// Only the creator can alter the name --</span>
+        <span class="c1">// the comparison is possible since contracts</span>
+        <span class="c1">// are explicitly convertible to addresses.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="kt">address</span><span class="p">(</span><span class="n">creator</span><span class="p">))</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">newName</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nf">transfer</span><span class="p">(</span><span class="kt">address</span> <span class="n">newOwner</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// Only the current owner can transfer the token.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">!=</span> <span class="n">owner</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="c1">// We ask the creator contract if the transfer</span>
+        <span class="c1">// should proceed by using a function of the</span>
+        <span class="c1">// `TokenCreator` contract defined below. If</span>
+        <span class="c1">// the call fails (e.g. due to out-of-gas),</span>
+        <span class="c1">// the execution also fails here.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">creator</span><span class="p">.</span><span class="n">isTokenTransferOK</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">newOwner</span><span class="p">))</span>
+            <span class="n">owner</span> <span class="o">=</span> <span class="n">newOwner</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">TokenCreator</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">createToken</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">name</span><span class="p">)</span>
+       <span class="kr">public</span>
+       <span class="k">returns</span> <span class="p">(</span><span class="n">OwnedToken</span> <span class="n">tokenAddress</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Create a new `Token` contract and return its address.</span>
+        <span class="c1">// From the JavaScript side, the return type is</span>
+        <span class="c1">// `address`, as this is the closest type available in</span>
+        <span class="c1">// the ABI.</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">OwnedToken</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">changeName</span><span class="p">(</span><span class="n">OwnedToken</span> <span class="n">tokenAddress</span><span class="p">,</span> <span class="kt">bytes32</span> <span class="n">name</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// Again, the external type of `tokenAddress` is</span>
+        <span class="c1">// simply `address`.</span>
+        <span class="n">tokenAddress</span><span class="p">.</span><span class="n">changeName</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Perform checks to determine if transferring a token to the</span>
+    <span class="c1">// `OwnedToken` contract should proceed</span>
+    <span class="kd">function</span> <span class="n">isTokenTransferOK</span><span class="p">(</span><span class="kt">address</span> <span class="n">currentOwner</span><span class="p">,</span> <span class="kt">address</span> <span class="n">newOwner</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="kr">pure</span>
+        <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span> <span class="n">ok</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Check an arbitrary condition to see if transfer should proceed</span>
+        <span class="k">return</span> <span class="nf">keccak256</span><span class="p">(</span><span class="nb">abi.encodePacked</span><span class="p">(</span><span class="n">currentOwner</span><span class="p">,</span> <span class="n">newOwner</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x7f</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visibility-and-getters">
+<span id="index-3"></span><span id="id2"></span><h2>Visibility and Getters<a class="headerlink" href="#visibility-and-getters" title="Permalink to this headline">¶</a></h2>
+<p>Since Solidity knows two kinds of function calls (internal
+ones that do not create an actual EVM call (also called
+a “message call”) and external
+ones that do), there are four types of visibilities for
+functions and state variables.</p>
+<p>Functions have to be specified as being <code class="docutils literal notranslate"><span class="pre">external</span></code>,
+<code class="docutils literal notranslate"><span class="pre">public</span></code>, <code class="docutils literal notranslate"><span class="pre">internal</span></code> or <code class="docutils literal notranslate"><span class="pre">private</span></code>.
+For state variables, <code class="docutils literal notranslate"><span class="pre">external</span></code> is not possible.</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">external</span></code>:</dt>
+<dd>External functions are part of the contract interface,
+which means they can be called from other contracts and
+via transactions. An external function <code class="docutils literal notranslate"><span class="pre">f</span></code> cannot be called
+internally (i.e. <code class="docutils literal notranslate"><span class="pre">f()</span></code> does not work, but <code class="docutils literal notranslate"><span class="pre">this.f()</span></code> works).
+External functions are sometimes more efficient when
+they receive large arrays of data.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">public</span></code>:</dt>
+<dd>Public functions are part of the contract interface
+and can be either called internally or via
+messages. For public state variables, an automatic getter
+function (see below) is generated.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">internal</span></code>:</dt>
+<dd>Those functions and state variables can only be
+accessed internally (i.e. from within the current contract
+or contracts deriving from it), without using <code class="docutils literal notranslate"><span class="pre">this</span></code>.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">private</span></code>:</dt>
+<dd>Private functions and state variables are only
+visible for the contract they are defined in and not in
+derived contracts.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Everything that is inside a contract is visible to
+all observers external to the blockchain. Making something <code class="docutils literal notranslate"><span class="pre">private</span></code>
+only prevents other contracts from accessing and modifying
+the information, but it will still be visible to the
+whole world outside of the blockchain.</p>
+</div>
+<p>The visibility specifier is given after the type for
+state variables and between parameter list and
+return parameter list for functions.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">)</span> <span class="kr">private</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">setData</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">)</span> <span class="kr">internal</span> <span class="p">{</span> <span class="n">data</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the following example, <code class="docutils literal notranslate"><span class="pre">D</span></code>, can call <code class="docutils literal notranslate"><span class="pre">c.getData()</span></code> to retrieve the value of
+<code class="docutils literal notranslate"><span class="pre">data</span></code> in state storage, but is not able to call <code class="docutils literal notranslate"><span class="pre">f</span></code>. Contract <code class="docutils literal notranslate"><span class="pre">E</span></code> is derived from
+<code class="docutils literal notranslate"><span class="pre">C</span></code> and, thus, can call <code class="docutils literal notranslate"><span class="pre">compute</span></code>.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="kr">private</span> <span class="n">data</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">)</span> <span class="kr">private</span> <span class="kr">pure</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">setData</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">data</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">getData</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">data</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">compute</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// This will not compile</span>
+<span class="kd">contract</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">readData</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">C</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">C</span><span class="p">();</span>
+        <span class="kt">uint</span> <span class="n">local</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">f</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span> <span class="c1">// error: member `f` is not visible</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">setData</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="n">local</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">getData</span><span class="p">();</span>
+        <span class="n">local</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">compute</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="c1">// error: member `compute` is not visible</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">E</span> <span class="kr">is</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">g</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">C</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">C</span><span class="p">();</span>
+        <span class="kt">uint</span> <span class="n">val</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="c1">// access to internal member (from derived to parent contract)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="getter-functions">
+<span id="index-4"></span><span id="id3"></span><h3>Getter Functions<a class="headerlink" href="#getter-functions" title="Permalink to this headline">¶</a></h3>
+<p>The compiler automatically creates getter functions for
+all <strong>public</strong> state variables. For the contract given below, the compiler will
+generate a function called <code class="docutils literal notranslate"><span class="pre">data</span></code> that does not take any
+arguments and returns a <code class="docutils literal notranslate"><span class="pre">uint</span></code>, the value of the state
+variable <code class="docutils literal notranslate"><span class="pre">data</span></code>. State variables can be initialized
+when they are declared.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Caller</span> <span class="p">{</span>
+    <span class="n">C</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">C</span><span class="p">();</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The getter functions have external visibility. If the
+symbol is accessed internally (i.e. without <code class="docutils literal notranslate"><span class="pre">this.</span></code>),
+it evaluates to a state variable.  If it is accessed externally
+(i.e. with <code class="docutils literal notranslate"><span class="pre">this.</span></code>), it evaluates to a function.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="n">x</span><span class="p">()</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// internal access</span>
+        <span class="k">return</span> <span class="nb">this</span><span class="p">.</span><span class="n">data</span><span class="p">();</span> <span class="c1">// external access</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you have a <code class="docutils literal notranslate"><span class="pre">public</span></code> state variable of array type, then you can only retrieve
+single elements of the array via the generated getter function. This mechanism
+exists to avoid high gas costs when returning an entire array. You can use
+arguments to specify which individual element to return, for example
+<code class="docutils literal notranslate"><span class="pre">data(0)</span></code>. If you want to return an entire array in one call, then you need
+to write a function, for example:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">arrayExample</span> <span class="p">{</span>
+  <span class="c1">// public state variable</span>
+  <span class="kt">uint</span><span class="p">[]</span> <span class="kr">public</span> <span class="n">myArray</span><span class="p">;</span>
+
+  <span class="c1">// Getter function generated by the compiler</span>
+  <span class="cm">/*</span>
+<span class="cm">  function myArray(uint i) returns (uint) {</span>
+<span class="cm">      return myArray[i];</span>
+<span class="cm">  }</span>
+<span class="cm">  */</span>
+
+  <span class="c1">// function that returns entire array</span>
+  <span class="kd">function</span> <span class="n">getArray</span><span class="p">()</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">myArray</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now you can use <code class="docutils literal notranslate"><span class="pre">getArray()</span></code> to retrieve the entire array, instead of
+<code class="docutils literal notranslate"><span class="pre">myArray(i)</span></code>, which returns a single element per call.</p>
+<p>The next example is more complex:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Complex</span> <span class="p">{</span>
+    <span class="kd">struct</span> <span class="n">Data</span> <span class="p">{</span>
+        <span class="kt">uint</span> <span class="n">a</span><span class="p">;</span>
+        <span class="kt">bytes3</span> <span class="n">b</span><span class="p">;</span>
+        <span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">map</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">bool</span> <span class="o">=&gt;</span> <span class="n">Data</span><span class="p">[]))</span> <span class="kr">public</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It generates a function of the following form. The mapping in the struct is omitted
+because there is no good way to provide the key for the mapping:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">data</span><span class="p">(</span><span class="kt">uint</span> <span class="n">arg1</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">arg2</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">arg3</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">bytes3</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">arg1</span><span class="p">][</span><span class="n">arg2</span><span class="p">][</span><span class="n">arg3</span><span class="p">].</span><span class="n">a</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">arg1</span><span class="p">][</span><span class="n">arg2</span><span class="p">][</span><span class="n">arg3</span><span class="p">].</span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="function-modifiers">
+<span id="modifiers"></span><span id="index-5"></span><h2>Function Modifiers<a class="headerlink" href="#function-modifiers" title="Permalink to this headline">¶</a></h2>
+<p>Modifiers can be used to easily change the behaviour of functions.  For example,
+they can automatically check a condition prior to executing the function. Modifiers are
+inheritable properties of contracts and may be overridden by derived contracts.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="n">owner</span><span class="p">;</span>
+
+    <span class="c1">// This contract only defines a modifier but does not use</span>
+    <span class="c1">// it: it will be used in derived contracts.</span>
+    <span class="c1">// The function body is inserted where the special symbol</span>
+    <span class="c1">// `_;` in the definition of a modifier appears.</span>
+    <span class="c1">// This means that if the owner calls this function, the</span>
+    <span class="c1">// function is executed and otherwise, an exception is</span>
+    <span class="c1">// thrown.</span>
+    <span class="kd">modifier</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">,</span>
+            <span class="s">&quot;Only owner can call this function.&quot;</span>
+        <span class="p">);</span>
+        <span class="kr">_</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">mortal</span> <span class="kr">is</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="c1">// This contract inherits the `onlyOwner` modifier from</span>
+    <span class="c1">// `owned` and applies it to the `close` function, which</span>
+    <span class="c1">// causes that calls to `close` only have an effect if</span>
+    <span class="c1">// they are made by the stored owner.</span>
+    <span class="kd">function</span> <span class="n">close</span><span class="p">()</span> <span class="kr">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+        <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">priced</span> <span class="p">{</span>
+    <span class="c1">// Modifiers can receive arguments:</span>
+    <span class="kd">modifier</span> <span class="n">costs</span><span class="p">(</span><span class="kt">uint</span> <span class="n">price</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.value</span> <span class="o">&gt;=</span> <span class="n">price</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kr">_</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Register</span> <span class="kr">is</span> <span class="n">priced</span><span class="p">,</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">mapping</span> <span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">registeredAddresses</span><span class="p">;</span>
+    <span class="kt">uint</span> <span class="n">price</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">initialPrice</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">price</span> <span class="o">=</span> <span class="n">initialPrice</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="c1">// It is important to also provide the</span>
+    <span class="c1">// `payable` keyword here, otherwise the function will</span>
+    <span class="c1">// automatically reject all Ether sent to it.</span>
+    <span class="kd">function</span> <span class="n">register</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="n">costs</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">registeredAddresses</span><span class="p">[</span><span class="nb">msg.sender</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">changePrice</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_price</span><span class="p">)</span> <span class="kr">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+        <span class="n">price</span> <span class="o">=</span> <span class="n">_price</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Mutex</span> <span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">locked</span><span class="p">;</span>
+    <span class="kd">modifier</span> <span class="n">noReentrancy</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nf">require</span><span class="p">(</span>
+            <span class="o">!</span><span class="n">locked</span><span class="p">,</span>
+            <span class="s">&quot;Reentrant call.&quot;</span>
+        <span class="p">);</span>
+        <span class="n">locked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="kr">_</span><span class="p">;</span>
+        <span class="n">locked</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// This function is protected by a mutex, which means that</span>
+    <span class="c1">/// reentrant calls from within `msg.sender.call` cannot call `f` again.</span>
+    <span class="c1">/// The `return 7` statement assigns 7 to the return value but still</span>
+    <span class="c1">/// executes the statement `locked = false` in the modifier.</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="n">noReentrancy</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,)</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">success</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Multiple modifiers are applied to a function by specifying them in a
+whitespace-separated list and are evaluated in the order presented.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In an earlier version of Solidity, <code class="docutils literal notranslate"><span class="pre">return</span></code> statements in functions
+having modifiers behaved differently.</p>
+</div>
+<p>Explicit returns from a modifier or function body only leave the current
+modifier or function body. Return variables are assigned and
+control flow continues after the “_” in the preceding modifier.</p>
+<p>Arbitrary expressions are allowed for modifier arguments and in this context,
+all symbols visible from the function are visible in the modifier. Symbols
+introduced in the modifier are not visible in the function (as they might
+change by overriding).</p>
+</div>
+<div class="section" id="constant-state-variables">
+<span id="index-6"></span><h2>Constant State Variables<a class="headerlink" href="#constant-state-variables" title="Permalink to this headline">¶</a></h2>
+<p>State variables can be declared as <code class="docutils literal notranslate"><span class="pre">constant</span></code>. In this case, they have to be
+assigned from an expression which is a constant at compile time. Any expression
+that accesses storage, blockchain data (e.g. <code class="docutils literal notranslate"><span class="pre">now</span></code>, <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code> or
+<code class="docutils literal notranslate"><span class="pre">block.number</span></code>) or
+execution data (<code class="docutils literal notranslate"><span class="pre">msg.value</span></code> or <code class="docutils literal notranslate"><span class="pre">gasleft()</span></code>) or makes calls to external contracts is disallowed. Expressions
+that might have a side-effect on memory allocation are allowed, but those that
+might have a side-effect on other memory objects are not. The built-in functions
+<code class="docutils literal notranslate"><span class="pre">keccak256</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256</span></code>, <code class="docutils literal notranslate"><span class="pre">ripemd160</span></code>, <code class="docutils literal notranslate"><span class="pre">ecrecover</span></code>, <code class="docutils literal notranslate"><span class="pre">addmod</span></code> and <code class="docutils literal notranslate"><span class="pre">mulmod</span></code>
+are allowed (even though, with the exception of <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>, they do call external contracts).</p>
+<p>The reason behind allowing side-effects on the memory allocator is that it
+should be possible to construct complex objects like e.g. lookup-tables.
+This feature is not yet fully usable.</p>
+<p>The compiler does not reserve a storage slot for these variables, and every occurrence is
+replaced by the respective constant expression (which might be computed to a single value by the optimizer).</p>
+<p>Not all types for constants are implemented at this time. The only supported types are
+value types and strings.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="kr">constant</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">32</span><span class="o">**</span><span class="mi">22</span> <span class="o">+</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="kr">constant</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;abc&quot;</span><span class="p">;</span>
+    <span class="kt">bytes32</span> <span class="kr">constant</span> <span class="n">myHash</span> <span class="o">=</span> <span class="nf">keccak256</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="functions">
+<span id="index-7"></span><span id="id4"></span><h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="function-parameters-and-return-variables">
+<span id="function-parameters-return-variables"></span><h3>Function Parameters and Return Variables<a class="headerlink" href="#function-parameters-and-return-variables" title="Permalink to this headline">¶</a></h3>
+<p>As in JavaScript, functions may take parameters as input. Unlike in JavaScript
+and C, functions may also return an arbitrary number of values as output.</p>
+<div class="section" id="function-parameters">
+<h4>Function Parameters<a class="headerlink" href="#function-parameters" title="Permalink to this headline">¶</a></h4>
+<p>Function parameters are declared the same way as variables, and the name of
+unused parameters can be omitted.</p>
+<p>For example, if you want your contract to accept one kind of external call
+with two integers, you would use something like:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Simple</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="n">taker</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_b</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="n">_a</span> <span class="o">+</span> <span class="n">_b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Function parameters can be used as any other local variable and they can also be assigned to.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>An <a class="reference internal" href="control-structures.html#external-function-calls"><span class="std std-ref">external function</span></a> cannot accept a
+multi-dimensional array as an input
+parameter. This functionality is possible if you enable the new
+experimental <code class="docutils literal notranslate"><span class="pre">ABIEncoderV2</span></code> feature by adding <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">ABIEncoderV2;</span></code> to your source file.</p>
+<p class="last">An <a class="reference internal" href="control-structures.html#external-function-calls"><span class="std std-ref">internal function</span></a> can accept a
+multi-dimensional array without enabling the feature.</p>
+</div>
+</div>
+<div class="section" id="return-variables">
+<span id="index-8"></span><h4>Return Variables<a class="headerlink" href="#return-variables" title="Permalink to this headline">¶</a></h4>
+<p>Function return variables are declared with the same syntax after the
+<code class="docutils literal notranslate"><span class="pre">returns</span></code> keyword.</p>
+<p>For example, suppose you want to return two results: the sum and the product of
+two integers passed as function parameters, then you use something like:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Simple</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">arithmetic</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_b</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="kr">pure</span>
+        <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">o_sum</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">o_product</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">o_sum</span> <span class="o">=</span> <span class="n">_a</span> <span class="o">+</span> <span class="n">_b</span><span class="p">;</span>
+        <span class="n">o_product</span> <span class="o">=</span> <span class="n">_a</span> <span class="o">*</span> <span class="n">_b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The names of return variables can be omitted.
+Return variables can be used as any other local variable and they
+are initialized with their <a class="reference internal" href="control-structures.html#default-value"><span class="std std-ref">default value</span></a> and have that value unless explicitly set.</p>
+<p>You can either explicitly assign to return variables and
+then leave the function using <code class="docutils literal notranslate"><span class="pre">return;</span></code>,
+or you can provide return values
+(either a single or <a class="reference internal" href="#multi-return"><span class="std std-ref">multiple ones</span></a>) directly with the <code class="docutils literal notranslate"><span class="pre">return</span></code>
+statement:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Simple</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">arithmetic</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_b</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="kr">pure</span>
+        <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">o_sum</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">o_product</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">_a</span> <span class="o">+</span> <span class="n">_b</span><span class="p">,</span> <span class="n">_a</span> <span class="o">*</span> <span class="n">_b</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This form is equivalent to first assigning values to the
+return variables and then using <code class="docutils literal notranslate"><span class="pre">return;</span></code> to leave the function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You cannot return some types from non-internal functions, notably
+multi-dimensional dynamic arrays and structs. If you enable the
+new experimental <code class="docutils literal notranslate"><span class="pre">ABIEncoderV2</span></code> feature by adding <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span>
+<span class="pre">ABIEncoderV2;</span></code> to your source file then more types are available, but
+<code class="docutils literal notranslate"><span class="pre">mapping</span></code> types are still limited to inside a single contract and you
+cannot transfer them.</p>
+</div>
+</div>
+<div class="section" id="returning-multiple-values">
+<span id="multi-return"></span><h4>Returning Multiple Values<a class="headerlink" href="#returning-multiple-values" title="Permalink to this headline">¶</a></h4>
+<p>When a function has multiple return types, the statement <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">(v0,</span> <span class="pre">v1,</span> <span class="pre">...,</span> <span class="pre">vn)</span></code> can be used to return multiple values.
+The number of components must be the same as the number of return types.</p>
+</div>
+</div>
+<div class="section" id="view-functions">
+<span id="index-9"></span><span id="id5"></span><h3>View Functions<a class="headerlink" href="#view-functions" title="Permalink to this headline">¶</a></h3>
+<p>Functions can be declared <code class="docutils literal notranslate"><span class="pre">view</span></code> in which case they promise not to modify the state.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the compiler’s EVM target is Byzantium or newer (default) the opcode
+<code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> is used for <code class="docutils literal notranslate"><span class="pre">view</span></code> functions which enforces the state
+to stay unmodified as part of the EVM execution. For library <code class="docutils literal notranslate"><span class="pre">view</span></code> functions
+<code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code> is used, because there is no combined <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code> and <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code>.
+This means library <code class="docutils literal notranslate"><span class="pre">view</span></code> functions do not have run-time checks that prevent state
+modifications. This should not impact security negatively because library code is
+usually known at compile-time and the static checker performs compile-time checks.</p>
+</div>
+<p>The following statements are considered modifying the state:</p>
+<ol class="arabic simple">
+<li>Writing to state variables.</li>
+<li><a class="reference internal" href="#events"><span class="std std-ref">Emitting events</span></a>.</li>
+<li><a class="reference internal" href="control-structures.html#creating-contracts"><span class="std std-ref">Creating other contracts</span></a>.</li>
+<li>Using <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>.</li>
+<li>Sending Ether via calls.</li>
+<li>Calling any function not marked <code class="docutils literal notranslate"><span class="pre">view</span></code> or <code class="docutils literal notranslate"><span class="pre">pure</span></code>.</li>
+<li>Using low-level calls.</li>
+<li>Using inline assembly that contains certain opcodes.</li>
+</ol>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="mi">42</span><span class="p">)</span> <span class="o">+</span> <span class="nb">now</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">constant</span></code> on functions used to be an alias to <code class="docutils literal notranslate"><span class="pre">view</span></code>, but this was dropped in version 0.5.0.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Getter methods are automatically marked <code class="docutils literal notranslate"><span class="pre">view</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to version 0.5.0, the compiler did not use the <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> opcode
+for <code class="docutils literal notranslate"><span class="pre">view</span></code> functions.
+This enabled state modifications in <code class="docutils literal notranslate"><span class="pre">view</span></code> functions through the use of
+invalid explicit type conversions.
+By using  <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> for <code class="docutils literal notranslate"><span class="pre">view</span></code> functions, modifications to the
+state are prevented on the level of the EVM.</p>
+</div>
+</div>
+<div class="section" id="pure-functions">
+<span id="index-10"></span><span id="id6"></span><h3>Pure Functions<a class="headerlink" href="#pure-functions" title="Permalink to this headline">¶</a></h3>
+<p>Functions can be declared <code class="docutils literal notranslate"><span class="pre">pure</span></code> in which case they promise not to read from or modify the state.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the compiler’s EVM target is Byzantium or newer (default) the opcode <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> is used,
+which does not guarantee that the state is not read, but at least that it is not modified.</p>
+</div>
+<p>In addition to the list of state modifying statements explained above, the following are considered reading from the state:</p>
+<ol class="arabic simple">
+<li>Reading from state variables.</li>
+<li>Accessing <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.balance</span></code>.</li>
+<li>Accessing any of the members of <code class="docutils literal notranslate"><span class="pre">block</span></code>, <code class="docutils literal notranslate"><span class="pre">tx</span></code>, <code class="docutils literal notranslate"><span class="pre">msg</span></code> (with the exception of <code class="docutils literal notranslate"><span class="pre">msg.sig</span></code> and <code class="docutils literal notranslate"><span class="pre">msg.data</span></code>).</li>
+<li>Calling any function not marked <code class="docutils literal notranslate"><span class="pre">pure</span></code>.</li>
+<li>Using inline assembly that contains certain opcodes.</li>
+</ol>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="mi">42</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Pure functions are able to use the <cite>revert()</cite> and <cite>require()</cite> functions to revert
+potential state changes when an <a class="reference internal" href="control-structures.html#assert-and-require"><span class="std std-ref">error occurs</span></a>.</p>
+<p>Reverting a state change is not considered a “state modification”, as only changes to the
+state made previously in code that did not have the <code class="docutils literal notranslate"><span class="pre">view</span></code> or <code class="docutils literal notranslate"><span class="pre">pure</span></code> restriction
+are reverted and that code has the option to catch the <code class="docutils literal notranslate"><span class="pre">revert</span></code> and not pass it on.</p>
+<p>This behaviour is also in line with the <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> opcode.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is not possible to prevent functions from reading the state at the level
+of the EVM, it is only possible to prevent them from writing to the state
+(i.e. only <code class="docutils literal notranslate"><span class="pre">view</span></code> can be enforced at the EVM level, <code class="docutils literal notranslate"><span class="pre">pure</span></code> can not).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to version 0.5.0, the compiler did not use the <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> opcode
+for <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions.
+This enabled state modifications in <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions through the use of
+invalid explicit type conversions.
+By using  <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> for <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions, modifications to the
+state are prevented on the level of the EVM.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to version 0.4.17 the compiler did not enforce that <code class="docutils literal notranslate"><span class="pre">pure</span></code> is not reading the state.
+It is a compile-time type check, which can be circumvented doing invalid explicit conversions
+between contract types, because the compiler can verify that the type of the contract does
+not do state-changing operations, but it cannot check that the contract that will be called
+at runtime is actually of that type.</p>
+</div>
+</div>
+<div class="section" id="fallback-function">
+<span id="index-11"></span><span id="id7"></span><h3>Fallback Function<a class="headerlink" href="#fallback-function" title="Permalink to this headline">¶</a></h3>
+<p>A contract can have exactly one unnamed function. This function cannot have
+arguments, cannot return anything and has to have <code class="docutils literal notranslate"><span class="pre">external</span></code> visibility.
+It is executed on a call to the contract if none of the other
+functions match the given function identifier (or if no data was supplied at
+all).</p>
+<p>Furthermore, this function is executed whenever the contract receives plain
+Ether (without data). To receive Ether and add it to the total balance of the contract, the fallback function
+must be marked <code class="docutils literal notranslate"><span class="pre">payable</span></code>. If no such function exists, the contract cannot receive
+Ether through regular transactions and throws an exception.</p>
+<p>In the worst case, the fallback function can only rely on 2300 gas being
+available (for example when <cite>send</cite> or <cite>transfer</cite> is used), leaving little
+room to perform other operations except basic logging. The following operations
+will consume more gas than the 2300 gas stipend:</p>
+<ul class="simple">
+<li>Writing to storage</li>
+<li>Creating a contract</li>
+<li>Calling an external function which consumes a large amount of gas</li>
+<li>Sending Ether</li>
+</ul>
+<p>Like any function, the fallback function can execute complex operations as long as there is enough gas passed on to it.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Even though the fallback function cannot have arguments, one can still use <code class="docutils literal notranslate"><span class="pre">msg.data</span></code> to retrieve
+any payload supplied with the call.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The fallback function is also executed if the caller meant to call
+a function that is not available. If you want to implement the fallback
+function only to receive ether, you should add a check
+like <code class="docutils literal notranslate"><span class="pre">require(msg.data.length</span> <span class="pre">==</span> <span class="pre">0)</span></code> to prevent invalid calls.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Contracts that receive Ether directly (without a function call, i.e. using <code class="docutils literal notranslate"><span class="pre">send</span></code> or <code class="docutils literal notranslate"><span class="pre">transfer</span></code>)
+but do not define a fallback function
+throw an exception, sending back the Ether (this was different
+before Solidity v0.4.0). So if you want your contract to receive Ether,
+you have to implement a payable fallback function.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>A contract without a payable fallback function can receive Ether as a recipient of a <cite>coinbase transaction</cite> (aka <cite>miner block reward</cite>)
+or as a destination of a <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>.</p>
+<p>A contract cannot react to such Ether transfers and thus also cannot reject them. This is a design choice of the EVM and Solidity cannot work around it.</p>
+<p class="last">It also means that <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code> can be higher than the sum of some manual accounting implemented in a contract (i.e. having a counter updated in the fallback function).</p>
+</div>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Test</span> <span class="p">{</span>
+    <span class="c1">// This function is called for all messages sent to</span>
+    <span class="c1">// this contract (there is no other function).</span>
+    <span class="c1">// Sending Ether to this contract will cause an exception,</span>
+    <span class="c1">// because the fallback function does not have the `payable`</span>
+    <span class="c1">// modifier.</span>
+    <span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="c1">// This contract keeps all Ether sent to it with no way</span>
+<span class="c1">// to get it back.</span>
+<span class="kd">contract</span> <span class="n">Sink</span> <span class="p">{</span>
+    <span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="kr">payable</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Caller</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">callTest</span><span class="p">(</span><span class="n">Test</span> <span class="n">test</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,)</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="n">test</span><span class="p">).</span><span class="nf">call</span><span class="p">(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;nonExistingFunction()&quot;</span><span class="p">));</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">success</span><span class="p">);</span>
+        <span class="c1">// results in test.x becoming == 1.</span>
+
+        <span class="c1">// address(test) will not allow to call ``send`` directly, since ``test`` has no payable</span>
+        <span class="c1">// fallback function. It has to be converted to the ``address payable`` type via an</span>
+        <span class="c1">// intermediate conversion to ``uint160`` to even allow calling ``send`` on it.</span>
+        <span class="kt">address</span> <span class="kr">payable</span> <span class="n">testPayable</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="kt">uint160</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="n">test</span><span class="p">)));</span>
+
+        <span class="c1">// If someone sends ether to that contract,</span>
+        <span class="c1">// the transfer will fail, i.e. this returns false here.</span>
+        <span class="k">return</span> <span class="n">testPayable</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="mi">2</span> <span class="kc">ether</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-overloading">
+<span id="overload-function"></span><span id="index-12"></span><h3>Function Overloading<a class="headerlink" href="#function-overloading" title="Permalink to this headline">¶</a></h3>
+<p>A contract can have multiple functions of the same name but with different parameter
+types.
+This process is called “overloading” and also applies to inherited functions.
+The following example shows overloading of the function
+<code class="docutils literal notranslate"><span class="pre">f</span></code> in the scope of contract <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_in</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_in</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">_really</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_really</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Overloaded functions are also present in the external interface. It is an error if two
+externally visible functions differ by their Solidity types but not by their external types.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// This will not compile</span>
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="n">B</span> <span class="n">_in</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="n">B</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">address</span> <span class="n">_in</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Both <code class="docutils literal notranslate"><span class="pre">f</span></code> function overloads above end up accepting the address type for the ABI although
+they are considered different inside Solidity.</p>
+<div class="section" id="overload-resolution-and-argument-matching">
+<h4>Overload resolution and Argument matching<a class="headerlink" href="#overload-resolution-and-argument-matching" title="Permalink to this headline">¶</a></h4>
+<p>Overloaded functions are selected by matching the function declarations in the current scope
+to the arguments supplied in the function call. Functions are selected as overload candidates
+if all arguments can be implicitly converted to the expected types. If there is not exactly one
+candidate, resolution fails.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Return parameters are not taken into account for overload resolution.</p>
+</div>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">_in</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint8</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">(</span><span class="kt">uint256</span> <span class="n">_in</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint256</span> <span class="n">out</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_in</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">f(50)</span></code> would create a type error since <code class="docutils literal notranslate"><span class="pre">50</span></code> can be implicitly converted both to <code class="docutils literal notranslate"><span class="pre">uint8</span></code>
+and <code class="docutils literal notranslate"><span class="pre">uint256</span></code> types. On another hand <code class="docutils literal notranslate"><span class="pre">f(256)</span></code> would resolve to <code class="docutils literal notranslate"><span class="pre">f(uint256)</span></code> overload as <code class="docutils literal notranslate"><span class="pre">256</span></code> cannot be implicitly
+converted to <code class="docutils literal notranslate"><span class="pre">uint8</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="events">
+<span id="index-13"></span><span id="id8"></span><h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>Solidity events give an abstraction on top of the EVM’s logging functionality.
+Applications can subscribe and listen to these events through the RPC interface of an Ethereum client.</p>
+<p>Events are inheritable members of contracts. When you call them, they cause the
+arguments to be stored in the transaction’s log - a special data structure
+in the blockchain. These logs are associated with the address of the contract,
+are incorporated into the blockchain, and stay there as long as a block is
+accessible (forever as of the Frontier and Homestead releases, but this might
+change with Serenity). The Log and its event data is not accessible from within
+contracts (not even from the contract that created them).</p>
+<p>It is possible to request a simple payment verification (SPV) for logs, so if
+an external entity supplies a contract with such a verification, it can check
+that the log actually exists inside the blockchain. You have to supply block headers
+because the contract can only see the last 256 block hashes.</p>
+<p>You can add the attribute <code class="docutils literal notranslate"><span class="pre">indexed</span></code> to up to three parameters which adds them
+to a special data structure known as <a class="reference internal" href="abi-spec.html#abi-events"><span class="std std-ref">“topics”</span></a> instead of
+the data part of the log. If you use arrays (including <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes</span></code>)
+as indexed arguments, its Keccak-256 hash is stored as a topic instead, this is
+because a topic can only hold a single word (32 bytes).</p>
+<p>All parameters without the <code class="docutils literal notranslate"><span class="pre">indexed</span></code> attribute are <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI-encoded</span></a>
+into the data part of the log.</p>
+<p>Topics allow you to search for events, for example when filtering a sequence of
+blocks for certain events. You can also filter events by the address of the
+contract that emitted the event.</p>
+<p>For example, the code below uses the web3.js <code class="docutils literal notranslate"><span class="pre">subscribe(&quot;logs&quot;)</span></code>
+<a class="reference external" href="https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs">method</a> to filter
+logs that match a topic with a certain address value:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">fromBlock</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">address</span><span class="o">:</span> <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">defaultAccount</span><span class="p">,</span>
+    <span class="nx">topics</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">]</span>
+<span class="p">};</span>
+<span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">error</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="p">})</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">log</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;changed&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>The hash of the signature of the event is one of the topics, except if you
+declared the event with the <code class="docutils literal notranslate"><span class="pre">anonymous</span></code> specifier. This means that it is
+not possible to filter for specific anonymous events by name.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">21</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">ClientReceipt</span> <span class="p">{</span>
+    <span class="kd">event</span> <span class="n">Deposit</span><span class="p">(</span>
+        <span class="kt">address</span> <span class="kr">indexed</span> <span class="n">_from</span><span class="p">,</span>
+        <span class="kt">bytes32</span> <span class="kr">indexed</span> <span class="n">_id</span><span class="p">,</span>
+        <span class="kt">uint</span> <span class="n">_value</span>
+    <span class="p">);</span>
+
+    <span class="kd">function</span> <span class="n">deposit</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">_id</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="c1">// Events are emitted using `emit`, followed by</span>
+        <span class="c1">// the name of the event and the arguments</span>
+        <span class="c1">// (if any) in parentheses. Any such invocation</span>
+        <span class="c1">// (even deeply nested) can be detected from</span>
+        <span class="c1">// the JavaScript API by filtering for `Deposit`.</span>
+        <span class="kr">emit</span> <span class="n">Deposit</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">,</span> <span class="n">_id</span><span class="p">,</span> <span class="nb">msg.value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The use in the JavaScript API is as follows:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="n">abi</span> <span class="o">=</span> <span class="cm">/* abi as generated by the compiler */</span><span class="p">;</span>
+<span class="kd">var</span> <span class="n">ClientReceipt</span> <span class="o">=</span> <span class="n">web3</span><span class="p">.</span><span class="n">eth</span><span class="p">.</span><span class="kd">contract</span><span class="p">(</span><span class="n">abi</span><span class="p">);</span>
+<span class="kd">var</span> <span class="n">clientReceipt</span> <span class="o">=</span> <span class="n">ClientReceipt</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">&quot;0x1234...ab67&quot;</span> <span class="cm">/* address */</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="kd">event</span> <span class="o">=</span> <span class="n">clientReceipt</span><span class="p">.</span><span class="n">Deposit</span><span class="p">();</span>
+
+<span class="c1">// watch for changes</span>
+<span class="kd">event</span><span class="p">.</span><span class="n">watch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">result</span><span class="p">){</span>
+    <span class="c1">// result contains non-indexed arguments and topics</span>
+    <span class="c1">// given to the `Deposit` call.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="c1">// Or pass a callback to start watching immediately</span>
+<span class="kd">var</span> <span class="kd">event</span> <span class="o">=</span> <span class="n">clientReceipt</span><span class="p">.</span><span class="n">Deposit</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>The output of the above looks like the following (trimmed):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;returnValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="nt">&quot;_from&quot;</span><span class="p">:</span> <span class="s2">&quot;0x1111…FFFFCCCC&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0x50…sd5adb20&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;_value&quot;</span><span class="p">:</span> <span class="s2">&quot;0x420042&quot;</span>
+   <span class="p">},</span>
+   <span class="nt">&quot;raw&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;0x7f…91385&quot;</span><span class="p">,</span>
+       <span class="nt">&quot;topics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;0xfd4…b4ead7&quot;</span><span class="p">,</span> <span class="s2">&quot;0x7f…1a91385&quot;</span><span class="p">]</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="low-level-interface-to-logs">
+<span id="index-14"></span><h3>Low-Level Interface to Logs<a class="headerlink" href="#low-level-interface-to-logs" title="Permalink to this headline">¶</a></h3>
+<p>It is also possible to access the low-level interface to the logging
+mechanism via the functions <code class="docutils literal notranslate"><span class="pre">log0</span></code>, <code class="docutils literal notranslate"><span class="pre">log1</span></code>, <code class="docutils literal notranslate"><span class="pre">log2</span></code>, <code class="docutils literal notranslate"><span class="pre">log3</span></code> and <code class="docutils literal notranslate"><span class="pre">log4</span></code>.
+<code class="docutils literal notranslate"><span class="pre">logi</span></code> takes <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">+</span> <span class="pre">1</span></code> parameter of type <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>, where the first
+argument will be used for the data part of the log and the others
+as topics. The event call above can be performed in the same way as</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">10</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">payable</span> <span class="p">{</span>
+        <span class="kt">uint256</span> <span class="n">_id</span> <span class="o">=</span> <span class="mh">0x420042</span><span class="p">;</span>
+        <span class="n">log3</span><span class="p">(</span>
+            <span class="kt">bytes32</span><span class="p">(</span><span class="nb">msg.value</span><span class="p">),</span>
+            <span class="kt">bytes32</span><span class="p">(</span><span class="mh">0x50cb9fe53daa9737b786ab3646f04d0150dc50ef4e75f59509d83667ad5adb20</span><span class="p">),</span>
+            <span class="kt">bytes32</span><span class="p">(</span><span class="kt">uint256</span><span class="p">(</span><span class="nb">msg.sender</span><span class="p">)),</span>
+            <span class="kt">bytes32</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>where the long hexadecimal number is equal to
+<code class="docutils literal notranslate"><span class="pre">keccak256(&quot;Deposit(address,bytes32,uint256)&quot;)</span></code>, the signature of the event.</p>
+</div>
+<div class="section" id="additional-resources-for-understanding-events">
+<h3>Additional Resources for Understanding Events<a class="headerlink" href="#additional-resources-for-understanding-events" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-events">Javascript documentation</a></li>
+<li><a class="reference external" href="https://github.com/debris/smart-exchange/blob/master/lib/contracts/SmartExchange.sol">Example usage of events</a></li>
+<li><a class="reference external" href="https://github.com/debris/smart-exchange/blob/master/lib/exchange_transactions.js">How to access them in js</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="inheritance">
+<span id="index-15"></span><h2>Inheritance<a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h2>
+<p>Solidity supports multiple inheritance including polymorphism.</p>
+<p>All function calls are virtual, which means that the most derived function
+is called, except when the contract name is explicitly given or the
+<code class="docutils literal notranslate"><span class="pre">super</span></code> keyword is used.</p>
+<p>When a contract inherits from other contracts, only a single
+contract is created on the blockchain, and the code from all the base contracts
+is compiled into the created contract.</p>
+<p>The general inheritance system is very similar to
+<a class="reference external" href="https://docs.python.org/3/tutorial/classes.html#inheritance">Python’s</a>,
+especially concerning multiple inheritance, but there are also
+some <a class="reference internal" href="#multi-inheritance"><span class="std std-ref">differences</span></a>.</p>
+<p>Details are given in the following example.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="n">owner</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Use `is` to derive from another contract. Derived</span>
+<span class="c1">// contracts can access all non-private members including</span>
+<span class="c1">// internal functions and state variables. These cannot be</span>
+<span class="c1">// accessed externally via `this`, though.</span>
+<span class="kd">contract</span> <span class="n">mortal</span> <span class="kr">is</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">)</span> <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// These abstract contracts are only provided to make the</span>
+<span class="c1">// interface known to the compiler. Note the function</span>
+<span class="c1">// without body. If a contract does not implement all</span>
+<span class="c1">// functions it can only be used as an interface.</span>
+<span class="kd">contract</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">lookup</span><span class="p">(</span><span class="kt">uint</span> <span class="n">id</span><span class="p">)</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span> <span class="n">adr</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">NameReg</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">register</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">name</span><span class="p">)</span> <span class="kr">public</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="n">unregister</span><span class="p">()</span> <span class="kr">public</span><span class="p">;</span>
+ <span class="p">}</span>
+
+<span class="c1">// Multiple inheritance is possible. Note that `owned` is</span>
+<span class="c1">// also a base class of `mortal`, yet there is only a single</span>
+<span class="c1">// instance of `owned` (as for virtual inheritance in C++).</span>
+<span class="kd">contract</span> <span class="n">named</span> <span class="kr">is</span> <span class="n">owned</span><span class="p">,</span> <span class="n">mortal</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">bytes32</span> <span class="n">name</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">Config</span> <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="mh">0xD5f9D8D94886E70b06E474c3fB14Fd43E2f23970</span><span class="p">);</span>
+        <span class="n">NameReg</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">lookup</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Functions can be overridden by another function with the same name and</span>
+    <span class="c1">// the same number/types of inputs.  If the overriding function has different</span>
+    <span class="c1">// types of output parameters, that causes an error.</span>
+    <span class="c1">// Both local and message-based function calls take these overrides</span>
+    <span class="c1">// into account.</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Config</span> <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="mh">0xD5f9D8D94886E70b06E474c3fB14Fd43E2f23970</span><span class="p">);</span>
+            <span class="n">NameReg</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">lookup</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="n">unregister</span><span class="p">();</span>
+            <span class="c1">// It is still possible to call a specific</span>
+            <span class="c1">// overridden function.</span>
+            <span class="n">mortal</span><span class="p">.</span><span class="n">kill</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// If a constructor takes an argument, it needs to be</span>
+<span class="c1">// provided in the header (or modifier-invocation-style at</span>
+<span class="c1">// the constructor of the derived contract (see below)).</span>
+<span class="kd">contract</span> <span class="n">PriceFeed</span> <span class="kr">is</span> <span class="n">owned</span><span class="p">,</span> <span class="n">mortal</span><span class="p">,</span> <span class="n">named</span><span class="p">(</span><span class="s">&quot;GoldFeed&quot;</span><span class="p">)</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="n">updateInfo</span><span class="p">(</span><span class="kt">uint</span> <span class="n">newInfo</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">)</span> <span class="n">info</span> <span class="o">=</span> <span class="n">newInfo</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="kd">function</span> <span class="n">get</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span><span class="p">(</span><span class="kt">uint</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">info</span><span class="p">;</span> <span class="p">}</span>
+
+   <span class="kt">uint</span> <span class="n">info</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that above, we call <code class="docutils literal notranslate"><span class="pre">mortal.kill()</span></code> to “forward” the
+destruction request. The way this is done is problematic, as
+seen in the following example:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="n">owner</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">mortal</span> <span class="kr">is</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">)</span> <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Base1</span> <span class="kr">is</span> <span class="n">mortal</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="cm">/* do cleanup 1 */</span> <span class="n">mortal</span><span class="p">.</span><span class="n">kill</span><span class="p">();</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Base2</span> <span class="kr">is</span> <span class="n">mortal</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="cm">/* do cleanup 2 */</span> <span class="n">mortal</span><span class="p">.</span><span class="n">kill</span><span class="p">();</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Final</span> <span class="kr">is</span> <span class="n">Base1</span><span class="p">,</span> <span class="n">Base2</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">Final.kill()</span></code> will call <code class="docutils literal notranslate"><span class="pre">Base2.kill</span></code> as the most
+derived override, but this function will bypass
+<code class="docutils literal notranslate"><span class="pre">Base1.kill</span></code>, basically because it does not even know about
+<code class="docutils literal notranslate"><span class="pre">Base1</span></code>.  The way around this is to use <code class="docutils literal notranslate"><span class="pre">super</span></code>:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">address</span> <span class="kr">payable</span> <span class="n">owner</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">mortal</span> <span class="kr">is</span> <span class="n">owned</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">)</span> <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Base1</span> <span class="kr">is</span> <span class="n">mortal</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="cm">/* do cleanup 1 */</span> <span class="nb">super</span><span class="p">.</span><span class="n">kill</span><span class="p">();</span> <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kd">contract</span> <span class="n">Base2</span> <span class="kr">is</span> <span class="n">mortal</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="cm">/* do cleanup 2 */</span> <span class="nb">super</span><span class="p">.</span><span class="n">kill</span><span class="p">();</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Final</span> <span class="kr">is</span> <span class="n">Base1</span><span class="p">,</span> <span class="n">Base2</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">Base2</span></code> calls a function of <code class="docutils literal notranslate"><span class="pre">super</span></code>, it does not simply
+call this function on one of its base contracts.  Rather, it
+calls this function on the next base contract in the final
+inheritance graph, so it will call <code class="docutils literal notranslate"><span class="pre">Base1.kill()</span></code> (note that
+the final inheritance sequence is – starting with the most
+derived contract: Final, Base2, Base1, mortal, owned).
+The actual function that is called when using super is
+not known in the context of the class where it is used,
+although its type is known. This is similar for ordinary
+virtual method lookup.</p>
+<div class="section" id="constructors">
+<span id="constructor"></span><span id="index-16"></span><h3>Constructors<a class="headerlink" href="#constructors" title="Permalink to this headline">¶</a></h3>
+<p>A constructor is an optional function declared with the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> keyword
+which is executed upon contract creation, and where you can run contract
+initialisation code.</p>
+<p>Before the constructor code is executed, state variables are initialised to
+their specified value if you initialise them inline, or zero if you do not.</p>
+<p>After the constructor has run, the final code of the contract is deployed
+to the blockchain. The deployment of
+the code costs additional gas linear to the length of the code.
+This code includes all functions that are part of the public interface
+and all functions that are reachable from there through function calls.
+It does not include the constructor code or internal functions that are
+only called from the constructor.</p>
+<p>Constructor functions can be either <code class="docutils literal notranslate"><span class="pre">public</span></code> or <code class="docutils literal notranslate"><span class="pre">internal</span></code>. If there is no
+constructor, the contract will assume the default constructor, which is
+equivalent to <code class="docutils literal notranslate"><span class="pre">constructor()</span> <span class="pre">public</span> <span class="pre">{}</span></code>. For example:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="kr">public</span> <span class="n">a</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_a</span><span class="p">)</span> <span class="kr">internal</span> <span class="p">{</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">_a</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="kr">is</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A constructor set as <code class="docutils literal notranslate"><span class="pre">internal</span></code> causes the contract to be marked as <a class="reference internal" href="#abstract-contract"><span class="std std-ref">abstract</span></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
+This syntax was deprecated and is not allowed anymore in version 0.5.0.</p>
+</div>
+</div>
+<div class="section" id="arguments-for-base-constructors">
+<span id="index-17"></span><h3>Arguments for Base Constructors<a class="headerlink" href="#arguments-for-base-constructors" title="Permalink to this headline">¶</a></h3>
+<p>The constructors of all the base contracts will be called following the
+linearization rules explained below. If the base constructors have arguments,
+derived contracts need to specify all of them. This can be done in two ways:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Base</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_x</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">x</span> <span class="o">=</span> <span class="n">_x</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Either directly specify in the inheritance list...</span>
+<span class="kd">contract</span> <span class="n">Derived1</span> <span class="kr">is</span> <span class="n">Base</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// or through a &quot;modifier&quot; of the derived constructor.</span>
+<span class="kd">contract</span> <span class="n">Derived2</span> <span class="kr">is</span> <span class="n">Base</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_y</span><span class="p">)</span> <span class="n">Base</span><span class="p">(</span><span class="n">_y</span> <span class="o">*</span> <span class="n">_y</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>One way is directly in the inheritance list (<code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">Base(7)</span></code>).  The other is in
+the way a modifier is invoked as part of
+the derived constructor (<code class="docutils literal notranslate"><span class="pre">Base(_y</span> <span class="pre">*</span> <span class="pre">_y)</span></code>). The first way to
+do it is more convenient if the constructor argument is a
+constant and defines the behaviour of the contract or
+describes it. The second way has to be used if the
+constructor arguments of the base depend on those of the
+derived contract. Arguments have to be given either in the
+inheritance list or in modifier-style in the derived constructor.
+Specifying arguments in both places is an error.</p>
+<p>If a derived contract does not specify the arguments to all of its base
+contracts’ constructors, it will be abstract.</p>
+</div>
+<div class="section" id="multiple-inheritance-and-linearization">
+<span id="multi-inheritance"></span><span id="index-18"></span><h3>Multiple Inheritance and Linearization<a class="headerlink" href="#multiple-inheritance-and-linearization" title="Permalink to this headline">¶</a></h3>
+<p>Languages that allow multiple inheritance have to deal with
+several problems.  One is the <a class="reference external" href="https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem">Diamond Problem</a>.
+Solidity is similar to Python in that it uses “<a class="reference external" href="https://en.wikipedia.org/wiki/C3_linearization">C3 Linearization</a>”
+to force a specific order in the directed acyclic graph (DAG) of base classes. This
+results in the desirable property of monotonicity but
+disallows some inheritance graphs. Especially, the order in
+which the base classes are given in the <code class="docutils literal notranslate"><span class="pre">is</span></code> directive is
+important: You have to list the direct base contracts
+in the order from “most base-like” to “most derived”.
+Note that this order is the reverse of the one used in Python.</p>
+<p>Another simplifying way to explain this is that when a function is called that
+is defined multiple times in different contracts, the given bases
+are searched from right to left (left to right in Python) in a depth-first manner,
+stopping at the first match. If a base contract has already been searched, it is skipped.</p>
+<p>In the following code, Solidity will give the
+error “Linearization of inheritance graph impossible”.</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">X</span> <span class="p">{}</span>
+<span class="kd">contract</span> <span class="n">A</span> <span class="kr">is</span> <span class="n">X</span> <span class="p">{}</span>
+<span class="c1">// This will not compile</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="kr">is</span> <span class="n">A</span><span class="p">,</span> <span class="n">X</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The reason for this is that <code class="docutils literal notranslate"><span class="pre">C</span></code> requests <code class="docutils literal notranslate"><span class="pre">X</span></code> to override <code class="docutils literal notranslate"><span class="pre">A</span></code>
+(by specifying <code class="docutils literal notranslate"><span class="pre">A,</span> <span class="pre">X</span></code> in this order), but <code class="docutils literal notranslate"><span class="pre">A</span></code> itself
+requests to override <code class="docutils literal notranslate"><span class="pre">X</span></code>, which is a contradiction that
+cannot be resolved.</p>
+</div>
+<div class="section" id="inheriting-different-kinds-of-members-of-the-same-name">
+<h3>Inheriting Different Kinds of Members of the Same Name<a class="headerlink" href="#inheriting-different-kinds-of-members-of-the-same-name" title="Permalink to this headline">¶</a></h3>
+<p>When the inheritance results in a contract with a function and a modifier of the same name, it is considered as an error.
+This error is produced also by an event and a modifier of the same name, and a function and an event of the same name.
+As an exception, a state variable getter can override a public function.</p>
+</div>
+</div>
+<div class="section" id="abstract-contracts">
+<span id="abstract-contract"></span><span id="index-19"></span><h2>Abstract Contracts<a class="headerlink" href="#abstract-contracts" title="Permalink to this headline">¶</a></h2>
+<p>Contracts are marked as abstract when at least one of their functions lacks an implementation as in the following example (note that the function declaration header is terminated by <code class="docutils literal notranslate"><span class="pre">;</span></code>):</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Feline</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">utterance</span><span class="p">()</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes32</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Such contracts cannot be compiled (even if they contain implemented functions alongside non-implemented functions), but they can be used as base contracts:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Feline</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">utterance</span><span class="p">()</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes32</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">Cat</span> <span class="kr">is</span> <span class="n">Feline</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">utterance</span><span class="p">()</span> <span class="kr">public</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">bytes32</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="s">&quot;miaow&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If a contract inherits from an abstract contract and does not implement all non-implemented functions by overriding, it will itself be abstract.</p>
+<p>Note that a function without implementation is different from a <a class="reference internal" href="types.html#function-types"><span class="std std-ref">Function Type</span></a> even though their syntax looks very similar.</p>
+<p>Example of function without implementation (a function declaration):</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">foo</span><span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="kr">external</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Example of a Function Type (a variable declaration, where the variable is of type <code class="docutils literal notranslate"><span class="pre">function</span></code>):</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="kr">external</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="n">foo</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Abstract contracts decouple the definition of a contract from its implementation providing better extensibility and self-documentation and
+facilitating patterns like the <a class="reference external" href="https://en.wikipedia.org/wiki/Template_method_pattern">Template method</a> and removing code duplication.
+Abstract contracts are useful in the same way that defining methods in an interface is useful. It is a way for the designer of the abstract contract to say “any child of mine must implement this method”.</p>
+</div>
+<div class="section" id="interfaces">
+<span id="index-20"></span><span id="id9"></span><h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h2>
+<p>Interfaces are similar to abstract contracts, but they cannot have any functions implemented. There are further restrictions:</p>
+<ul class="simple">
+<li>They cannot inherit other contracts or interfaces.</li>
+<li>All declared functions must be external.</li>
+<li>They cannot declare a constructor.</li>
+<li>They cannot declare state variables.</li>
+</ul>
+<p>Some of these restrictions might be lifted in the future.</p>
+<p>Interfaces are basically limited to what the Contract ABI can represent, and the conversion between the ABI and
+an interface should be possible without any information loss.</p>
+<p>Interfaces are denoted by their own keyword:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">interface</span> <span class="n">Token</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="n">TokenType</span> <span class="p">{</span> <span class="n">Fungible</span><span class="p">,</span> <span class="n">NonFungible</span> <span class="p">}</span>
+    <span class="kd">struct</span> <span class="n">Coin</span> <span class="p">{</span> <span class="kt">string</span> <span class="n">obverse</span><span class="p">;</span> <span class="kt">string</span> <span class="n">reverse</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">function</span> <span class="nf">transfer</span><span class="p">(</span><span class="kt">address</span> <span class="n">recipient</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="kr">external</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Contracts can inherit interfaces as they would inherit other contracts.</p>
+<p>Types defined inside interfaces and other contract-like structures
+can be accessed from other contracts: <code class="docutils literal notranslate"><span class="pre">Token.TokenType</span></code> or <code class="docutils literal notranslate"><span class="pre">Token.Coin</span></code>.</p>
+</div>
+<div class="section" id="libraries">
+<span id="index-21"></span><span id="id10"></span><h2>Libraries<a class="headerlink" href="#libraries" title="Permalink to this headline">¶</a></h2>
+<p>Libraries are similar to contracts, but their purpose is that they are deployed
+only once at a specific address and their code is reused using the <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code>
+(<code class="docutils literal notranslate"><span class="pre">CALLCODE</span></code> until Homestead)
+feature of the EVM. This means that if library functions are called, their code
+is executed in the context of the calling contract, i.e. <code class="docutils literal notranslate"><span class="pre">this</span></code> points to the
+calling contract, and especially the storage from the calling contract can be
+accessed. As a library is an isolated piece of source code, it can only access
+state variables of the calling contract if they are explicitly supplied (it
+would have no way to name them, otherwise). Library functions can only be
+called directly (i.e. without the use of <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code>) if they do not modify
+the state (i.e. if they are <code class="docutils literal notranslate"><span class="pre">view</span></code> or <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions),
+because libraries are assumed to be stateless. In particular, it is
+not possible to destroy a library.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Until version 0.4.20, it was possible to destroy libraries by
+circumventing Solidity’s type system. Starting from that version,
+libraries contain a <a class="reference internal" href="#call-protection"><span class="std std-ref">mechanism</span></a> that
+disallows state-modifying functions
+to be called directly (i.e. without <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code>).</p>
+</div>
+<p>Libraries can be seen as implicit base contracts of the contracts that use them.
+They will not be explicitly visible in the inheritance hierarchy, but calls
+to library functions look just like calls to functions of explicit base
+contracts (<code class="docutils literal notranslate"><span class="pre">L.f()</span></code> if <code class="docutils literal notranslate"><span class="pre">L</span></code> is the name of the library). Furthermore,
+<code class="docutils literal notranslate"><span class="pre">internal</span></code> functions of libraries are visible in all contracts, just as
+if the library were a base contract. Of course, calls to internal functions
+use the internal calling convention, which means that all internal types
+can be passed and types <a class="reference internal" href="types.html#data-location"><span class="std std-ref">stored in memory</span></a> will be passed by reference and not copied.
+To realize this in the EVM, code of internal library functions
+and all functions called from therein will at compile time be pulled into the calling
+contract, and a regular <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> call will be used instead of a <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code>.</p>
+<p id="index-22">The following example illustrates how to use libraries (but manual method
+be sure to check out <a class="reference internal" href="#using-for"><span class="std std-ref">using for</span></a> for a
+more advanced example to implement a set).</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">Set</span> <span class="p">{</span>
+  <span class="c1">// We define a new struct datatype that will be used to</span>
+  <span class="c1">// hold its data in the calling contract.</span>
+  <span class="kd">struct</span> <span class="n">Data</span> <span class="p">{</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">flags</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="c1">// Note that the first parameter is of type &quot;storage</span>
+  <span class="c1">// reference&quot; and thus only its storage address and not</span>
+  <span class="c1">// its contents is passed as part of the call.  This is a</span>
+  <span class="c1">// special feature of library functions.  It is idiomatic</span>
+  <span class="c1">// to call the first parameter `self`, if the function can</span>
+  <span class="c1">// be seen as a method of that object.</span>
+  <span class="kd">function</span> <span class="n">insert</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// already there</span>
+      <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// not there</span>
+      <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="n">contains</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="kr">view</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="n">Set</span><span class="p">.</span><span class="n">Data</span> <span class="n">knownValues</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">register</span><span class="p">(</span><span class="kt">uint</span> <span class="n">value</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// The library functions can be called without a</span>
+        <span class="c1">// specific instance of the library, since the</span>
+        <span class="c1">// &quot;instance&quot; will be the current contract.</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">Set</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">knownValues</span><span class="p">,</span> <span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="c1">// In this contract, we can also directly access knownValues.flags, if we want.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Of course, you do not have to follow this way to use
+libraries: they can also be used without defining struct
+data types. Functions also work without any storage
+reference parameters, and they can have multiple storage reference
+parameters and in any position.</p>
+<p>The calls to <code class="docutils literal notranslate"><span class="pre">Set.contains</span></code>, <code class="docutils literal notranslate"><span class="pre">Set.insert</span></code> and <code class="docutils literal notranslate"><span class="pre">Set.remove</span></code>
+are all compiled as calls (<code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code>) to an external
+contract/library. If you use libraries, be aware that an
+actual external function call is performed.
+<code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>, <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> and <code class="docutils literal notranslate"><span class="pre">this</span></code> will retain their values
+in this call, though (prior to Homestead, because of the use of <code class="docutils literal notranslate"><span class="pre">CALLCODE</span></code>, <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> and
+<code class="docutils literal notranslate"><span class="pre">msg.value</span></code> changed, though).</p>
+<p>The following example shows how to use <a class="reference internal" href="types.html#data-location"><span class="std std-ref">types stored in memory</span></a> and
+internal functions in libraries in order to implement
+custom types without the overhead of external function calls:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">BigInt</span> <span class="p">{</span>
+    <span class="kd">struct</span> <span class="n">bigint</span> <span class="p">{</span>
+        <span class="kt">uint</span><span class="p">[]</span> <span class="n">limbs</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">fromUint</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">limbs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">add</span><span class="p">(</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">_a</span><span class="p">,</span> <span class="n">bigint</span> <span class="kr">memory</span> <span class="n">_b</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">limbs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="n">max</span><span class="p">(</span><span class="n">_a</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span><span class="p">,</span> <span class="n">_b</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span><span class="p">));</span>
+        <span class="kt">uint</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">uint</span> <span class="n">a</span> <span class="o">=</span> <span class="n">limb</span><span class="p">(</span><span class="n">_a</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="kt">uint</span> <span class="n">b</span> <span class="o">=</span> <span class="n">limb</span><span class="p">(</span><span class="n">_b</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">carry</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">a</span> <span class="o">||</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">==</span> <span class="kt">uint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// too bad, we have to add a limb</span>
+            <span class="kt">uint</span><span class="p">[]</span> <span class="kr">memory</span> <span class="n">newLimbs</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">uint</span><span class="p">[](</span><span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kt">uint</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">newLimbs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">limbs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">newLimbs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">carry</span><span class="p">;</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">limbs</span> <span class="o">=</span> <span class="n">newLimbs</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">limb</span><span class="p">(</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">_a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_limb</span><span class="p">)</span> <span class="kr">internal</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">_limb</span> <span class="o">&lt;</span> <span class="n">_a</span><span class="p">.</span><span class="n">limbs</span><span class="p">.</span><span class="n">length</span> <span class="o">?</span> <span class="n">_a</span><span class="p">.</span><span class="n">limbs</span><span class="p">[</span><span class="n">_limb</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">max</span><span class="p">(</span><span class="kt">uint</span> <span class="n">a</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">b</span><span class="p">)</span> <span class="kr">private</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kn">using</span> <span class="n">BigInt</span> <span class="k">for</span> <span class="n">BigInt</span><span class="p">.</span><span class="n">bigint</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="n">BigInt</span><span class="p">.</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">x</span> <span class="o">=</span> <span class="n">BigInt</span><span class="p">.</span><span class="n">fromUint</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+        <span class="n">BigInt</span><span class="p">.</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">y</span> <span class="o">=</span> <span class="n">BigInt</span><span class="p">.</span><span class="n">fromUint</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+        <span class="n">BigInt</span><span class="p">.</span><span class="n">bigint</span> <span class="kr">memory</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="n">z</span><span class="p">.</span><span class="n">limb</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As the compiler cannot know where the library will be
+deployed at, these addresses have to be filled into the
+final bytecode by a linker
+(see <a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a> for how to use the
+commandline compiler for linking). If the addresses are not
+given as arguments to the compiler, the compiled hex code
+will contain placeholders of the form <code class="docutils literal notranslate"><span class="pre">__Set______</span></code> (where
+<code class="docutils literal notranslate"><span class="pre">Set</span></code> is the name of the library). The address can be filled
+manually by replacing all those 40 symbols by the hex
+encoding of the address of the library contract.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Manually linking libraries on the generated bytecode is discouraged, because
+it is restricted to 36 characters.
+You should ask the compiler to link the libraries at the time
+a contract is compiled by either using
+the <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> option of <code class="docutils literal notranslate"><span class="pre">solc</span></code> or the <code class="docutils literal notranslate"><span class="pre">libraries</span></code> key if you use
+the standard-JSON interface to the compiler.</p>
+</div>
+<p>Restrictions for libraries in comparison to contracts:</p>
+<ul class="simple">
+<li>No state variables</li>
+<li>Cannot inherit nor be inherited</li>
+<li>Cannot receive Ether</li>
+</ul>
+<p>(These might be lifted at a later point.)</p>
+<div class="section" id="call-protection-for-libraries">
+<span id="call-protection"></span><h3>Call Protection For Libraries<a class="headerlink" href="#call-protection-for-libraries" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned in the introduction, if a library’s code is executed
+using a <code class="docutils literal notranslate"><span class="pre">CALL</span></code> instead of a <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code> or <code class="docutils literal notranslate"><span class="pre">CALLCODE</span></code>,
+it will revert unless a <code class="docutils literal notranslate"><span class="pre">view</span></code> or <code class="docutils literal notranslate"><span class="pre">pure</span></code> function is called.</p>
+<p>The EVM does not provide a direct way for a contract to detect
+whether it was called using <code class="docutils literal notranslate"><span class="pre">CALL</span></code> or not, but a contract
+can use the <code class="docutils literal notranslate"><span class="pre">ADDRESS</span></code> opcode to find out “where” it is
+currently running. The generated code compares this address
+to the address used at construction time to determine the mode
+of calling.</p>
+<p>More specifically, the runtime code of a library always starts
+with a push instruction, which is a zero of 20 bytes at
+compilation time. When the deploy code runs, this constant
+is replaced in memory by the current address and this
+modified code is stored in the contract. At runtime,
+this causes the deploy time address to be the first
+constant to be pushed onto the stack and the dispatcher
+code compares the current address against this constant
+for any non-view and non-pure function.</p>
+</div>
+</div>
+<div class="section" id="using-for">
+<span id="index-23"></span><span id="id11"></span><h2>Using For<a class="headerlink" href="#using-for" title="Permalink to this headline">¶</a></h2>
+<p>The directive <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">B;</span></code> can be used to attach library
+functions (from the library <code class="docutils literal notranslate"><span class="pre">A</span></code>) to any type (<code class="docutils literal notranslate"><span class="pre">B</span></code>).
+These functions will receive the object they are called on
+as their first parameter (like the <code class="docutils literal notranslate"><span class="pre">self</span></code> variable in Python).</p>
+<p>The effect of <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">*;</span></code> is that the functions from
+the library <code class="docutils literal notranslate"><span class="pre">A</span></code> are attached to <em>any</em> type.</p>
+<p>In both situations, <em>all</em> functions in the library are attached,
+even those where the type of the first parameter does not
+match the type of the object. The type is checked at the
+point the function is called and function overload
+resolution is performed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">B;</span></code> directive is active only within the current
+contract, including within all of its functions, and has no effect
+outside of the contract in which it is used. The directive
+may only be used inside a contract, not inside any of its functions.</p>
+<p>By including a library, its data types including library functions are
+available without having to add further code.</p>
+<p>Let us rewrite the set example from the
+<a class="reference internal" href="#libraries"><span class="std std-ref">Libraries</span></a> in this way:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// This is the same code as before, just without comments</span>
+<span class="kd">library</span> <span class="n">Set</span> <span class="p">{</span>
+  <span class="kd">struct</span> <span class="n">Data</span> <span class="p">{</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">flags</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="n">insert</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// already there</span>
+      <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// not there</span>
+      <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="n">contains</span><span class="p">(</span><span class="n">Data</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+      <span class="kr">public</span>
+      <span class="kr">view</span>
+      <span class="k">returns</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">flags</span><span class="p">[</span><span class="n">value</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kn">using</span> <span class="n">Set</span> <span class="k">for</span> <span class="n">Set</span><span class="p">.</span><span class="n">Data</span><span class="p">;</span> <span class="c1">// this is the crucial change</span>
+    <span class="n">Set</span><span class="p">.</span><span class="n">Data</span> <span class="n">knownValues</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">register</span><span class="p">(</span><span class="kt">uint</span> <span class="n">value</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// Here, all variables of type Set.Data have</span>
+        <span class="c1">// corresponding member functions.</span>
+        <span class="c1">// The following function call is identical to</span>
+        <span class="c1">// `Set.insert(knownValues, value)`</span>
+        <span class="nf">require</span><span class="p">(</span><span class="n">knownValues</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It is also possible to extend elementary types in that way:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">library</span> <span class="n">Search</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">indexOf</span><span class="p">(</span><span class="kt">uint</span><span class="p">[]</span> <span class="kr">storage</span> <span class="n">self</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">value</span><span class="p">)</span>
+        <span class="kr">public</span>
+        <span class="kr">view</span>
+        <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span> <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kt">uint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kn">using</span> <span class="n">Search</span> <span class="k">for</span> <span class="kt">uint</span><span class="p">[];</span>
+    <span class="kt">uint</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">append</span><span class="p">(</span><span class="kt">uint</span> <span class="n">value</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">replace</span><span class="p">(</span><span class="kt">uint</span> <span class="n">_old</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">_new</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// This performs the library function call</span>
+        <span class="kt">uint</span> <span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">_old</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="kt">uint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">data</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">_new</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_new</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that all library calls are actual EVM function calls. This means that
+if you pass memory or value types, a copy will be performed, even of the
+<code class="docutils literal notranslate"><span class="pre">self</span></code> variable. The only situation where no copy will be performed
+is when storage reference variables are used.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="assembly.html" class="btn btn-neutral float-right" title="Solidity Assembly" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="control-structures.html" class="btn btn-neutral float-left" title="Expressions and Control Structures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

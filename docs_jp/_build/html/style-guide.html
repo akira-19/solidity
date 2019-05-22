@@ -1,0 +1,1362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Style Guide &mdash; Solidity 0.5.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Common Patterns" href="common-patterns.html" />
+    <link rel="prev" title="Yul" href="yul.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Solidity
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.5.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-layout">Code Layout</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#indentation">Indentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabs-or-spaces">Tabs or Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blank-lines">Blank Lines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maximum-line-length">Maximum Line Length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-file-encoding">Source File Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#order-of-functions">Order of Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#whitespace-in-expressions">Whitespace in Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#control-structures">Control Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-declaration">Function Declaration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mappings">Mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variable-declarations">Variable Declarations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-recommendations">Other Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#order-of-layout">Order of Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#naming-styles">Naming Styles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#names-to-avoid">Names to Avoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contract-and-library-names">Contract and Library Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#struct-names">Struct Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-names">Event Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-names">Function Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-argument-names">Function Argument Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-and-state-variable-names">Local and State Variable Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifier-names">Modifier Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avoiding-naming-collisions">Avoiding Naming Collisions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#general-recommendations">General Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#natspec">NatSpec</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Keyword Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Style Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/style-guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="style-guide">
+<span id="index-0"></span><h1>Style Guide<a class="headerlink" href="#style-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This guide is intended to provide coding conventions for writing solidity code.
+This guide should be thought of as an evolving document that will change over
+time as useful conventions are found and old conventions are rendered obsolete.</p>
+<p>Many projects will implement their own style guides.  In the event of
+conflicts, project specific style guides take precedence.</p>
+<p>The structure and many of the recommendations within this style guide were
+taken from python’s
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">pep8 style guide</a>.</p>
+<p>The goal of this guide is <em>not</em> to be the right way or the best way to write
+solidity code.  The goal of this guide is <em>consistency</em>.  A quote from python’s
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds">pep8</a>
+captures this concept well.</p>
+<blockquote>
+<div>A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.
+But most importantly: know when to be inconsistent – sometimes the style guide just doesn’t apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don’t hesitate to ask!</div></blockquote>
+</div>
+<div class="section" id="code-layout">
+<h2>Code Layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h3>
+<p>Use 4 spaces per indentation level.</p>
+</div>
+<div class="section" id="tabs-or-spaces">
+<h3>Tabs or Spaces<a class="headerlink" href="#tabs-or-spaces" title="Permalink to this headline">¶</a></h3>
+<p>Spaces are the preferred indentation method.</p>
+<p>Mixing tabs and spaces should be avoided.</p>
+</div>
+<div class="section" id="blank-lines">
+<h3>Blank Lines<a class="headerlink" href="#blank-lines" title="Permalink to this headline">¶</a></h3>
+<p>Surround top level declarations in solidity source with two blank lines.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+<span class="kd">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Within a contract surround function declarations with a single blank line.</p>
+<p>Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">spam</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="n">ham</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="kr">is</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">spam</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="n">ham</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">spam</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="n">ham</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="maximum-line-length">
+<span id="id1"></span><h3>Maximum Line Length<a class="headerlink" href="#maximum-line-length" title="Permalink to this headline">¶</a></h3>
+<p>Keeping lines under the <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#maximum-line-length">PEP 8 recommendation</a> to a maximum of 79 (or 99)
+characters helps readers easily parse the code.</p>
+<p>Wrapped lines should conform to the following guidelines.</p>
+<ol class="arabic simple">
+<li>The first argument should not be attached to the opening parenthesis.</li>
+<li>One, and only one, indent should be used.</li>
+<li>Each argument should fall on its own line.</li>
+<li>The terminating element, <code class="code docutils literal notranslate"><span class="pre">);</span></code>, should be placed on the final line by itself.</li>
+</ol>
+<p>Function Calls</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span>
+    <span class="n">longArgument1</span><span class="p">,</span>
+    <span class="n">longArgument2</span><span class="p">,</span>
+    <span class="n">longArgument3</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span><span class="n">longArgument1</span><span class="p">,</span>
+                              <span class="n">longArgument2</span><span class="p">,</span>
+                              <span class="n">longArgument3</span>
+<span class="p">);</span>
+
+<span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span><span class="n">longArgument1</span><span class="p">,</span>
+    <span class="n">longArgument2</span><span class="p">,</span>
+    <span class="n">longArgument3</span>
+<span class="p">);</span>
+
+<span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span>
+    <span class="n">longArgument1</span><span class="p">,</span> <span class="n">longArgument2</span><span class="p">,</span>
+    <span class="n">longArgument3</span>
+<span class="p">);</span>
+
+<span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span>
+<span class="n">longArgument1</span><span class="p">,</span>
+<span class="n">longArgument2</span><span class="p">,</span>
+<span class="n">longArgument3</span>
+<span class="p">);</span>
+
+<span class="n">thisFunctionCallIsReallyLong</span><span class="p">(</span>
+    <span class="n">longArgument1</span><span class="p">,</span>
+    <span class="n">longArgument2</span><span class="p">,</span>
+    <span class="n">longArgument3</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Assignment Statements</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">thisIsALongNestedMapping</span><span class="p">[</span><span class="n">being</span><span class="p">][</span><span class="n">set</span><span class="p">][</span><span class="n">to_some_value</span><span class="p">]</span> <span class="o">=</span> <span class="n">someFunction</span><span class="p">(</span>
+    <span class="n">argument1</span><span class="p">,</span>
+    <span class="n">argument2</span><span class="p">,</span>
+    <span class="n">argument3</span><span class="p">,</span>
+    <span class="n">argument4</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">thisIsALongNestedMapping</span><span class="p">[</span><span class="n">being</span><span class="p">][</span><span class="n">set</span><span class="p">][</span><span class="n">to_some_value</span><span class="p">]</span> <span class="o">=</span> <span class="n">someFunction</span><span class="p">(</span><span class="n">argument1</span><span class="p">,</span>
+                                                                   <span class="n">argument2</span><span class="p">,</span>
+                                                                   <span class="n">argument3</span><span class="p">,</span>
+                                                                   <span class="n">argument4</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Event Definitions and Event Emitters</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">event</span> <span class="n">LongAndLotsOfArgs</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">sender</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">recipient</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">publicKey</span><span class="p">,</span>
+    <span class="kt">uint256</span> <span class="n">amount</span><span class="p">,</span>
+    <span class="kt">bytes32</span><span class="p">[]</span> <span class="n">options</span>
+<span class="p">);</span>
+
+<span class="n">LongAndLotsOfArgs</span><span class="p">(</span>
+    <span class="n">sender</span><span class="p">,</span>
+    <span class="n">recipient</span><span class="p">,</span>
+    <span class="n">publicKey</span><span class="p">,</span>
+    <span class="n">amount</span><span class="p">,</span>
+    <span class="n">options</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">event</span> <span class="n">LongAndLotsOfArgs</span><span class="p">(</span><span class="kt">address</span> <span class="n">sender</span><span class="p">,</span>
+                        <span class="kt">address</span> <span class="n">recipient</span><span class="p">,</span>
+                        <span class="kt">uint256</span> <span class="n">publicKey</span><span class="p">,</span>
+                        <span class="kt">uint256</span> <span class="n">amount</span><span class="p">,</span>
+                        <span class="kt">bytes32</span><span class="p">[]</span> <span class="n">options</span><span class="p">);</span>
+
+<span class="n">LongAndLotsOfArgs</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span>
+                  <span class="n">recipient</span><span class="p">,</span>
+                  <span class="n">publicKey</span><span class="p">,</span>
+                  <span class="n">amount</span><span class="p">,</span>
+                  <span class="n">options</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source-file-encoding">
+<h3>Source File Encoding<a class="headerlink" href="#source-file-encoding" title="Permalink to this headline">¶</a></h3>
+<p>UTF-8 or ASCII encoding is preferred.</p>
+</div>
+<div class="section" id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h3>
+<p>Import statements should always be placed at the top of the file.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="s">&quot;./Owned.sol&quot;</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="kr">is</span> <span class="n">Owned</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+
+<span class="kn">import</span> <span class="s">&quot;./Owned.sol&quot;</span><span class="p">;</span>
+
+
+<span class="kd">contract</span> <span class="n">B</span> <span class="kr">is</span> <span class="n">Owned</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="order-of-functions">
+<h3>Order of Functions<a class="headerlink" href="#order-of-functions" title="Permalink to this headline">¶</a></h3>
+<p>Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.</p>
+<p>Functions should be grouped according to their visibility and ordered:</p>
+<ul class="simple">
+<li>constructor</li>
+<li>fallback function (if exists)</li>
+<li>external</li>
+<li>public</li>
+<li>internal</li>
+<li>private</li>
+</ul>
+<p>Within a grouping, place the <code class="docutils literal notranslate"><span class="pre">view</span></code> and <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions last.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+    <span class="c1">// External functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// External functions that are view</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// External functions that are pure</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// Public functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// Internal functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// Private functions</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="p">{</span>
+
+    <span class="c1">// External functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Private functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// Public functions</span>
+    <span class="c1">// ...</span>
+
+    <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Internal functions</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="whitespace-in-expressions">
+<h3>Whitespace in Expressions<a class="headerlink" href="#whitespace-in-expressions" title="Permalink to this headline">¶</a></h3>
+<p>Avoid extraneous whitespace in the following  situations:</p>
+<p>Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">spam</span><span class="p">(</span><span class="n">ham</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Coin</span><span class="p">({</span><span class="n">name</span><span class="o">:</span> <span class="s">&quot;ham&quot;</span><span class="p">}));</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">spam</span><span class="p">(</span> <span class="n">ham</span><span class="p">[</span> <span class="mi">1</span> <span class="p">],</span> <span class="n">Coin</span><span class="p">(</span> <span class="p">{</span> <span class="n">name</span><span class="o">:</span> <span class="s">&quot;ham&quot;</span> <span class="p">}</span> <span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>Exception:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">singleLine</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">spam</span><span class="p">();</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Immediately before a comma, semicolon:</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">spam</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span><span class="p">,</span> <span class="n">Coin</span> <span class="n">coin</span><span class="p">)</span> <span class="kr">public</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">spam</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="p">,</span> <span class="n">Coin</span> <span class="n">coin</span><span class="p">)</span> <span class="kr">public</span> <span class="p">;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>More than one space around an assignment or other operator to align with</dt>
+<dd>another:</dd>
+</dl>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">long_variable</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span>             <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">y</span>             <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">long_variable</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Don’t include a whitespace in the fallback function:</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="control-structures">
+<h3>Control Structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h3>
+<p>The braces denoting the body of a contract, library, functions and structs
+should:</p>
+<ul class="simple">
+<li>open on the same line as the declaration</li>
+<li>close on their own line at the same indentation level as the beginning of the
+declaration.</li>
+<li>The opening brace should be proceeded by a single space.</li>
+</ul>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Coin</span> <span class="p">{</span>
+    <span class="kd">struct</span> <span class="n">Bank</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">owner</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="nb">balance</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Coin</span>
+<span class="p">{</span>
+    <span class="kd">struct</span> <span class="n">Bank</span> <span class="p">{</span>
+        <span class="kt">address</span> <span class="n">owner</span><span class="p">;</span>
+        <span class="kt">uint</span> <span class="nb">balance</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The same recommendations apply to the control structures <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">else</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">for</span></code>.</p>
+<p>Additionally there should be a single space between the control structures
+<code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, and <code class="docutils literal notranslate"><span class="pre">for</span></code> and the parenthetic block representing the
+conditional, as well as a single space between the conditional parenthetic
+block and the opening brace.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="p">(...)</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(...)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">while</span><span class="p">(...){</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="p">(...)</span> <span class="p">{</span>
+    <span class="p">...;}</span>
+</pre></div>
+</div>
+<p>For control structures whose body contains a single statement, omitting the
+braces is ok <em>if</em> the statement is contained on a single line.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">someArray</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">Coin</span><span class="p">({</span>
+        <span class="n">name</span><span class="o">:</span> <span class="s">&#39;spam&#39;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">:</span> <span class="mi">42</span>
+    <span class="p">}));</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">if</span></code> blocks which have an <code class="docutils literal notranslate"><span class="pre">else</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> clause, the <code class="docutils literal notranslate"><span class="pre">else</span></code> should be
+placed on the same line as the <code class="docutils literal notranslate"><span class="pre">if</span></code>’s closing brace. This is an exception compared
+to the rules of other block-like structures.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">else</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-declaration">
+<h3>Function Declaration<a class="headerlink" href="#function-declaration" title="Permalink to this headline">¶</a></h3>
+<p>For short function declarations, it is recommended for the opening brace of the
+function body to be kept on the same line as the function declaration.</p>
+<p>The closing brace should be at the same indentation level as the function
+declaration.</p>
+<p>The opening brace should be preceded by a single space.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="n">onlyowner</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;}</span>
+</pre></div>
+</div>
+<p>You should explicitly label the visibility of all functions, including constructors.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">explicitlyPublic</span><span class="p">(</span><span class="kt">uint</span> <span class="n">val</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">implicitlyPublic</span><span class="p">(</span><span class="kt">uint</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The visibility modifier for a function should come before any custom
+modifiers.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="n">onlyowner</span> <span class="p">{</span>
+    <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="n">onlyowner</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For long function declarations, it is recommended to drop each argument onto
+it’s own line at the same indentation level as the function body.  The closing
+parenthesis and opening bracket should be placed on their own line as well at
+the same indentation level as the function declaration.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionHasLotsOfArguments</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">d</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">e</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">f</span>
+<span class="p">)</span>
+    <span class="kr">public</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="kt">address</span> <span class="n">a</span><span class="p">,</span> <span class="kt">address</span> <span class="n">b</span><span class="p">,</span> <span class="kt">address</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">d</span><span class="p">,</span> <span class="kt">address</span> <span class="n">e</span><span class="p">,</span> <span class="kt">address</span> <span class="n">f</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
+                                        <span class="kt">address</span> <span class="n">b</span><span class="p">,</span>
+                                        <span class="kt">address</span> <span class="n">c</span><span class="p">,</span>
+                                        <span class="kt">address</span> <span class="n">d</span><span class="p">,</span>
+                                        <span class="kt">address</span> <span class="n">e</span><span class="p">,</span>
+                                        <span class="kt">address</span> <span class="n">f</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">thisFunctionHasLotsOfArguments</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">d</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">e</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">f</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If a long function declaration has modifiers, then each modifier should be
+dropped to its own line.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">,</span> <span class="kt">address</span> <span class="n">y</span><span class="p">,</span> <span class="kt">address</span> <span class="n">z</span><span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="n">onlyowner</span>
+    <span class="n">priced</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">x</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">y</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">z</span><span class="p">,</span>
+<span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="n">onlyowner</span>
+    <span class="n">priced</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">,</span> <span class="kt">address</span> <span class="n">y</span><span class="p">,</span> <span class="kt">address</span> <span class="n">z</span><span class="p">)</span>
+                                      <span class="kr">public</span>
+                                      <span class="n">onlyowner</span>
+                                      <span class="n">priced</span>
+                                      <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">,</span> <span class="kt">address</span> <span class="n">y</span><span class="p">,</span> <span class="kt">address</span> <span class="n">z</span><span class="p">)</span>
+    <span class="kr">public</span> <span class="n">onlyowner</span> <span class="n">priced</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">,</span> <span class="kt">address</span> <span class="n">y</span><span class="p">,</span> <span class="kt">address</span> <span class="n">z</span><span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="n">onlyowner</span>
+    <span class="n">priced</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the <a class="reference internal" href="#maximum-line-length"><span class="std std-ref">Maximum Line Length</span></a> section.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">c</span>
+<span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="k">returns</span> <span class="p">(</span>
+        <span class="kt">address</span> <span class="n">someAddressName</span><span class="p">,</span>
+        <span class="kt">uint256</span> <span class="n">LongArgument</span><span class="p">,</span>
+        <span class="kt">uint256</span> <span class="n">Argument</span>
+    <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">veryLongReturnArg1</span><span class="p">,</span>
+        <span class="n">veryLongReturnArg2</span><span class="p">,</span>
+        <span class="n">veryLongReturnArg3</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span>
+    <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">address</span> <span class="n">c</span>
+<span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span> <span class="n">someAddressName</span><span class="p">,</span>
+             <span class="kt">uint256</span> <span class="n">LongArgument</span><span class="p">,</span>
+             <span class="kt">uint256</span> <span class="n">Argument</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">doSomething</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">veryLongReturnArg1</span><span class="p">,</span>
+            <span class="n">veryLongReturnArg1</span><span class="p">,</span>
+            <span class="n">veryLongReturnArg1</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For constructor functions on inherited contracts whose bases require arguments,
+it is recommended to drop the base constructors onto new lines in the same
+manner as modifiers if the function declaration is long or hard to read.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// Base contracts just to make this compile</span>
+<span class="kd">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">contract</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="kr">is</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">param1</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param2</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param3</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param4</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param5</span><span class="p">)</span>
+        <span class="n">B</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span>
+        <span class="n">C</span><span class="p">(</span><span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">)</span>
+        <span class="n">D</span><span class="p">(</span><span class="n">param4</span><span class="p">)</span>
+        <span class="kr">public</span>
+    <span class="p">{</span>
+        <span class="c1">// do something with param5</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">param5</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// Base contracts just to make this compile</span>
+<span class="kd">contract</span> <span class="n">B</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span> <span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">contract</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">A</span> <span class="kr">is</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">param1</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param2</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param3</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param4</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param5</span><span class="p">)</span>
+    <span class="n">B</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">)</span>
+    <span class="n">D</span><span class="p">(</span><span class="n">param4</span><span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">param5</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">X</span> <span class="kr">is</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="kd">constructor</span><span class="p">(</span><span class="kt">uint</span> <span class="n">param1</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param2</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param3</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param4</span><span class="p">,</span> <span class="kt">uint</span> <span class="n">param5</span><span class="p">)</span>
+        <span class="n">B</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span>
+        <span class="n">C</span><span class="p">(</span><span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">)</span>
+        <span class="n">D</span><span class="p">(</span><span class="n">param4</span><span class="p">)</span>
+        <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">param5</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When declaring short functions with a single statement, it is permissible to do it on a single line.</p>
+<p>Permissible:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">shortFunction</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">doSomething</span><span class="p">();</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>These guidelines for function declarations are intended to improve readability.
+Authors should use their best judgement as this guide does not try to cover all
+possible permutations for function declarations.</p>
+</div>
+<div class="section" id="mappings">
+<h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this headline">¶</a></h3>
+<p>In variable declarations, do not separate the keyword <code class="docutils literal notranslate"><span class="pre">mapping</span></code> from its
+type by a space. Do not separate any nested <code class="docutils literal notranslate"><span class="pre">mapping</span></code> keyword from its type by
+whitespace.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">map</span><span class="p">;</span>
+<span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">registeredAddresses</span><span class="p">;</span>
+<span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">bool</span> <span class="o">=&gt;</span> <span class="n">Data</span><span class="p">[]))</span> <span class="kr">public</span> <span class="n">data</span><span class="p">;</span>
+<span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="n">s</span><span class="p">))</span> <span class="n">data</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">map</span><span class="p">;</span>
+<span class="kd">mapping</span><span class="p">(</span> <span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span> <span class="p">)</span> <span class="n">registeredAddresses</span><span class="p">;</span>
+<span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span> <span class="p">(</span><span class="kt">bool</span> <span class="o">=&gt;</span> <span class="n">Data</span><span class="p">[]))</span> <span class="kr">public</span> <span class="n">data</span><span class="p">;</span>
+<span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kd">mapping</span> <span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="n">s</span><span class="p">))</span> <span class="n">data</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="variable-declarations">
+<h3>Variable Declarations<a class="headerlink" href="#variable-declarations" title="Permalink to this headline">¶</a></h3>
+<p>Declarations of array variables should not have a space between the type and
+the brackets.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="p">[]</span> <span class="n">x</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span> <span class="p">[]</span> <span class="n">x</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-recommendations">
+<h3>Other Recommendations<a class="headerlink" href="#other-recommendations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Strings should be quoted with double-quotes instead of single-quotes.</li>
+</ul>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">str</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">;</span>
+<span class="n">str</span> <span class="o">=</span> <span class="s">&quot;Hamlet says, &#39;To be or not to be...&#39;&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">str</span> <span class="o">=</span> <span class="s">&#39;bar&#39;</span><span class="p">;</span>
+<span class="n">str</span> <span class="o">=</span> <span class="s">&#39;&quot;Be yourself; everyone else is already taken.&quot; -Oscar Wilde&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Surround operators with a single space on either side.</li>
+</ul>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">|=</span> <span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">z</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">100</span><span class="o">/</span><span class="mi">10</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">+=</span> <span class="mi">3</span><span class="o">+</span><span class="mi">4</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">|=</span> <span class="n">y</span><span class="o">&amp;&amp;</span><span class="n">z</span><span class="p">;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Operators with a higher priority than others can exclude surrounding
+whitespace in order to denote precedence.  This is meant to allow for
+improved readability for complex statement. You should always use the same
+amount of whitespace on either side of an operator:</li>
+</ul>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">z</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="o">+</span><span class="n">z</span><span class="p">;</span>
+<span class="n">x</span> <span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="order-of-layout">
+<h2>Order of Layout<a class="headerlink" href="#order-of-layout" title="Permalink to this headline">¶</a></h2>
+<p>Layout contract elements in the following order:</p>
+<ol class="arabic simple">
+<li>Pragma statements</li>
+<li>Import statements</li>
+<li>Interfaces</li>
+<li>Libraries</li>
+<li>Contracts</li>
+</ol>
+<p>Inside each contract, library or interface, use the following order:</p>
+<ol class="arabic simple">
+<li>Type declarations</li>
+<li>State variables</li>
+<li>Events</li>
+<li>Functions</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It might be clearer to declare types close to their use in events or state
+variables.</p>
+</div>
+</div>
+<div class="section" id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>Naming conventions are powerful when adopted and used broadly.  The use of
+different conventions can convey significant <em>meta</em> information that would
+otherwise not be immediately available.</p>
+<p>The naming recommendations given here are intended to improve the readability,
+and thus they are not rules, but rather guidelines to try and help convey the
+most information through the names of things.</p>
+<p>Lastly, consistency within a codebase should always supersede any conventions
+outlined in this document.</p>
+<div class="section" id="naming-styles">
+<h3>Naming Styles<a class="headerlink" href="#naming-styles" title="Permalink to this headline">¶</a></h3>
+<p>To avoid confusion, the following names will be used to refer to different
+naming styles.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">b</span></code> (single lowercase letter)</li>
+<li><code class="docutils literal notranslate"><span class="pre">B</span></code> (single uppercase letter)</li>
+<li><code class="docutils literal notranslate"><span class="pre">lowercase</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">lower_case_with_underscores</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">UPPERCASE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">UPPER_CASE_WITH_UNDERSCORES</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">CapitalizedWords</span></code> (or CapWords)</li>
+<li><code class="docutils literal notranslate"><span class="pre">mixedCase</span></code> (differs from CapitalizedWords by initial lowercase character!)</li>
+<li><code class="docutils literal notranslate"><span class="pre">Capitalized_Words_With_Underscores</span></code></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms is mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.</p>
+</div>
+</div>
+<div class="section" id="names-to-avoid">
+<h3>Names to Avoid<a class="headerlink" href="#names-to-avoid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">l</span></code> - Lowercase letter el</li>
+<li><code class="docutils literal notranslate"><span class="pre">O</span></code> - Uppercase letter oh</li>
+<li><code class="docutils literal notranslate"><span class="pre">I</span></code> - Uppercase letter eye</li>
+</ul>
+<p>Never use any of these for single letter variable names.  They are often
+indistinguishable from the numerals one and zero.</p>
+</div>
+<div class="section" id="contract-and-library-names">
+<h3>Contract and Library Names<a class="headerlink" href="#contract-and-library-names" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Contracts and libraries should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code>, <code class="docutils literal notranslate"><span class="pre">SmartBank</span></code>, <code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code>, <code class="docutils literal notranslate"><span class="pre">Player</span></code>, <code class="docutils literal notranslate"><span class="pre">Congress</span></code>, <code class="docutils literal notranslate"><span class="pre">Owned</span></code>.</li>
+<li>Contract and library names should also match their filenames.</li>
+<li>If a contract file includes multiple contracts and/or libraries, then the filename should match the <em>core contract</em>. This is not recommended however if it can be avoided.</li>
+</ul>
+<p>As shown in the example below, if the contract name is <cite>Congress</cite> and the library name is <cite>Owned</cite>, then their associated filenames should be <cite>Congress.sol</cite> and <cite>Owned.sol</cite>.</p>
+<p>Yes:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// Owned.sol</span>
+<span class="kd">contract</span> <span class="n">Owned</span> <span class="p">{</span>
+     <span class="kt">address</span> <span class="kr">public</span> <span class="n">owner</span><span class="p">;</span>
+
+     <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+         <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="kd">modifier</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+         <span class="nf">require</span><span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">);</span>
+         <span class="kr">_</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="kd">function</span> <span class="n">transferOwnership</span><span class="p">(</span><span class="kt">address</span> <span class="n">newOwner</span><span class="p">)</span> <span class="kr">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+         <span class="n">owner</span> <span class="o">=</span> <span class="n">newOwner</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Congress.sol</span>
+<span class="kn">import</span> <span class="s">&quot;./Owned.sol&quot;</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Congress</span> <span class="kr">is</span> <span class="n">Owned</span><span class="p">,</span> <span class="n">TokenRecipient</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>No:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// owned.sol</span>
+<span class="kd">contract</span> <span class="n">owned</span> <span class="p">{</span>
+     <span class="kt">address</span> <span class="kr">public</span> <span class="n">owner</span><span class="p">;</span>
+
+     <span class="kd">constructor</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+         <span class="n">owner</span> <span class="o">=</span> <span class="nb">msg.sender</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="kd">modifier</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+         <span class="nf">require</span><span class="p">(</span><span class="nb">msg.sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">);</span>
+         <span class="kr">_</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="kd">function</span> <span class="n">transferOwnership</span><span class="p">(</span><span class="kt">address</span> <span class="n">newOwner</span><span class="p">)</span> <span class="kr">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+         <span class="n">owner</span> <span class="o">=</span> <span class="n">newOwner</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Congress.sol</span>
+<span class="kn">import</span> <span class="s">&quot;./owned.sol&quot;</span><span class="p">;</span>
+
+<span class="kd">contract</span> <span class="n">Congress</span> <span class="kr">is</span> <span class="n">owned</span><span class="p">,</span> <span class="n">tokenRecipient</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="struct-names">
+<h3>Struct Names<a class="headerlink" href="#struct-names" title="Permalink to this headline">¶</a></h3>
+<p>Structs should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code>, <code class="docutils literal notranslate"><span class="pre">Position</span></code>, <code class="docutils literal notranslate"><span class="pre">PositionXY</span></code>.</p>
+</div>
+<div class="section" id="event-names">
+<h3>Event Names<a class="headerlink" href="#event-names" title="Permalink to this headline">¶</a></h3>
+<p>Events should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code>, <code class="docutils literal notranslate"><span class="pre">Transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">Approval</span></code>, <code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code>, <code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code>.</p>
+</div>
+<div class="section" id="function-names">
+<h3>Function Names<a class="headerlink" href="#function-names" title="Permalink to this headline">¶</a></h3>
+<p>Functions other than constructors should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code>, <code class="docutils literal notranslate"><span class="pre">transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code>, <code class="docutils literal notranslate"><span class="pre">addMember</span></code>, <code class="docutils literal notranslate"><span class="pre">changeOwner</span></code>.</p>
+</div>
+<div class="section" id="function-argument-names">
+<h3>Function Argument Names<a class="headerlink" href="#function-argument-names" title="Permalink to this headline">¶</a></h3>
+<p>Function arguments should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">account</span></code>, <code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">senderAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">newOwner</span></code>.</p>
+<p>When writing library functions that operate on a custom struct, the struct
+should be the first argument and should always be named <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</div>
+<div class="section" id="local-and-state-variable-names">
+<h3>Local and State Variable Names<a class="headerlink" href="#local-and-state-variable-names" title="Permalink to this headline">¶</a></h3>
+<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">balancesOf</span></code>, <code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">isPreSale</span></code>, <code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code>.</p>
+</div>
+<div class="section" id="constants">
+<h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
+<p>Constants should be named with all capital letters with underscores separating
+words. Examples: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code>.</p>
+</div>
+<div class="section" id="modifier-names">
+<h3>Modifier Names<a class="headerlink" href="#modifier-names" title="Permalink to this headline">¶</a></h3>
+<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code>.</p>
+</div>
+<div class="section" id="enums">
+<h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
+<p>Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">Frame</span></code>, <code class="docutils literal notranslate"><span class="pre">HashStyle</span></code>, <code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code>.</p>
+</div>
+<div class="section" id="avoiding-naming-collisions">
+<h3>Avoiding Naming Collisions<a class="headerlink" href="#avoiding-naming-collisions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">single_trailing_underscore_</span></code></li>
+</ul>
+<p>This convention is suggested when the desired name collides with that of a
+built-in or otherwise reserved name.</p>
+</div>
+<div class="section" id="general-recommendations">
+<h3>General Recommendations<a class="headerlink" href="#general-recommendations" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+</div>
+<div class="section" id="natspec">
+<span id="id2"></span><h2>NatSpec<a class="headerlink" href="#natspec" title="Permalink to this headline">¶</a></h2>
+<p>Solidity contracts can have a form of comments that are the basis of the
+Ethereum Natural Language Specification Format.</p>
+<p>Add comments above functions or contracts following <a class="reference external" href="http://www.doxygen.nl">doxygen</a> notation
+of one or multiple lines starting with <cite>///</cite> or a
+multiline comment starting with <cite>/**</cite> and ending with <cite>*/</cite>.</p>
+<p>For example, the contract from <a class="reference external" href="simple-smart-contract">a simple smart contract</a> with the comments
+added looks like the one below:</p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">/// </span><span class="cs">@author</span><span class="c1"> The Solidity Team</span>
+<span class="c1">/// </span><span class="cs">@title</span><span class="c1"> A simple storage example</span>
+<span class="kd">contract</span> <span class="n">SimpleStorage</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">storedData</span><span class="p">;</span>
+
+    <span class="c1">/// Store `x`.</span>
+    <span class="c1">/// </span><span class="cs">@param</span><span class="c1"> x the new value to store</span>
+    <span class="c1">/// </span><span class="cs">@dev</span><span class="c1"> stores the number in the state variable `storedData`</span>
+    <span class="kd">function</span> <span class="n">set</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="n">storedData</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// Return the stored value.</span>
+    <span class="c1">/// </span><span class="cs">@dev</span><span class="c1"> retrieves the value of the state variable `storedData`</span>
+    <span class="c1">/// </span><span class="cs">@return</span><span class="c1"> the stored value</span>
+    <span class="kd">function</span> <span class="n">get</span><span class="p">()</span> <span class="kr">public</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">storedData</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Natspec uses doxygen style tags with some special meaning.
+If no tag is used, then the comment applies to <code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code> tag is the main NatSpec tag and its audience is
+users of the contract who have never seen the source code, so it should make
+as little assumptions about the inner details as possible.
+All tags are optional.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="49%" />
+<col width="36%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tag</th>
+<th class="head">Description</th>
+<th class="head">Context</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">&#64;title</span></code></td>
+<td>A title that describes the contract</td>
+<td>contract, interface</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">&#64;author</span></code></td>
+<td>The name of the author</td>
+<td>contract, interface, function</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code></td>
+<td>Explanation of functionality</td>
+<td>contract, interface, function</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">&#64;dev</span></code></td>
+<td>Any extra details</td>
+<td>contract, interface, function</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">&#64;param</span></code></td>
+<td>Parameter type followed by parameter name</td>
+<td>function</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">&#64;return</span></code></td>
+<td>The return value of a contract’s function</td>
+<td>function</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="common-patterns.html" class="btn btn-neutral float-right" title="Common Patterns" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="yul.html" class="btn btn-neutral float-left" title="Yul" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Ethereum
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

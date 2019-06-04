@@ -128,7 +128,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#conversions-between-literals-and-elementary-types">Conversions between Literals and Elementary Types</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#integer-types">Integer Types</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id15">Fixed-Size Byte Arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Fixed-Size Byte Arrays</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#addresses">Addresses</a></li>
 </ul>
 </li>
@@ -229,95 +229,75 @@ Solidityはいくつかの基本的なタイプを持ち、それらは結びつ
 <p>加えて、オペレータを含む表現でタイプは互いに干渉することができます。変数のオペレータのクイックリファレンスは <a class="reference internal" href="miscellaneous.html#order"><span class="std std-ref">Order of Precedence of Operators</span></a> を参照ください。</p>
 <div class="section" id="value-types">
 <span id="index-1"></span><span id="id2"></span><h2>Value Types<a class="headerlink" href="#value-types" title="Permalink to this headline">¶</a></h2>
-<p>The following types are also called value types because variables of these
-types will always be passed by value, i.e. they are always copied when they
-are used as function arguments or in assignments.</p>
+<p>次の型も常に値として渡されるため値型と呼ばれています。引数や割り当て時にはこれらは常にコピーされます。</p>
 <div class="section" id="booleans">
 <span id="index-2"></span><h3>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">bool</span></code>: The possible values are constants <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bool</span></code>: 取りうる値は <code class="docutils literal notranslate"><span class="pre">true</span></code> と <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
 <p>Operators:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">!</span></code> (logical negation)</li>
-<li><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> (logical conjunction, “and”)</li>
-<li><code class="docutils literal notranslate"><span class="pre">||</span></code> (logical disjunction, “or”)</li>
-<li><code class="docutils literal notranslate"><span class="pre">==</span></code> (equality)</li>
-<li><code class="docutils literal notranslate"><span class="pre">!=</span></code> (inequality)</li>
+<li><code class="docutils literal notranslate"><span class="pre">!</span></code> (論理否定)</li>
+<li><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> (論理積, “and”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">||</span></code> (論理和, “or”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">==</span></code> (等価)</li>
+<li><code class="docutils literal notranslate"><span class="pre">!=</span></code> (不等価)</li>
 </ul>
-<p>The operators <code class="docutils literal notranslate"><span class="pre">||</span></code> and <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> apply the common short-circuiting rules. This means that in the expression <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">||</span> <span class="pre">g(y)</span></code>, if <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">g(y)</span></code> will not be evaluated even if it may have side-effects.</p>
+<p><code class="docutils literal notranslate"><span class="pre">||</span></code> と <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> 演算子は一般的な短絡評価のルールに従います。つまり、<code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">||</span> <span class="pre">g(y)</span></code> という表現において、もし <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> が``true`` と評価された場合、たとえ副次的な作用があったとしても <code class="docutils literal notranslate"><span class="pre">g(y)</span></code> は評価されません。</p>
 </div>
 <div class="section" id="integers">
 <span id="index-3"></span><h3>Integers<a class="headerlink" href="#integers" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">uint</span></code>: Signed and unsigned integers of various sizes. Keywords <code class="docutils literal notranslate"><span class="pre">uint8</span></code> to <code class="docutils literal notranslate"><span class="pre">uint256</span></code> in steps of <code class="docutils literal notranslate"><span class="pre">8</span></code> (unsigned of 8 up to 256 bits) and <code class="docutils literal notranslate"><span class="pre">int8</span></code> to <code class="docutils literal notranslate"><span class="pre">int256</span></code>. <code class="docutils literal notranslate"><span class="pre">uint</span></code> and <code class="docutils literal notranslate"><span class="pre">int</span></code> are aliases for <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">int256</span></code>, respectively.</p>
+<p><code class="docutils literal notranslate"><span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">uint</span></code>: 色々なサイズの符号付と符号なし整数です。<code class="docutils literal notranslate"><span class="pre">uint8</span></code> から <code class="docutils literal notranslate"><span class="pre">uint256</span></code> まで8ずつ（符号なしの8から256ビットまで）と``int8`` から <code class="docutils literal notranslate"><span class="pre">int256</span></code> まで上がっていきます。<code class="docutils literal notranslate"><span class="pre">uint</span></code> と <code class="docutils literal notranslate"><span class="pre">int</span></code> はそれぞれ <code class="docutils literal notranslate"><span class="pre">uint256</span></code> と <code class="docutils literal notranslate"><span class="pre">int256</span></code> のエイリアスです。</p>
 <p>Operators:</p>
 <ul class="simple">
-<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
-<li>Bit operators: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (bitwise exclusive or), <code class="docutils literal notranslate"><span class="pre">~</span></code> (bitwise negation)</li>
-<li>Shift operators: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (left shift), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (right shift)</li>
-<li>Arithmetic operators: <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, unary <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> (modulo), <code class="docutils literal notranslate"><span class="pre">**</span></code> (exponentiation)</li>
+<li>比較: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> で評価)</li>
+<li>ビット演算子: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (ビット排他論理和), <code class="docutils literal notranslate"><span class="pre">~</span></code> (ビット否定)</li>
+<li>シフト演算子: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (左シフト), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (右シフト)</li>
+<li>算術演算子: <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, unary <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> (modulo), <code class="docutils literal notranslate"><span class="pre">**</span></code> (累乗)</li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Integers in Solidity are restricted to a certain range. For example, with <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, this is <code class="docutils literal notranslate"><span class="pre">0</span></code> up to <code class="docutils literal notranslate"><span class="pre">2**32</span> <span class="pre">-</span> <span class="pre">1</span></code>.
-If the result of some operation on those numbers does not fit inside this range, it is truncated. These truncations can have
-serious consequences that you should <a class="reference internal" href="security-considerations.html#underflow-overflow"><span class="std std-ref">be aware of and mitigate against</span></a>.</p>
+<p class="last">Solidityの整数はある範囲に制限されています。例えば、<code class="docutils literal notranslate"><span class="pre">uint32</span></code> であれば <code class="docutils literal notranslate"><span class="pre">0</span></code> から最大 <code class="docutils literal notranslate"><span class="pre">2**32</span> <span class="pre">-</span> <span class="pre">1</span></code> までです。
+もし計算結果がこの範囲に収まらない場合には、切り捨てられます。この切り捨てによって起こる結果は <a class="reference internal" href="security-considerations.html#underflow-overflow"><span class="std std-ref">be 知っておくべきです</span></a> 。</p>
 </div>
 <div class="section" id="comparisons">
 <h4>Comparisons<a class="headerlink" href="#comparisons" title="Permalink to this headline">¶</a></h4>
-<p>The value of a comparison is the one obtained by comparing the integer value.</p>
+<p>比較の値は整数値を比較することによって得られます。</p>
 </div>
 <div class="section" id="bit-operations">
 <h4>Bit operations<a class="headerlink" href="#bit-operations" title="Permalink to this headline">¶</a></h4>
-<p>Bit operations are performed on the two’s complement representation of the number.
-This means that, for example <code class="docutils literal notranslate"><span class="pre">~int256(0)</span> <span class="pre">==</span> <span class="pre">int256(-1)</span></code>.</p>
+<p>ビット演算子の計算は2の補数表現で行われます。例えば、 <code class="docutils literal notranslate"><span class="pre">~int256(0)</span> <span class="pre">==</span> <span class="pre">int256(-1)</span></code> です。</p>
 </div>
 <div class="section" id="shifts">
 <h4>Shifts<a class="headerlink" href="#shifts" title="Permalink to this headline">¶</a></h4>
-<p>The result of a shift operation has the type of the left operand. The
-expression <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;&lt;</span> <span class="pre">y</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">2**y</span></code>, and, for positive integers,
-<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code>. For negative <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code>
-is equivalent to dividing by a power of <code class="docutils literal notranslate"><span class="pre">2</span></code> while rounding down (towards negative infinity).
-Shifting by a negative amount throws a runtime exception.</p>
+<p>シフト演算の結果は左オペランドの型となります。<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;&lt;</span> <span class="pre">y</span></code> という表現は <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">2**y</span></code> と等価です。さらに正の整数に関しては <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> と <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code> が等価です。負の <code class="docutils literal notranslate"><span class="pre">x</span></code> に対して <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> は、<code class="docutils literal notranslate"><span class="pre">2</span></code> のべき乗で除し、切り捨てしたもの（負の無限大で）と等価です。
+負の数でシフトするとランタイム例外が投げられます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Before version <code class="docutils literal notranslate"><span class="pre">0.5.0</span></code> a right shift <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> for negative <code class="docutils literal notranslate"><span class="pre">x</span></code> was equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code>,
-i.e. right shifts used rounding towards zero instead of rounding towards negative infinity.</p>
+<p class="last">バージョン``0.5.0``の前までは、負の <code class="docutils literal notranslate"><span class="pre">x</span></code> に対して右シフト <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">y</span></code> は <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">2**y</span></code> と等価でした。例えば右シフトは負の無限大での切り捨ての代わりに、0の位での切り捨てを行なっていました。</p>
 </div>
 </div>
 <div class="section" id="addition-subtraction-and-multiplication">
 <h4>Addition, Subtraction and Multiplication<a class="headerlink" href="#addition-subtraction-and-multiplication" title="Permalink to this headline">¶</a></h4>
-<p>Addition, subtraction and multiplication have the usual semantics.
-They wrap in two’s complement representation, meaning that
-for example <code class="docutils literal notranslate"><span class="pre">uint256(0)</span> <span class="pre">-</span> <span class="pre">uint256(1)</span> <span class="pre">==</span> <span class="pre">2**256</span> <span class="pre">-</span> <span class="pre">1</span></code>. You have to take these overflows
-into account when designing safe smart contracts.</p>
-<p>The expression <code class="docutils literal notranslate"><span class="pre">-x</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">(T(0)</span> <span class="pre">-</span> <span class="pre">x)</span></code> where
-<code class="docutils literal notranslate"><span class="pre">T</span></code> is the type of <code class="docutils literal notranslate"><span class="pre">x</span></code>. This means that <code class="docutils literal notranslate"><span class="pre">-x</span></code> will not be negative
-if the type of <code class="docutils literal notranslate"><span class="pre">x</span></code> is an unsigned integer type. Also, <code class="docutils literal notranslate"><span class="pre">-x</span></code> can be
-positive if <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative. There is another caveat also resulting
-from two’s complement representation:</p>
+<p>加算、減算、乗算は通常のセマンティクスです。
+これらは2の補数表現で使用されます。つまり、例えば <code class="docutils literal notranslate"><span class="pre">uint256(0)</span> <span class="pre">-</span> <span class="pre">uint256(1)</span> <span class="pre">==</span> <span class="pre">2**256</span> <span class="pre">-</span> <span class="pre">1</span></code> です。安全なスマートコントラクトを作成するときには、このオーバーフローを考慮する必要があります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">T</span></code> が <code class="docutils literal notranslate"><span class="pre">x</span></code> の型であるとき <code class="docutils literal notranslate"><span class="pre">-x</span></code> という表現は <code class="docutils literal notranslate"><span class="pre">(T(0)</span> <span class="pre">-</span> <span class="pre">x)</span></code> と等価です。つまり、<code class="docutils literal notranslate"><span class="pre">x</span></code> の型が符号なし整数のときに <code class="docutils literal notranslate"><span class="pre">-x</span></code> は負の数にはなりません。また、<code class="docutils literal notranslate"><span class="pre">x</span></code> が負の数であれば <code class="docutils literal notranslate"><span class="pre">-x</span></code> は正の数になりえます。さらに、別の2の補数表現による注意があります:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="mi">255</span><span class="p">;</span>
 <span class="nf">assert</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>This means that even if a number is negative, you cannot assume that
-its negation will be positive.</p>
+<p>これが意味するのは、たとえある数字が負の数でも、それにマイナスをつけたものが正の数になるとは限らないということです。</p>
 </div>
 <div class="section" id="division">
 <h4>Division<a class="headerlink" href="#division" title="Permalink to this headline">¶</a></h4>
-<p>Since the type of the result of an operation is always the type of one of
-the operands, division on integers always results in an integer.
-In Solidity, division rounds towards zero. This mean that <code class="docutils literal notranslate"><span class="pre">int256(-5)</span> <span class="pre">/</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(-2)</span></code>.</p>
-<p>Note that in contrast, division on <a class="reference internal" href="#rational-literals"><span class="std std-ref">literals</span></a> results in fractional values
-of arbitrary precision.</p>
+<p>ある演算の出力の型は常に演算対象の型と同じなので、整数の除算の結果は整数になります。Solidityでは、除算は1の位までの概算になります。つまり、<code class="docutils literal notranslate"><span class="pre">int256(-5)</span> <span class="pre">/</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(-2)</span></code> となります。</p>
+<p>一方で、<a class="reference internal" href="#rational-literals"><span class="std std-ref">リテラル</span></a> での除算は任意の精度での少数値が結果として出力されるということに注意して下さい。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Division by zero causes a failing assert.</p>
+<p class="last">ゼロでの除算はフェイルアサーションが発生します。</p>
 </div>
 </div>
 <div class="section" id="modulo">
 <h4>Modulo<a class="headerlink" href="#modulo" title="Permalink to this headline">¶</a></h4>
-<p>The modulo operation <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span></code> yields the remainder <code class="docutils literal notranslate"><span class="pre">r</span></code> after the division of the operand <code class="docutils literal notranslate"><span class="pre">a</span></code>
-by the operand <code class="docutils literal notranslate"><span class="pre">n</span></code>, where <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">=</span> <span class="pre">int(a</span> <span class="pre">/</span> <span class="pre">n)</span></code> and <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">-</span> <span class="pre">(n</span> <span class="pre">*</span> <span class="pre">q)</span></code>. This means that modulo
-results in the same sign as its left operand (or zero) and <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span> <span class="pre">==</span> <span class="pre">-(abs(a)</span> <span class="pre">%</span> <span class="pre">n)</span></code> holds for negative <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<p>剰余演算 <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span></code> は <code class="docutils literal notranslate"><span class="pre">a</span></code> を <code class="docutils literal notranslate"><span class="pre">n</span></code> で割ったときの 余り <code class="docutils literal notranslate"><span class="pre">r</span></code> を結果として返します（<code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">=</span> <span class="pre">int(a</span> <span class="pre">/</span> <span class="pre">n)</span></code> で <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">-</span> <span class="pre">(n</span> <span class="pre">*</span> <span class="pre">q)</span></code> です）。つまり、剰余演算の答えは左オペランドと同じ符号（もしくはゼロ）で、負の数 <code class="docutils literal notranslate"><span class="pre">a</span></code> に対して <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">n</span> <span class="pre">==</span> <span class="pre">-(abs(a)</span> <span class="pre">%</span> <span class="pre">n)</span></code> となります:</p>
 <blockquote>
 <div><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">int256(5)</span> <span class="pre">%</span> <span class="pre">int256(2)</span> <span class="pre">==</span> <span class="pre">int256(1)</span></code></li>
@@ -328,16 +308,15 @@ results in the same sign as its left operand (or zero) and <code class="docutils
 </div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Modulo with zero causes a failing assert.</p>
+<p class="last">0での剰余演算はフェイルアサーションが発生します。</p>
 </div>
 </div>
 <div class="section" id="exponentiation">
 <h4>Exponentiation<a class="headerlink" href="#exponentiation" title="Permalink to this headline">¶</a></h4>
-<p>Exponentiation is only available for unsigned types. Please take care that the types
-you are using are large enough to hold the result and prepare for potential wrapping behaviour.</p>
+<p>指数演算は符号なしの型でのみ使用可能です。使っている型が指数演算の結果を包括するのに、また将来的に起こりうるラッピングに対して十分な大きさであることを確認してください。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Note that <code class="docutils literal notranslate"><span class="pre">0**0</span></code> is defined by the EVM as <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p class="last">EVMでは <code class="docutils literal notranslate"><span class="pre">0**0</span></code> は <code class="docutils literal notranslate"><span class="pre">1</span></code> と定義されています。</p>
 </div>
 </div>
 </div>
@@ -345,12 +324,9 @@ you are using are large enough to hold the result and prepare for potential wrap
 <span id="index-4"></span><h3>Fixed Point Numbers<a class="headerlink" href="#fixed-point-numbers" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Fixed point numbers are not fully supported by Solidity yet. They can be declared, but
-cannot be assigned to or from.</p>
+<p class="last">固定小数点はまだSolidityでは完全にサポートされていません。宣言はできますが、値を割り当てたりはできません。</p>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">fixed</span></code> / <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: Signed and unsigned fixed point number of various sizes. Keywords <code class="docutils literal notranslate"><span class="pre">ufixedMxN</span></code> and <code class="docutils literal notranslate"><span class="pre">fixedMxN</span></code>, where <code class="docutils literal notranslate"><span class="pre">M</span></code> represents the number of bits taken by
-the type and <code class="docutils literal notranslate"><span class="pre">N</span></code> represents how many decimal points are available. <code class="docutils literal notranslate"><span class="pre">M</span></code> must be divisible by 8 and goes from 8 to 256 bits. <code class="docutils literal notranslate"><span class="pre">N</span></code> must be between 0 and 80, inclusive.
-<code class="docutils literal notranslate"><span class="pre">ufixed</span></code> and <code class="docutils literal notranslate"><span class="pre">fixed</span></code> are aliases for <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> and <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code>, respectively.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fixed</span></code> / <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: いくつかのサイズがある符号付、符号なし固定小数点です。<code class="docutils literal notranslate"><span class="pre">ufixedMxN</span></code> と <code class="docutils literal notranslate"><span class="pre">fixedMxN</span></code> で <code class="docutils literal notranslate"><span class="pre">M</span></code> はその型で取れるビットの数で、<code class="docutils literal notranslate"><span class="pre">N</span></code> は、何桁の10進数少数点が取れるかを表しています。<code class="docutils literal notranslate"><span class="pre">M</span></code> は8で割り切れる数で、8から256ビットまでとれます。<code class="docutils literal notranslate"><span class="pre">N</span></code> は0から80までとることができます。<code class="docutils literal notranslate"><span class="pre">ufixed</span></code> と <code class="docutils literal notranslate"><span class="pre">fixed</span></code> はそれぞれ <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> と <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> のエイリアスです。</p>
 <p>Operators:</p>
 <ul class="simple">
 <li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
@@ -358,40 +334,30 @@ the type and <code class="docutils literal notranslate"><span class="pre">N</spa
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The main difference between floating point (<code class="docutils literal notranslate"><span class="pre">float</span></code> and <code class="docutils literal notranslate"><span class="pre">double</span></code> in many languages, more precisely IEEE 754 numbers) and fixed point numbers is
-that the number of bits used for the integer and the fractional part (the part after the decimal dot) is flexible in the former, while it is strictly
-defined in the latter. Generally, in floating point almost the entire space is used to represent the number, while only a small number of bits define
-where the decimal point is.</p>
+<p class="last">浮動小数と固定小数の主な違いですが、前者では整数部分と小数部分（多くの言語では <code class="docutils literal notranslate"><span class="pre">float</span></code> と <code class="docutils literal notranslate"><span class="pre">double</span></code> です。より詳細な情報はIEEE 754で確認してください）の桁数がフレキシブルで、後者では厳密に決められていることです。一般的に、浮動小数点数はほぼ全てのスペースをその数を表すのに使用し、少しのビットで小数点の長さを表します。</p>
 </div>
 </div>
 <div class="section" id="address">
 <span id="index-5"></span><span id="id3"></span><h3>Address<a class="headerlink" href="#address" title="Permalink to this headline">¶</a></h3>
-<p>The address type comes in two flavours, which are largely identical:</p>
+<p>アドレス型は広義的には同じである2つの種類があります:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: Holds a 20 byte value (size of an Ethereum address).</li>
-<li><code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>: Same as <code class="docutils literal notranslate"><span class="pre">address</span></code>, but with the additional members <code class="docutils literal notranslate"><span class="pre">transfer</span></code> and <code class="docutils literal notranslate"><span class="pre">send</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: 20バイトの値 (Ethereumアドレスの大きさ)です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>: <code class="docutils literal notranslate"><span class="pre">address</span></code> と同じですが、追加のメンバ <code class="docutils literal notranslate"><span class="pre">transfer</span></code> と <code class="docutils literal notranslate"><span class="pre">send</span></code> が使えます。</li>
 </ul>
 </div></blockquote>
-<p>The idea behind this distinction is that <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> is an address you can send Ether to,
-while a plain <code class="docutils literal notranslate"><span class="pre">address</span></code> cannot be sent Ether.</p>
+<p>この特徴が意味するのは、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> にはEtherを送ることができますが、ただの <code class="docutils literal notranslate"><span class="pre">address</span></code> にはできません。</p>
 <p>Type conversions:</p>
-<p>Implicit conversions from <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span></code> are allowed, whereas conversions from <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> are
-not possible (the only way to perform such a conversion is by using an intermediate conversion to <code class="docutils literal notranslate"><span class="pre">uint160</span></code>).</p>
-<p><a class="reference internal" href="#address-literals"><span class="std std-ref">Address literals</span></a> can be implicitly converted to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
-<p>Explicit conversions to and from <code class="docutils literal notranslate"><span class="pre">address</span></code> are allowed for integers, integer literals, <code class="docutils literal notranslate"><span class="pre">bytes20</span></code> and contract types with the following
-caveat:
-Conversions of the form <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code> are not allowed. Instead the result of a conversion of the form <code class="docutils literal notranslate"><span class="pre">address(x)</span></code>
-has the type <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is of integer or fixed bytes type, a literal or a contract with a payable fallback function.
-If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a contract without payable fallback function, then <code class="docutils literal notranslate"><span class="pre">address(x)</span></code> will be of type <code class="docutils literal notranslate"><span class="pre">address</span></code>.
-In external function signatures <code class="docutils literal notranslate"><span class="pre">address</span></code> is used for both the <code class="docutils literal notranslate"><span class="pre">address</span></code> and the <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> から <code class="docutils literal notranslate"><span class="pre">address</span></code> への暗黙的な変換は可能ですが、<code class="docutils literal notranslate"><span class="pre">address</span></code> から <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> にはできません（唯一 <code class="docutils literal notranslate"><span class="pre">uint160</span></code> を中継することで変換可能です）。</p>
+<p><a class="reference internal" href="#address-literals"><span class="std std-ref">アドレスリテラル</span></a> は暗黙的に <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> に変換可能です。</p>
+<p><code class="docutils literal notranslate"><span class="pre">address</span></code> への、もしくは <code class="docutils literal notranslate"><span class="pre">address</span></code> からの明示的な変換は整数、整数リテラル、<code class="docutils literal notranslate"><span class="pre">bytes20</span></code>、コントラクト型で可能ですが下記の注意事項を参照ください:
+<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code> という形での変換はできません。代わりに、<code class="docutils literal notranslate"><span class="pre">address(x)</span></code> という変換結果が <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> もしくは、もし <code class="docutils literal notranslate"><span class="pre">x</span></code> が整数もしくは固定サイズのバイト型であれば、リテラルかpayableのフォールバックファンクションを持つコントラクトになります。
+もし <code class="docutils literal notranslate"><span class="pre">x</span></code> がpayableのフォールバックファンクションを持たないコントラクトであれば、<code class="docutils literal notranslate"><span class="pre">address(x)</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span></code> になります。
+外部のファンクションの署名では、<code class="docutils literal notranslate"><span class="pre">address</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span></code> 型、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型両方で使用されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It might very well be that you do not need to care about the distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code>
-and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> and just use <code class="docutils literal notranslate"><span class="pre">address</span></code> everywhere. For example,
-if you are using the <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdrawal pattern</span></a>, you can (and should) store the
-address itself as <code class="docutils literal notranslate"><span class="pre">address</span></code>, because you invoke the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function on
-<code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>, which is an <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
+<p class="last">おそらく、<code class="docutils literal notranslate"><span class="pre">address</span></code>
+と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> の違いを気にする必要はあまりなく、どこでも``address`` を使うことになるでしょう。例えば、もし、<a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdrawal pattern</span></a> を使うと、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> である <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> で <code class="docutils literal notranslate"><span class="pre">transfer</span></code> を使うので、<code class="docutils literal notranslate"><span class="pre">address</span></code> としてアドレスを保存できます（するべきです）。</p>
 </div>
 <p>Operators:</p>
 <ul class="simple">
@@ -399,60 +365,48 @@ address itself as <code class="docutils literal notranslate"><span class="pre">a
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>If you convert a type that uses a larger byte size to an <code class="docutils literal notranslate"><span class="pre">address</span></code>, for example <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>, then the <code class="docutils literal notranslate"><span class="pre">address</span></code> is truncated.
-To reduce conversion ambiguity version 0.4.24 and higher of the compiler force you make the truncation explicit in the conversion.
-Take for example the address <code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC</span></code>.</p>
-<p class="last">You can use <code class="docutils literal notranslate"><span class="pre">address(uint160(bytes20(b)))</span></code>, which results in <code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999aAaa</span></code>,
-or you can use <code class="docutils literal notranslate"><span class="pre">address(uint160(uint256(b)))</span></code>, which results in <code class="docutils literal notranslate"><span class="pre">0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc</span></code>.</p>
+<p>もし``address`` 型よりも大きなサイズの型、例えば、<code class="docutils literal notranslate"><span class="pre">bytes32</span></code>、から変換しようとすると、<code class="docutils literal notranslate"><span class="pre">address</span></code> は切り詰められます。
+変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、<code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC</span></code>　です。</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999aAaa</span></code> となる <code class="docutils literal notranslate"><span class="pre">address(uint160(bytes20(b)))</span></code> もしくは、<code class="docutils literal notranslate"><span class="pre">0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc</span></code> となる <code class="docutils literal notranslate"><span class="pre">address(uint160(uint256(b)))</span></code> が使えます。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> was introduced with version 0.5.0.
-Also starting from that version, contracts do not derive from the address type, but can still be explicitly converted to
-<code class="docutils literal notranslate"><span class="pre">address</span></code> or to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>, if they have a payable fallback function.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">address</span></code> と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> の違いはバージョン0.5.0で導入されました。
+また、コントラクトはアドレス型からは生成されませんが、もしpayableのフォールバックファンクションを持っていれば、<code class="docutils literal notranslate"><span class="pre">address</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> に明示的に変換できるという機能がバージョン0.5.0から導入されました。</p>
 </div>
 <div class="section" id="members-of-addresses">
 <span id="id4"></span><h4>Members of Addresses<a class="headerlink" href="#members-of-addresses" title="Permalink to this headline">¶</a></h4>
-<p>For a quick reference of all members of address, see <a class="reference internal" href="units-and-global-variables.html#address-related"><span class="std std-ref">Members of Address Types</span></a>.</p>
+<p>アドレス型の全てのメンバのクイックリファレンスは  <a class="reference internal" href="units-and-global-variables.html#address-related"><span class="std std-ref">Members of Address Types</span></a> を参照ください。</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">balance</span></code> and <code class="docutils literal notranslate"><span class="pre">transfer</span></code></li>
 </ul>
-<p>It is possible to query the balance of an address using the property <code class="docutils literal notranslate"><span class="pre">balance</span></code>
-and to send Ether (in units of wei) to a payable address using the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function:</p>
+<p><code class="docutils literal notranslate"><span class="pre">balance</span></code> プロパティであるアドレスのバランスを確認できます。また、<code class="docutils literal notranslate"><span class="pre">transfer</span></code> でpayableなアドレスにEther（単位はwei）を送ることができます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span> <span class="kr">payable</span> <span class="n">x</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="mh">0x123</span><span class="p">);</span>
 <span class="kt">address</span> <span class="n">myAddress</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="nb">this</span><span class="p">);</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nb">balance</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">myAddress</span><span class="p">.</span><span class="nb">balance</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="n">x</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function fails if the balance of the current contract is not large enough
-or if the Ether transfer is rejected by the receiving account. The <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function
-reverts on failure.</p>
+<p>現在のコントラクトのバランスが十分大きくないか、受け取り側のアカウントでEtherの送金が拒否された場合、<a href="#id5"><span class="problematic" id="id6">``</span></a>transfer``ファンクションは失敗し、送金前の状態に戻ります。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a contract address, its code (more specifically: its <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">Fallback Function</span></a>, if present) will be executed together with the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> call (this is a feature of the EVM and cannot be prevented). If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.</p>
+<p class="last">もし <code class="docutils literal notranslate"><span class="pre">x</span></code> がコントラクトアドレスだった場合、そのコード（具体的には、もしあれば <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">Fallback Function</span></a>）は <code class="docutils literal notranslate"><span class="pre">transfer</span></code> と一緒に実行されます（これはEVMの特徴で、止めることはできません）。もしこの実行時にガス不足になったり、他の理由でフェイルした場合は、Etherの送金はキャンセル、元の状態に戻り、現在のコントラクトは例外と共にストップします。</p>
 </div>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">send</span></code></li>
 </ul>
-<p>Send is the low-level counterpart of <code class="docutils literal notranslate"><span class="pre">transfer</span></code>. If the execution fails, the current contract will not stop with an exception, but <code class="docutils literal notranslate"><span class="pre">send</span></code> will return <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Sendは <code class="docutils literal notranslate"><span class="pre">transfer</span></code> の低レベルバージョンです。もし実行が失敗したら、現在のコントラクトは例外と共にストップしない代わりに、<code class="docutils literal notranslate"><span class="pre">send</span></code> が <code class="docutils literal notranslate"><span class="pre">false</span></code> を返します。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">There are some dangers in using <code class="docutils literal notranslate"><span class="pre">send</span></code>: The transfer fails if the call stack depth is at 1024
-(this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
-to make safe Ether transfers, always check the return value of <code class="docutils literal notranslate"><span class="pre">send</span></code>, use <code class="docutils literal notranslate"><span class="pre">transfer</span></code> or even better:
-use a pattern where the recipient withdraws the money.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">send</span></code> を使うといくつかの危険が伴います:
+送金はコールスタックの深さが1024でフェイルします（これは常に呼び出し元によって行われます）。そして、もし受領者がガスを使い切ってもフェイルします。そのため、安全なEtherの送金のために、常に <code class="docutils literal notranslate"><span class="pre">send</span></code> の返り値を確認する、もしくは <code class="docutils literal notranslate"><span class="pre">transfer</span></code> を使ってください。さらに良いのは:
+受領者がお金を引き出す時の様式を使用することです。</p>
 </div>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code></li>
 </ul>
-<p>In order to interface with contracts that do not adhere to the ABI,
-or to get more direct control over the encoding,
-the functions <code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are provided.
-They all take a single <code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code> parameter and
-return the success condition (as a <code class="docutils literal notranslate"><span class="pre">bool</span></code>) and the returned data
-(<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>).
-The functions <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code>, <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code>, <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector</span></code>
-and <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature</span></code> can be used to encode structured data.</p>
+<p>ABIに従わないコントラクトと繋げるために、もしくはエンコードに対してもっと直接的なコントロールを得るために、<code class="docutils literal notranslate"><span class="pre">call</span></code>、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> ファンクションを使うことができます。
+これらは全て一つの <code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code> パラメータを引数とし、（<code class="docutils literal notranslate"><span class="pre">bool</span></code> で）成否と <code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code> の返ってきたデータを返します。
+<code class="docutils literal notranslate"><span class="pre">abi.encode</span></code>、<code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code>、<code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector</span></code>、<code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature</span></code> は体系的なデータをエンコードするために使用することができます。</p>
 <p>Example:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">payload</span> <span class="o">=</span> <span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">);</span>
 <span class="p">(</span><span class="kt">bool</span> <span class="n">success</span><span class="p">,</span> <span class="kt">bytes</span> <span class="kr">memory</span> <span class="n">returnData</span><span class="p">)</span> <span class="o">=</span> <span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">(</span><span class="n">payload</span><span class="p">);</span>
@@ -461,118 +415,96 @@ and <code class="docutils literal notranslate"><span class="pre">abi.encodeWithS
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">All these functions are low-level functions and should be used with care.
-Specifically, any unknown contract might be malicious and if you call it, you
-hand over control to that contract which could in turn call back into
-your contract, so be prepared for changes to your state variables
-when the call returns. The regular way to interact with other contracts
-is to call a function on a contract object (<code class="docutils literal notranslate"><span class="pre">x.f()</span></code>).</p>
+<p class="last">これら全てのファンクションは低級のファンクションで、使う際には注意が必要です。特に、未知のコントラクトは悪意を持っている可能性があり、もしそのコントラクトを呼び出すと、あなたのコントラクトに次々とコールバックを投げるコントラクトにコントロールを渡してしまうかもしれません。そのため、その呼び出しが返ってきたときに、状態変数の変化に対して準備をしておいてください。他のコントラクトと繋がる一般的な方法はコントラクトオブジェクト(<code class="docutils literal notranslate"><span class="pre">x.f()</span></code>)上でファンクションを呼び出すことです。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Previous versions of Solidity allowed these functions to receive
-arbitrary arguments and would also handle a first argument of type
-<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> differently. These edge cases were removed in version 0.5.0.</p>
+<p class="last">以前のバージョンではこれらのファンクションで任意の引数を取ることができ、<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> 型の第一引数を異なる方法で処理することができました。そのようなエッジケースはバージョン0.5.0で削除されました。</p>
 </div>
-<p>It is possible to adjust the supplied gas with the <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> modifier:</p>
+<p>供給されたガスを``.gas()``
+It is possible to adjust the supplied gas with the <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> modifierで調整することができます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">gas</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>Similarly, the supplied Ether value can be controlled too:</p>
+<p>同様に、供給されたEtherの値もコントロールすることができます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>Lastly, these modifiers can be combined. Their order does not matter:</p>
+<p>最後に、これらのmodifierは結合させることができます。順番は関係ありません:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">gas</span><span class="p">(</span><span class="mi">1000000</span><span class="p">).</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span> <span class="kc">ether</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>In a similar way, the function <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> can be used: the difference is that only the code of the given address is used, all other aspects (storage, balance, …) are taken from the current contract. The purpose of <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.</p>
+<p>似たような方法で、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> は使用されます: 違いは与えられたアドレスのコードだけ使われ、他の要素（storage、balance等）は現在のコントラクトから使われます。<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> の目的は別のコントラクトに保存されているライブラリを使用することです。ユーザはstorageの構造がどちらのコントラクトでもdelegatecallを使用するのに適切であることを確認しなければいけません。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Prior to homestead, only a limited variant called <code class="docutils literal notranslate"><span class="pre">callcode</span></code> was available that did not provide access to the original <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> and <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> values. This function was removed in version 0.5.0.</p>
+<p class="last">homestead以前は、<code class="docutils literal notranslate"><span class="pre">callcode</span></code> という制限のある変形型のみが使用可能でしたが、オリジナルの <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> と <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> にアクセス不可でした。このファンクションはバージョン0.5.0で削除されました。</p>
 </div>
-<p>Since byzantium <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> can be used as well. This is basically the same as <code class="docutils literal notranslate"><span class="pre">call</span></code>, but will revert if the called function modifies the state in any way.</p>
-<p>All three functions <code class="docutils literal notranslate"><span class="pre">call</span></code>, <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are very low-level functions and should only be used as a <em>last resort</em> as they break the type-safety of Solidity.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> option is available on all three methods, while the <code class="docutils literal notranslate"><span class="pre">.value()</span></code> option is not supported for <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>.</p>
+<p>Byzantiumから <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> も使うことができます。基本的には <code class="docutils literal notranslate"><span class="pre">call</span></code> と同じですが、もし呼ばれたファンクションがステートを変更したらリバートします。</p>
+<p><code class="docutils literal notranslate"><span class="pre">call</span></code>、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> の3つのファンクションは全てとても低級のファンクションで、Solidityの型安全性を破るため、<em>最終手段</em> として使用してください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">.gas()</span></code> オプションは全てのメソッドで使用可能ですが、<code class="docutils literal notranslate"><span class="pre">.value()</span></code> は <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> ではサポートされません。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">All contracts can be converted to <code class="docutils literal notranslate"><span class="pre">address</span></code> type, so it is possible to query the balance of the
-current contract using <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code>.</p>
+<p class="last">全てのコントラクトは <code class="docutils literal notranslate"><span class="pre">address</span></code> に変換できるため、<code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code> で現在のコントラクトにそのバランスをクエリすることができます。</p>
 </div>
 </div>
 </div>
 <div class="section" id="contract-types">
-<span id="index-6"></span><span id="id5"></span><h3>Contract Types<a class="headerlink" href="#contract-types" title="Permalink to this headline">¶</a></h3>
-<p>Every <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a> defines its own type.
-You can implicitly convert contracts to contracts they inherit from.
-Contracts can be explicitly converted to and from all other contract types
-and the <code class="docutils literal notranslate"><span class="pre">address</span></code> type.</p>
-<p>Explicit conversion to and from the <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type
-is only possible if the contract type has a payable fallback function.
-The conversion is still performed using <code class="docutils literal notranslate"><span class="pre">address(x)</span></code> and not
-using <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code>. You can find more information in the section about
-the <a class="reference internal" href="#address"><span class="std std-ref">address type</span></a>.</p>
+<span id="index-6"></span><span id="id7"></span><h3>Contract Types<a class="headerlink" href="#contract-types" title="Permalink to this headline">¶</a></h3>
+<p>全ての <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a> は自分自身の肩を定義します。
+あるコントラクトからそのコントラクトが継承しているコントラクトへ暗黙的に変換することができます。
+コントラクトは他のコントラクト型から、もしくは他のコントラクト型へ明示的に変換することができます。さらに <code class="docutils literal notranslate"><span class="pre">address</span></code> 型への変換も可能です。</p>
+<p>コントラクト型がpayableのフォールバックファンクションを持っている時のみ、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型から、もしくは <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型への明示的な変換が可能です。
+その変換は <code class="docutils literal notranslate"><span class="pre">address(x)</span></code> では行われますが、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable(x)</span></code> では行われません。詳細な情報は　<a class="reference internal" href="#address"><span class="std std-ref">address type</span></a> を参照ください。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Before version 0.5.0, contracts directly derived from the address type
-and there was no distinction between <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</p>
+<p class="last">バージョン0.5.0以前では、コントラクトは直接アドレス型から得られており、<code class="docutils literal notranslate"><span class="pre">address</span></code> と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> に違いはありませんでした。</p>
 </div>
-<p>If you declare a local variable of contract type (<cite>MyContract c</cite>), you can call
-functions on that contract. Take care to assign it from somewhere that is the
-same contract type.</p>
-<p>You can also instantiate contracts (which means they are newly created). You
-can find more details in the <a class="reference internal" href="control-structures.html#creating-contracts"><span class="std std-ref">‘Contracts via new’</span></a>
-section.</p>
-<p>The data representation of a contract is identical to that of the <code class="docutils literal notranslate"><span class="pre">address</span></code>
-type and this type is also used in the <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>.</p>
-<p>Contracts do not support any operators.</p>
-<p>The members of contract types are the external functions of the contract
-including public state variables.</p>
-<p>For a contract <code class="docutils literal notranslate"><span class="pre">C</span></code> you can use <code class="docutils literal notranslate"><span class="pre">type(C)</span></code> to access
-<a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">type information</span></a> about the contract.</p>
+<p>もしコントラクト型（<cite>MyContract c</cite>）のローカル変数を宣言した場合、そのコントラクト上でファンクションを呼び出すことができます。同じコントラクト型からその変数を割り当てる様にして下さい。</p>
+<p>コントラクトのインスタンスも作成可能です（つまり新しくそのコントラクトが作られるということです）。詳細は <a class="reference internal" href="control-structures.html#creating-contracts"><span class="std std-ref">‘Contracts via new’</span></a> を参照ください。</p>
+<p>コントラクトのデータ表現は <code class="docutils literal notranslate"><span class="pre">address</span></code> 型のデータ表現と同じで、この型は <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a> でも使われています。</p>
+<p>コントラクト型はどんな演算子もサポートしません。</p>
+<p>コントラクト型のメンバはpublicの状態変数を含んだそのコントラクトのexternalのファンクションです。</p>
+<p>あるコントラクト <code class="docutils literal notranslate"><span class="pre">C</span></code> に対して、そのコントラクトの <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">type information</span></a> にアクセスするために <code class="docutils literal notranslate"><span class="pre">type(C)</span></code> を使うことができます。</p>
 </div>
 <div class="section" id="fixed-size-byte-arrays">
 <span id="index-7"></span><h3>Fixed-size byte arrays<a class="headerlink" href="#fixed-size-byte-arrays" title="Permalink to this headline">¶</a></h3>
-<p>The value types <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes2</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes3</span></code>, …, <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>
-hold a sequence of bytes from one to up to 32.
-<code class="docutils literal notranslate"><span class="pre">byte</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>.</p>
+<p>値型である``bytes1``、<code class="docutils literal notranslate"><span class="pre">bytes2</span></code>、<code class="docutils literal notranslate"><span class="pre">bytes3</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> は1から32までバイト列を保持しています。
+<code class="docutils literal notranslate"><span class="pre">byte</span></code> は <code class="docutils literal notranslate"><span class="pre">byte1</span></code> のエイリアスです。</p>
 <p>Operators:</p>
 <ul class="simple">
-<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (evaluate to <code class="docutils literal notranslate"><span class="pre">bool</span></code>)</li>
+<li>Comparisons: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> を返します)</li>
 <li>Bit operators: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (bitwise exclusive or), <code class="docutils literal notranslate"><span class="pre">~</span></code> (bitwise negation)</li>
 <li>Shift operators: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (left shift), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (right shift)</li>
 <li>Index access: If <code class="docutils literal notranslate"><span class="pre">x</span></code> is of type <code class="docutils literal notranslate"><span class="pre">bytesI</span></code>, then <code class="docutils literal notranslate"><span class="pre">x[k]</span></code> for <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">I</span></code> returns the <code class="docutils literal notranslate"><span class="pre">k</span></code> th byte (read-only).</li>
+<li>比較: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code> で評価)</li>
+<li>ビット演算子: <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code> (ビット排他論理和), <code class="docutils literal notranslate"><span class="pre">~</span></code> (ビット否定)</li>
+<li>シフト演算子: <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> (左シフト), <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> (右シフト)</li>
+<li>インデックスアクセス: もし <code class="docutils literal notranslate"><span class="pre">x</span></code> が <code class="docutils literal notranslate"><span class="pre">bytesI</span></code> 型なら <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">I</span></code> の元で <code class="docutils literal notranslate"><span class="pre">x[k]</span></code> は <code class="docutils literal notranslate"><span class="pre">k</span></code> 番目のバイトを返します（読み取り専用）。</li>
 </ul>
-<p>The shifting operator works with any integer type as right operand (but
-returns the type of the left operand), which denotes the number of bits to shift by.
-Shifting by a negative amount causes a runtime exception.</p>
+<p>どれだけのビット数をシフトさせるか決める右オペランドがどの整数型でもシフト演算子は動作します（結果は左オペランドの型で返ります）。
+負の数でのシフトはランタイムの例外を生成します。</p>
 <p>Members:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">.length</span></code> yields the fixed length of the byte array (read-only).</li>
+<li><code class="docutils literal notranslate"><span class="pre">.length</span></code> は固定長さのバイト配列を返します（読み取り専用）。</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The type <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> is an array of bytes, but due to padding rules, it wastes
-31 bytes of space for each element (except in storage). It is better to use the <code class="docutils literal notranslate"><span class="pre">bytes</span></code>
-type instead.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">byte[]</span></code> はバイトの配列ですがパディングのため、各要素の間の31バイトを無駄にしています（storage以外）。代わりに、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> を使用する方が良いでしょう。</p>
 </div>
 </div>
 <div class="section" id="dynamically-sized-byte-array">
 <h3>Dynamically-sized byte array<a class="headerlink" href="#dynamically-sized-byte-array" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">bytes</span></code>:</dt>
-<dd>Dynamically-sized byte array, see <a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a>. Not a value-type!</dd>
+<dd>動的サイズのバイト配列です。<a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a> を参照ください。値型ではありません。</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">string</span></code>:</dt>
-<dd>Dynamically-sized UTF-8-encoded string, see <a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a>. Not a value-type!</dd>
+<dd>動的サイズのUTF-8でエンコードされた文字列です。<a class="reference internal" href="#arrays"><span class="std std-ref">Arrays</span></a> を参照ください。値型ではありません。</dd>
 </dl>
 </div>
 <div class="section" id="address-literals">
-<span id="index-8"></span><span id="id6"></span><h3>Address Literals<a class="headerlink" href="#address-literals" title="Permalink to this headline">¶</a></h3>
-<p>Hexadecimal literals that pass the address checksum test, for example
-<code class="docutils literal notranslate"><span class="pre">0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF</span></code> are of <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type.
-Hexadecimal literals that are between 39 and 41 digits
-long and do not pass the checksum test produce
-a warning and are treated as regular rational number literals.</p>
+<span id="index-8"></span><span id="id8"></span><h3>Address Literals<a class="headerlink" href="#address-literals" title="Permalink to this headline">¶</a></h3>
+<p>アドレスのチェックサムをパスする16進数のリテラル、例えば <code class="docutils literal notranslate"><span class="pre">0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型です。
+39から41文字で、チェックサムにパスしない16進数リテラルは警告を発し、通常の有理数リテラルとして扱われます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The mixed-case address checksum format is defined in <a class="reference external" href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md">EIP-55</a>.</p>
@@ -580,50 +512,31 @@ a warning and are treated as regular rational number literals.</p>
 </div>
 <div class="section" id="rational-and-integer-literals">
 <span id="rational-literals"></span><span id="index-9"></span><h3>Rational and Integer Literals<a class="headerlink" href="#rational-and-integer-literals" title="Permalink to this headline">¶</a></h3>
-<p>Integer literals are formed from a sequence of numbers in the range 0-9.
-They are interpreted as decimals. For example, <code class="docutils literal notranslate"><span class="pre">69</span></code> means sixty nine.
-Octal literals do not exist in Solidity and leading zeros are invalid.</p>
-<p>Decimal fraction literals are formed by a <code class="docutils literal notranslate"><span class="pre">.</span></code> with at least one number on
-one side.  Examples include <code class="docutils literal notranslate"><span class="pre">1.</span></code>, <code class="docutils literal notranslate"><span class="pre">.1</span></code> and <code class="docutils literal notranslate"><span class="pre">1.3</span></code>.</p>
-<p>Scientific notation is also supported, where the base can have fractions, while the exponent cannot.
-Examples include <code class="docutils literal notranslate"><span class="pre">2e10</span></code>, <code class="docutils literal notranslate"><span class="pre">-2e10</span></code>, <code class="docutils literal notranslate"><span class="pre">2e-10</span></code>, <code class="docutils literal notranslate"><span class="pre">2.5e1</span></code>.</p>
-<p>Underscores can be used to separate the digits of a numeric literal to aid readability.
-For example, decimal <code class="docutils literal notranslate"><span class="pre">123_000</span></code>, hexadecimal <code class="docutils literal notranslate"><span class="pre">0x2eff_abde</span></code>, scientific decimal notation <code class="docutils literal notranslate"><span class="pre">1_2e345_678</span></code> are all valid.
-Underscores are only allowed between two digits and only one consecutive underscore is allowed.
-There is no additional semantic meaning added to a number literal containing underscores,
-the underscores are ignored.</p>
-<p>Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
-using them together with a non-literal expression or by explicit conversion).
-This means that computations do not overflow and divisions do not truncate
-in number literal expressions.</p>
-<p>For example, <code class="docutils literal notranslate"><span class="pre">(2**800</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">-</span> <span class="pre">2**800</span></code> results in the constant <code class="docutils literal notranslate"><span class="pre">1</span></code> (of type <code class="docutils literal notranslate"><span class="pre">uint8</span></code>)
-although intermediate results would not even fit the machine word size. Furthermore, <code class="docutils literal notranslate"><span class="pre">.5</span> <span class="pre">*</span> <span class="pre">8</span></code> results
-in the integer <code class="docutils literal notranslate"><span class="pre">4</span></code> (although non-integers were used in between).</p>
-<p>Any operator that can be applied to integers can also be applied to number literal expressions as
-long as the operands are integers. If any of the two is fractional, bit operations are disallowed
-and exponentiation is disallowed if the exponent is fractional (because that might result in
-a non-rational number).</p>
+<p>整数リテラルは0から9までの数字から形成され、10進数として認識されます。例えば、<code class="docutils literal notranslate"><span class="pre">69</span></code> は六十九のことです。</p>
+<p>10進数の小数リテラルは <code class="docutils literal notranslate"><span class="pre">.</span></code> を使って形成され、少なくとも1文字片側に数字があります。例えば、<code class="docutils literal notranslate"><span class="pre">1.</span></code>、<code class="docutils literal notranslate"><span class="pre">.1</span></code>、<code class="docutils literal notranslate"><span class="pre">1.3</span></code> です。</p>
+<p>指数表記もサポートされています。基数は小数を取れますが、指数はできません。
+例えば、<code class="docutils literal notranslate"><span class="pre">2e10</span></code>、<code class="docutils literal notranslate"><span class="pre">-2e10</span></code>、<code class="docutils literal notranslate"><span class="pre">2e-10</span></code>、<a href="#id9"><span class="problematic" id="id10">``</span></a>2.5e1``です。</p>
+<p>アンダースコアは数字リテラルの読みやすさを改善するために数字を分けるのに使用することができます。
+例えば、10進数 <code class="docutils literal notranslate"><span class="pre">123_000</span></code>、16進数の <code class="docutils literal notranslate"><span class="pre">0x2eff_abde</span></code>、10進数の指数表記 <code class="docutils literal notranslate"><span class="pre">1_2e345_678</span></code> は全て有効です。
+アンダースコアは2つの数字の間でのみ有効で、1つのアンダースコアしか使うことができません（2つ連続でアンダースコアを使うことはできません）。セマンティクス的な意味は何もありません。アンダースコアを含む数字リテラルでアンダースコアは無視されます。</p>
+<p>数字リテラルは非リテラル型に（例えば非リテラル型と一緒に使うか、明示的な変換によって）変換されるまで任意の精度を持ちます。
+つまり数字リテラル表現では、計算してもオーバーフローしませんし、除算では切り捨ては起きません。</p>
+<p>例えば、中間の計算結果は機械語のサイズに収まっていませんが、<code class="docutils literal notranslate"><span class="pre">(2**800</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">-</span> <span class="pre">2**800</span></code> の結果は（<code class="docutils literal notranslate"><span class="pre">uint8</span></code> 型の）定数 <code class="docutils literal notranslate"><span class="pre">1</span></code> になります。さらに（非整数が使われていますが）``.5 * 8`` の結果は整数 <code class="docutils literal notranslate"><span class="pre">4</span></code> になります。</p>
+<p>計算対象が整数で有る限り、整数に使える演算子は全て数字リテラルで使用することができます。
+もし片方でも小数を含んでいた場合、ビット演算子は使うことはできません。また、指数部分に小数は使えません（結果が非有理数になる可能性があるため）。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Solidity has a number literal type for each rational number.
-Integer literals and rational number literals belong to number literal types.
-Moreover, all number literal expressions (i.e. the expressions that
-contain only number literals and operators) belong to number literal
-types.  So the number literal expressions <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code> both
-belong to the same number literal type for the rational number three.</p>
+<p class="last">Solidityは各有理数に対して数字リテラル型が使えます。整数リテラルと有理数リテラルは数字リテラル型に属します。
+さらに、全ての数字リテラル表現（数字リテラルと演算子のみを含む表現）は数字リテラル型に属します。そのため、数字リテラル表現の <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span></code> と <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code> の結果である有理数の3は両方とも同じ数字リテラル型に属します。</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Division on integer literals used to truncate in Solidity prior to version 0.4.0, but it now converts into a rational number, i.e. <code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">/</span> <span class="pre">2</span></code> is not equal to <code class="docutils literal notranslate"><span class="pre">2</span></code>, but to <code class="docutils literal notranslate"><span class="pre">2.5</span></code>.</p>
+<p class="last">バージョン0.4.0以前では整数リテラルの除算の結果は切り捨てされていましたが、現在は有理数に変換されます。例えば、<code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">/</span> <span class="pre">2</span></code> は <code class="docutils literal notranslate"><span class="pre">2</span></code> ではなく、<code class="docutils literal notranslate"><span class="pre">2.5</span></code> です。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Number literal expressions are converted into a non-literal type as soon as they are used with non-literal
-expressions. Disregarding types, the value of the expression assigned to <code class="docutils literal notranslate"><span class="pre">b</span></code>
-below evaluates to an integer. Because <code class="docutils literal notranslate"><span class="pre">a</span></code> is of type <code class="docutils literal notranslate"><span class="pre">uint128</span></code>, the
-expression <code class="docutils literal notranslate"><span class="pre">2.5</span> <span class="pre">+</span> <span class="pre">a</span></code> has to have a proper type, though. Since there is no common type
-for the type of <code class="docutils literal notranslate"><span class="pre">2.5</span></code> and <code class="docutils literal notranslate"><span class="pre">uint128</span></code>, the Solidity compiler does not accept
-this code.</p>
+<p class="last">数字リテラル表現は非数字リテラル表現が使われたタイミングで非数字リテラル型に変換されます。
+型を無視し、下記の <code class="docutils literal notranslate"><span class="pre">b</span></code> に割り当てられている式の値は整数となります。<code class="docutils literal notranslate"><span class="pre">a</span></code> は <code class="docutils literal notranslate"><span class="pre">uint128</span></code> 型であるため、<code class="docutils literal notranslate"><span class="pre">2.5</span> <span class="pre">+</span> <span class="pre">a</span></code> はある適切な型を持っていなければいけませんが、<code class="docutils literal notranslate"><span class="pre">2.5</span></code> の型と <code class="docutils literal notranslate"><span class="pre">uint128</span></code> 型に共通した型が存在しないため、Solidityのコンパイラはこのコードを処理しません。</p>
 </div>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint128</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="kt">uint128</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">2.5</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">;</span>
@@ -632,9 +545,9 @@ this code.</p>
 </div>
 <div class="section" id="string-literals-and-types">
 <span id="string-literals"></span><span id="index-10"></span><h3>String Literals and Types<a class="headerlink" href="#string-literals-and-types" title="Permalink to this headline">¶</a></h3>
-<p>String literals are written with either double or single-quotes (<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>).  They do not imply trailing zeroes as in C; <code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> represents three bytes, not four.  As with integer literals, their type can vary, but they are implicitly convertible to <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">bytes32</span></code>, if they fit, to <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and to <code class="docutils literal notranslate"><span class="pre">string</span></code>.</p>
-<p>For example, with <code class="docutils literal notranslate"><span class="pre">bytes32</span> <span class="pre">samevar</span> <span class="pre">=</span> <span class="pre">&quot;stringliteral&quot;</span></code> the string literal is interpreted in its raw byte form when assigned to a <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> type.</p>
-<p>String literals support the following escape characters:</p>
+<p>文字列リテラルはダブルもしくはシングルクオテーション(<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>)で記述されます。これらはC言語の様な後置ゼロにはなりません。<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、<code class="docutils literal notranslate"><span class="pre">bytes1</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> に暗黙的に変換可能です。もしサイズが合えば``bytes`` と <code class="docutils literal notranslate"><span class="pre">string</span></code> にも変換可能です。</p>
+<p>例えば、<code class="docutils literal notranslate"><span class="pre">bytes32</span> <span class="pre">samevar</span> <span class="pre">=</span> <span class="pre">&quot;stringliteral&quot;</span></code> では、文字列リテラルは <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> 型に割り当てられる時に、その生のバイト構造で解釈されます。</p>
+<p>文字列リテラルは以下のエスケープキャラクターをサポートします:</p>
 <blockquote>
 <div><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">\&lt;newline&gt;</span></code> (escapes an actual newline)</li>
@@ -651,31 +564,25 @@ this code.</p>
 <li><code class="docutils literal notranslate"><span class="pre">\uNNNN</span></code> (unicode escape, see below)</li>
 </ul>
 </div></blockquote>
-<p><code class="docutils literal notranslate"><span class="pre">\xNN</span></code> takes a hex value and inserts the appropriate byte, while <code class="docutils literal notranslate"><span class="pre">\uNNNN</span></code> takes a Unicode codepoint and inserts an UTF-8 sequence.</p>
-<p>The string in the following example has a length of ten bytes.
-It starts with a newline byte, followed by a double quote, a single
-quote a backslash character and then (without separator) the
-character sequence <code class="docutils literal notranslate"><span class="pre">abcdef</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">\xNN</span></code> は16進数をとり、適切なバイトを挿入します。一方で、<code class="docutils literal notranslate"><span class="pre">\uNNNN</span></code> はUnicodeのコードポイントをとり、UTF-8のシーケンスを挿入します。</p>
+<p>以下の例の中の文字列は10バイトの長さを持ちます。
+新しい行で始まり、ダブルクオート、シングルクオート、バックスラッシュと続き、（区切りなく）``abcdef`` という文字が続きます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="se">\n\&quot;\&#39;\\</span><span class="s">abc</span><span class="se">\</span>
 <span class="s">def&quot;</span>
 </pre></div>
 </div>
-<p>Any unicode line terminator which is not a newline (i.e. LF, VF, FF, CR, NEL, LS, PS) is considered to
-terminate the string literal. Newline only terminates the string literal if it is not preceded by a <code class="docutils literal notranslate"><span class="pre">\</span></code>.</p>
+<p>改行コード(例えばLF、VF、FF、CR、NEL、LS、PS)でないどんなユニコードのラインターミネータは文字列リテラルを終了させると考えられています。もし <code class="docutils literal notranslate"><span class="pre">\</span></code> で処理されていないのであれば、改行は文字列リテラルを終了させるだけです。</p>
 </div>
 <div class="section" id="hexadecimal-literals">
 <span id="index-11"></span><h3>Hexadecimal Literals<a class="headerlink" href="#hexadecimal-literals" title="Permalink to this headline">¶</a></h3>
-<p>Hexadecimal literals are prefixed with the keyword <code class="docutils literal notranslate"><span class="pre">hex</span></code> and are enclosed in double or single-quotes (<code class="docutils literal notranslate"><span class="pre">hex&quot;001122FF&quot;</span></code>). Their content must be a hexadecimal string and their value will be the binary representation of those values.</p>
-<p>Hexadecimal literals behave like <a class="reference internal" href="#string-literals"><span class="std std-ref">string literals</span></a> and have the same convertibility restrictions.</p>
+<p>16進数リテラルは <code class="docutils literal notranslate"><span class="pre">hex</span></code> という接頭辞をつけて、ダブルかシングルクオートで囲まれます（<code class="docutils literal notranslate"><span class="pre">hex&quot;001122FF&quot;</span></code>）。中身は16進数の文字列でなければなりません。そしてその値は2進数表現になります。</p>
+<p>16進数リテラルは <a class="reference internal" href="#string-literals"><span class="std std-ref">string literals</span></a> の様に振る舞い、変換に関して同じ制限を持っています。</p>
 </div>
 <div class="section" id="enums">
-<span id="index-12"></span><span id="id7"></span><h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
-<p>Enums are one way to create a user-defined type in Solidity. They are explicitly convertible
-to and from all integer types but implicit conversion is not allowed.  The explicit conversion
-from integer checks at runtime that the value lies inside the range of the enum and causes a failing assert otherwise.
-Enums needs at least one member.</p>
-<p>The data representation is the same as for enums in C: The options are represented by
-subsequent unsigned integer values starting from <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<span id="index-12"></span><span id="id11"></span><h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
+<p>列挙型はSolidityでのユーザー定義型の1つです。明示的に整数型から、もしくは整数型に変換可能ですが、暗黙的には変換できません。整数型からの明示的な変換では実行時にその値が列挙型の範囲内に収まっているかチェックし、範囲外である場合にはフェイルアサーションを起こします。
+列挙型は少なくとも1つの要素が必要です。</p>
+<p>そのデータ表現はC言語の列挙型と同じです。オプションは <code class="docutils literal notranslate"><span class="pre">0</span></code> で始まる符号なし整数値によって表されます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
@@ -704,62 +611,35 @@ subsequent unsigned integer values starting from <code class="docutils literal n
 </div>
 </div>
 <div class="section" id="function-types">
-<span id="index-13"></span><span id="id8"></span><h3>Function Types<a class="headerlink" href="#function-types" title="Permalink to this headline">¶</a></h3>
-<p>Function types are the types of functions. Variables of function type
-can be assigned from functions and function parameters of function type
-can be used to pass functions to and return functions from function calls.
-Function types come in two flavours - <em>internal</em> and <em>external</em> functions:</p>
-<p>Internal functions can only be called inside the current contract (more specifically,
-inside the current code unit, which also includes internal library functions
-and inherited functions) because they cannot be executed outside of the
-context of the current contract. Calling an internal function is realized
-by jumping to its entry label, just like when calling a function of the current
-contract internally.</p>
-<p>External functions consist of an address and a function signature and they can
-be passed via and returned from external function calls.</p>
-<p>Function types are notated as follows:</p>
+<span id="index-13"></span><span id="id12"></span><h3>Function Types<a class="headerlink" href="#function-types" title="Permalink to this headline">¶</a></h3>
+<p>ファンクション型はファンクションの型です。
+ファンクション型の変数はファンクションから割り当てられ、ファンクションコールにファンクションを渡す、またはファンクションコールからファンクションをリターンするためにファンクション型のパラメータは使用されます。
+ファンクション型は2種類あります - <em>internal</em> と <em>external</em> ファンクションです:</p>
+<p>現在のコントラクトの外からは実行することができないため、internalファンクションは現在のコントラクト内でのみ呼び出すことができます（具体的には、internalのライブラリファンクションや継承したファンクションも含むコード内）。internalのファンクションは、現在のコントラクト内部でファンクションを呼び出す様に、そのファンクションのエントリポイントにジャンプすることによって実行されます。</p>
+<p>Externalファンクションはアドレスとファンクションの署名によって構成され、外部からのファンクションコールを通し、返ってきます。</p>
+<p>ファンクションの種類は下記の様に表されます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">parameter</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span><span class="kr">internal</span><span class="o">|</span><span class="kr">external</span><span class="p">}</span> <span class="p">[</span><span class="kr">pure</span><span class="o">|</span><span class="kr">view</span><span class="o">|</span><span class="kr">payable</span><span class="p">]</span> <span class="p">[</span><span class="k">returns</span> <span class="p">(</span><span class="o">&lt;</span><span class="k">return</span> <span class="n">types</span><span class="o">&gt;</span><span class="p">)]</span>
 </pre></div>
 </div>
-<p>In contrast to the parameter types, the return types cannot be empty - if the
-function type should not return anything, the whole <code class="docutils literal notranslate"><span class="pre">returns</span> <span class="pre">(&lt;return</span> <span class="pre">types&gt;)</span></code>
-part has to be omitted.</p>
-<p>By default, function types are internal, so the <code class="docutils literal notranslate"><span class="pre">internal</span></code> keyword can be
-omitted. Note that this only applies to function types. Visibility has
-to be specified explicitly for functions defined in contracts, they
-do not have a default.</p>
+<p>parameter typesと異なり、return typesは空ではいけません。もしファンクションが何も返さないのであれば、<code class="docutils literal notranslate"><span class="pre">returns</span> <span class="pre">(&lt;return</span> <span class="pre">types&gt;)</span></code> 部分は除外しなければなりません。</p>
+<p>デフォルトでは、ファンクション型はinternalで、<code class="docutils literal notranslate"><span class="pre">internal</span></code> というキーワードは削除できます。これはファンクション型でのみ可能です。コントラクト内で定義されたファンクションはデフォルトで定義されておらず、可視性を明示しなければいけません。</p>
 <p>Conversions:</p>
-<p>A value of external function type can be explicitly converted to <code class="docutils literal notranslate"><span class="pre">address</span></code>
-resulting in the address of the contract of the function.</p>
-<p>A function type <code class="docutils literal notranslate"><span class="pre">A</span></code> is implicitly convertible to a function type <code class="docutils literal notranslate"><span class="pre">B</span></code> if and only if
-their parameter types are identical, their return types are identical,
-their internal/external property is identical and the state mutability of <code class="docutils literal notranslate"><span class="pre">A</span></code>
-is not more restrictive than the state mutability of <code class="docutils literal notranslate"><span class="pre">B</span></code>. In particular:</p>
+<p>externalファンクション型の値は明示的に <code class="docutils literal notranslate"><span class="pre">address</span></code> に変換可能で、そのファンクションのコントラクトのアドレスになります。</p>
+<p>もしパラメータの型、返り値の型が同じであり、internal/externalのプロパティも同じ、さらに <code class="docutils literal notranslate"><span class="pre">A</span></code> のミュータビリティの制限が <code class="docutils literal notranslate"><span class="pre">B</span></code> に比べて厳しくない場合あるファンクション型 <code class="docutils literal notranslate"><span class="pre">A</span></code> は 別のファンクション型 <code class="docutils literal notranslate"><span class="pre">B</span></code> に暗黙的に変換可能です。特に:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">pure</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">view</span></code> and <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
-<li><code class="docutils literal notranslate"><span class="pre">view</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
-<li><code class="docutils literal notranslate"><span class="pre">payable</span></code> functions can be converted to <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions</li>
+<li><code class="docutils literal notranslate"><span class="pre">pure</span></code> ファンクションは <code class="docutils literal notranslate"><span class="pre">view</span></code> と <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> ファンクションに変換可能</li>
+<li><code class="docutils literal notranslate"><span class="pre">view</span></code> ファンクションは <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> ファンクションに変換可能</li>
+<li><code class="docutils literal notranslate"><span class="pre">payable</span></code> は <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> ファンクションに変換可能</li>
 </ul>
 </div></blockquote>
-<p>No other conversions between function types are possible.</p>
-<p>The rule about <code class="docutils literal notranslate"><span class="pre">payable</span></code> and <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> might be a little
-confusing, but in essence, if a function is <code class="docutils literal notranslate"><span class="pre">payable</span></code>, this means that it
-also accepts a payment of zero Ether, so it also is <code class="docutils literal notranslate"><span class="pre">non-payable</span></code>.
-On the other hand, a <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> function will reject Ether sent to it,
-so <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> functions cannot be converted to <code class="docutils literal notranslate"><span class="pre">payable</span></code> functions.</p>
-<p>If a function type variable is not initialised, calling it results
-in a failed assertion. The same happens if you call a function after using <code class="docutils literal notranslate"><span class="pre">delete</span></code>
-on it.</p>
-<p>If external function types are used outside of the context of Solidity,
-they are treated as the <code class="docutils literal notranslate"><span class="pre">function</span></code> type, which encodes the address
-followed by the function identifier together in a single <code class="docutils literal notranslate"><span class="pre">bytes24</span></code> type.</p>
-<p>Note that public functions of the current contract can be used both as an
-internal and as an external function. To use <code class="docutils literal notranslate"><span class="pre">f</span></code> as an internal function,
-just use <code class="docutils literal notranslate"><span class="pre">f</span></code>, if you want to use its external form, use <code class="docutils literal notranslate"><span class="pre">this.f</span></code>.</p>
+<p>他のファンクション型間の変換はできません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">payable</span></code> と <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> 間のルールは少し分かりづらいかもしれません。しかし、大事なことは、<code class="docutils literal notranslate"><span class="pre">payable</span></code> ファンクションは0 etherの支払いを容認し、同様に <code class="docutils literal notranslate"><span class="pre">non-payable</span></code> ファンクションもそれを容認することです。一方で、<code class="docutils literal notranslate"><span class="pre">non-payable</span></code> はEtherの受け取りを拒否するため、<code class="docutils literal notranslate"><span class="pre">non-payable</span></code> ファンクションは <code class="docutils literal notranslate"><span class="pre">payable</span></code> ファンクションに変換できません。</p>
+<p>ファンクション型の変数が初期化されていない場合、その変数を呼び出してもフェイルアサーションとなります。<code class="docutils literal notranslate"><span class="pre">delete</span></code> をその変数に対して使った後に呼び出した場合も同じことが起きます。</p>
+<p>もしexternalのファンクション型がSolidityのコンテキスト外で使用された場合、ファンクション型として扱われます。そして、それはそのファンクションの識別子とその後のアドレスを一緒に1つの <code class="docutils literal notranslate"><span class="pre">bytes24</span></code> 型にエンコードします。</p>
+<p>現在のコントラクトのpublicのファンクションはinternalファンクションとしてもexternalファンクションとしても使用可能です。<code class="docutils literal notranslate"><span class="pre">f</span></code> をinternalファンクションとして使用したい場合には、単純に <code class="docutils literal notranslate"><span class="pre">f</span></code> を、もしexternalファンクションとして使用した場合には、<code class="docutils literal notranslate"><span class="pre">this.f</span></code> を使用してください。</p>
 <p>Members:</p>
-<p>Public (or external) functions also have a special member called <code class="docutils literal notranslate"><span class="pre">selector</span></code>,
-which returns the <a class="reference internal" href="abi-spec.html#abi-function-selector"><span class="std std-ref">ABI function selector</span></a>:</p>
+<p>Public（もしくはexternal）のファンクションは <code class="docutils literal notranslate"><span class="pre">selector</span></code> という特別なメンバも持っています。これは <a class="reference internal" href="abi-spec.html#abi-function-selector"><span class="std std-ref">ABI function selector</span></a> を返します:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">Selector</span> <span class="p">{</span>
@@ -769,7 +649,7 @@ which returns the <a class="reference internal" href="abi-spec.html#abi-function
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Example that shows how to use internal function types:</p>
+<p>internalのファンクション型の使用例です:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">library</span> <span class="n">ArrayUtils</span> <span class="p">{</span>
@@ -820,7 +700,7 @@ which returns the <a class="reference internal" href="abi-spec.html#abi-function
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Another example that uses external function types:</p>
+<p>externalファンクション型の別の使用例です:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">Oracle</span> <span class="p">{</span>
@@ -858,36 +738,30 @@ which returns the <a class="reference internal" href="abi-spec.html#abi-function
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Lambda or inline functions are planned but not yet supported.</p>
+<p class="last">ラムダ式もしくはインラインファンクションの導入が予定されていますが、まだサポートされていません。</p>
 </div>
 </div>
 </div>
 <div class="section" id="reference-types">
-<span id="index-14"></span><span id="id9"></span><h2>Reference Types<a class="headerlink" href="#reference-types" title="Permalink to this headline">¶</a></h2>
+<span id="index-14"></span><span id="id13"></span><h2>Reference Types<a class="headerlink" href="#reference-types" title="Permalink to this headline">¶</a></h2>
 <p>参照型の値は複数の異なった名前で修正できます。値型の変数が使用される度に、独立したコピーをとった値型と比較してみて下さい。このことから参照型は値型より気をつけて扱う必要があります。現在、構造体、配列、マッピングは参照型です。もし参照型を使用しているのであれば、値が保存されるデータ領域を常に明示する必要があります: <code class="docutils literal notranslate"><span class="pre">memory</span></code> (ライフタイムはファンクションの呼び出し時のみに制限されます)、<code class="docutils literal notranslate"><span class="pre">storage</span></code> （状態変数が保存されている場所）、もしくは <code class="docutils literal notranslate"><span class="pre">calldata</span></code> （特別なデータロケーションで、ファンクションの引数を含み、externalのファンクションコールのパラメータでのみ使用可能です）。</p>
 <p>データロケーションを変える値の割り当てや型変換では常に自動でコピー操作が行われる一方で、
 同じデータロケーション内での値の割り当てはただコピーするだけです（いくつかの例ではstorage型で）。</p>
 <div class="section" id="data-location">
-<span id="id10"></span><h3>Data location<a class="headerlink" href="#data-location" title="Permalink to this headline">¶</a></h3>
-<p>Every reference type, i.e. <em>arrays</em> and <em>structs</em>, has an additional
-annotation, the “data location”, about where it is stored. There are three data locations:
-<code class="docutils literal notranslate"><span class="pre">memory</span></code>, <code class="docutils literal notranslate"><span class="pre">storage</span></code> and <code class="docutils literal notranslate"><span class="pre">calldata</span></code>. Calldata is only valid for parameters of external contract
-functions and is required for this type of parameter. Calldata is a non-modifiable,
-non-persistent area where function arguments are stored, and behaves mostly like memory.</p>
+<span id="id14"></span><h3>Data location<a class="headerlink" href="#data-location" title="Permalink to this headline">¶</a></h3>
+<p><em>配列</em>、<em>構造体</em> の様な全ての参照型は”data location”というそれが保存されている場所を表す追加のアノテーションを持っています。<code class="docutils literal notranslate"><span class="pre">memory</span></code>, <code class="docutils literal notranslate"><span class="pre">storage</span></code> and <code class="docutils literal notranslate"><span class="pre">calldata</span></code> という3つのデータロケーションがあります。Calldataは外部コントラクトのファンクションの参照型のパラメータとして要求される場合にのみ有効です。Calldataは修正不可で、ファンクションの引数が保存される非永続的なエリアで、基本的にはmemoryの様に振舞います。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Prior to version 0.5.0 the data location could be omitted, and would default to different locations
-depending on the kind of variable, function type, etc., but all complex types must now give an explicit
-data location.</p>
+<p class="last">バージョン0.5.0以前では、データロケーションは省略可能ですが、変数の種類やファンクションの種類などによってデフォルトで異なる場所に保存されます。しかし、現在は全ての複雑な型は明示的にデータロケーションを示す必要があります。</p>
 </div>
 <div class="section" id="data-location-and-assignment-behaviour">
 <span id="data-location-assignment"></span><h4>Data location and assignment behaviour<a class="headerlink" href="#data-location-and-assignment-behaviour" title="Permalink to this headline">¶</a></h4>
-<p>Data locations are not only relevant for persistency of data, but also for the semantics of assignments:</p>
+<p>データロケーションはデータの持続性だけではなく、割り当てのセマンティクスにも関係しています:</p>
 <ul class="simple">
-<li>Assignments between <code class="docutils literal notranslate"><span class="pre">storage</span></code> and <code class="docutils literal notranslate"><span class="pre">memory</span></code> (or from <code class="docutils literal notranslate"><span class="pre">calldata</span></code>) always create an independent copy.</li>
-<li>Assignments from <code class="docutils literal notranslate"><span class="pre">memory</span></code> to <code class="docutils literal notranslate"><span class="pre">memory</span></code> only create references. This means that changes to one memory variable are also visible in all other memory variables that refer to the same data.</li>
-<li>Assignments from <code class="docutils literal notranslate"><span class="pre">storage</span></code> to a local storage variable also only assign a reference.</li>
-<li>All other assignments to <code class="docutils literal notranslate"><span class="pre">storage</span></code> always copy. Examples for this case are assignments to state variables or to members of local variables of storage struct type, even if the local variable itself is just a reference.</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage</span></code> と <code class="docutils literal notranslate"><span class="pre">memory</span></code> (もしくは <code class="docutils literal notranslate"><span class="pre">calldata</span></code> から)の間での割り当ては常に独立したコピーを作成します。</li>
+<li><code class="docutils literal notranslate"><span class="pre">memory</span></code> から <code class="docutils literal notranslate"><span class="pre">memory</span></code> への割り当てでは参照のみ作られます。つまり、memory変数への変化は同じデータを参照している他のmemory変数からも可視であるということです。</li>
+<li><code class="docutils literal notranslate"><span class="pre">storage</span></code> からローカル変数へは参照のみ割り当てられます。</li>
+<li>他の <code class="docutils literal notranslate"><span class="pre">storage</span></code> への割り当ては常に全てコピーとなります。この例としては、状態変数への割り当てや、たとえローカル変数がただの参照だったとしてもstorageの構造型の要素への割り当てはコピーになります。</li>
 </ul>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -919,56 +793,29 @@ data location.</p>
 </div>
 </div>
 <div class="section" id="arrays">
-<span id="index-15"></span><span id="id11"></span><h3>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h3>
-<p>Arrays can have a compile-time fixed size, or they can have a dynamic size.</p>
-<p>The type of an array of fixed size <code class="docutils literal notranslate"><span class="pre">k</span></code> and element type <code class="docutils literal notranslate"><span class="pre">T</span></code> is written as <code class="docutils literal notranslate"><span class="pre">T[k]</span></code>,
-and an array of dynamic size as <code class="docutils literal notranslate"><span class="pre">T[]</span></code>.</p>
-<p>For example, an array of 5 dynamic arrays of <code class="docutils literal notranslate"><span class="pre">uint</span></code> is written as
-<code class="docutils literal notranslate"><span class="pre">uint[][5]</span></code>. The notation is reversed compared to some other languages. In
-Solidity, <code class="docutils literal notranslate"><span class="pre">X[3]</span></code> is always an array containing three elements of type <code class="docutils literal notranslate"><span class="pre">X</span></code>,
-even if <code class="docutils literal notranslate"><span class="pre">X</span></code> is itself an array. This is not the case in other languages such
-as C.</p>
-<p>Indices are zero-based, and access is in the opposite direction of the
-declaration.</p>
-<p>For example, if you have a variable <code class="docutils literal notranslate"><span class="pre">uint[][5]</span> <span class="pre">x</span> <span class="pre">memory</span></code>, you access the
-second <code class="docutils literal notranslate"><span class="pre">uint</span></code> in the third dynamic array using <code class="docutils literal notranslate"><span class="pre">x[2][1]</span></code>, and to access the
-third dynamic array, use <code class="docutils literal notranslate"><span class="pre">x[2]</span></code>. Again,
-if you have an array <code class="docutils literal notranslate"><span class="pre">T[5]</span> <span class="pre">a</span></code> for a type <code class="docutils literal notranslate"><span class="pre">T</span></code> that can also be an array,
-then <code class="docutils literal notranslate"><span class="pre">a[2]</span></code> always has type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
-<p>Array elements can be of any type, including mapping or struct. The general
-restrictions for types apply, in that mappings can only be stored in the
-<code class="docutils literal notranslate"><span class="pre">storage</span></code> data location and publicly-visible functions need parameters that are <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI types</span></a>.</p>
-<p>It is possible to mark arrays <code class="docutils literal notranslate"><span class="pre">public</span></code> and have Solidity create a <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">getter</span></a>.
-The numeric index becomes a required parameter for the getter.</p>
-<p>Accessing an array past its end causes a failing assertion. You can use the <code class="docutils literal notranslate"><span class="pre">.push()</span></code> method to append a new element at the end or assign to the <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> to change the size (see below for caveats).
-method or increase the <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> to add elements.</p>
+<span id="index-15"></span><span id="id15"></span><h3>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h3>
+<p>配列はコンパイル時での固定サイズか動的サイズです。</p>
+<p>固定サイズ <code class="docutils literal notranslate"><span class="pre">k</span></code> で要素の型が <code class="docutils literal notranslate"><span class="pre">T</span></code> の配列は <code class="docutils literal notranslate"><span class="pre">T[k]`</span> <span class="pre">の様に記述されます。そして動的サイズの配列は</span> <span class="pre">``T[]</span></code> の様に書けます。</p>
+<p>例えば、5個の <code class="docutils literal notranslate"><span class="pre">uint</span></code> 動的配列の配列は <code class="docutils literal notranslate"><span class="pre">uint[][5]</span></code> の様に書けます。この記法は他の記法でも使われています。Solidityでは、たとえ <code class="docutils literal notranslate"><span class="pre">X</span></code> 自体が配列だとしても <code class="docutils literal notranslate"><span class="pre">X[3]</span></code> は常に3つの要素を含んだ <code class="docutils literal notranslate"><span class="pre">X</span></code> 型となります。これは例えばC言語の様な他の言語とは異なっています。</p>
+<p>インデックスはゼロベースで、アクセスする際には宣言とは逆方向でアクセスします。</p>
+<p>例えば、もし <code class="docutils literal notranslate"><span class="pre">uint[][5]</span> <span class="pre">x</span> <span class="pre">memory</span></code> を持っていたら、3つ目の動的配列に入っている2つ目の <code class="docutils literal notranslate"><span class="pre">uint</span></code> には <code class="docutils literal notranslate"><span class="pre">x[2][1]</span></code> でアクセスできます。また、3つ目の動的配列自体には <code class="docutils literal notranslate"><span class="pre">x[2]</span></code> でアクセスします。繰り返しですが、<code class="docutils literal notranslate"><span class="pre">T[5]</span> <span class="pre">a</span></code> という配列（<code class="docutils literal notranslate"><span class="pre">T</span></code> 自体は配列でも良い）を持っていたら、<code class="docutils literal notranslate"><span class="pre">a[2]</span></code> というのは常に <code class="docutils literal notranslate"><span class="pre">T</span></code> という型になります。</p>
+<p>配列の要素はマッピングや構造体含めてどの型でも構いません。全般的な制限として、マッピングは <code class="docutils literal notranslate"><span class="pre">storage</span></code> にのみ保存され、publicなファンクションは <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI types</span></a> であるパラメータが必要になります。</p>
+<p>配列に <code class="docutils literal notranslate"><span class="pre">public</span></code> をつけることでSolidityが :ref:<a href="#id16"><span class="problematic" id="id17">`</span></a>getter &lt;visibility-and-getters&gt;`を生成します。
+インデックスがgetterのパラメータになります。</p>
+<p>そのサイズ以上の配列要素にアクセスしようとするとフェイルアサーションが発生します。新しい要素を配列の最後に追加するために <code class="docutils literal notranslate"><span class="pre">.push()</span></code> が、新しいサイズを指定するのに <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> が使用できます（下記補足を参照ください）。</p>
 <div class="section" id="bytes-and-strings-as-arrays">
 <h4><code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">strings</span></code> as Arrays<a class="headerlink" href="#bytes-and-strings-as-arrays" title="Permalink to this headline">¶</a></h4>
-<p>Variables of type <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code> are special arrays. A <code class="docutils literal notranslate"><span class="pre">bytes</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">byte[]</span></code>,
-but it is packed tightly in calldata and memory. <code class="docutils literal notranslate"><span class="pre">string</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">bytes</span></code> but does not allow
-length or index access.</p>
-<p>While Solidity does not have string manipulation functions, you can use
-this implicit conversion for equivalent functionality. For example to compare
-two strings <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encode(s1))</span> <span class="pre">==</span> <span class="pre">keccak256(abi.encode(s2))</span></code>, or to
-concatenate two strings already encoded with <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(s1,</span> <span class="pre">s2);</span></code>.</p>
-<p>You should use <code class="docutils literal notranslate"><span class="pre">bytes</span></code> over <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> because it is cheaper, since <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> adds 31 padding bytes between the elements. As a general rule,
-use <code class="docutils literal notranslate"><span class="pre">bytes</span></code> for arbitrary-length raw byte data and <code class="docutils literal notranslate"><span class="pre">string</span></code> for arbitrary-length
-string (UTF-8) data. If you can limit the length to a certain number of bytes,
-always use one of the value types <code class="docutils literal notranslate"><span class="pre">bytes1</span></code> to <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> because they are much cheaper.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> 型の変数は特別な配列となります。<code class="docutils literal notranslate"><span class="pre">bytes</span></code> は <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> と似ていますが、calldataとmemoryに保存されています。<code class="docutils literal notranslate"><span class="pre">string</span></code> は <code class="docutils literal notranslate"><span class="pre">bytes</span></code> と等価ですが、lengthとインデックスによるアクセスができません。</p>
+<p>SolidityはStringを操作するファンクションがありませんが、同じ機能を使うための暗黙の変換が使えます。例えば、2つのstringを比較するためには <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encode(s1))</span> <span class="pre">==</span> <span class="pre">keccak256(abi.encode(s2))</span></code>、エンコードされた2つのstringを連結させるには <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(s1,</span> <span class="pre">s2);</span></code> を使うことができます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">byte[]</span></code> は要素間を埋めるのに31バイト追加するので、<code class="docutils literal notranslate"><span class="pre">byte[]</span></code> よりその分安い <code class="docutils literal notranslate"><span class="pre">bytes</span></code> を使用する方が良いでしょう。全般的なルールとして、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> は任意の長さの生のバイトデータを、<code class="docutils literal notranslate"><span class="pre">string</span></code> を任意の長さのstring (UTF-8)データを使用するために使ってください。もしバイト長に制限を咥えられるのであれば、非常に低コストに抑えられるため、常に``bytes1`` から <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> までのいずれかを使用してください。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you want to access the byte-representation of a string <code class="docutils literal notranslate"><span class="pre">s</span></code>, use
-<code class="docutils literal notranslate"><span class="pre">bytes(s).length</span></code> / <code class="docutils literal notranslate"><span class="pre">bytes(s)[7]</span> <span class="pre">=</span> <span class="pre">'x';</span></code>. Keep in mind
-that you are accessing the low-level bytes of the UTF-8 representation,
-and not the individual characters.</p>
+<p class="last">もしバイト表現のある文字列 <code class="docutils literal notranslate"><span class="pre">s</span></code> にアクセスしたい場合は、<code class="docutils literal notranslate"><span class="pre">bytes(s).length</span></code> / <code class="docutils literal notranslate"><span class="pre">bytes(s)[7]</span> <span class="pre">=</span> <span class="pre">'x';</span></code> を使ってください。この際、低レベルのUTF-8表現にアクセスしているのであって、個々の文字にアクセスしている訳ではないということを覚えておいてください。</p>
 </div>
 </div>
 <div class="section" id="allocating-memory-arrays">
 <span id="index-16"></span><h4>Allocating Memory Arrays<a class="headerlink" href="#allocating-memory-arrays" title="Permalink to this headline">¶</a></h4>
-<p>You must use the <code class="docutils literal notranslate"><span class="pre">new</span></code> keyword to create arrays with a runtime-dependent length in memory.
-As opposed to storage arrays, it is <strong>not</strong> possible to resize memory arrays (e.g. by assigning to
-the <code class="docutils literal notranslate"><span class="pre">.length</span></code> member). You either have to calculate the required size in advance
-or create a new memory array and copy every element.</p>
+<p>メモリー内のランタイム依存の長さを持つ配列を作成するには <code class="docutils literal notranslate"><span class="pre">new</span></code> というキーワードを使う必要があります。storageの配列とは逆で、（<code class="docutils literal notranslate"><span class="pre">.length</span></code> を使ったりして）memoryの配列の長さを変えることはできません。事前に長さを計算しておくか、新しいmemoryの配列を作成して全ての要素をコピーする必要があります。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
@@ -985,13 +832,9 @@ or create a new memory array and copy every element.</p>
 </div>
 <div class="section" id="array-literals">
 <span id="index-17"></span><h4>Array Literals<a class="headerlink" href="#array-literals" title="Permalink to this headline">¶</a></h4>
-<p>An array literal is a comma-separated list of one or more expressions, enclosed
-in square brackets (<code class="docutils literal notranslate"><span class="pre">[...]</span></code>). For example <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">a,</span> <span class="pre">f(3)]</span></code>. There must be a
-common type all elements can be implicitly converted to. This is the elementary
-type of the array.</p>
-<p>Array literals are always statically-sized memory arrays.</p>
-<p>In the example below, the type of <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> is
-<code class="docutils literal notranslate"><span class="pre">uint8[3]</span> <span class="pre">memory</span></code>. Because the type of each of these constants is <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, if you want the result to be a <code class="docutils literal notranslate"><span class="pre">uint[3]</span> <span class="pre">memory</span></code> type, you need to convert the first element to <code class="docutils literal notranslate"><span class="pre">uint</span></code>.</p>
+<p>配列リテラルは角括弧 (<code class="docutils literal notranslate"><span class="pre">[...]</span></code>)で囲まれ、カンマで区切られた1つ以上のリストを持っています（例えば <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">a,</span> <span class="pre">f(3)]</span></code>）。全ての要素が暗黙的に変換できる共通の型が存在しなければなりません。これはその配列の基本型になります。</p>
+<p>配列リテラルは常に静的サイズのmemoryの配列となります。</p>
+<p>下記の例で、<code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> の型は <code class="docutils literal notranslate"><span class="pre">uint8[3]</span> <span class="pre">memory</span></code> です。各値の型が <code class="docutils literal notranslate"><span class="pre">uint8</span></code> ですので、もし <code class="docutils literal notranslate"><span class="pre">uint[3]</span> <span class="pre">memory</span></code> の結果が欲しい場合には、最初の要素を <code class="docutils literal notranslate"><span class="pre">uint</span></code> 型に変換する必要があります。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
@@ -1004,7 +847,7 @@ type of the array.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Fixed size memory arrays cannot be assigned to dynamically-sized memory arrays, i.e. the following is not possible:</p>
+<p>固定サイズのmemoryの配列は可変サイズのmemoryの配列に割り当てることはできません。例えば、次の例の様なことはできません:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="c1">// This will not compile.</span>
@@ -1017,50 +860,37 @@ type of the array.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>It is planned to remove this restriction in the future, but it creates some
-complications because of how arrays are passed in the ABI.</p>
+<p>この制約は将来的には削除する予定ですが、ABI内で配列の受け渡し方で複雑になってしまいます。</p>
 </div>
 <div class="section" id="array-members">
-<span id="index-18"></span><span id="id12"></span><h4>Array Members<a class="headerlink" href="#array-members" title="Permalink to this headline">¶</a></h4>
+<span id="index-18"></span><span id="id18"></span><h4>Array Members<a class="headerlink" href="#array-members" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><strong>length</strong>:</dt>
-<dd>Arrays have a <code class="docutils literal notranslate"><span class="pre">length</span></code> member that contains their number of elements.
-The length of memory arrays is fixed (but dynamic, i.e. it can depend on runtime parameters) once they are created.
-For dynamically-sized arrays (only available for storage), this member can be assigned to resize the array.
-Accessing elements outside the current length does not automatically resize the array and instead causes a failing assertion.
-Increasing the length adds new zero-initialised elements to the array.
-Reducing the length performs an implicit :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on each of the
-removed elements. If you try to resize a non-dynamic array that isn’t in
-storage, you receive a <code class="docutils literal notranslate"><span class="pre">Value</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">an</span> <span class="pre">lvalue</span></code> error.</dd>
+<dd>配列はその要素の長さを含む <code class="docutils literal notranslate"><span class="pre">length</span></code> というメンバを持っています。
+memory配列の長さは作成時に固定されます（動的配列はランタイムのパラメータによります）。
+動的配列（storageでのみ使用可）に関して、このメンバは配列のサイズを変えるのに使用できます。
+そのサイズ以上の配列要素にアクセスしようとすると、自動でサイズを変更するのではなく、フェイルアサーションが発生します。
+長さを大きくすると、ゼロ初期化された要素が配列に加わります。長さを減らすと、削除された各要素に対して <code class="docutils literal notranslate"><span class="pre">delete</span></code> を暗黙的に行います。もしstorage出ない非動的配列のリサイズを行おうとすると、<code class="docutils literal notranslate"><span class="pre">Value</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">an</span> <span class="pre">lvalue</span></code> というエラーが発生します。</dd>
 <dt><strong>push</strong>:</dt>
-<dd>Dynamic storage arrays and <code class="docutils literal notranslate"><span class="pre">bytes</span></code> (not <code class="docutils literal notranslate"><span class="pre">string</span></code>) have a member function called <code class="docutils literal notranslate"><span class="pre">push</span></code> that you can use to append an element at the end of the array. The element will be zero-initialised. The function returns the new length.</dd>
+<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">push</span></code> というファンクションを持ち、配列の最後に要素を追加することができます。その要素はゼロ初期化されます。ファンクションは新しい長さを返します。</dd>
 <dt><strong>pop</strong>:</dt>
-<dd>Dynamic storage arrays and <code class="docutils literal notranslate"><span class="pre">bytes</span></code> (not <code class="docutils literal notranslate"><span class="pre">string</span></code>) have a member function called <code class="docutils literal notranslate"><span class="pre">pop</span></code> that you can use to remove an element from the end of the array. This also implicitly calls :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on the removed element.</dd>
+<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">pop</span></code> というファンクションを持ち、配列の最後から一つの要素を削除することができます。これも暗黙的に削除する要素に対して <code class="docutils literal notranslate"><span class="pre">delete</span></code> を呼び出しています。</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">If you use <code class="docutils literal notranslate"><span class="pre">.length--</span></code> on an empty array, it causes an underflow and
-thus sets the length to <code class="docutils literal notranslate"><span class="pre">2**256-1</span></code>.</p>
+<p class="last">もし <code class="docutils literal notranslate"><span class="pre">.length--</span></code> を空の配列に対して使うのと、アンダーフローし、長さが <code class="docutils literal notranslate"><span class="pre">2**256-1</span></code> となってしまいます。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Increasing the length of a storage array has constant gas costs because
-storage is assumed to be zero-initialised, while decreasing
-the length has at least linear cost (but in most cases worse than linear),
-because it includes explicitly clearing the removed
-elements similar to calling :ref:<code class="docutils literal notranslate"><span class="pre">delete</span></code> on them.</p>
+<p class="last">storageの配列の長さを増やすことで一定のガスがかかります。これはstorageがゼロ初期化されているとみなされているためです。一方で、長さを減らすのは少なくとも比例関数的にコストがかかります（しかしほとんどの場合比例関数より高くなります）。これは、<code class="docutils literal notranslate"><span class="pre">delete</span></code> を呼び出す様に明示的に削除した要素をクリアする工程を含んでいるためです。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It is not yet possible to use arrays of arrays in external functions
-(but they are supported in public functions).</p>
+<p class="last">まだ配列の配列をexternalのファンクションで使用することはできません（ただし、publicのファンクションではサポートされています）。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In EVM versions before Byzantium, it was not possible to access
-dynamic arrays return from function calls. If you call functions
-that return dynamic arrays, make sure to use an EVM that is set to
-Byzantium mode.</p>
+<p class="last">Byzantiumの前のEVMのバージョンではファンクションコールからの返り値として動的配列にはアクセスできませんでした。もし動的配列を返すファンクションんを呼び出すときは、ByzantiumモードがセットされているEVMを使っていることを確認して下さい。</p>
 </div>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -1152,9 +982,8 @@ Byzantium mode.</p>
 </div>
 </div>
 <div class="section" id="structs">
-<span id="index-19"></span><span id="id13"></span><h3>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h3>
-<p>Solidity provides a way to define new types in the form of structs, which is
-shown in the following example:</p>
+<span id="index-19"></span><span id="id19"></span><h3>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h3>
+<p>Solidityでは次の例の様に構造体として新しい型を定義する方法があります:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">CrowdFunding</span> <span class="p">{</span>
@@ -1205,25 +1034,14 @@ shown in the following example:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The contract does not provide the full functionality of a crowdfunding
-contract, but it contains the basic concepts necessary to understand structs.
-Struct types can be used inside mappings and arrays and they can itself
-contain mappings and arrays.</p>
-<p>It is not possible for a struct to contain a member of its own type,
-although the struct itself can be the value type of a mapping member
-or it can contain a dynamically-sized array of its type.
-This restriction is necessary, as the size of the struct has to be finite.</p>
-<p>Note how in all the functions, a struct type is assigned to a local variable
-with data location <code class="docutils literal notranslate"><span class="pre">storage</span></code>.
-This does not copy the struct but only stores a reference so that assignments to
-members of the local variable actually write to the state.</p>
-<p>Of course, you can also directly access the members of the struct without
-assigning it to a local variable, as in
-<code class="docutils literal notranslate"><span class="pre">campaigns[campaignID].amount</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
+<p>このコントラクトはクラウドファンディングの全機能を備えている訳ではありませんが、構造体を理解するために必要な基本的な概念を含んでいます。構造体型はマッピングや配列の中でも使えますし、構造体の中にマッピングや配列を含むこともできます。</p>
+<p>構造体自身はマッピングの要素の値型になったり、自分自身の型の動的配列を含むことはできますが、構造体の中に自分自身の構造体型を含めることはできません。構造体のサイズが有限である様にするためにこの制限が必要となっています。</p>
+<p>これらの全てのファンクションの中で、構造体型がどの様にデータの保存場所である <code class="docutils literal notranslate"><span class="pre">storage</span></code> が付いているローカル変数に割り当てられているか注意してください。構造体をコピーしているのではなく、参照先を保存しているだけなので、ローカル変数への割り当ては実際は状態のみを記述しています。</p>
+<p>もちろん、<code class="docutils literal notranslate"><span class="pre">campaigns[campaignID].amount</span> <span class="pre">=</span> <span class="pre">0</span></code> の様にローカル変数への割り当てをせずに直接構造体へアクセスすることもできます。</p>
 </div>
 </div>
 <div class="section" id="mapping-types">
-<span id="index-20"></span><span id="id14"></span><h2>Mapping Types<a class="headerlink" href="#mapping-types" title="Permalink to this headline">¶</a></h2>
+<span id="index-20"></span><span id="id20"></span><h2>Mapping Types<a class="headerlink" href="#mapping-types" title="Permalink to this headline">¶</a></h2>
 <p>マッピング型は <code class="docutils literal notranslate"><span class="pre">mapping(_KeyType</span> <span class="pre">=&gt;</span> <span class="pre">_ValueType)</span></code> という構文で宣言します。<code class="docutils literal notranslate"><span class="pre">_KeyType</span></code> はどの基本型でも入ります。つまりどのビルトインの型に加え、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> が使えます。ユーザー定義、もしくはコントラクト型、enum、マッピング、構造体、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> を除いた配列は使用できません。<code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> はマッピングを含めて、どの型でもとることができます。</p>
 <p>マッピングはどんなキーも存在し、そのバイト表現は全てゼロ（型の <a class="reference internal" href="control-structures.html#default-value"><span class="std std-ref">デフォルト値</span></a>）で実質的に初期化されている <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">hash tables</a> の様に考えることができます。ただ似ているのはそれだけで、キーデータはマッピングには保存されず、その <code class="docutils literal notranslate"><span class="pre">keccak256</span></code> ハッシュだけが値を検索するのに使用されます。</p>
 <p>そのため、マッピングは長さを持たず、キーの概念やセットする値などはありません。</p>
@@ -1344,8 +1162,8 @@ assigning it to a local variable, as in
 </pre></div>
 </div>
 </div>
-<div class="section" id="id15">
-<h3>Fixed-Size Byte Arrays<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id21">
+<h3>Fixed-Size Byte Arrays<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
 <p>10進数の数字リテラルは暗黙的に固定サイズのバイト配列に変換できません。16進数の数字リテラルはバイト型のサイズと桁数がぴったり合っている場合のみ変換可能です。10進数、16進数両者の唯一の例外として、値が0であればどの固定サイズのバイト型に変換できます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">54321</span><span class="p">;</span> <span class="c1">// not allowed</span>
 <span class="kt">bytes2</span> <span class="n">b</span> <span class="o">=</span> <span class="mh">0x12</span><span class="p">;</span> <span class="c1">// not allowed</span>

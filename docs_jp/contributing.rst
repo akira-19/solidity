@@ -68,21 +68,12 @@ Running the compiler tests
 ``aleth`` がパスに見つかる場合は実行しますが、ダウンロードは行いませんので、最初にインストールしておく必要があります。
 詳細を確認してください。
 
-The ``./scripts/tests.sh`` script executes most Solidity tests and
-runs ``aleth`` automatically if it is in the path, but does not download it,
-so you need to install it first. Please read on for the details.
-
 Solidityは様々なテストを含んでおり、ほとんどが ``soltest`` アプリケーションに同包されています。
 それらのいくつかはテストモードで　``aleth`` クライアントを必要とし、``libz3`` を必要とするものもあります。
-Solidity includes different types of tests, most of them bundled into the ``soltest``
-application. Some of them require the ``aleth`` client in testing mode, others require ``libz3``.
 
 ``aleth`` も ``libz3`` も必要としない基本的なテストセットを実行するには、
 ``./scripts/soltest.sh --no-ipc --no-smt`` を実行します。
 このスクリプトは ``./build/test/soltest`` を内部的に走らせます。
-To run a basic set of tests that require neither ``aleth`` nor ``libz3``, run
-``./scripts/soltest.sh --no-ipc --no-smt``. This script runs ``./build/test/soltest``
-internally.
 
 .. note ::
 
@@ -101,37 +92,24 @@ ipcテスト(生成されたコードのセマンティックをテストする�
 をインストールします。
 その後、テストモードで実行します。 
 ``aleth --db memorydb --test -d /tmp/testeth``
-If you want to run the ipc tests (that test the semantics of the generated code),
-you need to install `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_ 
-and run it in testing mode: ``aleth --db memorydb --test -d /tmp/testeth``.
 
 実際のテストを実行するには、 ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc`` を使います。
-To run the actual tests, use: ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc``.
 
 テストの一部を実行する場合は、フィルタを使います。
 ``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``
 ``TestName`` はワイルドカードを指定できます。 ``*`` 
-To run a subset of tests, you can use filters:
-``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``,
-where ``TestName`` can be a wildcard ``*``.
 
 例えば、実行したテストがあるとして、
 ``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``
 を実行すると、disambiguatorの全てのテストが実行されます。
-For example, here's an example test you might run;
-``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``.
-This will test all the tests for the disambiguator.
 
 全てテストを確認するには、
 ``./build/test/soltest --list_content=HRF -- --ipcpath /tmp/irrelevant``
 を使います。
-To get a list of all tests, use
-``./build/test/soltest --list_content=HRF -- --ipcpath /tmp/irrelevant``.
 
 もしGDBでデバッグしたい場合は、通常とは異なる方法でビルドしていることが必要です。
 以下のコマンドを ``build`` フォルダで実行します。
-If you want to debug using GDB, make sure you build differently than the "usual".
-For example, you could run the following command in your ``build`` folder:
+
 ::
 
    cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -140,27 +118,16 @@ For example, you could run the following command in your ``build`` folder:
 
 これは、あなたが ``--debug`` フラグを使いテストをデバッグする際のシンボルを生成します。
 これで、関数や変数をbreakしたりprintで表示したりすることができるようになります。
-This will create symbols such that when you debug a test using the ``--debug`` 
-flag, you will have access to functions and variables in which you can break 
-or print with.
 
 ``./scripts/tests.sh`` スクリプトも、``soltest`` で見つかったテストに加えて、コマンドラインテストを実行しテストをコンパイルします。
-The script ``./scripts/tests.sh`` also runs commandline tests and compilation tests
-in addition to those found in ``soltest``.
 
 CIはEmscriptenのコンパイルを必要とする追加のテスト( ``solc-js`` やサードパーティのSolidityフレームワークのテストを含みます)を実行します。
-The CI runs additional tests 
-(including ``solc-js`` and testing third party Solidity frameworks) 
-that require compiling the Emscripten target.
 
 .. note ::
 
     いくつかの ``aleth`` のバージョンはテストに使うことはできません。
     SolidityのCIで使っているものと同じバージョンを使うことを推奨します。
     現在CIはバージョン ``aleth`` の ``1.5.0-alpha.7`` を使っています。
-    Some versions of ``aleth`` can not be used for testing. We suggest using
-    the same version that the Solidity continuous integration tests use.
-    Currently the CI uses version ``1.5.0-alpha.7`` of ``aleth``.
 
 Writing and running syntax tests
 構文テストの実装と実行
@@ -170,15 +137,8 @@ Writing and running syntax tests
 それらは ``tests/libsolidity/syntaxTests`` フォルダ内へ個別のファイルに格納されます。
 それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
 テストスイートは、正しい結果に対してチェックしコンパイルします。
-Syntax tests check that the compiler generates the correct error 
-messages for invalid code
-and properly accepts valid code.
-They are stored in individual files inside the ``tests/libsolidity/syntaxTests`` folder.
-These files must contain annotations, stating the expected result(s) of the respective test.
-The test suite compiles and checks them against the given expectations.
 
 例えば、 ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol`` では、
-For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol``
 
 ::
 
@@ -190,27 +150,16 @@ For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.s
     // DeclarationError: (36-52): Identifier already declared.
 
 構文テストは、少なくともセパレータ ``// ----`` に続くテスト自身のコントラクトを含まなければいけません。
-A syntax test must contain at least the contract under test itself, 
-followed by the separator ``// ----``. 
 セパレータに続くコメントは、正しいコンパイラエラーやワーニングを記述するのに使われます。
-The comments that follow the separator are used to describe the
-expected compiler errors or warnings. 
 数字の範囲は、エラーが発生したソースコードの場所を指定しています。
-The number range denotes the location in the source where the error occurred.
 コントラクトにエラーやワーニングなしでコンパイルしたい場合、セパレータとコメントを削除することができます。
-If you want the contract to compile without any errors or warning you can leave
-out the separator and the comments that follow it.
 
 上記の例だと、``variable``変数は２度宣言されてます。
 これは、すでに宣言されていますという識別子の ``DeclarationError`` となります。
-In the above example, the state variable ``variable`` was declared twice, 
-which is not allowed. 
-This results in a ``DeclarationError`` stating 
-that the identifier was already declared.
 
-The ``isoltest`` tool is used for these tests and you can find it under ``./build/test/tools/``. It is an interactive tool which allows
-editing of failing contracts using your preferred text editor. 
-Let's try to break this test by removing the second declaration of ``variable``:
+``isoltest``というツールはこれらのテストに使え、 ``./build/test/tools/`` にあります。
+このツールは、対話的に、お好みのエディタを使って、失敗しているコントラクトを編集することができます。
+``variable`` を削除して、このテストを突破してみましょう！
 
 ::
 
@@ -220,7 +169,7 @@ Let's try to break this test by removing the second declaration of ``variable``:
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
-Running ``./build/test/isoltest`` again results in a test failure:
+再度 ``./build/test/isoltest``を実行すると失敗します。
 
 ::
 
@@ -235,20 +184,18 @@ Running ``./build/test/isoltest`` again results in a test failure:
         Obtained result:
             Success
 
+``isoltest`` は得られた結果の次に期待する結果を表示します。また、現在のコントラクトの編集や更新、スキップする方法や、アプリケーションを終了する方法など方法も提供します。
 
-``isoltest`` prints the expected result next to the obtained result, and also
-provides a way to edit, update or skip the current contract file, or quit the application.
+失敗してるテストのためにいくつかの選択肢を提供します。
 
-It offers several options for failing tests:
+- ``edit``: ``isoltest`` はエディタでコントラクトを開こうとし、修正できるます。 ``isoltest --editor /path/to/editor`` としてコマンドラインで与えられたエディタか、,``EDITOR`` 環境変数で設定されいてるものか ``/usr/bin/editor`` を使います。(この順番で設定されます).
+- ``update``: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。
+- ``skip``: 特定のテストの実行をスキップします。
+- ``quit``: ``isoltest`` を終了します。
 
-- ``edit``: ``isoltest`` tries to open the contract in an editor so you can adjust it. It either uses the editor given on the command line (as ``isoltest --editor /path/to/editor``), in the environment variable ``EDITOR`` or just ``/usr/bin/editor`` (in that order).
-- ``update``: Updates the expectations for contract under test. This updates the annotations by removing unmet expectations and adding missing expectations. The test is then run again.
-- ``skip``: Skips the execution of this particular test.
-- ``quit``: Quits ``isoltest``.
+全てのテスト実行を終了する ``quit`` をのぞいて全てのオプションは現在のコントラクトへ適用します。
 
-All of these options apply to the current contract, expect ``quit`` which stops the entire testing process.
-
-Automatically updating the test above changes it to
+自動的、上記のテストは以下に変更され、
 
 ::
 
@@ -257,7 +204,7 @@ Automatically updating the test above changes it to
     }
     // ----
 
-and re-run the test. It now passes again:
+再実行され、テストはパスします。
 
 ::
 
@@ -266,24 +213,22 @@ and re-run the test. It now passes again:
 
 
 .. note::
-
-    Choose a name for the contract file that explains what it tests, e.g. ``double_variable_declaration.sol``.
-    Do not put more than one contract into a single file, unless you are testing inheritance or cross-contract calls.
-    Each file should test one aspect of your new feature.
+    そのテストを説明するコントラクトファイルの名前を選んでみてください。例えば、``double_variable_declaration.sol`` などです。 
+    継承のテストやクロスコントラクトのテスト以外で、1つのファイルに複数のコントラクトを配置していはいけません。
+    各ファイルは新しい機能の側面のみテストすべきです。
 
 
 Running the Fuzzer via AFL
 ==========================
+Fuzzingは例外的な状態(segmentation faults, exceptions, etc)を見つけるための、ランダムインプットでプログラムを実行させるテクニックです。
 
-Fuzzing is a technique that runs programs on more or less random inputs to find exceptional execution
-states (segmentation faults, exceptions, etc). Modern fuzzers are clever and run a directed search
-inside the input. We have a specialized binary called ``solfuzzer`` which takes source code as input
-and fails whenever it encounters an internal compiler error, segmentation fault or similar, but
-does not fail if e.g., the code contains an error. This way, fuzzing tools can find internal problems in the compiler.
+現代のfuzzersはかしこく、インプットの中で有向探索を実行します。
+インプットとして、ソースコードをとる ``solfuzzer`` と呼ばれる特別なバイナリがあります。
+内部コンパイラエラー、やsegmentation faultや類似のエラーが発生した時は失敗しますが、
+コードにエラーが含まれていても失敗しません。こうして、fuzzingツールはコンパイラの中の内部的な問題を見つけることができます。
 
-We mainly use `AFL <http://lcamtuf.coredump.cx/afl/>`_ for fuzzing. You need to download and
-install the AFL packages from your repositories (afl, afl-clang) or build them manually.
-Next, build Solidity (or just the ``solfuzzer`` binary) with AFL as your compiler:
+私たちは主に、 `AFL <http://lcamtuf.coredump.cx/afl/>` をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
+次に、自分用のコンパイラとしてAFLとSolidityをビルドします（もしくは、単に ``solfuzzer`` バイナリを使います）。
 
 ::
 
@@ -293,7 +238,7 @@ Next, build Solidity (or just the ``solfuzzer`` binary) with AFL as your compile
     cmake .. -DCMAKE_C_COMPILER=path/to/afl-gcc -DCMAKE_CXX_COMPILER=path/to/afl-g++
     make solfuzzer
 
-At this stage you should be able to see a message similar to the following:
+この段階では以下のようなメッセージを見ることになるでしょう。
 
 ::
 
@@ -304,7 +249,7 @@ At this stage you should be able to see a message similar to the following:
     [+] Instrumented 1949 locations (64-bit, non-hardened mode, ratio 100%).
     [100%] Linking CXX executable solfuzzer
 
-If the instrumentation messages did not appear, try switching the cmake flags pointing to AFL's clang binaries:
+このようなメッセージ表示されない場合、cmakeフラグをAFLのclangバイナリに向けるようにしてみてください。
 
 ::
 
@@ -313,7 +258,7 @@ If the instrumentation messages did not appear, try switching the cmake flags po
     cmake .. -DCMAKE_C_COMPILER=path/to/afl-clang -DCMAKE_CXX_COMPILER=path/to/afl-clang++
     make solfuzzer
 
-Otherwise, upon execution the fuzzer halts with an error saying binary is not instrumented:
+そうしなければ、直ちにバイナリはインスツルメントされてないというエラーと共にfuzzerは停止します。
 
 ::
 
@@ -334,10 +279,8 @@ Otherwise, upon execution the fuzzer halts with an error saying binary is not in
     [-] PROGRAM ABORT : No instrumentation detected
              Location : check_binary(), afl-fuzz.c:6920
 
-
-Next, you need some example source files. This makes it much easier for the fuzzer
-to find errors. You can either copy some files from the syntax tests or extract test files
-from the documentation or the other tests:
+次に、サンプルソースファイルで、それはfuzzerに簡単にエラーを見つけられるようする実例のソースコードが必要です。
+あなたは、文法テストからファイルをコピーするか、ドキュメントや他のテストからテストファイルを抽出することができます。
 
 ::
 
@@ -348,37 +291,32 @@ from the documentation or the other tests:
     # extract from documentation:
     path/to/solidity/scripts/isolate_tests.py path/to/solidity/docs docs
 
-The AFL documentation states that the corpus (the initial input files) should not be
-too large. The files themselves should not be larger than 1 kB and there should be
-at most one input file per functionality, so better start with a small number of.
-There is also a tool called ``afl-cmin`` that can trim input files
-that result in similar behaviour of the binary.
+AFLドキュメントはコーパス（初期のインプットファイル）が大きすぎないようにしています。これらのファイル自身は1 kBを超えず、機能あたり多くても１ファイルであるべきです。
+``afl-cmin`` というインプットファイルをバイナリと似た動作に整えるツールもあります。
 
-Now run the fuzzer (the ``-m`` extends the size of memory to 60 MB):
+fuzzerを実行してください( ``-m`` はメモリサイズを60 MBへ拡張します):
 
 ::
 
     afl-fuzz -m 60 -i /tmp/test_cases -o /tmp/fuzzer_reports -- /path/to/solfuzzer
 
-The fuzzer creates source files that lead to failures in ``/tmp/fuzzer_reports``.
-Often it finds many similar source files that produce the same error. You can
-use the tool ``scripts/uniqueErrors.sh`` to filter out the unique errors.
+fuzzerは ``/tmp/fuzzer_reports`` に失敗するソースファイルを生成します。
+同じエラーを発生させる似たソースファイルがあることもありますが、 ``scripts/uniqueErrors.sh`` を使うとユニークなエラーのみ絞り込むことができます。
 
 Whiskers
 ========
 
-*Whiskers* is a string templating system similar to `Mustache <https://mustache.github.io>`_. It is used by the
-compiler in various places to aid readability, and thus maintainability and verifiability, of the code.
+*Whiskers* は `Mustache <https://mustache.github.io>` と似た文字型テンプレートシステムです。
+コードの保守性や検証可能性、可読性のため、様々な場所でコンパイラが使います。
 
-The syntax comes with a substantial difference to Mustache. The template markers ``{{`` and ``}}`` are
-replaced by ``<`` and ``>`` in order to aid parsing and avoid conflicts with :ref:`inline-assembly`
-(The symbols ``<`` and ``>`` are invalid in inline assembly, while ``{`` and ``}`` are used to delimit blocks).
-Another limitation is that lists are only resolved one depth and they do not recurse. This may change in the future.
+シンタックスはMustacheと大きく異なり、 ``{{`` と ``}}`` は　``<`` と ``>`` に置き換わっています。
+それはパースしやすくするのと、 :ref:`inline-assembly` とコンフリクトするのを避けるためです(インラインアセンブラでは ``<`` と ``>`` は不正ですが、 ``{`` と ``}`` はブロックを区切るのに使います)
+リストは１階層のみ処理され再帰しない、という制限がありますが、将来は変更されるでしょう。
 
 A rough specification is the following:
+大まかな仕様として以下があります。
 
-Any occurrence of ``<name>`` is replaced by the string-value of the supplied variable ``name`` without any
-escaping and without iterated replacements. An area can be delimited by ``<#name>...</name>``. It is replaced
-by as many concatenations of its contents as there were sets of variables supplied to the template system,
-each time replacing any ``<inner>`` items by their respective value. Top-level variables can also be used
-inside such areas.
+``<name>`` は全て文字型の ``name`` にエスケープや繰り返しの置換することなしに置き換われます。
+領域は ``<#name>...</name>`` で区切ることができます。テンプレートシステムへ与えられた変数のセットとして、内容を連結したものに置きかわりますし、
+``<inner>`` は毎回、それぞれの値で置き換わります。
+トップレベルの変数はその領域内部でも使うことができます。

@@ -6,35 +6,25 @@ Yul
 
 .. index:: ! assembly, ! asm, ! evmasm, ! yul, julia, iulia
 
-Yul (previously also called JULIA or IULIA) is an intermediate language that can
-compile to various different backends
-(EVM 1.0, EVM 1.5 and eWASM are planned).
-Because of that, it is designed to be a usable common denominator of all three
-platforms.
-It can already be used for "inline assembly" inside Solidity and
-future versions of the Solidity compiler will even use Yul as intermediate
-language. It should also be easy to build high-level optimizer stages for Yul.
+Yul(以前JULIAやIULIAと呼ばれていたものです)は複数の異なるバックエンド(EVM1.0やEVM1.5、eWASM)でコンパイルできる中間言語です。
+そのため、Yulは3つのプラットフォームすべての使用可能な共通分母になるように設計されています。
+YulはすでにSolidity内の"inline assembly"としても使用されており、Solidityコンパイラの将来のバージョンではYulを中間言語として使用できるようになります。
+また、Yul用の高水準オプティマイザステージを構築するのは簡単です。
 
 .. note::
 
-    Note that the flavour used for "inline assembly" does not have types
-    (everything is ``u256``) and the built-in functions are identical
-    to the EVM opcodes. Please resort to the inline assembly documentation
-    for details.
+    "inline assembly"として使用されるときに型を持つわけではありません(すべて ``u256`` になります)。
+    そして、組み込み関数はEVMオペコードと同じです。詳細についてはinline assemblyのドキュメントを参照してください。
 
-The core components of Yul are functions, blocks, variables, literals,
-for-loops, if-statements, switch-statements, expressions and assignments to variables.
+Yulのコアコンポーネントは関数、ブロック、変数、リテラル、forループ、if文、switch文、式と変数への代入です。
 
-Yul is typed, both variables and literals must specify the type with postfix
-notation. The supported types are ``bool``, ``u8``, ``s8``, ``u32``, ``s32``,
-``u64``, ``s64``, ``u128``, ``s128``, ``u256`` and ``s256``.
+Yulは型付けされ、変数とリテラルの両方が後置記法で型を指定しなければなりません。
+サポートしている型は、 ``bool``、 ``u8``、 ``s8``、 ``u32``、 ``s32``、 ``u64``、 ``s64``、 ``u128``、 ``s128``、 ``u256``、 ``s256`` です。
 
-Yul in itself does not even provide operators. If the EVM is targeted,
-opcodes will be available as built-in functions, but they can be reimplemented
-if the backend changes. For a list of mandatory built-in functions, see the section below.
+Yul自体は、演算子すら持ちません。もしあるEVMが指定された場合、オペコードは組み込み関数として利用可能になりますが、バックエンドが変更された場合は再実装することができます。
+マンダトリーなビルドイン関数のリストは下のセクションを参照ください。
 
-The following example program assumes that the EVM opcodes ``mul``, ``div``
-and ``mod`` are available either natively or as functions and computes exponentiation.
+次のプログラムの例では、EVMのオペコード ``mul``、 ``div``、および ``mod`` がネイティブでも関数としても利用可能であると仮定して、べき乗を計算します。
 
 .. code::
 
@@ -53,9 +43,9 @@ and ``mod`` are available either natively or as functions and computes exponenti
         }
     }
 
-It is also possible to implement the same function using a for-loop
-instead of with recursion. Here, we need the EVM opcodes ``lt`` (less-than)
-and ``add`` to be available.
+
+また、再帰ではなくforループを使用して同じ関数を実装することも可能です。
+ここで、利用可能なEVMオペコードの ``lt`` (less-than)と ``add`` が必要になります。
 
 .. code::
 
@@ -73,7 +63,7 @@ and ``add`` to be available.
 Specification of Yul
 ====================
 
-This chapter describes Yul code. It is usually placed inside a Yul object, which is described in the following chapter.
+この章では、Yulのコードを記述します。通常、Yulオブジェクトの中に置かれるものです。これについては次の章で説明します。
 
 Grammar::
 
@@ -129,89 +119,56 @@ Grammar::
 Restrictions on the Grammar
 ---------------------------
 
-Switches must have at least one case (including the default case).
-If all possible values of the expression are covered, a default case should
-not be allowed (i.e. a switch with a ``bool`` expression that has both a
-true and a false case should not allow a default case). All case values need to
-have the same type.
+Switch文はdefault caseを含む最低でも1つのcaseを持ちます。
+もし式のすべての可能な値がカバーされている場合、defaultのcaseは許容するべきではありません(すなわち、真と偽の両方のケースを持つ ``bool`` を持つSwitch文)。
+また、すべてのcaseの値は同じ型である必要があります。
 
-Every expression evaluates to zero or more values. Identifiers and Literals
-evaluate to exactly
-one value and function calls evaluate to a number of values equal to the
-number of return values of the function called.
+すべての式はゼロ以上の値に評価されます。識別子とリテラルは厳密に1つの値であると評価され、関数呼び出しは呼び出された関数の戻り値の数と等しい数の値であると評価されます。
 
-In variable declarations and assignments, the right-hand-side expression
-(if present) has to evaluate to a number of values equal to the number of
-variables on the left-hand-side.
-This is the only situation where an expression evaluating
-to more than one value is allowed.
+変数宣言時や代入時、右辺の式は、左辺の変数の数と等しい数の値であると評価される必要があります。
+これが、複数の値に評価される式が許可される唯一の状況です。
 
-Expressions that are also statements (i.e. at the block level) have to
-evaluate to zero values.
+ステートメント(すなわち、ブロックレベル)でもある式は、0として評価される必要があります。
+そして、その他のすべてのシチュエーションにおいて、式は単一の値として評価する必要があります。
 
-In all other situations, expressions have to evaluate to exactly one value.
+ ``continue`` や ``break`` 文はループ文中でのみ使用でき、ループ文と同じ関数内になければなりません(もしくは両方ともトップレベルになければなりません)。
 
-The ``continue`` and ``break`` statements can only be used inside loop bodies
-and have to be in the same function as the loop (or both have to be at the
-top level).
-The condition part of the for-loop has to evaluate to exactly one value.
+for文の条件は、単一の値で評価される必要があります。
 
-Literals cannot be larger than the their type. The largest type defined is 256-bit wide.
+リテラルは、その型以上に大きくなることはありません。最大値の型は、256ビット長であることが決められています。
 
 Scoping Rules
 -------------
 
-Scopes in Yul are tied to Blocks (exceptions are functions and the for loop
-as explained below) and all declarations
-(``FunctionDefinition``, ``VariableDeclaration``)
-introduce new identifiers into these scopes.
+Yulのスコープはブロックと結びついており(関数とforループは例外です)、すべての宣言( ``FunctionDefinition``、 ``VariableDeclaration``)はこれらのスコープに新たな識別子をもたらします。
 
-Identifiers are visible in
-the block they are defined in (including all sub-nodes and sub-blocks).
-As an exception, identifiers defined in the "init" part of the for-loop
-(the first block) are visible in all other parts of the for-loop
-(but not outside of the loop).
-Identifiers declared in the other parts of the for loop respect the regular
-syntactical scoping rules.
-The parameters and return parameters of functions are visible in the
-function body and their names cannot overlap.
+識別子は、定義されたブロック内で表示することができます(すべてのサブノートやサブブロックを含みます)。
+例外として、forループの"init"部分(最初のブロック)で定義された識別子は、forループの他のすべての部分で表示することができます(ただし、ループの外側では表示できません)。
+関数のパラメータと戻り値は関数本体に表示され、それらの名前は同じものを使用することはできません。
 
-Variables can only be referenced after their declaration. In particular,
-variables cannot be referenced in the right hand side of their own variable
-declaration.
-Functions can be referenced already before their declaration (if they are visible).
+変数は宣言後に参照することができます。特に、変数はそれ自身の変数宣言の右側では参照できません。
+関数は宣言前にすでに参照できます(可視性である場合に限ります)。
 
-Shadowing is disallowed, i.e. you cannot declare an identifier at a point
-where another identifier with the same name is also visible, even if it is
-not accessible.
+シャドーイングは使用できません。つまり、たとえアクセスできない場合でも、同じ名前の別の識別子も表示されている場所で識別子を宣言することはできません。
 
-Inside functions, it is not possible to access a variable that was declared
-outside of that function.
+また、関数の外側で宣言された変数にアクセスすることはできません。
 
 Formal Specification
 --------------------
 
-We formally specify Yul by providing an evaluation function E overloaded
-on the various nodes of the AST. Any functions can have side effects, so
-E takes two state objects and the AST node and returns two new
-state objects and a variable number of other values.
-The two state objects are the global state object
-(which in the context of the EVM is the memory, storage and state of the
-blockchain) and the local state object (the state of local variables, i.e. a
-segment of the stack in the EVM).
-If the AST node is a statement, E returns the two state objects and a "mode",
-which is used for the ``break`` and ``continue`` statements.
-If the AST node is an expression, E returns the two state objects and
-as many values as the expression evaluates to.
+私たちは、ASTのさまざまなノードにオーバーロードされた評価関数Eを提供して、Yulを形式的に指定します。
+どの関数にも副作用がある可能性があるため、評価関数Eは2つのステートオブジェクトとASTノードを取り、2つの新しいステートオブジェクトと可変数の他の値を返します。
+2つの状態オブジェクトとはグローバルステートオブジェクト(EVMのコンテキストではブロックチェーンのメモリ、ストレージ、およびステート)とローカルステートオブジェクト(ローカル変数のステート、つまりEVM内のスタックのセグメント)です。
 
+もしASTノードがステートメントである場合、評価関数Eは2つのステートオブジェクトと、 ``break`` と ``continue`` に使用される "mode"を返します。
+もしASTノードが式である場合、評価関数Eは2つのステートオブジェクトと式が評価する同じ数の値を返します。
 
-The exact nature of the global state is unspecified for this high level
-description. The local state ``L`` is a mapping of identifiers ``i`` to values ``v``,
-denoted as ``L[i] = v``.
+グローバルステートの正確な性質は、この上位レベルの説明では規定されていません。
+ローカルステート ``L`` は、識別子 ``i`` から値 ``v`` へのマッピングで、``L[i] = v`` と表されます。
 
-For an identifier ``v``, let ``$v`` be the name of the identifier.
+識別子 ``v`` の場合、 ``$v`` を識別子の名前とします。
 
-We will use a destructuring notation for the AST nodes.
+また、ASTノードには分割表記を使用します。
 
 .. code::
 
@@ -242,9 +199,9 @@ We will use a destructuring notation for the AST nodes.
     E(G, L, <for { i1, ..., in } condition post body>: ForLoop) =
         if n >= 1:
             let G1, L1, mode = E(G, L, i1, ..., in)
-            // mode has to be regular due to the syntactic restrictions
+            // 構文上の制限のため、modeは規則的でなければなりません
             let G2, L2, mode = E(G1, L1, for {} condition post body)
-            // mode has to be regular due to the syntactic restrictions
+            // 構文上の制限のため、modeは規則的でなければなりません
             let L3 be the restriction of L2 to only variables of L
             G2, L3, regular
         else:
@@ -273,7 +230,7 @@ We will use a destructuring notation for the AST nodes.
     E(G, L, <switch condition case l1:t1 st1 ... case ln:tn stn default st'>: Switch) =
         let G0, L0, v = E(G, L, condition)
         // i = 1 .. n
-        // Evaluate literals, context doesn't matter
+        // コンテキストに関係なくリテラルを評価します
         let _, _, v1 = E(G0, L0, l1)
         ...
         let _, _, vn = E(G0, L0, ln)
@@ -308,28 +265,27 @@ We will use a destructuring notation for the AST nodes.
 Type Conversion Functions
 -------------------------
 
-Yul has no support for implicit type conversion and therefore functions exist to provide explicit conversion.
-When converting a larger type to a shorter type a runtime exception can occur in case of an overflow.
+Yulは暗黙的型変換をサポートしていないため、明示的変換を提供するための関数が存在します。
+大きな型からより小さな型へ変換するとき、オーバーフローの場合にruntime exceptionが発生する可能性があります。
 
-Truncating conversions are supported between the following types:
+以下の型間での変換の切り捨てがサポートされています:
  - ``bool``
  - ``u32``
  - ``u64``
  - ``u256``
  - ``s256``
 
-For each of these a type conversion function exists having the prototype in the form of ``<input_type>to<output_type>(x:<input_type>) -> y:<output_type>``,
-such as ``u32tobool(x:u32) -> y:bool``, ``u256tou32(x:u256) -> y:u32`` or ``s256tou256(x:s256) -> y:u256``.
+これらのそれぞれに対して、型変換関数は、 ``u32tobool(x:u32) -> y:bool``、 ``u256tou32(x:u256) -> y:u32`` や ``s256tou256(x:s256) -> y:u256`` などといった ``<input_type>to<output_type>(x:<input_type>) -> y:<output_type>`` 形式のプロトタイプを持ちます。
 
 .. note::
 
-    ``u32tobool(x:u32) -> y:bool`` can be implemented as ``y := not(iszerou256(x))`` and
-    ``booltou32(x:bool) -> y:u32`` can be implemented as ``switch x case true:bool { y := 1:u32 } case false:bool { y := 0:u32 }``
+    ``u32tobool(x:u32) -> y:bool`` は ``y := not(iszerou256(x))`` として実行され、
+    ``booltou32(x:bool) -> y:u32`` は ``switch x case true:bool { y := 1:u32 } case false:bool { y := 0:u32 }`` として実行されます。
 
 Low-level Functions
 -------------------
 
-The following functions must be available:
+以下の関数が利用可能でなければなりません:
 
 +---------------------------------------------------------------------------------------------------------------+
 | *Logic*                                                                                                       |
@@ -530,13 +486,13 @@ The following functions must be available:
 Backends
 --------
 
-Backends or targets are the translators from Yul to a specific bytecode. Each of the backends can expose functions
-prefixed with the name of the backend. We reserve ``evm_`` and ``ewasm_`` prefixes for the two proposed backends.
+バックエンドやターゲットはYulから特定のバイトコードへのtranslatorとなります。各バックエンドは、バックエンドの名前を接頭辞として持つ関数を公開することができます。
+また、バックエンドのために ``evm`` と ``ewasm`` の接頭辞を予約語としています。
 
 Backend: EVM
 ------------
 
-The EVM target will have all the underlying EVM opcodes exposed with the `evm_` prefix.
+EVMターゲットは ``evm_`` 接頭辞で公開されているすべての基底のEVMオペコードを持ちます。
 
 Backend: "EVM 1.5"
 ------------------
@@ -551,12 +507,10 @@ TBD
 Specification of Yul Object
 ===========================
 
-Yul objects are used to group named code and data sections.
-The functions ``datasize``, ``dataoffset`` and ``datacopy``
-can be used to access these sections from within code.
-Hex strings can be used to specify data in hex encoding,
-regular strings in native encoding. For code,
-``datacopy`` will access its assembled binary representation.
+Yulオブジェクトは、名前付きコードとデータセクションをグループ化するために使用されます。
+関数 ``datasize`` 、 ``dataoffset`` および ``datacopy`` は、コード内からこれらのセクションにアクセスするために使用できます。
+また、16進数エンコーディングでデータを指定し、ネイティブエンコーディングで通常の文字列を指定するために16進数の文字列を使用できます。
+コードの場合、 ``datacopy`` はassembled binary representationにアクセスします。
 
 Grammar::
 
@@ -566,36 +520,33 @@ Grammar::
     HexLiteral = 'hex' ('"' ([0-9a-fA-F]{2})* '"' | '\'' ([0-9a-fA-F]{2})* '\'')
     StringLiteral = '"' ([^"\r\n\\] | '\\' .)* '"'
 
-Above, ``Block`` refers to ``Block`` in the Yul code grammar explained in the previous chapter.
+以上において、``Block`` は前の章で説明したYulコード文法の ``Block`` を表します。
 
-An example Yul Object is shown below:
+Yulオブジェクトの例を以下に示します:
 
 .. code::
 
-    // Code consists of a single object. A single "code" node is the code of the object.
-    // Every (other) named object or data section is serialized and
-    // made accessible to the special built-in functions datacopy / dataoffset / datasize
-    // Access to nested objects can be performed by joining the names using ``.``.
-    // The current object and sub-objects and data items inside the current object
-    // are in scope without nested access.
+    // コードは単一のオブジェクトで構成されています。単一の "code"ノードはオブジェクトのコードです。
+    // すべての（他の）名前付きオブジェクトまたはデータセクションはシリアライズされ、
+    // 特別な組み込み関数 datacopy/dataoffset/datasize にアクセスできるようになります。    
+    // ネストされたオブジェクトへのアクセスは ``.`` を使って名前を結合することによって可能です。
+    // 現在のオブジェクト、現在のオブジェクト内のサブオブジェクト、およびデータ項目は、ネストアクセスなしでスコープ内にあります。
     object "Contract1" {
         code {
-            // first create "runtime.Contract2"
+            // 最初に "runtime.Contract2" を作成します
             let size = datasize("runtime.Contract2")
             let offset = allocate(size)
-            // This will turn into a memory->memory copy for eWASM and
-            // a codecopy for EVM
+            // 以下はeWASMの場合はmemory-> memory、
+            // EVMの場合は "runtime.Contract2"のコードコピーになります
             datacopy(offset, dataoffset("runtime.Contract2"), size)
-            // constructor parameter is a single number 0x1234
+            // コンストラクタパラメータは単一値0x1234になります
             mstore(add(offset, size), 0x1234)
             create(offset, add(size, 32))
 
-            // now return the runtime object (this is
-            // constructor code)
+            // これでランタイムオブジェクトを返すようになりました（これはコンストラクタコードです）
             size := datasize("runtime")
             offset := allocate(size)
-            // This will turn into a memory->memory copy for eWASM and
-            // a codecopy for EVM
+            // 以下はeWASMの場合はmemory-> memory、EVMの場合はcodecopyになります。
             datacopy(offset, dataoffset("runtime"), size)
             return(offset, size)
         }
@@ -604,28 +555,27 @@ An example Yul Object is shown below:
 
         object "runtime" {
             code {
-                // runtime code
+                // ランタイムコード
 
                 let size = datasize("Contract2")
                 let offset = allocate(size)
-                // This will turn into a memory->memory copy for eWASM and
-                // a codecopy for EVM
+                // 以下はeWASMの場合はmemory-> memory、EVMの場合はcodecopyになります。
                 datacopy(offset, dataoffset("Contract2"), size)
-                // constructor parameter is a single number 0x1234
+                // コンストラクタパラメータは単一値0x1234になります
                 mstore(add(offset, size), 0x1234)
                 create(offset, add(size, 32))
             }
 
-            // Embedded object. Use case is that the outside is a factory contract,
-            // and Contract2 is the code to be created by the factory
+            // 埋め込みオブジェクト。ユースケースとして、オブジェクト外においてファクトリコントラクトであり、
+            // Contract2がファクトリによって作成されるコードです。
             object "Contract2" {
                 code {
-                    // code here ...
+                    // コード...
                 }
 
                 object "runtime" {
                     code {
-                        // code here ...
+                        // コード...
                     }
                  }
 

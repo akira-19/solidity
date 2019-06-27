@@ -467,8 +467,7 @@ No::
             value: 42
         }));
 
-
- ``else`` または ``else if`` 節を持つ ``if`` ブロックの場合、 ``else``は ``if`` の閉じ括弧と同じ行に配置する必要があります。
+``else`` または ``else if`` 節を持つ ``if`` ブロックの場合、 ``else``は ``if`` の閉じ括弧と同じ行に配置する必要があります。
 これは他のブロックのような構造の規則と比較して例外です。
 
 Yes::
@@ -1069,7 +1068,7 @@ NatSpec
 
 Solidityコントラクトは、Ethereum Natural Language Specification Format のベースとなっている形式のコメントを付けることができます。
 
- `///` またはaで始まる1行または複数行の `doxygen <http://www.doxygen.nl>`_ 表記に続く関数または規約の上にコメントを追加します。
+`///` またはaで始まる1行または複数行の `doxygen <http://www.doxygen.nl>`_ 表記に続く関数または規約の上にコメントを追加します。
 
 例えば、コメントが追加された `a simple smart contract <simple-smart-contract>`_ のコントラクトは以下のようになります::
 
@@ -1097,7 +1096,7 @@ Solidityコントラクトは、Ethereum Natural Language Specification Format �
 
 Natspecは特別な意味を持つdoxygenスタイルのタグを使います。
 タグが使用されていない場合、コメントは ``@notice`` として適用されます。
- ``@notice`` タグはNatSpecのメインタグで、読み手はソースコードを読んだことのないコントラクトユーザーを想定しています。
+``@notice`` タグはNatSpecのメインタグで、読み手はソースコードを読んだことのないコントラクトユーザーを想定しています。
 そのため、できるだけ内部の詳細についての推測させないようにするべきです。
 また、すべてのタグはオプショナルです。
 

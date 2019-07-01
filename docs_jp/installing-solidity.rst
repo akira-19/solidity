@@ -9,7 +9,7 @@ Installing the Solidity Compiler
 Versioning
 ==========
 
-Solidityのバージョンは `semantic versioning <https://semver.org>`_ に準じており、リリースに加え、**nightly development builds** も使用可能となっている。ドキュメントに含んでいないものや大きな変更を含んだ成果が組み込まれているものの、nightly buildsは動作を保証されていません。
+Solidityのバージョンは `semantic versioning <https://semver.org>`_ に準じており、リリースに加え、**nightly development builds** も使用可能となっています。ドキュメントに含んでいないものや大きな変更を含んだ成果が組み込まれているものの、nightly buildsは動作を保証されていません。
 最新バージョンを使用することをお薦めします。下記のパッケージインストーラでは最新バージョンを使用しています。
 
 Remix
@@ -17,7 +17,7 @@ Remix
 
 *小規模のコントラクトやさっとSolidityを学ぶのにRemixをお薦めしています。*
 
-`Remix onlineにアクセスして下さい <https://remix.ethereum.org/>`_、 何もインストールする必要はありません。
+`Remix onlineにアクセスして下さい <https://remix.ethereum.org/>`_。何もインストールする必要はありません。
 もしインターネット接続無しで使用したい場合は https://github.com/ethereum/remix-live/tree/gh-pages にアクセスし、指示に従って ``.zip`` ファイルをダウンロードして下さい。
 
 追加オプションとしてこのページではコマンドラインのSolidityコンパイラのインストール方法を紹介しています。大規模なコントラクトやもっと複雑なコンパイルオプションが必要な場合にはコマンドラインコンパイラを使用してください。
@@ -29,7 +29,7 @@ npm / Node.js
 
 Solidityコンパイラである `solcjs` の便利で簡単なインストール方法として `npm` を使用してください。`solcjs` はこの後紹介するコンパイラへのアクセス方法に比べて機能は少ないです。:ref:`commandline-compiler` のドキュメンテーションでは全ての機能が備わっている `solc` というコンパイラを使用します。`solcjs` の使用方法はその `レポジトリ <https://github.com/ethereum/solc-js>`_ にドキュメント化されています。
 
-Note: solc-jsプロジェクトはEmscriptenを使うことでC++ `solc` から派生されています。つまり両方とも同じコンパイラのソースコードを使用しているということです。`solc-js` はJavascriptのプロジェクトで（Remixの様に）直接使用可能です。使い方はsolc-jsレポジトリを参照して下さい。
+注意: solc-jsプロジェクトはEmscriptenを使うことでC++ `solc` から派生されています。つまり両方とも同じコンパイラのソースコードを使用しているということです。`solc-js` はJavascriptのプロジェクトで（Remixの様に）直接使用可能です。使い方はsolc-jsレポジトリを参照して下さい。
 
 .. code-block:: bash
 
@@ -142,7 +142,7 @@ SolidityのLinux buildのために下記のdependenciesをインストールす�
 Prerequisites - macOS
 ---------------------
 
-macOS用に最新バージョンの `Xcodeがインストールされている<https://developer.apple.com/xcode/download/>`_ ことを確認して下さい。これには `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_ と `Xcode IDE <https://en.wikipedia.org/wiki/Xcode>`_、それに他のOS XでC++アプリを開発するのに必要なAppleのdevelopmentツールが含まれています。もしXcodeをインストールするのが初めて、もしくは新しいバージョンをインストールしたばかりなのであれば、コマンドラインbuildsをする前にライセンスに同意する必要があります:
+macOS用に最新バージョンの `Xcodeがインストールされている <https://developer.apple.com/xcode/download/>`_ ことを確認して下さい。これには `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_ と `Xcode IDE <https://en.wikipedia.org/wiki/Xcode>`_、それに他のOS XでC++アプリを開発するのに必要なAppleのdevelopmentツールが含まれています。もしXcodeをインストールするのが初めて、もしくは新しいバージョンをインストールしたばかりなのであれば、コマンドラインbuildsをする前にライセンスに同意する必要があります:
 
 .. code-block:: bash
 
@@ -266,7 +266,7 @@ SMT Solvers
 -----------
 Solidityはデフォルトでシステム内でSMT solversがあれば、それを使ってビルドすることができます（デフォルトで使用します）。`cmake` オプションで全てのsolverは無効にできます。
 
-*Note: いくつかの例においては潜在的にビルドの失敗を引き起こす場合があります。*
+*注意: いくつかの例においては潜在的にビルドの失敗を引き起こす場合があります。*
 
 
 デフォルトで有効になっていますが、buildフォルダ内ではsolverは無効にできます:

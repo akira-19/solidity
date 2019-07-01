@@ -195,20 +195,20 @@
 <span id="installing-solidity"></span><span id="index-0"></span><h1>Installing the Solidity Compiler<a class="headerlink" href="#installing-the-solidity-compiler" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="versioning">
 <h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
-<p>Solidityのバージョンは <a class="reference external" href="https://semver.org">semantic versioning</a> に準じており、リリースに加え、<strong>nightly development builds</strong> も使用可能となっている。ドキュメントに含んでいないものや大きな変更を含んだ成果が組み込まれているものの、nightly buildsは動作を保証されていません。
+<p>Solidityのバージョンは <a class="reference external" href="https://semver.org">semantic versioning</a> に準じており、リリースに加え、<strong>nightly development builds</strong> も使用可能となっています。ドキュメントに含んでいないものや大きな変更を含んだ成果が組み込まれているものの、nightly buildsは動作を保証されていません。
 最新バージョンを使用することをお薦めします。下記のパッケージインストーラでは最新バージョンを使用しています。</p>
 </div>
 <div class="section" id="remix">
 <h2>Remix<a class="headerlink" href="#remix" title="Permalink to this headline">¶</a></h2>
 <p><em>小規模のコントラクトやさっとSolidityを学ぶのにRemixをお薦めしています。</em></p>
-<p><a class="reference external" href="https://remix.ethereum.org/">Remix onlineにアクセスして下さい</a>、 何もインストールする必要はありません。
+<p><a class="reference external" href="https://remix.ethereum.org/">Remix onlineにアクセスして下さい</a>。何もインストールする必要はありません。
 もしインターネット接続無しで使用したい場合は <a class="reference external" href="https://github.com/ethereum/remix-live/tree/gh-pages">https://github.com/ethereum/remix-live/tree/gh-pages</a> にアクセスし、指示に従って <code class="docutils literal notranslate"><span class="pre">.zip</span></code> ファイルをダウンロードして下さい。</p>
 <p>追加オプションとしてこのページではコマンドラインのSolidityコンパイラのインストール方法を紹介しています。大規模なコントラクトやもっと複雑なコンパイルオプションが必要な場合にはコマンドラインコンパイラを使用してください。</p>
 </div>
 <div class="section" id="npm-node-js">
 <span id="solcjs"></span><h2>npm / Node.js<a class="headerlink" href="#npm-node-js" title="Permalink to this headline">¶</a></h2>
 <p>Solidityコンパイラである <cite>solcjs</cite> の便利で簡単なインストール方法として <cite>npm</cite> を使用してください。<cite>solcjs</cite> はこの後紹介するコンパイラへのアクセス方法に比べて機能は少ないです。<a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a> のドキュメンテーションでは全ての機能が備わっている <cite>solc</cite> というコンパイラを使用します。<cite>solcjs</cite> の使用方法はその <a class="reference external" href="https://github.com/ethereum/solc-js">レポジトリ</a> にドキュメント化されています。</p>
-<p>Note: solc-jsプロジェクトはEmscriptenを使うことでC++ <cite>solc</cite> から派生されています。つまり両方とも同じコンパイラのソースコードを使用しているということです。<cite>solc-js</cite> はJavascriptのプロジェクトで（Remixの様に）直接使用可能です。使い方はsolc-jsレポジトリを参照して下さい。</p>
+<p>注意: solc-jsプロジェクトはEmscriptenを使うことでC++ <cite>solc</cite> から派生されています。つまり両方とも同じコンパイラのソースコードを使用しているということです。<cite>solc-js</cite> はJavascriptのプロジェクトで（Remixの様に）直接使用可能です。使い方はsolc-jsレポジトリを参照して下さい。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npm install -g solc
 </pre></div>
 </div>
@@ -299,7 +299,7 @@ brew install https://raw.githubusercontent.com/ethereum/homebrew-ethereum/77cce0
 </div>
 <div class="section" id="prerequisites-macos">
 <h3>Prerequisites - macOS<a class="headerlink" href="#prerequisites-macos" title="Permalink to this headline">¶</a></h3>
-<p>macOS用に最新バージョンの <a href="#id3"><span class="problematic" id="id4">`Xcodeがインストールされている&lt;https://developer.apple.com/xcode/download/&gt;`_</span></a> ことを確認して下さい。これには <a class="reference external" href="https://en.wikipedia.org/wiki/Clang">Clang C++ compiler</a> と <a class="reference external" href="https://en.wikipedia.org/wiki/Xcode">Xcode IDE</a>、それに他のOS XでC++アプリを開発するのに必要なAppleのdevelopmentツールが含まれています。もしXcodeをインストールするのが初めて、もしくは新しいバージョンをインストールしたばかりなのであれば、コマンドラインbuildsをする前にライセンスに同意する必要があります:</p>
+<p>macOS用に最新バージョンの <a class="reference external" href="https://developer.apple.com/xcode/download/">Xcodeがインストールされている</a> ことを確認して下さい。これには <a class="reference external" href="https://en.wikipedia.org/wiki/Clang">Clang C++ compiler</a> と <a class="reference external" href="https://en.wikipedia.org/wiki/Xcode">Xcode IDE</a>、それに他のOS XでC++アプリを開発するのに必要なAppleのdevelopmentツールが含まれています。もしXcodeをインストールするのが初めて、もしくは新しいバージョンをインストールしたばかりなのであれば、コマンドラインbuildsをする前にライセンスに同意する必要があります:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo xcodebuild -license accept
 </pre></div>
 </div>
@@ -401,7 +401,7 @@ cmake -G <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> ..
 <div class="section" id="smt-solvers">
 <span id="smt-solvers-build"></span><h3>SMT Solvers<a class="headerlink" href="#smt-solvers" title="Permalink to this headline">¶</a></h3>
 <p>Solidityはデフォルトでシステム内でSMT solversがあれば、それを使ってビルドすることができます（デフォルトで使用します）。<cite>cmake</cite> オプションで全てのsolverは無効にできます。</p>
-<p><em>Note: いくつかの例においては潜在的にビルドの失敗を引き起こす場合があります。</em></p>
+<p><em>注意: いくつかの例においては潜在的にビルドの失敗を引き起こす場合があります。</em></p>
 <p>デフォルトで有効になっていますが、buildフォルダ内ではsolverは無効にできます:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># disables only Z3 SMT Solver.</span>
 cmake .. -DUSE_Z3<span class="o">=</span>OFF

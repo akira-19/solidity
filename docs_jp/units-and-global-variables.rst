@@ -160,15 +160,15 @@ Members of Address Types
 ``<address>.balance`` (``uint256``):
     :ref:`address` のバランス（Wei）
 ``<address payable>.transfer(uint256 amount)``:
-    与えられたWeiを:ref:`address`に送ります。失敗するとリバートし、固定で2300ガスを送ります。 （変更不可です。）
+    与えられたWeiを :ref:`address` に送ります。失敗するとリバートし、固定で2300ガスを送ります。 （変更不可です。）
 ``<address payable>.send(uint256 amount) returns (bool)``:
-    与えられたWeiを:ref:`address`に送ります。失敗すると``false``を返し、固定で2300ガスを送ります。 （変更不可です。）
+    与えられたWeiを :ref:`address` に送ります。失敗すると ``false`` を返し、固定で2300ガスを送ります。 （変更不可です。）
 ``<address>.call(bytes memory) returns (bool, bytes memory)``:
-    低レベルの``CALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
+    低レベルの ``CALL`` を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 ``<address>.delegatecall(bytes memory) returns (bool, bytes memory)``:
-    低レベルの``DELEGATECALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
+    低レベルの ``DELEGATECALL`` を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 ``<address>.staticcall(bytes memory) returns (bool, bytes memory)``:
-    低レベルの``STATICCALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
+    低レベルの ``STATICCALL`` を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）
 
 詳細は :ref:`address` を参照ください。
 

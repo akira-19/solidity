@@ -88,13 +88,13 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
-<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Layout of a Solidity Source File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">Structure of a Contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solidity Assembly</a><ul>
@@ -208,73 +208,56 @@
             
   <div class="section" id="solidity-assembly">
 <h1>Solidity Assembly<a class="headerlink" href="#solidity-assembly" title="Permalink to this headline">¶</a></h1>
-<p id="index-0">Solidity defines an assembly language that you can use without Solidity and also
-as “inline assembly” inside Solidity source code. This guide starts with describing
-how to use inline assembly, how it differs from standalone assembly, and
-specifies assembly itself.</p>
+<p id="index-0">SolidityはSolidityなしで使えるアセンブリ言語を定義しており、更にSolidityのソースコード内で”インラインアセンブリ”も使用可能です。このガイドではまずどの様にインラインアセンブリを使用するのか、スタンドアローンアセンブリとどう違うのか、そしてアセンブリ自体の説明をしていきます。</p>
 <div class="section" id="inline-assembly">
 <span id="id1"></span><h2>Inline Assembly<a class="headerlink" href="#inline-assembly" title="Permalink to this headline">¶</a></h2>
-<p>You can interleave Solidity statements with inline assembly in a language close
-to the one of the virtual machine. This gives you more fine-grained control,
-especially when you are enhancing the language by writing libraries.</p>
-<p>As the EVM is a stack machine, it is often hard to address the correct stack slot
-and provide arguments to opcodes at the correct point on the stack. Solidity’s inline
-assembly helps you do this, and with other issues that arise when writing manual assembly.</p>
-<p>Inline assembly has the following features:</p>
+<p>仮想マシンの様な言語のインラインアセンブリで、Solidityの宣言をインターリーブできます。これにより細かいコントールを得ることができます。特にライブラリを作って言語を便利にする時に有用です。</p>
+<p>EVMはスタックマシンなので、正確なスタック位置の指定や正確なスタック位置のopcodeに引数を与えるのは難しいです。Solidityのインラインアセンブリはこれらの問題や、マニュアルアセンブリを書いている時に出てくる問題に対して役にたちます。</p>
+<p>インラインアセンブリは下記の特徴があります:</p>
 <ul class="simple">
 <li>functional-style opcodes: <code class="docutils literal notranslate"><span class="pre">mul(1,</span> <span class="pre">add(2,</span> <span class="pre">3))</span></code></li>
 <li>assembly-local variables: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(2,</span> <span class="pre">3)</span>&#160; <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mload(0x40)</span>&#160; <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(x,</span> <span class="pre">y)</span></code></li>
-<li>access to external variables: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint</span> <span class="pre">x)</span> <span class="pre">public</span> <span class="pre">{</span> <span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
-<li>loops: <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span> <span class="pre">lt(i,</span> <span class="pre">x)</span> <span class="pre">{</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">add(i,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(2,</span> <span class="pre">y)</span> <span class="pre">}</span></code></li>
-<li>if statements: <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">slt(x,</span> <span class="pre">0)</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(0,</span> <span class="pre">x)</span> <span class="pre">}</span></code></li>
-<li>switch statements: <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">2)</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span></code></li>
-<li>function calls: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">y</span> <span class="pre">{</span> <span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">1</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">f(sub(x,</span> <span class="pre">1)))</span> <span class="pre">}</span>&#160;&#160; <span class="pre">}</span></code></li>
+<li>外部の変数にアクセス: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint</span> <span class="pre">x)</span> <span class="pre">public</span> <span class="pre">{</span> <span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
+<li>ループ: <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span> <span class="pre">lt(i,</span> <span class="pre">x)</span> <span class="pre">{</span> <span class="pre">i</span> <span class="pre">:=</span> <span class="pre">add(i,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(2,</span> <span class="pre">y)</span> <span class="pre">}</span></code></li>
+<li>if文: <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">slt(x,</span> <span class="pre">0)</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">sub(0,</span> <span class="pre">x)</span> <span class="pre">}</span></code></li>
+<li>switch分: <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">2)</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">0</span> <span class="pre">}</span></code></li>
+<li>ファンクションコール: <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">y</span> <span class="pre">{</span> <span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">0</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">1</span> <span class="pre">}</span> <span class="pre">default</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">f(sub(x,</span> <span class="pre">1)))</span> <span class="pre">}</span>&#160;&#160; <span class="pre">}</span></code></li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Inline assembly is a way to access the Ethereum Virtual Machine
-at a low level. This bypasses several important safety
-features and checks of Solidity. You should only use it for
-tasks that need it, and only if you are confident with using it.</p>
+<p class="last">インラインアセンブリはEVMに低レベルでアクセスする方法です。そのため、Solidityの大事な安全に関する機能やチェックをバイパスします。必要がある時のみ、またこの機能について知識がある時のみ使用する方が良いでしょう。</p>
 </div>
 <div class="section" id="syntax">
 <h3>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
-<p>Assembly parses comments, literals and identifiers in the same way as Solidity, so you can use the
-usual <code class="docutils literal notranslate"><span class="pre">//</span></code> and <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">*/</span></code> comments. Inline assembly is marked by <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> and inside
-these curly braces, you can use the following (see the later sections for more details):</p>
+<p>アセンブリはコメント、リテラル、識別子をSolidityと同じ方法でパースします。そのため、普段使っている <code class="docutils literal notranslate"><span class="pre">//</span></code> と <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">*/</span></code> は使用可能です。インラインアセンブリは <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> で書かれており、中括弧の中では下記が使用可能です（詳細は後述のセクションを参照ください）:</p>
 <blockquote>
 <div><ul class="simple">
-<li>literals, i.e. <code class="docutils literal notranslate"><span class="pre">0x123</span></code>, <code class="docutils literal notranslate"><span class="pre">42</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (strings up to 32 characters)</li>
-<li>opcodes in functional style, e.g. <code class="docutils literal notranslate"><span class="pre">add(1,</span> <span class="pre">mlod(0))</span></code></li>
-<li>variable declarations, e.g. <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">7</span></code>, <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span></code> (initial value of empty (0) is assigned)</li>
-<li>identifiers (assembly-local variables and externals if used as inline assembly), e.g. <code class="docutils literal notranslate"><span class="pre">add(3,</span> <span class="pre">x)</span></code>, <code class="docutils literal notranslate"><span class="pre">sstore(x_slot,</span> <span class="pre">2)</span></code></li>
-<li>assignments, e.g. <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code></li>
-<li>blocks where local variables are scoped inside, e.g. <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">3</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">add(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
+<li>リテラル 例： <code class="docutils literal notranslate"><span class="pre">0x123</span></code>、<code class="docutils literal notranslate"><span class="pre">42</span></code>、<code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (文字列は32文字まで)</li>
+<li>ファンクション式のopcode 例: <code class="docutils literal notranslate"><span class="pre">add(1,</span> <span class="pre">mlod(0))</span></code></li>
+<li>変数の宣言 例: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">7</span></code>, <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span></code> (空（0）の初期値は割り当て済み)</li>
+<li>識別子 (インラインアセンブリで使われたassembly-local 変数と外部のもの) 例: <code class="docutils literal notranslate"><span class="pre">add(3,</span> <span class="pre">x)</span></code>, <code class="docutils literal notranslate"><span class="pre">sstore(x_slot,</span> <span class="pre">2)</span></code></li>
+<li>値の割り当て 例: <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(y,</span> <span class="pre">3)</span></code></li>
+<li>ローカルの変数が内部でスコープされているブロック 例: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">3</span> <span class="pre">{</span> <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">add(x,</span> <span class="pre">1)</span> <span class="pre">}</span> <span class="pre">}</span></code></li>
 </ul>
 </div></blockquote>
-<p>The following features are only available for standalone assembly:</p>
+<p>下記の機能はスタンドアローンのアセンブリでのみ使用可能です:</p>
 <blockquote>
 <div><ul class="simple">
-<li>direct stack control via <code class="docutils literal notranslate"><span class="pre">dup1</span></code>, <code class="docutils literal notranslate"><span class="pre">swap1</span></code>, …</li>
-<li>direct stack assignments (in “instruction style”), e.g. <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">=:</span> <span class="pre">x</span></code></li>
-<li>labels, e.g. <code class="docutils literal notranslate"><span class="pre">name:</span></code></li>
-<li>jump opcodes</li>
+<li><code class="docutils literal notranslate"><span class="pre">dup1</span></code>、<code class="docutils literal notranslate"><span class="pre">swap1</span></code>、、、を介した直接的なスタックのコントロール</li>
+<li>ダイレクトなスタックの割り当て (in “instruction style”) 例: <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">=:</span> <span class="pre">x</span></code></li>
+<li>ラベル 例: <code class="docutils literal notranslate"><span class="pre">name:</span></code></li>
+<li>ジャンプopcode</li>
 </ul>
 </div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Standalone assembly is supported for backwards compatibility but is not documented
-here anymore.</p>
+<p class="last">スタンドアローンのアセンブリは後方互換性をサポートしますが、ここではドキュメント化しません。</p>
 </div>
-<p>At the end of the <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> block, the stack must be balanced,
-unless you require it otherwise. If it is not balanced, the compiler generates
-a warning.</p>
+<p>要求しない限り、<code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> ブロックの最後に、スタックはバランスしなければいけません。もしバランスしていなかったら、コンパイラは警告を発します。</p>
 </div>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
-<p>The following example provides library code to access the code of another contract and
-load it into a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> variable. This is not possible with “plain Solidity” and the
-idea is that assembly libraries will be used to enhance the Solidity language.</p>
+<p>下記の例は、別のコントラクトのコードにアクセスするライブラリのコード例で、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> 変数にそのコードを載せています。”生のSolidity” ではこれはできません。アセンブリライブラリはSolidityという言語をより良くするために使用されます。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">library</span> <span class="n">GetCode</span> <span class="p">{</span>
@@ -296,8 +279,7 @@ idea is that assembly libraries will be used to enhance the Solidity language.</
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Inline assembly is also beneficial in cases where the optimizer fails to produce
-efficient code, for example:</p>
+<p>オプティマイザが効率的なコードを生成するのに失敗した場合にもインラインアセンブリは有用です。例えば:</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">library</span> <span class="n">VectorSum</span> <span class="p">{</span>
@@ -349,18 +331,15 @@ efficient code, for example:</p>
 </div>
 <div class="section" id="opcodes">
 <span id="id2"></span><h3>Opcodes<a class="headerlink" href="#opcodes" title="Permalink to this headline">¶</a></h3>
-<p>This document does not want to be a full description of the Ethereum virtual machine, but the
-following list can be used as a reference of its opcodes.</p>
-<p>If an opcode takes arguments (always from the top of the stack), they are given in parentheses.
-Note that the order of arguments can be seen to be reversed in non-functional style (explained below).
-Opcodes marked with <code class="docutils literal notranslate"><span class="pre">-</span></code> do not push an item onto the stack (do not return a result),
-those marked with <code class="docutils literal notranslate"><span class="pre">*</span></code> are special and all others push exactly one item onto the stack (their “return value”).
-Opcodes marked with <code class="docutils literal notranslate"><span class="pre">F</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">B</span></code> or <code class="docutils literal notranslate"><span class="pre">C</span></code> are present since Frontier, Homestead, Byzantium or Constantinople, respectively.
-Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.</p>
+<p>このドキュメントではEthereum Virtual Machineについて完全には説明しませんが、下記のリストはEVMのopcodeのリファレンスとして使用できます。</p>
+<p>opcodeが引数をとる場合（常にスタックの上からとります）、括弧の中に引数が入ります。
+引数の順番はnon-functional styleでは逆さまに入っています（後述します）。
+<code class="docutils literal notranslate"><span class="pre">-</span></code> がついているopcodeは何もスタック上にプッシュしません（結果も返しません）。<code class="docutils literal notranslate"><span class="pre">*</span></code> がついているopcodeは特別で、他のopcodeは1つだけスタック上にプッシュします（”返り値”）。
+<code class="docutils literal notranslate"><span class="pre">F</span></code>、<code class="docutils literal notranslate"><span class="pre">H</span></code>、<code class="docutils literal notranslate"><span class="pre">B</span></code>、<code class="docutils literal notranslate"><span class="pre">C</span></code> がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.</p>
 <p>In the following, <code class="docutils literal notranslate"><span class="pre">mem[a...b)</span></code> signifies the bytes of memory starting at position <code class="docutils literal notranslate"><span class="pre">a</span></code> up to
 but not including position <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">storage[p]</span></code> signifies the storage contents at position <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
-<p>The opcodes <code class="docutils literal notranslate"><span class="pre">pushi</span></code> and <code class="docutils literal notranslate"><span class="pre">jumpdest</span></code> cannot be used directly.</p>
-<p>In the grammar, opcodes are represented as pre-defined identifiers.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pushi</span></code> と <code class="docutils literal notranslate"><span class="pre">jumpdest</span></code> のopcodeは直接は使用できません。</p>
+<p>グラマー上、opcodeは事前に定義された識別子として表されます。</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="26%" />

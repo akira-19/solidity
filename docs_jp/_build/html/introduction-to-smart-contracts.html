@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Solidityをインストールする" href="installing-solidity.html" />
+    <link rel="next" title="Installing the Solidity Compiler" href="installing-solidity.html" />
     <link rel="prev" title="Solidity" href="index.html" /> 
 </head>
 
@@ -114,7 +114,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
@@ -269,7 +269,7 @@
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">minter</span><span class="p">()</span> <span class="kr">external</span> <span class="kr">view</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">address</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">minter</span><span class="p">;</span> <span class="p">}</span>
 </pre></div>
 </div>
-<p>もちろんファンクション名と状態変数が同じ名前のためこの様なファンクションを追加しても動きませんが、コンパイラがこの様に解釈するということを理解して頂けると幸いです。</p>
+<p>もちろんファンクション名と状態変数が同じ名前のため、この様なファンクションを追加しても動きませんが、コンパイラがこの様に解釈するということを理解して頂けると幸いです。</p>
 <p id="index-1">次の行の <code class="docutils literal notranslate"><span class="pre">mapping</span> <span class="pre">(address</span> <span class="pre">=&gt;</span> <span class="pre">uint)</span> <span class="pre">public</span> <span class="pre">balances;</span></code> は同様にパブリックな状態変数を生成しますが、もう少し複雑なデータタイプです。
 これはaddressに符号無しのinteger型を割り当てます。Mappingは <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">hash table</a> として扱うことができます。そしてそれは事実上初期化され、そのため全てのpossible keyは最初から存在し、バイト表現で0となる値に割り当てられます。しかしhash tableと全く同じではありません。mappingではキーや値のリストを取得することはできません。そのため、何をmappingに追加したか覚えておいてください（もしくはリストを保存するか他の高度なデータタイプを使ってください）。もしくはそんなことをしなくて済む様な場合において使用して下さい。</p>
 <p>今回の場合 <code class="docutils literal notranslate"><span class="pre">public</span></code> で作られた <a class="reference internal" href="contracts.html#getter-functions"><span class="std std-ref">getter function</span></a> はもう少し複雑でおおまかには下記の様になります:</p>
@@ -332,7 +332,7 @@
 <span id="id2"></span><h2>The Ethereum Virtual Machine<a class="headerlink" href="#index-6" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<p>Ethereum Virtual Machine（EVM）はEthereum上のスマートこコントラクトのためのruntime環境です。サンドボックス化されているだけでなく、実際には完全に独立しています。つまりEVM内部のコードはネットワークやファイルシステム、または他のプロセスにアクセスしません。
+<p>Ethereum Virtual Machine（EVM）はEthereum上のスマートコントラクトのためのruntime環境です。サンドボックス化されているだけでなく、実際には完全に独立しています。つまりEVM内部のコードはネットワークやファイルシステム、または他のプロセスにアクセスしません。
 スマートコントラクトですら他のスマートコントラクトへのアクセスは制限されています。</p>
 </div>
 <div class="section" id="accounts">
@@ -368,7 +368,7 @@
 Storageは256bitのワードを256bitのワードにマッピングしているkey-value storeです。
 コントラクト内ではstorageを列挙することはできません。また、storageの読み込みは比較的高価ですし、変更はさらに高価です。コントラクト外からstorageを読み書きすることはできません。</p>
 <p>2つ目のデータエリアは <strong>memory</strong> と呼ばれ、コントラクトは各メッセージの呼び出しに対してクリアされたインスタンスを取得します。memoryはバイトレベルのリニアアドレスですが、読み取りは256bitに制限され、書き込みは8bitもしくは256bitに制限されます。過去に変更がないmemoryの単語にアクセスした際にmemoryは256-bitの単語に拡張されます（例えば単語のオフセット）。拡張の際にはgasは支払われます。memoryは成長すればするほど高くなります。（二次関数的に大きくなります。）</p>
-<p>EVMは登録機械ではなくstack machineです。そのため全ての計算は <strong>stack</strong> と呼ばれるデータエリアで行われます。最大1024要素であり、256-bitの単語を含見ます。stackへのアクセスは下記のようにトップエンドに制限されます。
+<p>EVMは登録機械ではなくstack machineです。そのため全ての計算は <strong>stack</strong> と呼ばれるデータエリアで行われます。最大1024要素であり、256-bitの単語を含みます。stackへのアクセスは下記のようにトップエンドに制限されます。
 トップの16要素の内の1要素を一番トップの要素にコピーするか、一番トップの要素をその下の16要素の内の一つと交換することができます。他のオペレーションはstackからトップ二つの要素（オペレーションによるが一つか二つ以上の場合もある）を取り出し、stackに追加します。
 もちろん、stackの深い要素にアクセスするために、stackの要素をstorageやmemoryに移動するのは可能です。
 しかし、stackのトップを最初に削除しないでstackの深いところにある任意の要素にアクセスすることはできません。</p>
@@ -405,7 +405,7 @@ Storageは256bitのワードを256bitのワードにマッピングしているk
 </div>
 <div class="section" id="deactivate-and-self-destruct">
 <span id="index-16"></span><h3>Deactivate and Self-destruct<a class="headerlink" href="#deactivate-and-self-destruct" title="Permalink to this headline">¶</a></h3>
-<p>ブロックチェーン からコードを削除する唯一の手段はコントラクトが <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> を実行する時のみです。そのアドレスに残っているEtherが設定されていた送信先に送られた時にstorageとコードは削除されます。コントラクトの削除は理論上は良いアイデアの様に聞こえますが、潜在的に危険を孕んでいます。誰かが削除されたコントラクトにEtherを送り、そのEtherは永遠に失われる様なことが起こり得ます。</p>
+<p>ブロックチェーン からコードを削除する唯一の手段はコントラクトが <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> を実行する時のみです。そのアドレスに残っているEtherが設定されていた送信先に送られた時にstorageとコードは削除されます。コントラクトの削除は理論上は良いアイデアの様に聞こえますが、潜在的に危険をはらんでいます。誰かが削除されたコントラクトにEtherを送り、そのEtherは永遠に失われる様なことが起こり得ます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">もしコントラクトのコードが <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> を含んでいなかったとしても、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">callcode</span></code> を使うことで実行可能です。</p>
@@ -427,7 +427,7 @@ Storageは256bitのワードを256bitのワードにマッピングしているk
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installing-solidity.html" class="btn btn-neutral float-right" title="Solidityをインストールする" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="installing-solidity.html" class="btn btn-neutral float-right" title="Installing the Solidity Compiler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="Solidity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -4,75 +4,58 @@ Solidity Assembly
 
 .. index:: ! assembly, ! asm, ! evmasm
 
-Solidity defines an assembly language that you can use without Solidity and also
-as "inline assembly" inside Solidity source code. This guide starts with describing
-how to use inline assembly, how it differs from standalone assembly, and
-specifies assembly itself.
+SolidityはSolidityなしで使えるアセンブリ言語を定義しており、更にSolidityのソースコード内で"インラインアセンブリ"も使用可能です。このガイドではまずどの様にインラインアセンブリを使用するのか、スタンドアローンアセンブリとどう違うのか、そしてアセンブリ自体の説明をしていきます。
 
 .. _inline-assembly:
 
 Inline Assembly
 ===============
 
-You can interleave Solidity statements with inline assembly in a language close
-to the one of the virtual machine. This gives you more fine-grained control,
-especially when you are enhancing the language by writing libraries.
+仮想マシンの様な言語のインラインアセンブリで、Solidityの宣言をインターリーブできます。これにより細かいコントールを得ることができます。特にライブラリを作って言語を便利にする時に有用です。
 
-As the EVM is a stack machine, it is often hard to address the correct stack slot
-and provide arguments to opcodes at the correct point on the stack. Solidity's inline
-assembly helps you do this, and with other issues that arise when writing manual assembly.
+EVMはスタックマシンなので、正確なスタック位置の指定や正確なスタック位置のopcodeに引数を与えるのは難しいです。Solidityのインラインアセンブリはこれらの問題や、マニュアルアセンブリを書いている時に出てくる問題に対して役にたちます。
 
-Inline assembly has the following features:
+インラインアセンブリは下記の特徴があります:
 
 * functional-style opcodes: ``mul(1, add(2, 3))``
 * assembly-local variables: ``let x := add(2, 3)  let y := mload(0x40)  x := add(x, y)``
-* access to external variables: ``function f(uint x) public { assembly { x := sub(x, 1) } }``
-* loops: ``for { let i := 0 } lt(i, x) { i := add(i, 1) } { y := mul(2, y) }``
-* if statements: ``if slt(x, 0) { x := sub(0, x) }``
-* switch statements: ``switch x case 0 { y := mul(x, 2) } default { y := 0 }``
-* function calls: ``function f(x) -> y { switch x case 0 { y := 1 } default { y := mul(x, f(sub(x, 1))) }   }``
+* 外部の変数にアクセス: ``function f(uint x) public { assembly { x := sub(x, 1) } }``
+* ループ: ``for { let i := 0 } lt(i, x) { i := add(i, 1) } { y := mul(2, y) }``
+* if文: ``if slt(x, 0) { x := sub(0, x) }``
+* switch分: ``switch x case 0 { y := mul(x, 2) } default { y := 0 }``
+* ファンクションコール: ``function f(x) -> y { switch x case 0 { y := 1 } default { y := mul(x, f(sub(x, 1))) }   }``
 
 .. warning::
-    Inline assembly is a way to access the Ethereum Virtual Machine
-    at a low level. This bypasses several important safety
-    features and checks of Solidity. You should only use it for
-    tasks that need it, and only if you are confident with using it.
+    インラインアセンブリはEVMに低レベルでアクセスする方法です。そのため、Solidityの大事な安全に関する機能やチェックをバイパスします。必要がある時のみ、またこの機能について知識がある時のみ使用する方が良いでしょう。
 
 Syntax
 ------
 
-Assembly parses comments, literals and identifiers in the same way as Solidity, so you can use the
-usual ``//`` and ``/* */`` comments. Inline assembly is marked by ``assembly { ... }`` and inside
-these curly braces, you can use the following (see the later sections for more details):
+アセンブリはコメント、リテラル、識別子をSolidityと同じ方法でパースします。そのため、普段使っている ``//`` と ``/* */`` は使用可能です。インラインアセンブリは ``assembly { ... }`` で書かれており、中括弧の中では下記が使用可能です（詳細は後述のセクションを参照ください）:
 
- - literals, i.e. ``0x123``, ``42`` or ``"abc"`` (strings up to 32 characters)
- - opcodes in functional style, e.g. ``add(1, mlod(0))``
- - variable declarations, e.g. ``let x := 7``, ``let x := add(y, 3)`` or ``let x`` (initial value of empty (0) is assigned)
- - identifiers (assembly-local variables and externals if used as inline assembly), e.g. ``add(3, x)``, ``sstore(x_slot, 2)``
- - assignments, e.g. ``x := add(y, 3)``
- - blocks where local variables are scoped inside, e.g. ``{ let x := 3 { let y := add(x, 1) } }``
+ - リテラル 例： ``0x123``、``42``、``"abc"`` (文字列は32文字まで)
+ - ファンクション式のopcode 例: ``add(1, mlod(0))``
+ - 変数の宣言 例: ``let x := 7``, ``let x := add(y, 3)`` or ``let x`` (空（0）の初期値は割り当て済み)
+ - 識別子 (インラインアセンブリで使われたassembly-local 変数と外部のもの) 例: ``add(3, x)``, ``sstore(x_slot, 2)``
+ - 値の割り当て 例: ``x := add(y, 3)``
+ - ローカルの変数が内部でスコープされているブロック 例: ``{ let x := 3 { let y := add(x, 1) } }``
 
-The following features are only available for standalone assembly:
+下記の機能はスタンドアローンのアセンブリでのみ使用可能です:
 
- - direct stack control via ``dup1``, ``swap1``, ...
- - direct stack assignments (in "instruction style"), e.g. ``3 =: x``
- - labels, e.g. ``name:``
- - jump opcodes
+ - ``dup1``、``swap1``、、、を介した直接的なスタックのコントロール
+ - ダイレクトなスタックの割り当て (in "instruction style") 例: ``3 =: x``
+ - ラベル 例: ``name:``
+ - ジャンプopcode
 
 .. note::
-  Standalone assembly is supported for backwards compatibility but is not documented
-  here anymore.
+  スタンドアローンのアセンブリは後方互換性をサポートしますが、ここではドキュメント化しません。
 
-At the end of the ``assembly { ... }`` block, the stack must be balanced,
-unless you require it otherwise. If it is not balanced, the compiler generates
-a warning.
+要求しない限り、``assembly { ... }`` ブロックの最後に、スタックはバランスしなければいけません。もしバランスしていなかったら、コンパイラは警告を発します。
 
 Example
 -------
 
-The following example provides library code to access the code of another contract and
-load it into a ``bytes`` variable. This is not possible with "plain Solidity" and the
-idea is that assembly libraries will be used to enhance the Solidity language.
+下記の例は、別のコントラクトのコードにアクセスするライブラリのコード例で、``bytes`` 変数にそのコードを載せています。"生のSolidity" ではこれはできません。アセンブリライブラリはSolidityという言語をより良くするために使用されます。
 
 .. code::
 
@@ -96,8 +79,7 @@ idea is that assembly libraries will be used to enhance the Solidity language.
         }
     }
 
-Inline assembly is also beneficial in cases where the optimizer fails to produce
-efficient code, for example:
+オプティマイザが効率的なコードを生成するのに失敗した場合にもインラインアセンブリは有用です。例えば:
 
 .. code::
 
@@ -154,22 +136,20 @@ efficient code, for example:
 Opcodes
 -------
 
-This document does not want to be a full description of the Ethereum virtual machine, but the
-following list can be used as a reference of its opcodes.
+このドキュメントではEthereum Virtual Machineについて完全には説明しませんが、下記のリストはEVMのopcodeのリファレンスとして使用できます。
 
-If an opcode takes arguments (always from the top of the stack), they are given in parentheses.
-Note that the order of arguments can be seen to be reversed in non-functional style (explained below).
-Opcodes marked with ``-`` do not push an item onto the stack (do not return a result),
-those marked with ``*`` are special and all others push exactly one item onto the stack (their "return value").
-Opcodes marked with ``F``, ``H``, ``B`` or ``C`` are present since Frontier, Homestead, Byzantium or Constantinople, respectively.
-Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.
+opcodeが引数をとる場合（常にスタックの上からとります）、括弧の中に引数が入ります。
+引数の順番はnon-functional styleでは逆さまに入っています（後述します）。
+``-`` がついているopcodeは何もスタック上にプッシュしません（結果も返しません）。``*`` がついているopcodeは特別で、他のopcodeは1つだけスタック上にプッシュします（"返り値"）。
+``F``、``H``、``B``、``C`` がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.
 
 In the following, ``mem[a...b)`` signifies the bytes of memory starting at position ``a`` up to
 but not including position ``b`` and ``storage[p]`` signifies the storage contents at position ``p``.
 
-The opcodes ``pushi`` and ``jumpdest`` cannot be used directly.
+``pushi`` と ``jumpdest`` のopcodeは直接は使用できません。
 
-In the grammar, opcodes are represented as pre-defined identifiers.
+グラマー上、opcodeは事前に定義された識別子として表されます。
+
 
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | Instruction             |     |   | Explanation                                                     |

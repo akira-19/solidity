@@ -205,7 +205,7 @@
 <h1>Solidity by Example<a class="headerlink" href="#solidity-by-example" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="voting">
 <span id="index-0"></span><span id="id1"></span><h2>Voting<a class="headerlink" href="#voting" title="Permalink to this headline">¶</a></h2>
-<p>次のコントラクトは割と複雑ですが、Solidityのたくさんの機能を表しています。そのコントラクトは投票を実行しています。もちろん、電子投票のメインの問題はどうやって投票権を正しい人に渡すのかということと、どうやって不正操作を防ぐかです。ここでは全ての問題を解決はしませんが、投票がどの様に行われ、そして**自動かつ公正な**投票数のカウントの方法をお見せします。</p>
+<p>次のコントラクトは割と複雑ですが、Solidityのたくさんの機能を表しています。そのコントラクトは投票を実行しています。もちろん、電子投票のメインの問題はどうやって投票権を正しい人に渡すのかということと、どうやって不正操作を防ぐかです。ここでは全ての問題を解決はしませんが、投票がどの様に行われ、そして <strong>自動かつ公正な</strong> 投票数のカウントの方法をお見せします。</p>
 <p>そのアイデアとは投票ごとにコントラクトを作り、オプションごとに短い名前をつけるものです。そしてコントラクトの作成者は管理者として各アドレスに投票の権利を付与します。</p>
 <p>そのアドレスを持っている人は自分で投票するか、投票の権利を信頼している人に譲渡することもできます。</p>
 <p>投票の最後に、<code class="docutils literal notranslate"><span class="pre">winningProposal()</span></code> は現在の最高投票数を獲得している人を表示します。</p>
@@ -795,7 +795,7 @@
 <li>リプレイアタックに対する防御策</li>
 </ol>
 </div></blockquote>
-<p>リプレイアタックは署名されたメッセージが承認を要求するのに再び使われることです。これを回避するためにEthereumのトランザクションと同じ様に、アカウントから送信されたトランザクションの数、いわゆるnonceを使用します。スマートコントラクトはnonceが何度か使われていないか確認します。</p>
+<p>リプレイアタックは署名されたメッセージが承認を要求するのに再び使われることです。これを回避するためにEthereumのトランザクションと同じ様に、アカウントから送信されたトランザクションの数、いわゆるnonceを使用します。スマートコントラクトはnonceが何度も使われていないか確認します。</p>
 <p>別のタイプのリプレイアタックはあるオーナーが支払いを行い、その後コントラクトを破棄する <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code> というスマートコントラクトをデプロイした時に起こり得ます。その後、オーナーが再び <code class="docutils literal notranslate"><span class="pre">RecipientPays</span></code> をデプロイする時、その新しいコントラクトは前のデプロイでのnonceを知らないので、攻撃者は古いメッセージを再使用することができます。</p>
 <p>アリスはメッセージの中にコントラクトのアドレスを含めることによりこの攻撃を防ぐことができます。さらにこの中ではコントラクトのアドレスを含んだメッセージだけが許可されます。このセクションの最後にあるコントラクトの中の <code class="docutils literal notranslate"><span class="pre">claimPayment()</span></code> ファンクションの中の最初の2行でこの例を確認できます。</p>
 </div>
@@ -830,7 +830,7 @@
 </div>
 <div class="section" id="computing-the-message-hash">
 <h4>Computing the Message Hash<a class="headerlink" href="#computing-the-message-hash" title="Permalink to this headline">¶</a></h4>
-<p>スマートコントラクトはどのパラメータがサインされたか知る必要あるので、スマートコントラクトはパラメータをメッセージから再作成し、それを署名の認証に使わなければならない。<code class="docutils literal notranslate"><span class="pre">prefixed</span></code> と <code class="docutils literal notranslate"><span class="pre">recoverSigner</span></code> ファンクションは <code class="docutils literal notranslate"><span class="pre">claimPayment</span></code> ファンクションの中でこれを行う。</p>
+<p>スマートコントラクトはどのパラメータがサインされたか知る必要あるので、スマートコントラクトはパラメータをメッセージから再作成し、それを署名の認証に使わなければなりません。<code class="docutils literal notranslate"><span class="pre">prefixed</span></code> と <code class="docutils literal notranslate"><span class="pre">recoverSigner</span></code> ファンクションは <code class="docutils literal notranslate"><span class="pre">claimPayment</span></code> ファンクションの中でこれを行います。</p>
 </div>
 <div class="section" id="the-full-contract">
 <h4>The full contract<a class="headerlink" href="#the-full-contract" title="Permalink to this headline">¶</a></h4>
@@ -902,7 +902,7 @@
 </div>
 <div class="section" id="writing-a-simple-payment-channel">
 <h3>Writing a Simple Payment Channel<a class="headerlink" href="#writing-a-simple-payment-channel" title="Permalink to this headline">¶</a></h3>
-<p>アリスは今、シンプルだけど完全なペイメントチャンネルを作っている。ペイメントチャンネルは繰り返されるEtherのやり取りを安全、即時、かつトランザクション手数料なしで行うため、暗号学的な署名を使用している。アリスとボブによるシンプルな間接的ペイメントチャンネルを考えてみましょう。</p>
+<p>アリスは今、シンプルですが完全なペイメントチャンネルを作っています。ペイメントチャンネルは繰り返されるEtherのやり取りを安全、即時、かつトランザクション手数料なしで行うため、暗号学的な署名を使用しています。アリスとボブによるシンプルな間接的ペイメントチャンネルを考えてみましょう。</p>
 <div class="section" id="what-is-a-payment-channel">
 <h4>What is a Payment Channel?<a class="headerlink" href="#what-is-a-payment-channel" title="Permalink to this headline">¶</a></h4>
 <p>ペイメントチャンネルは参加者にトランザクションを使用しないで何度もEtherのやり取りをできる様にしています。つまりトランザクションに関わる遅れや手数料が発生しないということです。</p>

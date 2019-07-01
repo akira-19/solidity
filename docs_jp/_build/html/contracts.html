@@ -88,13 +88,13 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
-<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Layout of a Solidity Source File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">Structure of a Contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Contracts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-contracts">Creating Contracts</a></li>
@@ -220,12 +220,7 @@
             
   <div class="section" id="contracts">
 <span id="index-0"></span><span id="id1"></span><h1>Contracts<a class="headerlink" href="#contracts" title="Permalink to this headline">¶</a></h1>
-<p>Contracts in Solidity are similar to classes in object-oriented languages. They
-contain persistent data in state variables and functions that can modify these
-variables. Calling a function on a different contract (instance) will perform
-an EVM function call and thus switch the context such that state variables are
-inaccessible. A contract and its functions need to be called for anything to happen.
-There is no “cron” concept in Ethereum to call a function at a particular event automatically.</p>
+<p>Solidityに置けるコントラクトはオブジェクト指向の言語におけるクラスに似ています。コントラクトは永続的な状態変数とそれを変更するファンクションを保持しています。異なるコントラクト上（インスタンス上）のファンクションコールはEVMのファンクションコールとなり、その結果コンテクストが変わり、状態変数にアクセスできなくなります。コントラクトとそのファンクションは呼び出さないと動きません。Ethereumには”cron”の様に特定のイベントで自動的にファンクションを呼び出す機能はありません。</p>
 <div class="section" id="creating-contracts">
 <span id="index-1"></span><h2>Creating Contracts<a class="headerlink" href="#creating-contracts" title="Permalink to this headline">¶</a></h2>
 <p>Contracts can be created “from outside” via Ethereum transactions or from within Solidity contracts.</p>

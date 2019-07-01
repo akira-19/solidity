@@ -2,26 +2,21 @@
 Solidity v0.5.0 Breaking Changes
 ********************************
 
-This section highlights the main breaking changes introduced in Solidity
-version 0.5.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
+このセクションではSolidityバージョン0.5.0で導入された主要な変更を、変更の理由と影響あるコードをアップデートする方法と共に紹介します。
+フルリストは、`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_ を参照ください。
 
 .. note::
-   Contracts compiled with Solidity v0.5.0 can still interface with contracts
-   and even libraries compiled with older versions without recompiling or
-   redeploying them.  Changing the interfaces to include data locations and
-   visibility and mutability specifiers suffices. See the
-   :ref:`Interoperability With Older Contracts <interoperability>` section below.
+   Solidityのバージョン0.5.0でコンパイルされたコントラクトは古いバージョンでコンパイルされたコントラクトやライブラリを再コンパイルもしくは再デプロイなしに使えます。
+   データロケーション、可視性、ミュータビリティを含めるようにインターフェースを変えれば十分です。下記の :ref:`Interoperability With Older Contracts <interoperability>` を参照ください。
+
 
 Semantic Only Changes
 =====================
 
-This section lists the changes that are semantic-only, thus potentially
-hiding new and different behavior in existing code.
+このセクションはセマンティクス上の変更だけのリストです。そのため、潜在的には現状のコードで、新しいもしくは異なる動作をしてしまうかもしれません。
 
-* Signed right shift now uses proper arithmetic shift, i.e. rounding towards
+* 符号付右シフトは現在適切な算術シフトを使っています。つまり、
+Signed right shift now uses proper arithmetic shift, i.e. rounding towards
   negative infinity, instead of rounding towards zero.  Signed and unsigned
   shift will have dedicated opcodes in Constantinople, and are emulated by
   Solidity for the moment.
@@ -33,9 +28,7 @@ hiding new and different behavior in existing code.
 * The functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` do not
   pad anymore when given a single ``bytes`` parameter.
 
-* Pure and view functions are now called using the opcode ``STATICCALL``
-  instead of ``CALL`` if the EVM version is Byzantium or later. This
-  disallows state changes on the EVM level.
+* pureとviewファンクションはEVMバージョンがByzantium以降であれば、``CALL`` の代わりに ``STATICCALL`` を使って呼ばれます。このopcodeではEVMレベルで、状態変更ができません。
 
 * The ABI encoder now properly pads byte arrays and strings from calldata
   (``msg.data`` and external function parameters) when used in external
@@ -52,12 +45,10 @@ hiding new and different behavior in existing code.
 Semantic and Syntactic Changes
 ==============================
 
-This section highlights changes that affect syntax and semantics.
+このセクションではシンタックスとセマンティクスに関連する変更を紹介します。
 
-* The functions ``.call()``, ``.delegatecall()``, ``staticcall()``,
-  ``keccak256()``, ``sha256()`` and ``ripemd160()`` now accept only a single
-  ``bytes`` argument. Moreover, the argument is not padded. This was changed to
-  make more explicit and clear how the arguments are concatenated. Change every
+* ``.call()``、``.delegatecall()``、``staticcall()``、``keccak256()``、``sha256()``、``ripemd160()`` は1つの ``bytes`` 引数だけを受け入れます。さらに引数はパディングされません。これは引数がどのように連結させるかをわかりやすくするためです。
+Change every
   ``.call()`` (and family) to a ``.call("")`` and every ``.call(signature, a,
   b, c)`` to use ``.call(abi.encodeWithSignature(signature, a, b, c))`` (the
   last one only works for value types).  Change every ``keccak256(a, b, c)`` to

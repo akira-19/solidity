@@ -8,18 +8,21 @@ Miscellaneous
 Layout of State Variables in Storage
 ************************************
 
+静的サイズの変数（マッピングと動的サイズの配列以外のもの）は
 Statically-sized variables (everything except mapping and dynamically-sized array types) are laid out contiguously in storage starting from position ``0``. Multiple, contiguous items that need less than 32 bytes are packed into a single storage slot if possible, according to the following rules:
 
 - The first item in a storage slot is stored lower-order aligned.
 - Elementary types use only that many bytes that are necessary to store them.
-- If an elementary type does not fit the remaining part of a storage slot, it is moved to the next storage slot.
-- Structs and array data always start a new slot and occupy whole slots (but items inside a struct or array are packed tightly according to these rules).
+- 基本型がストレージのスロットの余っている部分に入りきらなかった場合は、次のストレージスロットに移動します。
+- 構造体と配列データは常に新しいスロットで始まり、全てのスロットを占有します（ただし、構造体もしくは配列の中身の要素はこのルールに従ってタイトに保存されます）。
 
+継承を使用するコントラクトに関しては、
 For contracts that use inheritance, the ordering of state variables is determined by the
 C3-linearized order of contracts starting with the most base-ward contract. If allowed
 by the above rules, state variables from different contracts do share the same storage slot.
 
 .. warning::
+    32バイト未満の要素を使用すると、コントラクトのガス消費量が高くなるかもしれません。これはEVMがに32バイト
     When using elements that are smaller than 32 bytes, your contract's gas usage may be higher.
     This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller
     than that, the EVM must use more operations in order to reduce the size of the element from 32

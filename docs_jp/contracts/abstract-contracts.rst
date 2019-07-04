@@ -6,7 +6,7 @@
 Abstract Contracts
 ******************
 
-Contracts are marked as abstract when at least one of their functions lacks an implementation as in the following example (note that the function declaration header is terminated by ``;``)::
+アブストラクトとなるコントラクトは少なくとも1つのファンクションは下記の様に実行部がないものを持っています（ファンクションのヘッダーが ``;`` で終わっていることを確認して下さい）::
 
     pragma solidity >=0.4.0 <0.6.0;
 
@@ -14,7 +14,7 @@ Contracts are marked as abstract when at least one of their functions lacks an i
         function utterance() public returns (bytes32);
     }
 
-Such contracts cannot be compiled (even if they contain implemented functions alongside non-implemented functions), but they can be used as base contracts::
+その様なコントラクトはコンパイルできません（実行できるファンクションが一緒にあったとしても）が、ベースコントラクトとして使用することができます::
 
     pragma solidity >=0.4.0 <0.6.0;
 
@@ -26,18 +26,17 @@ Such contracts cannot be compiled (even if they contain implemented functions al
         function utterance() public returns (bytes32) { return "miaow"; }
     }
 
-If a contract inherits from an abstract contract and does not implement all non-implemented functions by overriding, it will itself be abstract.
+もしあるコントラクトがアブストラクトを継承し、全ての非実行のファンクションをオーバーライドした上で、実行しなかった場合、そのコントラクト自体がアブストラクトになります。
 
-Note that a function without implementation is different from a :ref:`Function Type <function_types>` even though their syntax looks very similar.
+シンタックスはとても似ていますが、実行しないファンクションは :ref:`Function Type <function_types>` とは違うということに注意してください。
 
-Example of function without implementation (a function declaration)::
+実行しないファンクションの例（ファンクションの宣言）です::
 
     function foo(address) external returns (address);
 
-Example of a Function Type (a variable declaration, where the variable is of type ``function``)::
+ファンクション型の例です（変数の型が ``function`` である変数の宣言）::
 
     function(address) external returns (address) foo;
 
-Abstract contracts decouple the definition of a contract from its implementation providing better extensibility and self-documentation and
-facilitating patterns like the `Template method <https://en.wikipedia.org/wiki/Template_method_pattern>`_ and removing code duplication.
-Abstract contracts are useful in the same way that defining methods in an interface is useful. It is a way for the designer of the abstract contract to say "any child of mine must implement this method".
+アブストラクトコントラクトは、より良い拡張性を持つ実装や、自己文書化、`Template method <https://en.wikipedia.org/wiki/Template_method_pattern>`_ の様なファシリテーションパターン、コード複製の削除を、コントラクトの定義から切り離します。
+アブストラクトコントラクトはインターフェースに置いてメソッド定義が便利なのと同じ様に便利です。これがアブストラクトコントラクトの作成者が「自分の子は全てこのメソッドを実行する」と言うための方法です。

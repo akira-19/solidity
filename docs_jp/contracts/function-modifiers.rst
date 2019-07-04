@@ -6,9 +6,7 @@
 Function Modifiers
 ******************
 
-Modifiers can be used to easily change the behaviour of functions.  For example,
-they can automatically check a condition prior to executing the function. Modifiers are
-inheritable properties of contracts and may be overridden by derived contracts.
+modifierはファンクションの挙動を簡単に変えるのに使うことができます。例えば、ファンクションの実行前に自動的にある条件をチェックできます。modifierは継承可能なコントラクトのプロパティで、継承されたコントラクトによってオーバーライドされるかもしれません。
 
 ::
 
@@ -94,18 +92,11 @@ inheritable properties of contracts and may be overridden by derived contracts.
         }
     }
 
-Multiple modifiers are applied to a function by specifying them in a
-whitespace-separated list and are evaluated in the order presented.
+複数のmodifierはホワイトスペースで分けられたリストで明記されあるファンクションに適用されます。書かれた順番に評価されます。
 
 .. warning::
-    In an earlier version of Solidity, ``return`` statements in functions
-    having modifiers behaved differently.
+    以前のSolidityでは ``return`` はmodifierを持つファンクションの中では異なった挙動をしていました。
 
-Explicit returns from a modifier or function body only leave the current
-modifier or function body. Return variables are assigned and
-control flow continues after the "_" in the preceding modifier.
+modifierもしくはファンクション本体からの明示的なreturnは現在のmodifierもしくはファンクション本体からしか出ません。返ってきた変数は割り当てられ、制御フローは先に処理されたmodifierの"_"の後に続きます。
 
-Arbitrary expressions are allowed for modifier arguments and in this context,
-all symbols visible from the function are visible in the modifier. Symbols
-introduced in the modifier are not visible in the function (as they might
-change by overriding).
+modifierの引数に任意の式が使えます。このコンテキストに置いて、ファンクションから可視の全ての記号はmodifierでも可視です。modifierで処理される記号はファンクションからは可視ではありません（オーバーライドで変わってしまう可能性があるため）。

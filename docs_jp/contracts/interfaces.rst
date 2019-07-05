@@ -6,20 +6,18 @@
 Interfaces
 **********
 
-インターフェースはアブストラクトコントラクトに似ています。
-Interfaces are similar to abstract contracts, but they cannot have any functions implemented. There are further restrictions:
+インターフェースはアブストラクトコントラクトに似ていますが、どんなファンクションも実行することはできません。他の制限がこちらです。
 
-- They cannot inherit other contracts or interfaces.
-- All declared functions must be external.
-- They cannot declare a constructor.
-- They cannot declare state variables.
+- 他のコントラクやインターフェースを継承できません。
+- 全ての宣言されたファンクションはexternalでなければいけません。
+- コンストラクタは使えません。
+- 状態変数は宣言できません。
 
-Some of these restrictions might be lifted in the future.
+将来的にはこの制限のいくつかは撤廃されるかもしれません。
 
-Interfaces are basically limited to what the Contract ABI can represent, and the conversion between the ABI and
-an interface should be possible without any information loss.
+インターフェースは基本的にコントラクトABIが表せるものに制限され、ABIとインターフェース間の変換は、どんな情報の喪失もなく行われるはずです。
 
-Interfaces are denoted by their own keyword:
+インターフェースはinterfaceというキーワードで表されます。
 
 ::
 
@@ -31,7 +29,6 @@ Interfaces are denoted by their own keyword:
         function transfer(address recipient, uint amount) external;
     }
 
-Contracts can inherit interfaces as they would inherit other contracts.
+コントラクトは他のコントラクトを継承するようにインターフェースを継承できます。
 
-Types defined inside interfaces and other contract-like structures
-can be accessed from other contracts: ``Token.TokenType`` or ``Token.Coin``.
+インターフェース内で定義された型と他のコントラクトの様な構造は他のコントラクトからアクセスできます: ``Token.TokenType`` もしくは ``Token.Coin``

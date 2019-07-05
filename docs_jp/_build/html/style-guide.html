@@ -88,14 +88,26 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Style Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -137,7 +149,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -210,36 +222,32 @@
 <span id="index-0"></span><h1>Style Guide<a class="headerlink" href="#style-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>This guide is intended to provide coding conventions for writing solidity code.
-This guide should be thought of as an evolving document that will change over
-time as useful conventions are found and old conventions are rendered obsolete.</p>
-<p>Many projects will implement their own style guides.  In the event of
-conflicts, project specific style guides take precedence.</p>
-<p>The structure and many of the recommendations within this style guide were
-taken from python’s
-<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">pep8 style guide</a>.</p>
-<p>The goal of this guide is <em>not</em> to be the right way or the best way to write
-solidity code.  The goal of this guide is <em>consistency</em>.  A quote from python’s
-<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds">pep8</a>
-captures this concept well.</p>
+<p>このガイドの目的は、Solidityコードを書くためのコーディング規約を提供することです。
+また、このガイドでは、みなさんが役に立つ規約が見つけられて、過去の規約が時代遅れとなれば、時間の経過とともに変化し進化するドキュメントとして考えてください。</p>
+<p>多くのプロジェクトでは独自のスタイルガイドが実装されます。
+つまり、コンフリクトが発生した場合は、プロジェクト固有のスタイルガイドが優先されるということです。</p>
+<p>スタイルガイド内の構造と多くのレコメンデーションはpythonの <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">pep8 style guide</a>. をもとにしています。</p>
+<p>また、このガイドの目的は、堅実なコードを書くための正しい方法や最良の方法を提供することではありません。
+ガイドのゴールは、Solidityにおける <em>consistency</em> について知ってもらうことです。pythonの <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds">pep8</a> からの引用により、この目的を達成できるようします。</p>
 <blockquote>
-<div>A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.
-But most importantly: know when to be inconsistent – sometimes the style guide just doesn’t apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don’t hesitate to ask!</div></blockquote>
+<div>このスタイルガイドは一貫性(consistency)について述べます。このスタイルガイドのconsistencyは重要です。もっというと、プロジェクトのconsistencyはもっと重要です。
+さらには、1つのモジュールにおけるconsistency、1つの関数におけるconsistencyはより重要なものです。
+しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。 – 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！</div></blockquote>
 </div>
 <div class="section" id="code-layout">
 <h2>Code Layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="indentation">
 <h3>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h3>
-<p>Use 4 spaces per indentation level.</p>
+<p>インデントには4つのスペースを使ってください。</p>
 </div>
 <div class="section" id="tabs-or-spaces">
 <h3>Tabs or Spaces<a class="headerlink" href="#tabs-or-spaces" title="Permalink to this headline">¶</a></h3>
-<p>Spaces are the preferred indentation method.</p>
-<p>Mixing tabs and spaces should be avoided.</p>
+<p>スペースはタブよりもインデントに適しています。
+また、スペースとタブの混合は避けるべきです。</p>
 </div>
 <div class="section" id="blank-lines">
 <h3>Blank Lines<a class="headerlink" href="#blank-lines" title="Permalink to this headline">¶</a></h3>
-<p>Surround top level declarations in solidity source with two blank lines.</p>
+<p>2行の空白行を持つSolidityソースでの最上位の宣言を囲むようにします。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -273,8 +281,8 @@ But most importantly: know when to be inconsistent – sometimes the style guide
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Within a contract surround function declarations with a single blank line.</p>
-<p>Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)</p>
+<p>コントラクト内では、関数宣言は1行の空白行で囲むようにします。
+関連するワンライナーのグループ間で空白行を省略することができます(抽象コントラクトのスタブ関数など)。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -311,14 +319,15 @@ But most importantly: know when to be inconsistent – sometimes the style guide
 </div>
 <div class="section" id="maximum-line-length">
 <span id="id1"></span><h3>Maximum Line Length<a class="headerlink" href="#maximum-line-length" title="Permalink to this headline">¶</a></h3>
-<p>Keeping lines under the <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#maximum-line-length">PEP 8 recommendation</a> to a maximum of 79 (or 99)
-characters helps readers easily parse the code.</p>
-<p>Wrapped lines should conform to the following guidelines.</p>
+<blockquote>
+<div><a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#maximum-line-length">PEP 8 recommendation</a> に従い、行数は最大で79行(または99行)にとどめましょう。</div></blockquote>
+<p>これによりコードの可読性が向上します。</p>
+<p>折り返し行は、次のガイドラインに従ってください。</p>
 <ol class="arabic simple">
-<li>The first argument should not be attached to the opening parenthesis.</li>
-<li>One, and only one, indent should be used.</li>
-<li>Each argument should fall on its own line.</li>
-<li>The terminating element, <code class="code docutils literal notranslate"><span class="pre">);</span></code>, should be placed on the final line by itself.</li>
+<li>最初の引数は左括弧に付けないでください</li>
+<li>折り返し後のインデントは1つのみ使用してください</li>
+<li>各引数は1行で表現できるようにします</li>
+<li>最後の要素 <code class="code docutils literal notranslate"><span class="pre">);</span></code> は最終行に単独で置いてください</li>
 </ol>
 <p>Function Calls</p>
 <p>Yes:</p>
@@ -410,11 +419,11 @@ characters helps readers easily parse the code.</p>
 </div>
 <div class="section" id="source-file-encoding">
 <h3>Source File Encoding<a class="headerlink" href="#source-file-encoding" title="Permalink to this headline">¶</a></h3>
-<p>UTF-8 or ASCII encoding is preferred.</p>
+<p>UTF-8とASCIIを使いましょう。</p>
 </div>
 <div class="section" id="imports">
 <h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h3>
-<p>Import statements should always be placed at the top of the file.</p>
+<p>Import文は常にファイルの先頭に置きましょう。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -448,17 +457,18 @@ characters helps readers easily parse the code.</p>
 </div>
 <div class="section" id="order-of-functions">
 <h3>Order of Functions<a class="headerlink" href="#order-of-functions" title="Permalink to this headline">¶</a></h3>
-<p>Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.</p>
-<p>Functions should be grouped according to their visibility and ordered:</p>
+<p>関数レベルの順序付けは、読者がどの関数を呼び出すことができるかを識別することを簡単にします。
+これにより、コンストラクタとフォールバック定義を簡単に見つけるのに役立ちます。</p>
+<p>関数は可視性(可視性修飾子を含む)に従って分類され、順序付けされるべきです:</p>
 <ul class="simple">
 <li>constructor</li>
-<li>fallback function (if exists)</li>
+<li>fallback function(もしあるなら)</li>
 <li>external</li>
 <li>public</li>
 <li>internal</li>
 <li>private</li>
 </ul>
-<p>Within a grouping, place the <code class="docutils literal notranslate"><span class="pre">view</span></code> and <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions last.</p>
+<p>グループ内では、関数の最後に <code class="docutils literal notranslate"><span class="pre">view</span></code> や <code class="docutils literal notranslate"><span class="pre">pure</span></code> を付けましょう。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -521,8 +531,8 @@ characters helps readers easily parse the code.</p>
 </div>
 <div class="section" id="whitespace-in-expressions">
 <h3>Whitespace in Expressions<a class="headerlink" href="#whitespace-in-expressions" title="Permalink to this headline">¶</a></h3>
-<p>Avoid extraneous whitespace in the following  situations:</p>
-<p>Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.</p>
+<p>次の場合は、余分なスペースを避けましょう:</p>
+<p>単一行の関数宣言以外の、括弧、大括弧または大括弧のすぐ内側:</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">spam</span><span class="p">(</span><span class="n">ham</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Coin</span><span class="p">({</span><span class="n">name</span><span class="o">:</span> <span class="s">&quot;ham&quot;</span><span class="p">}));</span>
 </pre></div>
@@ -535,7 +545,7 @@ characters helps readers easily parse the code.</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">singleLine</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">spam</span><span class="p">();</span> <span class="p">}</span>
 </pre></div>
 </div>
-<p>Immediately before a comma, semicolon:</p>
+<p>コンマ、セミコロンの直前:</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">spam</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span><span class="p">,</span> <span class="n">Coin</span> <span class="n">coin</span><span class="p">)</span> <span class="kr">public</span><span class="p">;</span>
 </pre></div>
@@ -544,10 +554,7 @@ characters helps readers easily parse the code.</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">spam</span><span class="p">(</span><span class="kt">uint</span> <span class="n">i</span> <span class="p">,</span> <span class="n">Coin</span> <span class="n">coin</span><span class="p">)</span> <span class="kr">public</span> <span class="p">;</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>More than one space around an assignment or other operator to align with</dt>
-<dd>another:</dd>
-</dl>
+<p>代入または他の演算子の周囲に、他のものと位置を合わせるためのスペースが複数ある場合:</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -560,7 +567,7 @@ characters helps readers easily parse the code.</p>
 <span class="n">long_variable</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Don’t include a whitespace in the fallback function:</p>
+<p>フォールバック関数内にはホワイトスペースを含めないでください:</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span><span class="p">()</span> <span class="kr">external</span> <span class="p">{</span>
     <span class="p">...</span>
@@ -576,13 +583,11 @@ characters helps readers easily parse the code.</p>
 </div>
 <div class="section" id="control-structures">
 <h3>Control Structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h3>
-<p>The braces denoting the body of a contract, library, functions and structs
-should:</p>
+<p>コントラクトボディ、ライブラリ、関数、および構造体を示す波括弧は、次のようになります。</p>
 <ul class="simple">
-<li>open on the same line as the declaration</li>
-<li>close on their own line at the same indentation level as the beginning of the
-declaration.</li>
-<li>The opening brace should be proceeded by a single space.</li>
+<li>宣言と同じ行で開きます</li>
+<li>宣言の始めと同じインデントレベルで、それぞれの行を閉じます</li>
+<li>波括弧を開くときは、シングルスペースに続きます</li>
 </ul>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
@@ -607,12 +612,9 @@ declaration.</li>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The same recommendations apply to the control structures <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">else</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">for</span></code>.</p>
-<p>Additionally there should be a single space between the control structures
-<code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, and <code class="docutils literal notranslate"><span class="pre">for</span></code> and the parenthetic block representing the
-conditional, as well as a single space between the conditional parenthetic
-block and the opening brace.</p>
+<p>これらのレコメンデーションは``if`` や <code class="docutils literal notranslate"><span class="pre">else</span></code> 、 <code class="docutils literal notranslate"><span class="pre">while</span></code> 、 <code class="docutils literal notranslate"><span class="pre">for</span></code> といった制御構造にも適用されます。</p>
+<p>さらに、制御構造 <code class="docutils literal notranslate"><span class="pre">if</span></code> 、 <code class="docutils literal notranslate"><span class="pre">while</span></code> 、 <code class="docutils literal notranslate"><span class="pre">for</span></code> と、条件を表す括弧ブロックの間、
+および条件括弧ブロックと括弧の間には、シングルスペースがあるべきです。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>
     <span class="p">...</span>
@@ -636,8 +638,8 @@ block and the opening brace.</p>
     <span class="p">...;}</span>
 </pre></div>
 </div>
-<p>For control structures whose body contains a single statement, omitting the
-braces is ok <em>if</em> the statement is contained on a single line.</p>
+<p>コントラクトボディに単一のステートメントが含まれる制御構造の場合、波括弧は省略しても構いません。
+ただし、ステートメントが1行で表せられる場合に限ります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
@@ -651,9 +653,8 @@ braces is ok <em>if</em> the statement is contained on a single line.</p>
     <span class="p">}));</span>
 </pre></div>
 </div>
-<p>For <code class="docutils literal notranslate"><span class="pre">if</span></code> blocks which have an <code class="docutils literal notranslate"><span class="pre">else</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> clause, the <code class="docutils literal notranslate"><span class="pre">else</span></code> should be
-placed on the same line as the <code class="docutils literal notranslate"><span class="pre">if</span></code>’s closing brace. This is an exception compared
-to the rules of other block-like structures.</p>
+<p><code class="docutils literal notranslate"><span class="pre">else</span></code> または <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> 節を持つ <code class="docutils literal notranslate"><span class="pre">if</span></code> ブロックの場合、 <code class="docutils literal notranslate"><span class="pre">else``は</span> <span class="pre">``if</span></code> の閉じ括弧と同じ行に配置する必要があります。
+これは他のブロックのような構造の規則と比較して例外です。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
@@ -682,11 +683,9 @@ to the rules of other block-like structures.</p>
 </div>
 <div class="section" id="function-declaration">
 <h3>Function Declaration<a class="headerlink" href="#function-declaration" title="Permalink to this headline">¶</a></h3>
-<p>For short function declarations, it is recommended for the opening brace of the
-function body to be kept on the same line as the function declaration.</p>
-<p>The closing brace should be at the same indentation level as the function
-declaration.</p>
-<p>The opening brace should be preceded by a single space.</p>
+<p>短い関数の宣言時は、関数内の左波括弧を関数宣言と同じ行に置くことを推奨します。</p>
+<p>また、右波括弧は、関数宣言と同じインデントレベルになければなりません。</p>
+<p>さらに、左波括弧の前には、単一のスペースを入れます。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">increment</span><span class="p">(</span><span class="kt">uint</span> <span class="n">x</span><span class="p">)</span> <span class="kr">public</span> <span class="kr">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
@@ -715,7 +714,7 @@ declaration.</p>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;}</span>
 </pre></div>
 </div>
-<p>You should explicitly label the visibility of all functions, including constructors.</p>
+<p>コンストラクタを含むすべての関数の可視性に明示的にラベルを付ける必要があります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">explicitlyPublic</span><span class="p">(</span><span class="kt">uint</span> <span class="n">val</span><span class="p">)</span> <span class="kr">public</span> <span class="p">{</span>
     <span class="n">doSomething</span><span class="p">();</span>
@@ -728,8 +727,7 @@ declaration.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The visibility modifier for a function should come before any custom
-modifiers.</p>
+<p>関数の可視性修飾子は、どのカスタム修飾子よりも先に来る必要があります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">kill</span><span class="p">()</span> <span class="kr">public</span> <span class="n">onlyowner</span> <span class="p">{</span>
     <span class="nb">selfdestruct</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
@@ -742,10 +740,8 @@ modifiers.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>For long function declarations, it is recommended to drop each argument onto
-it’s own line at the same indentation level as the function body.  The closing
-parenthesis and opening bracket should be placed on their own line as well at
-the same indentation level as the function declaration.</p>
+<p>長い関数の宣言時は、関数本体と同じインデントレベルで、各引数を独自の行に配置することを推奨します。
+また、右括弧と左角括弧は、関数宣言と同じインデントレベルで、新しい行に単一に配置する必要があります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionHasLotsOfArguments</span><span class="p">(</span>
     <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
@@ -787,8 +783,7 @@ the same indentation level as the function declaration.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>If a long function declaration has modifiers, then each modifier should be
-dropped to its own line.</p>
+<p>もしこの長い関数の宣言時に関数が修飾子を持つ場合、各修飾子は新しい行に単一に配置する必要があります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span> <span class="n">x</span><span class="p">,</span> <span class="kt">address</span> <span class="n">y</span><span class="p">,</span> <span class="kt">address</span> <span class="n">z</span><span class="p">)</span>
     <span class="kr">public</span>
@@ -837,7 +832,7 @@ dropped to its own line.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the <a class="reference internal" href="#maximum-line-length"><span class="std std-ref">Maximum Line Length</span></a> section.</p>
+<p>複数のアウトプットパラメータとそのreturn文は <a class="reference internal" href="#maximum-line-length"><span class="std std-ref">Maximum Line Length</span></a> セクションにある複数行をラップする場合と同じように行います。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">thisFunctionNameIsReallyLong</span><span class="p">(</span>
     <span class="kt">address</span> <span class="n">a</span><span class="p">,</span>
@@ -880,9 +875,8 @@ dropped to its own line.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>For constructor functions on inherited contracts whose bases require arguments,
-it is recommended to drop the base constructors onto new lines in the same
-manner as modifiers if the function declaration is long or hard to read.</p>
+<p>引数が必要なコントラクトを継承するコンストラクタ関数において、関数宣言が長い場合や読みにくい場合は、
+修飾子と同じ方法でベースコンストラクタを新しい行に配置することを推奨しています。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -958,20 +952,18 @@ manner as modifiers if the function declaration is long or hard to read.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>When declaring short functions with a single statement, it is permissible to do it on a single line.</p>
+<p>短い関数を1つのステートメントで宣言するときは、1行で宣言してもかまいません。</p>
 <p>Permissible:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">shortFunction</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span> <span class="n">doSomething</span><span class="p">();</span> <span class="p">}</span>
 </pre></div>
 </div>
-<p>These guidelines for function declarations are intended to improve readability.
-Authors should use their best judgement as this guide does not try to cover all
-possible permutations for function declarations.</p>
+<p>関数宣言に関するこれらのガイドラインは、可読性を向上させることを目的としています。
+このガイドは関数宣言時のすべてのケースを網羅しようとするものではないので、コードを書く場合はその都度最善の判断に従うべきでしょう。</p>
 </div>
 <div class="section" id="mappings">
 <h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this headline">¶</a></h3>
-<p>In variable declarations, do not separate the keyword <code class="docutils literal notranslate"><span class="pre">mapping</span></code> from its
-type by a space. Do not separate any nested <code class="docutils literal notranslate"><span class="pre">mapping</span></code> keyword from its type by
-whitespace.</p>
+<p>変数の宣言時には、キーワード <code class="docutils literal notranslate"><span class="pre">mapping</span></code> をその型とスペースで区切らないでください。
+また、ネストされた `` mapping``キーワードをそのタイプとスペースで区切らないでください。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">map</span><span class="p">;</span>
 <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">registeredAddresses</span><span class="p">;</span>
@@ -989,8 +981,7 @@ whitespace.</p>
 </div>
 <div class="section" id="variable-declarations">
 <h3>Variable Declarations<a class="headerlink" href="#variable-declarations" title="Permalink to this headline">¶</a></h3>
-<p>Declarations of array variables should not have a space between the type and
-the brackets.</p>
+<p>配列変数の宣言時には、型と角括弧の間にスペースを入れないでください。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="p">[]</span> <span class="n">x</span><span class="p">;</span>
 </pre></div>
@@ -1003,7 +994,7 @@ the brackets.</p>
 <div class="section" id="other-recommendations">
 <h3>Other Recommendations<a class="headerlink" href="#other-recommendations" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Strings should be quoted with double-quotes instead of single-quotes.</li>
+<li>文字列は、シングルクオーテーションではなくダブルクオーテーションで囲む必要があります:</li>
 </ul>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">str</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">;</span>
@@ -1016,7 +1007,7 @@ the brackets.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Surround operators with a single space on either side.</li>
+<li>演算子はシングルスペースで囲ってください:</li>
 </ul>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -1033,10 +1024,9 @@ the brackets.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Operators with a higher priority than others can exclude surrounding
-whitespace in order to denote precedence.  This is meant to allow for
-improved readability for complex statement. You should always use the same
-amount of whitespace on either side of an operator:</li>
+<li>高い優先順位を持つ演算子は、優先順位を示すために周囲のスペースを除外することができます。
+これは複雑な代入文の可読性を向上させることを目的としています。
+また、演算子の両側には常に同じ量の空白を使用してください:</li>
 </ul>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span>
@@ -1054,7 +1044,7 @@ amount of whitespace on either side of an operator:</li>
 </div>
 <div class="section" id="order-of-layout">
 <h2>Order of Layout<a class="headerlink" href="#order-of-layout" title="Permalink to this headline">¶</a></h2>
-<p>Layout contract elements in the following order:</p>
+<p>コントラクト内にある要素のレイアウトは次の順序に従ってください:</p>
 <ol class="arabic simple">
 <li>Pragma statements</li>
 <li>Import statements</li>
@@ -1062,67 +1052,61 @@ amount of whitespace on either side of an operator:</li>
 <li>Libraries</li>
 <li>Contracts</li>
 </ol>
-<p>Inside each contract, library or interface, use the following order:</p>
+<p>各コントラクトやライブラリ、インターフェース内においては次の順序に従ってください:</p>
 <ol class="arabic simple">
-<li>Type declarations</li>
-<li>State variables</li>
-<li>Events</li>
-<li>Functions</li>
+<li>型宣言</li>
+<li>状態変数</li>
+<li>イベント</li>
+<li>関数</li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It might be clearer to declare types close to their use in events or state
-variables.</p>
+<p class="last">イベントや状態変数での使用に近い型を宣言する方が明確な場合があります。</p>
 </div>
 </div>
 <div class="section" id="naming-conventions">
 <h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
-<p>Naming conventions are powerful when adopted and used broadly.  The use of
-different conventions can convey significant <em>meta</em> information that would
-otherwise not be immediately available.</p>
-<p>The naming recommendations given here are intended to improve the readability,
-and thus they are not rules, but rather guidelines to try and help convey the
-most information through the names of things.</p>
-<p>Lastly, consistency within a codebase should always supersede any conventions
-outlined in this document.</p>
+<p>命名規則は、採用され広く使用されている場合に強力なものとなります。
+異なる規則を使用すると、利用できない重要な <em>meta</em> 情報を伝えることができます。</p>
+<p>ここで与えられた命名規則は可読性を改善することを目的としています。
+そのため、それらは規則というより、むしろ名前を通してほとんどの情報を伝えられるという点に着目します。</p>
+<p>最後に、コードベース内における一貫性は、この文書で説明されている規約よりも常に優先されるべきです。</p>
 <div class="section" id="naming-styles">
 <h3>Naming Styles<a class="headerlink" href="#naming-styles" title="Permalink to this headline">¶</a></h3>
-<p>To avoid confusion, the following names will be used to refer to different
-naming styles.</p>
+<p>混乱を避けるために、以下の名前はさまざまな命名スタイルを指すために使用されます。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">b</span></code> (single lowercase letter)</li>
-<li><code class="docutils literal notranslate"><span class="pre">B</span></code> (single uppercase letter)</li>
+<li><code class="docutils literal notranslate"><span class="pre">b</span></code> (単一の小文字)</li>
+<li><code class="docutils literal notranslate"><span class="pre">B</span></code> (単一の大文字)</li>
 <li><code class="docutils literal notranslate"><span class="pre">lowercase</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">lower_case_with_underscores</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">UPPERCASE</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">UPPER_CASE_WITH_UNDERSCORES</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">CapitalizedWords</span></code> (or CapWords)</li>
-<li><code class="docutils literal notranslate"><span class="pre">mixedCase</span></code> (differs from CapitalizedWords by initial lowercase character!)</li>
+<li><code class="docutils literal notranslate"><span class="pre">CapitalizedWords</span></code> (もしくはCapWords)</li>
+<li><code class="docutils literal notranslate"><span class="pre">mixedCase</span></code> (頭文字が小文字である点がCapitalizedWordsと異なります！)</li>
 <li><code class="docutils literal notranslate"><span class="pre">Capitalized_Words_With_Underscores</span></code></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms is mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.</p>
+<p class="last">CapWordsでイニシャリズムを使用するときは、イニシャリズムのすべての文字を大文字にします。そのため、HTTPServerError は HttpServerError よりも良い命名といえます。イニシャルを使用する場合は、mixedCaseを使用します。名前の頭文字である場合は最初の1文字を小文字にする以外は、イニシャルのすべての文字を大文字にします。そのため、xmlHTTPRequest は XMLHTTPRequest よりも良い命名です。</p>
 </div>
 </div>
 <div class="section" id="names-to-avoid">
 <h3>Names to Avoid<a class="headerlink" href="#names-to-avoid" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">l</span></code> - Lowercase letter el</li>
-<li><code class="docutils literal notranslate"><span class="pre">O</span></code> - Uppercase letter oh</li>
-<li><code class="docutils literal notranslate"><span class="pre">I</span></code> - Uppercase letter eye</li>
+<li><code class="docutils literal notranslate"><span class="pre">l</span></code> - 小文字の el</li>
+<li><code class="docutils literal notranslate"><span class="pre">O</span></code> - 大文字の oh</li>
+<li><code class="docutils literal notranslate"><span class="pre">I</span></code> - 大文字の eye</li>
 </ul>
-<p>Never use any of these for single letter variable names.  They are often
-indistinguishable from the numerals one and zero.</p>
+<p>1文字の変数名にこれらのいずれも使用しないでください。数字の1と0と区別がつかないケースがよくあります。</p>
 </div>
 <div class="section" id="contract-and-library-names">
 <h3>Contract and Library Names<a class="headerlink" href="#contract-and-library-names" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Contracts and libraries should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code>, <code class="docutils literal notranslate"><span class="pre">SmartBank</span></code>, <code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code>, <code class="docutils literal notranslate"><span class="pre">Player</span></code>, <code class="docutils literal notranslate"><span class="pre">Congress</span></code>, <code class="docutils literal notranslate"><span class="pre">Owned</span></code>.</li>
-<li>Contract and library names should also match their filenames.</li>
-<li>If a contract file includes multiple contracts and/or libraries, then the filename should match the <em>core contract</em>. This is not recommended however if it can be avoided.</li>
+<li>コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。 例: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code> 、 <code class="docutils literal notranslate"><span class="pre">SmartBank</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Player</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Congress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Owned</span></code> など。</li>
+<li>コントラクトとライブラリの名前もそれらのファイル名と一致する必要があります。</li>
+<li>コントラクトファイルに複数のコントラクトやライブラリが含まれている場合、ファイル名は <em>core contract</em> と一致させる必要があります。ただしこの構造はお勧めできないため、でいるだけ回避しましょう。</li>
 </ul>
-<p>As shown in the example below, if the contract name is <cite>Congress</cite> and the library name is <cite>Owned</cite>, then their associated filenames should be <cite>Congress.sol</cite> and <cite>Owned.sol</cite>.</p>
+<p>以下の例に示すように、コントラクト名が <cite>Congress</cite> でライブラリ名が <cite>Owned</cite> の場合、それらに関連するファイル名は <cite>Congress.sol</cite> と ` Owned.sol` になります。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -1184,46 +1168,43 @@ indistinguishable from the numerals one and zero.</p>
 </div>
 <div class="section" id="struct-names">
 <h3>Struct Names<a class="headerlink" href="#struct-names" title="Permalink to this headline">¶</a></h3>
-<p>Structs should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code>, <code class="docutils literal notranslate"><span class="pre">Position</span></code>, <code class="docutils literal notranslate"><span class="pre">PositionXY</span></code>.</p>
+<p>構造体はCapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Position</span></code> 、 <code class="docutils literal notranslate"><span class="pre">PositionXY</span></code> など。</p>
 </div>
 <div class="section" id="event-names">
 <h3>Event Names<a class="headerlink" href="#event-names" title="Permalink to this headline">¶</a></h3>
-<p>Events should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code>, <code class="docutils literal notranslate"><span class="pre">Transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">Approval</span></code>, <code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code>, <code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code>.</p>
+<p>イベントはCapWordsスタイルを使って命名されるべきです。例: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Transfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Approval</span></code> 、 <code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code> など。</p>
 </div>
 <div class="section" id="function-names">
 <h3>Function Names<a class="headerlink" href="#function-names" title="Permalink to this headline">¶</a></h3>
-<p>Functions other than constructors should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code>, <code class="docutils literal notranslate"><span class="pre">transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code>, <code class="docutils literal notranslate"><span class="pre">addMember</span></code>, <code class="docutils literal notranslate"><span class="pre">changeOwner</span></code>.</p>
+<p>コンストラクタ以外の関数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code> 、 <code class="docutils literal notranslate"><span class="pre">transfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code> 、 <code class="docutils literal notranslate"><span class="pre">addMember</span></code> 、 <code class="docutils literal notranslate"><span class="pre">changeOwner</span></code> など。</p>
 </div>
 <div class="section" id="function-argument-names">
 <h3>Function Argument Names<a class="headerlink" href="#function-argument-names" title="Permalink to this headline">¶</a></h3>
-<p>Function arguments should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">account</span></code>, <code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">senderAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">newOwner</span></code>.</p>
-<p>When writing library functions that operate on a custom struct, the struct
-should be the first argument and should always be named <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<p>関数の引数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">account</span></code> 、 <code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">senderAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">newOwner</span></code> など。</p>
+<p>カスタム構造体を操作するライブラリ関数を書くときは、その構造体を最初の引数にして、常に <code class="docutils literal notranslate"><span class="pre">self</span></code> という名前にします。</p>
 </div>
 <div class="section" id="local-and-state-variable-names">
 <h3>Local and State Variable Names<a class="headerlink" href="#local-and-state-variable-names" title="Permalink to this headline">¶</a></h3>
-<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">balancesOf</span></code>, <code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">isPreSale</span></code>, <code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code>.</p>
+<p>mixedCaseを使用してください。 例: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">balancesOf</span></code> 、 <code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">isPreSale</span></code> 、 <code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code> など。</p>
 </div>
 <div class="section" id="constants">
 <h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
-<p>Constants should be named with all capital letters with underscores separating
-words. Examples: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code>.</p>
+<p>定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code> 、 <code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code> 、 <code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code> など。</p>
 </div>
 <div class="section" id="modifier-names">
 <h3>Modifier Names<a class="headerlink" href="#modifier-names" title="Permalink to this headline">¶</a></h3>
-<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code>.</p>
+<p>mixedCaseを使用してください。 例: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code> 、 <code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code> 、 <code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code> など。</p>
 </div>
 <div class="section" id="enums">
 <h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
-<p>Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">Frame</span></code>, <code class="docutils literal notranslate"><span class="pre">HashStyle</span></code>, <code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code>.</p>
+<p>列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Frame</span></code> 、 <code class="docutils literal notranslate"><span class="pre">HashStyle</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code> など。</p>
 </div>
 <div class="section" id="avoiding-naming-collisions">
 <h3>Avoiding Naming Collisions<a class="headerlink" href="#avoiding-naming-collisions" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">single_trailing_underscore_</span></code></li>
 </ul>
-<p>This convention is suggested when the desired name collides with that of a
-built-in or otherwise reserved name.</p>
+<p>この規則は、命名する名前が組み込み名または予約語と競合する場合に推奨されます。</p>
 </div>
 <div class="section" id="general-recommendations">
 <h3>General Recommendations<a class="headerlink" href="#general-recommendations" title="Permalink to this headline">¶</a></h3>
@@ -1232,13 +1213,9 @@ built-in or otherwise reserved name.</p>
 </div>
 <div class="section" id="natspec">
 <span id="id2"></span><h2>NatSpec<a class="headerlink" href="#natspec" title="Permalink to this headline">¶</a></h2>
-<p>Solidity contracts can have a form of comments that are the basis of the
-Ethereum Natural Language Specification Format.</p>
-<p>Add comments above functions or contracts following <a class="reference external" href="http://www.doxygen.nl">doxygen</a> notation
-of one or multiple lines starting with <cite>///</cite> or a
-multiline comment starting with <cite>/**</cite> and ending with <cite>*/</cite>.</p>
-<p>For example, the contract from <a class="reference external" href="simple-smart-contract">a simple smart contract</a> with the comments
-added looks like the one below:</p>
+<p>Solidityコントラクトは、Ethereum Natural Language Specification Format のベースとなっている形式のコメントを付けることができます。</p>
+<p><cite>///</cite> またはaで始まる1行または複数行の <a class="reference external" href="http://www.doxygen.nl">doxygen</a> 表記に続く関数または規約の上にコメントを追加します。</p>
+<p>例えば、コメントが追加された <a class="reference external" href="simple-smart-contract">a simple smart contract</a> のコントラクトは以下のようになります:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="c1">/// </span><span class="cs">@author</span><span class="c1"> The Solidity Team</span>
@@ -1262,12 +1239,11 @@ added looks like the one below:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Natspec uses doxygen style tags with some special meaning.
-If no tag is used, then the comment applies to <code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code>.
-The <code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code> tag is the main NatSpec tag and its audience is
-users of the contract who have never seen the source code, so it should make
-as little assumptions about the inner details as possible.
-All tags are optional.</p>
+<p>Natspecは特別な意味を持つdoxygenスタイルのタグを使います。
+タグが使用されていない場合、コメントは <code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code> として適用されます。
+<code class="docutils literal notranslate"><span class="pre">&#64;notice</span></code> タグはNatSpecのメインタグで、読み手はソースコードを読んだことのないコントラクトユーザーを想定しています。
+そのため、できるだけ内部の詳細についての推測させないようにするべきです。
+また、すべてのタグはオプショナルです。</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="15%" />

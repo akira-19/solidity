@@ -88,7 +88,7 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
@@ -101,12 +101,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -196,27 +208,27 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://ethfiddle.com/">EthFiddle</a></dt>
-<dd>Solidity IDE in the Browser. Write and share your Solidity code. Uses server-side components.</dd>
+<dd>ブラウザのSolidity IDE Solidityコードを書いて共有しましょう。サーバーサイドコンポーネントを使用します。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://remix.ethereum.org/">Remix</a></dt>
-<dd>Browser-based IDE with integrated compiler and Solidity runtime environment without server-side components.</dd>
+<dd>サーバーサイドコンポーネントのない統合コンパイラとSolidityランタイム環境を持つブラウザベースのIDEです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/duaraghav8/Solium/">Solium</a></dt>
-<dd>Linter to identify and fix style and security issues in Solidity.</dd>
+<dd>Solidityのスタイルとセキュリティの問題を特定し修正するリンターです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/protofire/solhint">Solhint</a></dt>
-<dd>Solidity linter that provides security, style guide and best practice rules for smart contract validation.</dd>
+<dd>セキュリティ、スタイルガイド、およびスマートコントラクトの検証のためのベストプラクティスルールを提供するSolidityリンターです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://lab.superblocks.com/">Superblocks Lab</a></dt>
-<dd>Browser-based IDE. Built-in browser-based VM and Metamask integration (one click deployment to Testnet/Mainnet).</dd>
+<dd>ブラウザベースのIDEです。ビルドインのブラウザベースのVMとMetamaskのインテグレーションです(Testnet / Mainnetへのワンクリックデプロイメント)。</dd>
 </dl>
 </li>
 </ul>
@@ -227,17 +239,17 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/0mkara/etheratom">Etheratom</a></dt>
-<dd>Plugin for the Atom editor that features syntax highlighting, compilation and a runtime environment (Backend node &amp; VM compatible).</dd>
+<dd>シンタックスハイライト、コンパイル、およびランタイム環境(バックエンドノードとVM互換)を特徴とするAtomエディター用のプラグインです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://atom.io/packages/linter-solidity">Atom Solidity Linter</a></dt>
-<dd>Plugin for the Atom editor that provides Solidity linting.</dd>
+<dd>Solidityのリントを提供するAtomエディター用のプラグインです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://atom.io/packages/linter-solium">Atom Solium Linter</a></dt>
-<dd>Configurable Solidty linter for Atom using Solium as a base.</dd>
+<dd>Soliumをベースとして使用するAtom用の構成可能なSolidtyリンターです。</dd>
 </dl>
 </li>
 </ul>
@@ -248,7 +260,7 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://yakindu.github.io/solidity-ide/">YAKINDU Solidity Tools</a></dt>
-<dd>Eclipse based IDE. Features context sensitive code completion and help, code navigation, syntax coloring, built in compiler, quick fixes and templates.</dd>
+<dd>EclipseベースのIDEです。状況依存のコード補完とヘルプ、コードナビゲーション、構文の色分け、組み込みコンパイラ、クイックフィックス、およびテンプレートを備えています。</dd>
 </dl>
 </li>
 </ul>
@@ -259,7 +271,7 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/ethereum/emacs-solidity/">Emacs Solidity</a></dt>
-<dd>Plugin for the Emacs editor providing syntax highlighting and compilation error reporting.</dd>
+<dd>シンタックスハイライトとコンパイルエラーレポートを提供するEmacsエディタ用のプラグインです。</dd>
 </dl>
 </li>
 </ul>
@@ -270,7 +282,7 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://plugins.jetbrains.com/plugin/9475-intellij-solidity">IntelliJ IDEA plugin</a></dt>
-<dd>Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs)</dd>
+<dd>IntelliJ IDEA(と他のすべてのJetBrains IDE)用のSolidityプラグインです。</dd>
 </dl>
 </li>
 </ul>
@@ -281,7 +293,7 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://packagecontrol.io/packages/Ethereum/">Package for SublimeText - Solidity language syntax</a></dt>
-<dd>Solidity syntax highlighting for SublimeText editor.</dd>
+<dd>SublimeTextエディタ用のSolidityシンタックスハイライトです。</dd>
 </dl>
 </li>
 </ul>
@@ -292,12 +304,12 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/tomlion/vim-solidity/">Vim Solidity</a></dt>
-<dd>Plugin for the Vim editor providing syntax highlighting.</dd>
+<dd>Vimエディタ用のSolidityシンタックスハイライトを提供するプラグインです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/scrooloose/syntastic">Vim Syntastic</a></dt>
-<dd>Plugin for the Vim editor providing compile checking.</dd>
+<dd>Vimエディタ用のコンパイルチェックを提供するプラグインです。</dd>
 </dl>
 </li>
 </ul>
@@ -308,7 +320,7 @@
 <div><ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="http://juan.blanco.ws/solidity-contracts-in-visual-studio-code/">Visual Studio Code extension</a></dt>
-<dd>Solidity plugin for Microsoft Visual Studio Code that includes syntax highlighting and the Solidity compiler.</dd>
+<dd>Microsoft Visual Studio Code用のSolidityシンタックスハイライトとコンパイラを含むプラグインです。</dd>
 </dl>
 </li>
 </ul>
@@ -319,17 +331,17 @@
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/ethereum/mix/">Mix IDE</a></dt>
-<dd>Qt based IDE for designing, debugging and testing solidity smart contracts.</dd>
+<dd>堅牢なスマートコントラクト設計、デバッグ、テストするためのQtベースのIDEです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://live.ether.camp/">Ethereum Studio</a></dt>
-<dd>Specialized web IDE that also provides shell access to a complete Ethereum environment.</dd>
+<dd>完全なEthereum環境へのシェルアクセスも提供する専用のWeb IDEです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://visualstudiogallery.msdn.microsoft.com/96221853-33c4-4531-bdd5-d2ea5acc4799/">Visual Studio Extension</a></dt>
-<dd>Solidity plugin for Microsoft Visual Studio that includes the Solidity compiler.</dd>
+<dd>Microsoft Visual Studio用のSolidityコンパイラを含むプラグインです。</dd>
 </dl>
 </li>
 </ul>
@@ -339,53 +351,54 @@
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://dapp.tools/dapp/">Dapp</a></dt>
-<dd>Build tool, package manager, and deployment assistant for Solidity.</dd>
+<dd>Solidity用のビルドツール、パッケージマネージャ、そしてデプロイアシスタントです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/raineorshine/solidity-repl">Solidity REPL</a></dt>
-<dd>Try Solidity instantly with a command-line Solidity console.</dd>
+<dd>コマンドラインコンソールを使ってSolidityをすぐに試してみてください。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/raineorshine/solgraph">solgraph</a></dt>
-<dd>Visualize Solidity control flow and highlight potential security vulnerabilities.</dd>
+<dd>Solidityの制御フローを視覚化し、潜在的なセキュリティの脆弱性を表示します。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/DigixGlobal/doxity">Doxity</a></dt>
-<dd>Documentation Generator for Solidity.</dd>
+<dd>Solidityのためのドキュメントジェネレータです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/Arachnid/evmdis">evmdis</a></dt>
-<dd>EVM Disassembler that performs static analysis on the bytecode to provide a higher level of abstraction than raw EVM operations.</dd>
+<dd>バイトコードの静的解析を実行し、生のEVM操作よりも高いレベルの抽象化を提供するEVM逆アセンブラです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://gist.github.com/chriseth/8f533d133fa0c15b0d6eaf3ec502c82b">ABI to solidity interface converter</a></dt>
-<dd>A script for generating contract interfaces from the ABI of a smart contract.</dd>
+<dd>スマートコントラクトのABIからコントラクトインターフェースを生成するためのスクリプトです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://securify.ch/">Securify</a></dt>
-<dd>Fully automated online static analyzer for smart contracts, providing a security report based on vulnerability patterns.</dd>
+<dd>スマートコントラクト用の完全に自動化されたオンライン静的アナライザです。脆弱性パターンに基づいたセキュリティーレポートを提供します。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/ConsenSys/surya/">Sūrya</a></dt>
-<dd>Utility tool for smart contract systems, offering a number of visual outputs and information about the contracts’ structure. Also supports querying the function call graph.</dd>
+<dd>スマートコントラクトのためのユーティリティツールです。コントラクトの構造に関する多数の視覚的な出力と情報を提供します。また、関数コールグラフのクエリもサポートしています。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/ethereum/evmlab/">EVM Lab</a></dt>
-<dd>Rich tool package to interact with the EVM. Includes a VM, Etherchain API, and a trace-viewer with gas cost display.</dd>
+<dd>EVMとやり取りを行うツールパッケージです。VM、Etherchain API、およびガスコストの表示を行うトレースビューアが含まれています。</dd>
 </dl>
 </li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Information like variable names, comments, and source code formatting is lost in the compilation process and it is not possible to completely recover the original source code. Decompiling smart contracts to view the original source code might not be possible, or the end result that useful.</p>
+<p class="last">変数名、コメント、ソースコードのフォーマットなどの情報はコンパイルプロセスで失われ、元のソースコードを完全に回復することは不可能です。
+元のソースコードを表示するためにスマートコントラクトを逆コンパイルすることは可能ではないかもしれません。しかし、その結果は有用なものでしょう。</p>
 </div>
 </div>
 <div class="section" id="third-party-solidity-parsers-and-grammars">
@@ -393,12 +406,12 @@
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/ConsenSys/solidity-parser">solidity-parser</a></dt>
-<dd>Solidity parser for JavaScript</dd>
+<dd>JavaScript用のSolidityパーサです。</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="https://github.com/federicobond/solidity-antlr4">Solidity Grammar for ANTLR 4</a></dt>
-<dd>Solidity grammar for the ANTLR 4 parser generator</dd>
+<dd>ANTLR 4パーサジェネレータ用のSolidityグラマーです。</dd>
 </dl>
 </li>
 </ul>

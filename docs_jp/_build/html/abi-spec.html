@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contract ABI Specification &mdash; Solidity 0.5.4 documentation</title>
+  <title>Basic Design &mdash; Solidity 0.5.4 documentation</title>
   
 
   
@@ -88,40 +88,37 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contract ABI Specification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basic-design">Basic Design</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#function-selector">Function Selector</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#types">Types</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mapping-solidity-to-abi-types">Mapping Solidity to ABI types</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#types">Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mapping-solidity-to-abi-types">Mapping Solidity to ABI types</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#events">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#json">JSON</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#handling-tuple-types">Handling tuple types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#json">JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#handling-tuple-types">Handling tuple types</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#non-standard-packed-mode">Non-standard Packed Mode</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -171,7 +168,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Contract ABI Specification</li>
+      <li>Basic Design</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -190,196 +187,161 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contract-abi-specification">
-<span id="abi"></span><span id="index-0"></span><h1>Contract ABI Specification<a class="headerlink" href="#contract-abi-specification" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="basic-design">
-<h2>Basic Design<a class="headerlink" href="#basic-design" title="Permalink to this headline">¶</a></h2>
-<p>The Contract Application Binary Interface (ABI) is the standard way to interact with contracts in the Ethereum ecosystem, both
-from outside the blockchain and for contract-to-contract interaction. Data is encoded according to its type,
-as described in this specification.  The encoding is not self describing and thus requires a schema in order to decode.</p>
-<p>We assume the interface functions of a contract are strongly typed, known at compilation time and static. We assume that all contracts will have the interface definitions of any contracts they call available at compile-time.</p>
-<p>This specification does not address contracts whose interface is dynamic or otherwise known only at run-time.</p>
+  <div class="section" id="basic-design">
+<h1>Basic Design<a class="headerlink" href="#basic-design" title="Permalink to this headline">¶</a></h1>
+<p>コントラクトにおけるアプリケーションバイナリインターフェース(Application Binary Interface, ABI)はイーサリアムエコシステム内でコントラクトに接続するスタンダードなインターフェースです。コントラクトもABIもブロックチェーン外で作成され、ABIはコントラクトとコントラクトを接続するために使用されます。このドキュメントで紹介されているように、データはABIに従う形でエンコーディングされます。このエンコーディングのやり方は自己記述的なものではありません。そのため、デコードを行う際には、あるスキーマで行うことが必要になります。</p>
+<p>コントラクトのインターフェースは型付けされていることが強制されます。このことはコンパイル時に静的型付けであることとしてすでに知られていることです。すべてのコントラクトは、コンパイル時に呼び出し可能なすべてのコントラクトのインターフェース定義を内包します。</p>
+<p>この仕様は動的なインターフェースやランタイムにのみ認識されるインターフェースを持つコントラクトには対応しません。</p>
 </div>
 <div class="section" id="function-selector">
-<span id="abi-function-selector"></span><h2>Function Selector<a class="headerlink" href="#function-selector" title="Permalink to this headline">¶</a></h2>
-<p>The first four bytes of the call data for a function call specifies the function to be called. It is the
-first (left, high-order in big-endian) four bytes of the Keccak-256 (SHA-3) hash of the signature of the function. The signature is defined as the canonical expression of the basic prototype without data location specifier, i.e.
-the function name with the parenthesised list of parameter types. Parameter types are split by a single comma - no spaces are used.</p>
+<span id="abi-function-selector"></span><h1>Function selector<a class="headerlink" href="#function-selector" title="Permalink to this headline">¶</a></h1>
+<p>関数呼び出し時のコールデータの最初の4バイトは呼び出す関数を指定しています。関数シグネチャにおけるKeccak-256(SHA-3)ハッシュの最初の4バイト(左から4バイトでビッグ・エンディアンの順序になっています)のことです。このシグネチャはデータ位置指定子(data location specifier)を含まない基本プロトタイプの正規表現として定義されています。例えば、かっこで囲まれたパラメータ型のリストを含む関数名などが挙げられます。パラメータの型は単一のコンマで区切られ、スペースは使用されません。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The return type of a function is not part of this signature. In <a class="reference internal" href="contracts.html#overload-function"><span class="std std-ref">Solidity’s function overloading</span></a> return types are not considered. The reason is to keep function call resolution context-independent.
-The <a class="reference internal" href="#abi-json"><span class="std std-ref">JSON description of the ABI</span></a> however contains both inputs and outputs.</p>
+<p class="last">関数の戻り値の型はこのシグニチャの一部ではありません。 <a class="reference internal" href="contracts.html#overload-function"><span class="std std-ref">Solidityの関数のオーバーロード</span></a> においては、戻り値の型は考慮されません。これは関数呼び出しを特定のコンテキストに依存しないようにするためです。
+しかし、 :ref:<a href="#id1"><span class="problematic" id="id2">`</span></a>ABIのJSON記述&lt;abi_json&gt;`は入力値と出力値の両方を含むことに注意が必要です。</p>
 </div>
 </div>
 <div class="section" id="argument-encoding">
-<h2>Argument Encoding<a class="headerlink" href="#argument-encoding" title="Permalink to this headline">¶</a></h2>
-<p>Starting from the fifth byte, the encoded arguments follow. This encoding is also used in other places, e.g. the return values and also event arguments are encoded in the same way, without the four bytes specifying the function.</p>
+<h1>Argument Encoding<a class="headerlink" href="#argument-encoding" title="Permalink to this headline">¶</a></h1>
+<p>先頭から数えて5バイト目から、エンコーディングされた引数が続きます。このエンコーディングされた引数は、特定の関数を指定する4バイトを除いて、戻り値などの別の場所でも使用されます。また、イベント引数も同やり方でエンコーディングされます。</p>
 </div>
 <div class="section" id="types">
-<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
-<p>The following elementary types exist:</p>
+<h1>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h1>
+<p>基本の型は以下です:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>: unsigned integer type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code>. e.g. <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: two’s complement signed integer type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: equivalent to <code class="docutils literal notranslate"><span class="pre">uint160</span></code>, except for the assumed interpretation and language typing. For computing the function selector, <code class="docutils literal notranslate"><span class="pre">address</span></code> is used.</li>
-<li><code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>: synonyms for <code class="docutils literal notranslate"><span class="pre">uint256</span></code>, <code class="docutils literal notranslate"><span class="pre">int256</span></code> respectively. For computing the function selector, <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">int256</span></code> have to be used.</li>
-<li><code class="docutils literal notranslate"><span class="pre">bool</span></code>: equivalent to <code class="docutils literal notranslate"><span class="pre">uint8</span></code> restricted to the values 0 and 1. For computing the function selector, <code class="docutils literal notranslate"><span class="pre">bool</span></code> is used.</li>
-<li><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>: signed fixed-point decimal number of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">&lt;=</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==0</span></code>, and <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">80</span></code>, which denotes the value <code class="docutils literal notranslate"><span class="pre">v</span></code> as <code class="docutils literal notranslate"><span class="pre">v</span> <span class="pre">/</span> <span class="pre">(10</span> <span class="pre">**</span> <span class="pre">N)</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>: unsigned variant of <code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">fixed</span></code>, <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: synonyms for <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code>, <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> respectively. For computing the function selector, <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> and <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> have to be used.</li>
-<li><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>: binary type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bytes, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">32</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">function</span></code>: an address (20 bytes) followed by a function selector (4 bytes). Encoded identical to <code class="docutils literal notranslate"><span class="pre">bytes24</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>:  <code class="docutils literal notranslate"><span class="pre">M</span></code> ビットのunsigned int型。 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code> と <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code> である必要があります。 <code class="docutils literal notranslate"><span class="pre">uint32</span></code> 、 <code class="docutils literal notranslate"><span class="pre">uint8</span></code> 、 <code class="docutils literal notranslate"><span class="pre">uint256</span></code> が挙げられます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: 2の補数がつく <code class="docutils literal notranslate"><span class="pre">M</span></code> ビットのsigned int型。 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code> 、 <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code> である必要があります。</li>
+<li><code class="docutils literal notranslate"><span class="pre">address</span></code>:  <code class="docutils literal notranslate"><span class="pre">uint160</span></code> と同等です。ただしこの場合、 <code class="docutils literal notranslate"><span class="pre">uint160</span></code> が暗黙的な値や型であるときを除きます。関数セレクタを計算する際に、 <code class="docutils literal notranslate"><span class="pre">address</span></code> は使用されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>:  <code class="docutils literal notranslate"><span class="pre">uint256</span></code> や <code class="docutils literal notranslate"><span class="pre">int256</span></code> と同じ意味です。関数セレクタを計算する際に、 <code class="docutils literal notranslate"><span class="pre">uint256</span></code> と <code class="docutils literal notranslate"><span class="pre">int256</span></code> は必ず使用されなくてはなりません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">bool</span></code>:  <code class="docutils literal notranslate"><span class="pre">uint8</span></code> と同等です。ただしこの場合、値は0と1のみである必要があります。 関数セレクタを計算する際に、 <code class="docutils literal notranslate"><span class="pre">bool</span></code> が使用されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>:  <code class="docutils literal notranslate"><span class="pre">M</span></code> ビットの符号付き固定小数点。 <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">&lt;=</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code> 、 <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==0</span></code>　、 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">80</span></code> である必要があり、 <code class="docutils literal notranslate"><span class="pre">v</span></code> as <code class="docutils literal notranslate"><span class="pre">v</span> <span class="pre">/</span> <span class="pre">(10</span> <span class="pre">**</span> <span class="pre">N)</span></code> であることを示します。</li>
+<li><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>:  <code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code> の符号付き変数。</li>
+<li><code class="docutils literal notranslate"><span class="pre">fixed</span></code>, <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>:  <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> や <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> と同じ意味です。関数セレクタを計算する際に、 <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> と <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> は必ず使用されなくてはなりません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>:  <code class="docutils literal notranslate"><span class="pre">M</span></code> バイトのバイナリ型。 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">32</span></code> です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">function</span></code>: アドレス（20バイト）とそれに続く関数セレクタ（4バイト）。 <code class="docutils literal notranslate"><span class="pre">bytes24</span></code> と同じエンコーディングです。</li>
 </ul>
-<p>The following (fixed-size) array type exists:</p>
+<p>固定長な型は以下です:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[M]</span></code>: a fixed-length array of <code class="docutils literal notranslate"><span class="pre">M</span></code> elements, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code>, of the given type.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[M]</span></code>:  <code class="docutils literal notranslate"><span class="pre">M</span></code> 個要素の固定長配列です。与えられた型の <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> になります。</li>
 </ul>
-<p>The following non-fixed-size types exist:</p>
+<p>可変長な型は以下です:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">bytes</span></code>: dynamic sized byte sequence.</li>
-<li><code class="docutils literal notranslate"><span class="pre">string</span></code>: dynamic sized unicode string assumed to be UTF-8 encoded.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[]</span></code>: a variable-length array of elements of the given type.</li>
+<li><code class="docutils literal notranslate"><span class="pre">bytes</span></code>: 動的サイズのバイトシーケンス。</li>
+<li><code class="docutils literal notranslate"><span class="pre">string</span></code>: UTF-8でエンコードされている動的サイズのUnicode文字列。</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[]</span></code>: 指定されたタイプの要素の可変長配列。</li>
 </ul>
-<p>Types can be combined to a tuple by enclosing them inside parentheses, separated by commas:</p>
+<p>データ型はカンマで区切って括弧で囲むとタプルにまとめることができます:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">(T1,T2,...,Tn)</span></code>: tuple consisting of the types <code class="docutils literal notranslate"><span class="pre">T1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">Tn</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">(T1,T2,...,Tn)</span></code>: 同じデータ型 <code class="docutils literal notranslate"><span class="pre">T1</span></code> …, <code class="docutils literal notranslate"><span class="pre">Tn</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> で構成されたタプル。</li>
 </ul>
-<p>It is possible to form tuples of tuples, arrays of tuples and so on.  It is also possible to form zero-tuples (where <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">==</span> <span class="pre">0</span></code>).</p>
+<p>また、タプルのタプル、タプルの配列なども形成することができます。ゼロタプル( `` n == 0`` )を作ることもできます。</p>
 <div class="section" id="mapping-solidity-to-abi-types">
-<h3>Mapping Solidity to ABI types<a class="headerlink" href="#mapping-solidity-to-abi-types" title="Permalink to this headline">¶</a></h3>
-<p>Solidity supports all the types presented above with the same names with the
-exception of tuples. On the other hand, some Solidity types are not supported
-by the ABI.  The following table shows on the left column Solidity types that
-are not part of the ABI, and on the right column the ABI types that represent
-them.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="29%" />
-<col width="71%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Solidity</th>
-<th class="head">ABI</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="types.html#address"><span class="std std-ref">address payable</span></a></td>
-<td><code class="docutils literal notranslate"><span class="pre">address</span></code></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a></td>
-<td><code class="docutils literal notranslate"><span class="pre">address</span></code></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="types.html#enums"><span class="std std-ref">enum</span></a></td>
-<td><p class="first">smallest <code class="docutils literal notranslate"><span class="pre">uint</span></code> type that is large enough to hold all values</p>
-<p class="last">For example, an <code class="docutils literal notranslate"><span class="pre">enum</span></code> of 255 values or less is mapped to <code class="docutils literal notranslate"><span class="pre">uint8</span></code> and
-an <code class="docutils literal notranslate"><span class="pre">enum</span></code> of 256 values is mapped to <code class="docutils literal notranslate"><span class="pre">uint16</span></code>.</p>
-</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="types.html#structs"><span class="std std-ref">struct</span></a></td>
-<td><code class="docutils literal notranslate"><span class="pre">tuple</span></code></td>
-</tr>
-</tbody>
-</table>
+<h2>Mapping Solidity to ABI types<a class="headerlink" href="#mapping-solidity-to-abi-types" title="Permalink to this headline">¶</a></h2>
+<p>Solidityは上記のすべての型を同じ名前でサポートしています(ただしタプルは例外です)。一方で、SolidityタイプのいくつかはABIにはサポートされていません。次の表は、左列にABIにサポートされていないSolidityのデータ型を、右列にはABI側でのそのデータ型の表記を表しています。</p>
 </div>
 </div>
 <div class="section" id="design-criteria-for-the-encoding">
-<h2>Design Criteria for the Encoding<a class="headerlink" href="#design-criteria-for-the-encoding" title="Permalink to this headline">¶</a></h2>
-<p>The encoding is designed to have the following properties, which are especially useful if some arguments are nested arrays:</p>
+<h1>Design Criteria for the Encoding<a class="headerlink" href="#design-criteria-for-the-encoding" title="Permalink to this headline">¶</a></h1>
+<p>エンコーディングは次のプロパティを持つように設計されています。これは、引数がネストされた配列の場合に特に便利です。</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>The number of reads necessary to access a value is at most the depth of the value inside the argument array structure, i.e. four reads are needed to retrieve <code class="docutils literal notranslate"><span class="pre">a_i[k][l][r]</span></code>. In a previous version of the ABI, the number of reads scaled linearly with the total number of dynamic parameters in the worst case.</li>
-<li>The data of a variable or array element is not interleaved with other data and it is relocatable, i.e. it only uses relative “addresses”.</li>
+<li>値にアクセスするのに必要な読み込みの数は、引数となる配列構造内の値の最大の深さに依ります。すなわち、 `` a_i [k] [l] [r] `` を取得するには4回の読み込みが必要になるということです。以前のバージョンのABIでは、最悪の場合、読み取り数は動的パラメータの総数に比例して増減しました。</li>
+<li>変数または配列要素のデータは他のデータとインターリーブされません。またこれらのデータは再配置可能です。つまり、相対的な「アドレス」のみを使用します。</li>
 </ol>
 </div></blockquote>
 </div>
 <div class="section" id="formal-specification-of-the-encoding">
-<h2>Formal Specification of the Encoding<a class="headerlink" href="#formal-specification-of-the-encoding" title="Permalink to this headline">¶</a></h2>
-<p>We distinguish static and dynamic types. Static types are encoded in-place and dynamic types are encoded at a separately allocated location after the current block.</p>
-<p><strong>Definition:</strong> The following types are called “dynamic”:</p>
+<h1>Formal Specification of the Encoding<a class="headerlink" href="#formal-specification-of-the-encoding" title="Permalink to this headline">¶</a></h1>
+<p>静的型と動的型を区別するようにします。静的型はインプレースでエンコードされ、動的型はカレントブロック後に別々に割り当てられた場所でエンコードされます。</p>
+<p><strong>定義:</strong> 次の型は「動的型」です:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">bytes</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">string</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">T[]</span></code> for any <code class="docutils literal notranslate"><span class="pre">T</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">T[k]</span></code> for any dynamic <code class="docutils literal notranslate"><span class="pre">T</span></code> and any <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">(T1,...,Tk)</span></code> if <code class="docutils literal notranslate"><span class="pre">Ti</span></code> is dynamic for some <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">k</span></code></li>
 </ul>
-<p>All other types are called “static”.</p>
-<p><strong>Definition:</strong> <code class="docutils literal notranslate"><span class="pre">len(a)</span></code> is the number of bytes in a binary string <code class="docutils literal notranslate"><span class="pre">a</span></code>.
-The type of <code class="docutils literal notranslate"><span class="pre">len(a)</span></code> is assumed to be <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p>
-<p>We define <code class="docutils literal notranslate"><span class="pre">enc</span></code>, the actual encoding, as a mapping of values of the ABI types to binary strings such
-that <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> depends on the value of <code class="docutils literal notranslate"><span class="pre">X</span></code> if and only if the type of <code class="docutils literal notranslate"><span class="pre">X</span></code> is dynamic.</p>
-<p><strong>Definition:</strong> For any ABI value <code class="docutils literal notranslate"><span class="pre">X</span></code>, we recursively define <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code>, depending
-on the type of <code class="docutils literal notranslate"><span class="pre">X</span></code> being</p>
+<p><a href="#id3"><span class="problematic" id="id4">*</span></a>任意の <code class="docutils literal notranslate"><span class="pre">T</span></code> における <code class="docutils literal notranslate"><span class="pre">T[]</span></code>
+<a href="#id5"><span class="problematic" id="id6">*</span></a>任意の動的な <code class="docutils literal notranslate"><span class="pre">T</span></code> と任意の <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> における <code class="docutils literal notranslate"><span class="pre">T[k]</span></code>
+* <code class="docutils literal notranslate"><span class="pre">Ti</span></code> が <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">k</span></code> に対して動的である場合の <code class="docutils literal notranslate"><span class="pre">(T1,...,Tk)</span></code></p>
+<p>上記以外のすべてのすべての型は「静的型」です。</p>
+<dl class="docutils">
+<dt><strong>定義:</strong> <code class="docutils literal notranslate"><span class="pre">len(a)</span></code> はバイナリ文字列 <code class="docutils literal notranslate"><span class="pre">a</span></code> のバイト数です。</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">len(a)``の型は</span> <span class="pre">``uint256</span></code> であると仮定されます。</dd>
+<dt>実際のエンコーディングである <code class="docutils literal notranslate"><span class="pre">enc</span></code> は、ABI型の値を以下のようなバイナリ文字列にマッピングするものとして定義します。</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> は <code class="docutils literal notranslate"><span class="pre">X</span></code> の型が動的である場合に限り、 <code class="docutils literal notranslate"><span class="pre">X</span></code> の値に依存します。</dd>
+<dt><strong>定義:</strong> 任意のABI値 <code class="docutils literal notranslate"><span class="pre">X</span></code> に対して、再帰的に <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> を定義します。</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">X</span></code> の型が</dd>
+</dl>
 <ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">(T1,...,Tk)</span></code> for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and any types <code class="docutils literal notranslate"><span class="pre">T1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">Tk</span></code></p>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> と任意の型  <code class="docutils literal notranslate"><span class="pre">T1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">Tk</span></code> に対する <a href="#id7"><span class="problematic" id="id8">``</span></a>(T1,…,Tk)``のときは以下になります:</p>
 <p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">head(X(1))</span> <span class="pre">...</span> <span class="pre">head(X(k))</span> <span class="pre">tail(X(1))</span> <span class="pre">...</span> <span class="pre">tail(X(k))</span></code></p>
-<p>where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">=</span> <span class="pre">(X(1),</span> <span class="pre">...,</span> <span class="pre">X(k))</span></code> and
-<code class="docutils literal notranslate"><span class="pre">head</span></code> and <code class="docutils literal notranslate"><span class="pre">tail</span></code> are defined for <code class="docutils literal notranslate"><span class="pre">Ti</span></code> being a static type as</p>
+<p><code class="docutils literal notranslate"><span class="pre">Ti``が静的型である場合、</span> <span class="pre">``X</span> <span class="pre">=</span> <span class="pre">(X(1)),</span> <span class="pre">...,</span> <span class="pre">X(k))``と</span> <span class="pre">``head</span></code> と <code class="docutils literal notranslate"><span class="pre">tail</span></code> は以下のように</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">head(X(i))</span> <span class="pre">=</span> <span class="pre">enc(X(i))</span></code> and <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></code> (the empty string)</p>
+<div><p><code class="docutils literal notranslate"><span class="pre">head(X(i))</span> <span class="pre">=</span> <span class="pre">enc(X(i))</span></code> および <a href="#id9"><span class="problematic" id="id10">``</span></a>tail(X(i)) = “”<a href="#id11"><span class="problematic" id="id12">``</span></a>（空の文字列）</p>
 </div></blockquote>
-<p>and as</p>
+<p>や</p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">head(X(i))</span> <span class="pre">=</span> <span class="pre">enc(len(head(X(1))</span> <span class="pre">...</span> <span class="pre">head(X(k))</span> <span class="pre">tail(X(1))</span> <span class="pre">...</span> <span class="pre">tail(X(i-1))</span> <span class="pre">))</span></code>
 <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span> <span class="pre">=</span> <span class="pre">enc(X(i))</span></code></p>
 </div></blockquote>
-<p>otherwise, i.e. if <code class="docutils literal notranslate"><span class="pre">Ti</span></code> is a dynamic type.</p>
-<p>Note that in the dynamic case, <code class="docutils literal notranslate"><span class="pre">head(X(i))</span></code> is well-defined since the lengths of
-the head parts only depend on the types and not the values. Its value is the offset
-of the beginning of <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span></code> relative to the start of <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code>.</p>
+<p>となります。</p>
+<p>上記以外の場合は、 <code class="docutils literal notranslate"><span class="pre">Ti</span></code> は動的型です。</p>
+<p>動的な場合、 <code class="docutils literal notranslate"><span class="pre">head(X(i))</span></code> は
+ヘッド部分がそのデータ型にのみ依存し、値には依存しません。またその値は <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> の先頭から <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span></code> の先頭までの範囲でのオフセットです。</p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">T[k]</span></code> for any <code class="docutils literal notranslate"><span class="pre">T</span></code> and <code class="docutils literal notranslate"><span class="pre">k</span></code>:</p>
+<li><p class="first">任意の <code class="docutils literal notranslate"><span class="pre">T</span></code> と <code class="docutils literal notranslate"><span class="pre">k</span></code> における <a href="#id13"><span class="problematic" id="id14">``</span></a>T[k]``のときは以下になります:</p>
 <p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc((X[0],</span> <span class="pre">...,</span> <span class="pre">X[k-1]))</span></code></p>
-<p>i.e. it is encoded as if it were a tuple with <code class="docutils literal notranslate"><span class="pre">k</span></code> elements
-of the same type.</p>
+<p>すなわち、同じ型の <code class="docutils literal notranslate"><span class="pre">k</span></code> 要素を持つタプルであるかのようにエンコードされます。</p>
 </li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">T[]</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span></code> has <code class="docutils literal notranslate"><span class="pre">k</span></code> elements (<code class="docutils literal notranslate"><span class="pre">k</span></code> is assumed to be of type <code class="docutils literal notranslate"><span class="pre">uint256</span></code>):</p>
-<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">enc([X[0],</span> <span class="pre">...,</span> <span class="pre">X[k-1]])</span></code></p>
-<p>i.e. it is encoded as if it were an array of static size <code class="docutils literal notranslate"><span class="pre">k</span></code>, prefixed with
-the number of elements.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">bytes</span></code>, of length <code class="docutils literal notranslate"><span class="pre">k</span></code> (which is assumed to be of type <code class="docutils literal notranslate"><span class="pre">uint256</span></code>):</p>
-<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">pad_right(X)</span></code>, i.e. the number of bytes is encoded as a
-<code class="docutils literal notranslate"><span class="pre">uint256</span></code> followed by the actual value of <code class="docutils literal notranslate"><span class="pre">X</span></code> as a byte sequence, followed by
-the minimum number of zero-bytes such that <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> is a multiple of 32.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">string</span></code>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(enc_utf8(X))</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">X</span></code> is utf-8 encoded and this value is interpreted as of <code class="docutils literal notranslate"><span class="pre">bytes</span></code> type and encoded further. Note that the length used in this subsequent encoding is the number of bytes of the utf-8 encoded string, not its number of characters.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the big-endian encoding of <code class="docutils literal notranslate"><span class="pre">X</span></code>, padded on the higher-order (left) side with zero-bytes such that the length is 32 bytes.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">address</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">uint160</span></code> case</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the big-endian two’s complement encoding of <code class="docutils literal notranslate"><span class="pre">X</span></code>, padded on the higher-order (left) side with <code class="docutils literal notranslate"><span class="pre">0xff</span></code> for negative <code class="docutils literal notranslate"><span class="pre">X</span></code> and with zero bytes for positive <code class="docutils literal notranslate"><span class="pre">X</span></code> such that the length is 32 bytes.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">bool</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">uint8</span></code> case, where <code class="docutils literal notranslate"><span class="pre">1</span></code> is used for <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">0</span></code> for <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is <code class="docutils literal notranslate"><span class="pre">enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> is interpreted as a <code class="docutils literal notranslate"><span class="pre">int256</span></code>.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">fixed</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> case</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is <code class="docutils literal notranslate"><span class="pre">enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> is interpreted as a <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> case</p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the sequence of bytes in <code class="docutils literal notranslate"><span class="pre">X</span></code> padded with trailing zero-bytes to a length of 32 bytes.</p>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">X</span></code> が <code class="docutils literal notranslate"><span class="pre">k</span></code> 要素を持つとき( <code class="docutils literal notranslate"><span class="pre">k``は</span> <span class="pre">``uint256</span></code> 型であると仮定されます)の <code class="docutils literal notranslate"><span class="pre">T[]</span></code> のときは以下になります:</p>
 </li>
 </ul>
-<p>Note that for any <code class="docutils literal notranslate"><span class="pre">X</span></code>, <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> is a multiple of 32.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">enc([X[0],</span> <span class="pre">...,</span> <span class="pre">X[k-1]])</span></code></p>
+<p>すなわち、要素数を前に付けた静的サイズの <code class="docutils literal notranslate"><span class="pre">k</span></code> の配列であるかのようにエンコードされます。</p>
+</div></blockquote>
+<ul>
+<li><p class="first">長さが <code class="docutils literal notranslate"><span class="pre">k</span></code> (これは <code class="docutils literal notranslate"><span class="pre">uint256``型であると仮定されます)の</span> <span class="pre">``bytes</span></code> のときは以下になります:</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">pad_right(X)</span></code> 。 すなわち、バイト数は
+<code class="docutils literal notranslate"><span class="pre">uint256</span></code> の後にバイトシーケンスとしての <code class="docutils literal notranslate"><span class="pre">X</span></code> の実際の値が続き、その後に <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> が32の倍数になるような最小ゼロバイト数が続きます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">string</span></code> のときは以下になります:</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(enc_utf8(X))</span></code> 。すなわち、<code class="docutils literal notranslate"><span class="pre">X</span></code> はUTF-8でエンコードされており、この値は <code class="docutils literal notranslate"><span class="pre">bytes</span></code> 型として解釈され、さらにエンコードされます。この後のエンコーディングで使用される長さは、その文字数ではなく、utf-8でエンコードされた文字列のバイト数です。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> は <code class="docutils literal notranslate"><span class="pre">X</span></code> のビッグエンディアンエンコーディングで、長さが32バイトになるように高位(左側)にゼロバイトが埋め込まれます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">address</span></code>: <code class="docutils literal notranslate"><span class="pre">uint160</span></code> の場合と同じです。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> は、 <code class="docutils literal notranslate"><span class="pre">X</span></code> のビッグエンディアンの2の補数エンコーディングで、負の <code class="docutils literal notranslate"><span class="pre">X</span></code> の場合は高位(左側)に <code class="docutils literal notranslate"><span class="pre">0xff``がパディングされ、長さが32バイトになるような正の</span> <span class="pre">``X</span></code> の場合はゼロバイトがパディングされます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">bool</span></code>: <code class="docutils literal notranslate"><span class="pre">uint8</span></code> の場合のように、 <code class="docutils literal notranslate"><span class="pre">1</span></code> は <code class="docutils literal notranslate"><span class="pre">true</span></code> が使われ、 <code class="docutils literal notranslate"><span class="pre">0</span></code> は <code class="docutils literal notranslate"><span class="pre">false</span></code> が使われます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)``は</span> <span class="pre">``enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> です。ここで <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> は <code class="docutils literal notranslate"><span class="pre">int256</span></code> として解釈されます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">fixed</span></code>: <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> の場合と同じです。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> は <code class="docutils literal notranslate"><span class="pre">enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> です。ここで <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> は <code class="docutils literal notranslate"><span class="pre">uint256</span></code> として解釈されます。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> の場合と同じです。</p>
+</li>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> は末尾の0バイトを32バイトの長さまで埋め込んだ <code class="docutils literal notranslate"><span class="pre">X</span></code> 内のバイトの並びです。</p>
+</li>
+</ul>
+<blockquote>
+<div>任意の``X``において、 <a href="#id15"><span class="problematic" id="id16">``</span></a>len(enc(X))``は32の倍数であることを念頭に入れてください。</div></blockquote>
 </div>
 <div class="section" id="function-selector-and-argument-encoding">
-<h2>Function Selector and Argument Encoding<a class="headerlink" href="#function-selector-and-argument-encoding" title="Permalink to this headline">¶</a></h2>
-<p>All in all, a call to the function <code class="docutils literal notranslate"><span class="pre">f</span></code> with parameters <code class="docutils literal notranslate"><span class="pre">a_1,</span> <span class="pre">...,</span> <span class="pre">a_n</span></code> is encoded as</p>
+<h1>Function Selector and Argument Encoding<a class="headerlink" href="#function-selector-and-argument-encoding" title="Permalink to this headline">¶</a></h1>
+<p>たいていの場合、 <code class="docutils literal notranslate"><span class="pre">a_1,</span> <span class="pre">...,</span> <span class="pre">a_n</span></code> をパラメータとして関数 <code class="docutils literal notranslate"><span class="pre">f</span></code> をコールするときには次のようにエンコーディングされます。</p>
 <blockquote>
 <div><code class="docutils literal notranslate"><span class="pre">function_selector(f)</span> <span class="pre">enc((a_1,</span> <span class="pre">...,</span> <span class="pre">a_n))</span></code></div></blockquote>
-<p>and the return values <code class="docutils literal notranslate"><span class="pre">v_1,</span> <span class="pre">...,</span> <span class="pre">v_k</span></code> of <code class="docutils literal notranslate"><span class="pre">f</span></code> are encoded as</p>
+<p>また、 <code class="docutils literal notranslate"><span class="pre">f</span></code> の返り値である <code class="docutils literal notranslate"><span class="pre">v_1,</span> <span class="pre">...,</span> <span class="pre">v_k</span></code> は次のようにエンコーディングされます。</p>
 <blockquote>
 <div><code class="docutils literal notranslate"><span class="pre">enc((v_1,</span> <span class="pre">...,</span> <span class="pre">v_k))</span></code></div></blockquote>
-<p>i.e. the values are combined into a tuple and encoded.</p>
+<p>すなわち、値はタプルに組み合わされてエンコードされます。</p>
 </div>
 <div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>Given the contract:</p>
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>次のコントラクトがあります:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">Foo</span> <span class="p">{</span>
@@ -389,235 +351,239 @@ the minimum number of zero-bytes such that <code class="docutils literal notrans
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Thus for our <code class="docutils literal notranslate"><span class="pre">Foo</span></code> example if we wanted to call <code class="docutils literal notranslate"><span class="pre">baz</span></code> with the parameters <code class="docutils literal notranslate"><span class="pre">69</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code>, we would pass 68 bytes total, which can be broken down into:</p>
+<p>このように <code class="docutils literal notranslate"><span class="pre">Foo</span></code> の例では、もしパラメータに「69」と「true」を指定して「baz」を呼び出すなら、合計68バイトを渡します。このことは次のように分割できます。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0xcdcd77c0</span></code>: the Method ID. This is derived as the first 4 bytes of the Keccak hash of the ASCII form of the signature <code class="docutils literal notranslate"><span class="pre">baz(uint32,bool)</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000045</span></code>: the first parameter, a uint32 value <code class="docutils literal notranslate"><span class="pre">69</span></code> padded to 32 bytes</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the second parameter - boolean <code class="docutils literal notranslate"><span class="pre">true</span></code>, padded to 32 bytes</li>
+<li><code class="docutils literal notranslate"><span class="pre">0xcdcd77c0</span></code>: 指定のメソッドID。これは <code class="docutils literal notranslate"><span class="pre">baz(uint32,bool)</span></code> の署名のASCII形式のKeccakハッシュにおける最初の4バイトとして導出されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000045</span></code>: 32バイトにパディングされた最初のパラメータ <code class="docutils literal notranslate"><span class="pre">69</span></code> のuint32値。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: 32バイトにパディングされた2番目のパラメータ <code class="docutils literal notranslate"><span class="pre">true</span></code> のブール値。</li>
 </ul>
-<p>In total:</p>
+<p>これらを連結すると:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001
 </pre></div>
 </div>
-<p>It returns a single <code class="docutils literal notranslate"><span class="pre">bool</span></code>. If, for example, it were to return <code class="docutils literal notranslate"><span class="pre">false</span></code>, its output would be the single byte array <code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000000</span></code>, a single bool.</p>
-<p>If we wanted to call <code class="docutils literal notranslate"><span class="pre">bar</span></code> with the argument <code class="docutils literal notranslate"><span class="pre">[&quot;abc&quot;,</span> <span class="pre">&quot;def&quot;]</span></code>, we would pass 68 bytes total, broken down into:</p>
+<p>一つの <code class="docutils literal notranslate"><span class="pre">bool</span></code> を返します。たとえば、 <code class="docutils literal notranslate"><span class="pre">false</span></code> を返すことになっていたら、その出力はシングルバイト配列 `` 0x000000000000000000000000000000000000000000000000000000000000``、シングルブールになります。</p>
+<p>これは1つの``bool`` 値を返します。 もしここで例えばこの値が <code class="docutils literal notranslate"><span class="pre">false</span></code> を返すなら、その出力はバイト配列の <code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000000</span></code> となるでしょう。</p>
+<p>引数 <code class="docutils literal notranslate"><span class="pre">[&quot;abc&quot;、</span> <span class="pre">&quot;def&quot;]</span></code> と共に `` bar``を呼び出したい場合は、合計68バイトを渡します。これは次のように分割されます:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0xfce353f6</span></code>: the Method ID. This is derived from the signature <code class="docutils literal notranslate"><span class="pre">bar(bytes3[2])</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x6162630000000000000000000000000000000000000000000000000000000000</span></code>: the first part of the first parameter, a <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> value <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (left-aligned).</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x6465660000000000000000000000000000000000000000000000000000000000</span></code>: the second part of the first parameter, a <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> value <code class="docutils literal notranslate"><span class="pre">&quot;def&quot;</span></code> (left-aligned).</li>
+<li><code class="docutils literal notranslate"><span class="pre">0xfce353f6</span></code>: 指定のメソッドID。これは <code class="docutils literal notranslate"><span class="pre">bar(bytes3[2])</span></code> の署名から導出されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x6162630000000000000000000000000000000000000000000000000000000000</span></code>: 最初の引数の最初のパート、 <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> の値 <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (左寄せ)。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x6465660000000000000000000000000000000000000000000000000000000000</span></code>: 最初の引数の2番目のパート、 <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> の値 <code class="docutils literal notranslate"><span class="pre">&quot;def&quot;</span></code> (左寄せ)。</li>
 </ul>
-<p>In total:</p>
+<p>これらを連結すると:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xfce353f661626300000000000000000000000000000000000000000000000000000000006465660000000000000000000000000000000000000000000000000000000000
 </pre></div>
 </div>
-<p>If we wanted to call <code class="docutils literal notranslate"><span class="pre">sam</span></code> with the arguments <code class="docutils literal notranslate"><span class="pre">&quot;dave&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code>, we would pass 292 bytes total, broken down into:</p>
+<p>引数として <code class="docutils literal notranslate"><span class="pre">&quot;dave&quot;</span></code>、 <code class="docutils literal notranslate"><span class="pre">true</span></code> および <code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code> を付けて <code class="docutils literal notranslate"><span class="pre">sam</span></code> を呼び出したい場合、合計292バイトを渡します。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0xa5643bf2</span></code>: the Method ID. This is derived from the signature <code class="docutils literal notranslate"><span class="pre">sam(bytes,bool,uint256[])</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">uint</span></code> is replaced with its canonical representation <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code>: the location of the data part of the first parameter (dynamic type), measured in bytes from the start of the arguments block. In this case, <code class="docutils literal notranslate"><span class="pre">0x60</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the second parameter: boolean true.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>: the location of the data part of the third parameter (dynamic type), measured in bytes. In this case, <code class="docutils literal notranslate"><span class="pre">0xa0</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000004</span></code>: the data part of the first argument, it starts with the length of the byte array in elements, in this case, 4.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x6461766500000000000000000000000000000000000000000000000000000000</span></code>: the contents of the first argument: the UTF-8 (equal to ASCII in this case) encoding of <code class="docutils literal notranslate"><span class="pre">&quot;dave&quot;</span></code>, padded on the right to 32 bytes.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: the data part of the third argument, it starts with the length of the array in elements, in this case, 3.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the first entry of the third parameter.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code>: the second entry of the third parameter.</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: the third entry of the third parameter.</li>
+<li><code class="docutils literal notranslate"><span class="pre">0xa5643bf2</span></code>: 指定のメソッドID。 これは <code class="docutils literal notranslate"><span class="pre">sam(bytes,bool,uint256[])</span></code> の署名から導出されます。 <code class="docutils literal notranslate"><span class="pre">uint</span></code> はその正規表現 <code class="docutils literal notranslate"><span class="pre">uint256</span></code> に置き換えられていることを念頭に入れてください。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code>: 引数ブロックの先頭からのバイト単位で測定された、最初のパラメータ（動的型）のデータ部分の位置。この場合は <code class="docutils literal notranslate"><span class="pre">0x60</span></code> です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: 2番目のパラメータ: <code class="docutils literal notranslate"><span class="pre">true</span></code> のブール値。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>: 3番目のパラメータ(動的型)のデータ部分の位置(バイト単位)。この場合、 <code class="docutils literal notranslate"><span class="pre">0xa0</span></code> です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000004</span></code>: 最初の引数のデータ部分。要素のバイト配列の長さで始まります。この場合は4です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x6461766500000000000000000000000000000000000000000000000000000000</span></code>: 最初の引数の内容：32バイトまで右側にパディングしたUTF-8(この場合はASCIIに等しくなります)エンコーディング。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: 3番目の引数のデータ部分。要素の配列の長さから始まります。この場合は3です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: 3番目のパラメータの最初のデータ</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code>: 3番目のパラメータの2番目のデータ</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: 3番目のパラメータの３番目のデータ</li>
 </ul>
-<p>In total:</p>
+<p>これらを連結すると:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xa5643bf20000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000464617665000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003
 </pre></div>
 </div>
 </div>
 <div class="section" id="use-of-dynamic-types">
-<h2>Use of Dynamic Types<a class="headerlink" href="#use-of-dynamic-types" title="Permalink to this headline">¶</a></h2>
-<p>A call to a function with the signature <code class="docutils literal notranslate"><span class="pre">f(uint,uint32[],bytes10,bytes)</span></code> with values <code class="docutils literal notranslate"><span class="pre">(0x123,</span> <span class="pre">[0x456,</span> <span class="pre">0x789],</span> <span class="pre">&quot;1234567890&quot;,</span> <span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;)</span></code> is encoded in the following way:</p>
-<p>We take the first four bytes of <code class="docutils literal notranslate"><span class="pre">sha3(&quot;f(uint256,uint32[],bytes10,bytes)&quot;)</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">0x8be65246</span></code>.
-Then we encode the head parts of all four arguments. For the static types <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes10</span></code>, these are directly the values we want to pass, whereas for the dynamic types <code class="docutils literal notranslate"><span class="pre">uint32[]</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, we use the offset in bytes to the start of their data area, measured from the start of the value encoding (i.e. not counting the first four bytes containing the hash of the function signature). These are:</p>
+<h1>Use of Dynamic Types<a class="headerlink" href="#use-of-dynamic-types" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">(0x123、[0x456、0x789]、</span> <span class="pre">&quot;1234567890&quot;、</span> <span class="pre">&quot;Hello、world！&quot;)</span></code> の値を持つシグネチャ <code class="docutils literal notranslate"><span class="pre">f(uint、uint32[]、bytes10、bytes)</span></code> を持つ関数コールは次のようにエンコードされます:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sha3(&quot;f(uint256,uint32[],bytes10,bytes)&quot;)</span></code> の最初の4バイトを取ります。すなわち、 <code class="docutils literal notranslate"><span class="pre">0x8be65246</span></code> です。</p>
+</div></blockquote>
+<p>それから、4つの引数すべての先頭部分をエンコードします。静的型である <code class="docutils literal notranslate"><span class="pre">uint256</span></code> と <code class="docutils literal notranslate"><span class="pre">bytes10</span></code> の場合、これらは直接渡したい値ではありますが、動的型の <code class="docutils literal notranslate"><span class="pre">uint32[]``と</span> <span class="pre">``</span> <span class="pre">bytes</span></code> の場合は、値エンコーディングの開始から測定された、データ領域の開始までのバイト単位のオフセットを使用します(つまり、関数シグネチャのハッシュを含む最初の4バイトはカウントしません)。これらは:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000123</span></code> (<code class="docutils literal notranslate"><span class="pre">0x123</span></code> padded to 32 bytes)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000080</span></code> (offset to start of data part of second parameter, 4*32 bytes, exactly the size of the head part)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x3132333435363738393000000000000000000000000000000000000000000000</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;1234567890&quot;</span></code> padded to 32 bytes on the right)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000e0</span></code> (offset to start of data part of fourth parameter = offset to start of data part of first dynamic parameter + size of data part of first dynamic parameter = 4*32 + 3*32 (see below))</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000123</span></code> (32バイトにパディングされた <code class="docutils literal notranslate"><span class="pre">0x123</span></code> の値)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000080</span></code> (2番目のパラメータのデータ部の先頭までのオフセット。4 * 32バイト。正確には先頭部分のサイズ)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x3132333435363738393000000000000000000000000000000000000000000000</span></code> (32バイトに右詰めにパディングされた <code class="docutils literal notranslate"><span class="pre">&quot;1234567890&quot;</span></code> の値)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000e0</span></code> (4番目のパラメータのデータ部の先頭までのオフセット = 最初の動的パラメータのデータ部の先頭までのオフセット + 最初の動的パラメータのデータ部のサイズ = 4 * 32 + 3 * 32(下記を参照してください)))</li>
 </ul>
 </div></blockquote>
-<p>After this, the data part of the first dynamic argument, <code class="docutils literal notranslate"><span class="pre">[0x456,</span> <span class="pre">0x789]</span></code> follows:</p>
+<p>このあと、最初の動的引数のデータ部分である  <code class="docutils literal notranslate"><span class="pre">[0x456,</span> <span class="pre">0x789]</span></code> は次のようになります:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements of the array, 2)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000456</span></code> (first element)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000789</span></code> (second element)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (配列の要素数、2)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000456</span></code> (最初の要素)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000789</span></code> (2番目の要素)</li>
 </ul>
 </div></blockquote>
-<p>Finally, we encode the data part of the second dynamic argument, <code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code>:</p>
+<p>最後に、2番目の動的引数のデータ部分、 <code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code> をエンコードします:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x000000000000000000000000000000000000000000000000000000000000000d</span></code> (number of elements (bytes in this case): 13)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x48656c6c6f2c20776f726c642100000000000000000000000000000000000000</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code> padded to 32 bytes on the right)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x000000000000000000000000000000000000000000000000000000000000000d</span></code> (要素数(この場合バイトになります): 13)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x48656c6c6f2c20776f726c642100000000000000000000000000000000000000</span></code> (32バイトになるように右側にパディングした <code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code> )</li>
 </ul>
 </div></blockquote>
-<p>All together, the encoding is (newline after function selector and each 32-bytes for clarity):</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0x8be65246
-  0000000000000000000000000000000000000000000000000000000000000123
-  0000000000000000000000000000000000000000000000000000000000000080
-  3132333435363738393000000000000000000000000000000000000000000000
-  00000000000000000000000000000000000000000000000000000000000000e0
-  0000000000000000000000000000000000000000000000000000000000000002
-  0000000000000000000000000000000000000000000000000000000000000456
-  0000000000000000000000000000000000000000000000000000000000000789
-  000000000000000000000000000000000000000000000000000000000000000d
-  48656c6c6f2c20776f726c642100000000000000000000000000000000000000
+<p>こうして、エンコーディングは次のとおりです(関数セレクタの後に改行、わかりやすくするために各32バイト):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   0x8be65246
+     0000000000000000000000000000000000000000000000000000000000000123
+     0000000000000000000000000000000000000000000000000000000000000080
+     3132333435363738393000000000000000000000000000000000000000000000
+     00000000000000000000000000000000000000000000000000000000000000e0
+     0000000000000000000000000000000000000000000000000000000000000002
+     0000000000000000000000000000000000000000000000000000000000000456
+     0000000000000000000000000000000000000000000000000000000000000789
+     000000000000000000000000000000000000000000000000000000000000000d
+     48656c6c6f2c20776f726c642100000000000000000000000000000000000000
+
+``([[1、2]、[3]]、[&quot;one&quot;、 &quot;two&quot;、 &quot;three&quot;])``の値で署名付きの関数 ``g(uint[][],string[])`` に同じ原則を適用します。しかし、エンコーディングの最も基本的な部分から始めましょう:
 </pre></div>
 </div>
-<p>Let us apply the same principle to encode the data for a function with a signature <code class="docutils literal notranslate"><span class="pre">g(uint[][],string[])</span></code> with values <code class="docutils literal notranslate"><span class="pre">([[1,</span> <span class="pre">2],</span> <span class="pre">[3]],</span> <span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;])</span></code> but start from the most atomic parts of the encoding:</p>
-<p>First we encode the length and data of the first embedded dynamic array <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code>:</p>
+<p>まずはじめに、最初のルート配列 <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> の最初の動的な要素配列 <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> の長さとデータをエンコードします。</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements in the first array, 2; the elements themselves are <code class="docutils literal notranslate"><span class="pre">1</span></code>  and <code class="docutils literal notranslate"><span class="pre">2</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (first element)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (second element)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (最初の配列の要素数である2。ただし要素自体は1と2です)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (最初の要素)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (2番目の要素)</li>
 </ul>
 </div></blockquote>
-<p>Then we encode the length and data of the second embedded dynamic array <code class="docutils literal notranslate"><span class="pre">[3]</span></code> of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code>:</p>
+<p>次に、最初のルート配列 <code class="docutils literal notranslate"><span class="pre">[[1、2]、[3]]</span></code> の2番目の動的な要素配列 <code class="docutils literal notranslate"><span class="pre">[3]</span></code> の長さとデータをエンコードします。</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (number of elements in the second array, 1; the element is <code class="docutils literal notranslate"><span class="pre">3</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (first element)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (2番目の配列の要素数である1。要素は3です)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (最初の要素)</li>
 </ul>
 </div></blockquote>
-<p>Then we need to find the offsets <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> for their respective dynamic arrays  <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> and <code class="docutils literal notranslate"><span class="pre">[3]</span></code>. To calculate the offsets we can take a look at the encoded data of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> enumerating each line in the encoding:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - a                                                                - offset of [1, 2]
-1 - b                                                                - offset of [3]
-2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
-3 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
-4 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
-5 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
-6 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
+<p>それから、それぞれの動的配列 <code class="docutils literal notranslate"><span class="pre">[1、2]</span></code> と <code class="docutils literal notranslate"><span class="pre">[3]</span></code> に対するオフセット <code class="docutils literal notranslate"><span class="pre">a</span></code> と <code class="docutils literal notranslate"><span class="pre">b``を見つける必要があります。オフセットを計算するために、エンコーディングの各行を列挙している最初のルート配列</span> <span class="pre">``[[1、2]、[3]]</span></code> のエンコードされたデータを見ることができます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - a                                                                - [1, 2]のオフセット
+1 - b                                                                - [3]のオフセット
+2 - 0000000000000000000000000000000000000000000000000000000000000002 - [1, 2]の要素数
+3 - 0000000000000000000000000000000000000000000000000000000000000001 - 1のエンコーディング
+4 - 0000000000000000000000000000000000000000000000000000000000000002 - 2のエンコーディング
+5 - 0000000000000000000000000000000000000000000000000000000000000001 - [3]の要素数
+6 - 0000000000000000000000000000000000000000000000000000000000000003 - 3のエンコーディング
 </pre></div>
 </div>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">a</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> which is line 2 (64 bytes); thus <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000040</span></code>.</p>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">b</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[3]</span></code> which is line 5 (160 bytes); thus <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>.</p>
-<p>Then we encode the embedded strings of the second root array:</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">a</span></code> は、2行目(64バイト)の配列 <code class="docutils literal notranslate"><span class="pre">[1、2]</span></code> の始まりを指しています。したがって、 <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000040</span></code> です。</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">b</span></code> は、配列 <a href="#id17"><span class="problematic" id="id18">``</span></a>[3]``の5行目(160バイト)の先頭を指します。したがって、 <a href="#id19"><span class="problematic" id="id20">``</span></a>b = 0x00000000000000000000000000000000000000000000000000000000000000a0``です。</p>
+<p>そして、2番目のルート配列の埋め込み文字列をエンコードします:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x6f6e650000000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x74776f0000000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000005</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">0x7468726565000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code> の中の文字数)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x6f6e650000000000000000000000000000000000000000000000000000000000</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code> のutf8での表現)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> の中の文字数)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x74776f0000000000000000000000000000000000000000000000000000000000</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> のutf8での表現)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000005</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code> の中の文字数)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x7468726565000000000000000000000000000000000000000000000000000000</span></code> (単語 <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code> のutf8での表現)</li>
 </ul>
 </div></blockquote>
-<p>In parallel to the first root array, since strings are dynamic elements we need to find their offsets <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code> and <code class="docutils literal notranslate"><span class="pre">e</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - c                                                                - offset for &quot;one&quot;
-1 - d                                                                - offset for &quot;two&quot;
-2 - e                                                                - offset for &quot;three&quot;
-3 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;one&quot;
-4 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of &quot;one&quot;
-5 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;two&quot;
-6 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of &quot;two&quot;
-7 - 0000000000000000000000000000000000000000000000000000000000000005 - count for &quot;three&quot;
-8 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of &quot;three&quot;
+<p>最初のルート配列と並行して、文字列は動的要素なので、それらのオフセット <code class="docutils literal notranslate"><span class="pre">c</span></code> 、 <code class="docutils literal notranslate"><span class="pre">d</span></code> および <code class="docutils literal notranslate"><span class="pre">e</span></code> を見つける必要があります:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - c                                                                - &quot;one&quot;のオフセット
+1 - d                                                                - &quot;two&quot;のオフセット
+2 - e                                                                - &quot;three&quot;のオフセット
+3 - 0000000000000000000000000000000000000000000000000000000000000003 - &quot;one&quot;の文字列数
+4 - 6f6e650000000000000000000000000000000000000000000000000000000000 - &quot;one&quot;のエンコーディング
+5 - 0000000000000000000000000000000000000000000000000000000000000003 - &quot;two&quot;の文字列数
+6 - 74776f0000000000000000000000000000000000000000000000000000000000 - &quot;two&quot;のエンコーディング
+7 - 0000000000000000000000000000000000000000000000000000000000000005 - &quot;three&quot;の文字列数
+8 - 7468726565000000000000000000000000000000000000000000000000000000 - &quot;three&quot;のエンコーディング
 </pre></div>
 </div>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">c</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code> which is line 3 (96 bytes); thus <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code>.</p>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">d</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> which is line 5 (160 bytes); thus <code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>.</p>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">e</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code> which is line 7 (224 bytes); thus <code class="docutils literal notranslate"><span class="pre">e</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000e0</span></code>.</p>
-<p>Note that the encodings of the embedded elements of the root arrays are not dependent on each other and have the same encodings for a function with a signature <code class="docutils literal notranslate"><span class="pre">g(string[],uint[][])</span></code>.</p>
-<p>Then we encode the length of the first root array:</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">c</span></code>　は、文字列 <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code> の3行目(96バイト)の先頭を指します。したがって、 <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code> です。</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">d</span></code> は、文字列 <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> の先頭を指します。これは5行目(160バイト)です。したがって、 <a href="#id21"><span class="problematic" id="id22">``</span></a>d = 0x00000000000000000000000000000000000000000000000000000000000000a0``です。</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">e</span></code> は、文字列 <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code> の7行目(224バイト)の先頭を指します。したがって、 <a href="#id23"><span class="problematic" id="id24">``</span></a>e = 0x00000000000000000000000000000000000000000000000000000000000000e0``です。</p>
+<p>ルート配列の埋め込み要素のエンコーディングは互いに依存関係がなく、シグネチャが <code class="docutils literal notranslate"><span class="pre">g(string[],uint[][])</span></code> の関数に対して同じエンコーディングを持つことに注意してください。</p>
+<p>次に、最初のルート配列の長さをエンコードします:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements in the first root array, 2; the elements themselves are <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code>  and <code class="docutils literal notranslate"><span class="pre">[3]</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (最初のルート配列の要素数である2。要素自体は <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> と <a href="#id25"><span class="problematic" id="id26">``</span></a>[3]``です)</li>
 </ul>
 </div></blockquote>
-<p>Then we encode the length of the second root array:</p>
+<p>次に、2番目のルート配列の長さをエンコードします:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of strings in the second root array, 3; the strings themselves are <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (2番目のルート配列の文字列数である3。文字列自体は <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>、 <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> 及び <a href="#id27"><span class="problematic" id="id28">``</span></a>”three”<a href="#id29"><span class="problematic" id="id30">``</span></a>です)</li>
 </ul>
 </div></blockquote>
-<p>Finally we find the offsets <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code> for their respective root dynamic arrays <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> and <code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;]</span></code>, and assemble parts in the correct order:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0x2289b18c                                                            - function signature
- 0 - f                                                                - offset of [[1, 2], [3]]
- 1 - g                                                                - offset of [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
- 2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [[1, 2], [3]]
- 3 - 0000000000000000000000000000000000000000000000000000000000000040 - offset of [1, 2]
- 4 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset of [3]
- 5 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
- 6 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
- 7 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
- 8 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
- 9 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
-10 - 0000000000000000000000000000000000000000000000000000000000000003 - count for [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
-11 - 0000000000000000000000000000000000000000000000000000000000000060 - offset for &quot;one&quot;
-12 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset for &quot;two&quot;
-13 - 00000000000000000000000000000000000000000000000000000000000000e0 - offset for &quot;three&quot;
-14 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;one&quot;
-15 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of &quot;one&quot;
-16 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;two&quot;
-17 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of &quot;two&quot;
-18 - 0000000000000000000000000000000000000000000000000000000000000005 - count for &quot;three&quot;
-19 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of &quot;three&quot;
+<p>最後に、それぞれのルート動的配列 <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> と <code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;]</span></code> に対するオフセット <code class="docutils literal notranslate"><span class="pre">f</span></code> と <code class="docutils literal notranslate"><span class="pre">g</span></code> を見つけます。そして、正しい順序でこれらのパーツを組み立てます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0x2289b18c                                                            - 関数シグニチャ
+ 0 - f                                                                - [[1, 2], [3]]のオフセット
+ 1 - g                                                                - [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]のオフセット
+ 2 - 0000000000000000000000000000000000000000000000000000000000000002 - [[1, 2], [3]]の要素数
+ 3 - 0000000000000000000000000000000000000000000000000000000000000040 - [1, 2]のオフセット
+ 4 - 00000000000000000000000000000000000000000000000000000000000000a0 - [3]のオフセット
+ 5 - 0000000000000000000000000000000000000000000000000000000000000002 - [1, 2]の要素数
+ 6 - 0000000000000000000000000000000000000000000000000000000000000001 - 1のエンコーディング
+ 7 - 0000000000000000000000000000000000000000000000000000000000000002 - 2のエンコーディング
+ 8 - 0000000000000000000000000000000000000000000000000000000000000001 - [3]の要素数
+ 9 - 0000000000000000000000000000000000000000000000000000000000000003 - 3のエンコーディング
+10 - 0000000000000000000000000000000000000000000000000000000000000003 - [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]の要素数
+11 - 0000000000000000000000000000000000000000000000000000000000000060 - &quot;one&quot;のエンコーディング
+12 - 00000000000000000000000000000000000000000000000000000000000000a0 - &quot;two&quot;のオフセット
+13 - 00000000000000000000000000000000000000000000000000000000000000e0 - &quot;three&quot;のオフセット
+14 - 0000000000000000000000000000000000000000000000000000000000000003 - &quot;one&quot;の文字列数
+15 - 6f6e650000000000000000000000000000000000000000000000000000000000 - &quot;one&quot;のエンコーディング
+16 - 0000000000000000000000000000000000000000000000000000000000000003 - &quot;two&quot;の文字列数
+17 - 74776f0000000000000000000000000000000000000000000000000000000000 - &quot;two&quot;のエンコーディング
+18 - 0000000000000000000000000000000000000000000000000000000000000005 - &quot;three&quot;の文字列数
+19 - 7468726565000000000000000000000000000000000000000000000000000000 - &quot;three&quot;のエンコーディング
 </pre></div>
 </div>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">f</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> which is line 2 (64 bytes); thus <code class="docutils literal notranslate"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000040</span></code>.</p>
-<p>Offset <code class="docutils literal notranslate"><span class="pre">g</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;]</span></code> which is line 10 (320 bytes); thus <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000140</span></code>.</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">f</span></code> は、配列 <a href="#id31"><span class="problematic" id="id32">``</span></a>[[1、2]、[3]]``の2行目(64バイト)の先頭を指します。したがって、 <a href="#id33"><span class="problematic" id="id34">``</span></a>f = 0x0000000000000000000000000000000000000000000000000000000000000040``です。</p>
+<p>オフセット <code class="docutils literal notranslate"><span class="pre">g</span></code> は、配列 <code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;、</span> <span class="pre">&quot;two&quot;、</span> <span class="pre">&quot;three&quot;]</span></code> の先頭を指します。これは10行目(320バイト)です。したがって、 <a href="#id35"><span class="problematic" id="id36">``</span></a>g = 0x0000000000000000000000000000000000000000000000000000000000000140``です。</p>
 </div>
 <div class="section" id="events">
-<span id="abi-events"></span><h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
-<p>Events are an abstraction of the Ethereum logging/event-watching protocol. Log entries provide the contract’s address, a series of up to four topics and some arbitrary length binary data. Events leverage the existing function ABI in order to interpret this (together with an interface spec) as a properly typed structure.</p>
-<p>Given an event name and series of event parameters, we split them into two sub-series: those which are indexed and those which are not. Those which are indexed, which may number up to 3, are used alongside the Keccak hash of the event signature to form the topics of the log entry. Those which are not indexed form the byte array of the event.</p>
-<p>In effect, a log entry using this ABI is described as:</p>
+<span id="abi-events"></span><h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<p>イベントはEthereumロギング/イベント監視プロトコルを抽象化したものです。ログエントリは、コントラクトアドレス、最大4つまでの一連のトピック、及び任意の長さのバイナリデータを提供します。イベントは既存の関数ABIを(インターフェース仕様とともに)正しく型付けされた構造体として解釈するために利用します。</p>
+<p>イベント名と一連のイベントパラメータが与えられたとき、それらを2つのサブシリーズに分けます。それはインデックスされているものとそうでないものです。インデックス付けされたもの(最大3まで)は、イベント署名のKeccakハッシュと一緒に使用されて、ログエントリのトピックを形成します。インデックスが付けられていないものはイベントのバイト配列を形成します。</p>
+<p>実際には、このABIを使用するログエントリは次のように記述されています:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: the address of the contract (intrinsically provided by Ethereum);</li>
-<li><code class="docutils literal notranslate"><span class="pre">topics[0]</span></code>: <code class="docutils literal notranslate"><span class="pre">keccak(EVENT_NAME+&quot;(&quot;+EVENT_ARGS.map(canonical_type_of).join(&quot;,&quot;)+&quot;)&quot;)</span></code> (<code class="docutils literal notranslate"><span class="pre">canonical_type_of</span></code> is a function that simply returns the canonical type of a given argument, e.g. for <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">indexed</span> <span class="pre">foo</span></code>, it would return <code class="docutils literal notranslate"><span class="pre">uint256</span></code>). If the event is declared as <code class="docutils literal notranslate"><span class="pre">anonymous</span></code> the <code class="docutils literal notranslate"><span class="pre">topics[0]</span></code> is not generated;</li>
-<li><code class="docutils literal notranslate"><span class="pre">topics[n]</span></code>: <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS[n</span> <span class="pre">-</span> <span class="pre">1]</span></code> (<code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> is the series of <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code> that are indexed);</li>
-<li><code class="docutils literal notranslate"><span class="pre">data</span></code>: <code class="docutils literal notranslate"><span class="pre">abi_serialise(EVENT_NON_INDEXED_ARGS)</span></code> (<code class="docutils literal notranslate"><span class="pre">EVENT_NON_INDEXED_ARGS</span></code> is the series of <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code> that are not indexed, <code class="docutils literal notranslate"><span class="pre">abi_serialise</span></code> is the ABI serialisation function used for returning a series of typed values from a function, as described above).</li>
+<li><code class="docutils literal notranslate"><span class="pre">address</span></code>: コントラクトアドレス(Ethereumから提供されるものです)</li>
+<li><code class="docutils literal notranslate"><span class="pre">topics[0]</span></code>: <code class="docutils literal notranslate"><span class="pre">keccak(EVENT_NAME+&quot;(&quot;+EVENT_ARGS.map(canonical_type_of).join(&quot;,&quot;)+&quot;)&quot;)</span></code> ( <code class="docutils literal notranslate"><span class="pre">canonical_type_of</span></code> は与えられた引数の標準型を単純に返す関数です。 <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">indexed</span> <span class="pre">foo</span></code> の場合は、 <code class="docutils literal notranslate"><span class="pre">uint256</span></code> を返します。) イベントが <code class="docutils literal notranslate"><span class="pre">匿名</span></code> として宣言されている場合、 <code class="docutils literal notranslate"><span class="pre">topics[0]</span></code> は生成されません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">topics[n]</span></code>: <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS[n</span> <span class="pre">-</span> <span class="pre">1]</span></code> ( <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> はインデックスが付けられた一連の <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code> です)</li>
+<li><code class="docutils literal notranslate"><span class="pre">data</span></code>: <code class="docutils literal notranslate"><span class="pre">abi_serialise(EVENT_NON_INDEXED_ARGS)</span></code> ( <code class="docutils literal notranslate"><span class="pre">EVENT_NON_INDEXED_ARGS</span></code> はインデックスされていない一連の <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code> 、 <a href="#id37"><span class="problematic" id="id38">``</span></a>abi_serialise``は上述のように関数から一連の型付き値を返すために使用されるABIシリアライゼーション関数です)</li>
 </ul>
-<p>For all fixed-length Solidity types, the <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> array contains the 32-byte encoded value directly. However, for <em>types of dynamic length</em>, which include <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, and arrays, <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> will contain the <em>Keccak hash</em> of the packed encoded value (see <a class="reference internal" href="#abi-packed-mode"><span class="std std-ref">Strict Encoding Mode</span></a>), rather than the encoded value directly. This allows applications to efficiently query for values of dynamic-length types (by setting the hash of the encoded value as the topic), but leaves applications unable to decode indexed values they have not queried for. For dynamic-length types, application developers face a trade-off between fast search for predetermined values (if the argument is indexed) and legibility of arbitrary values (which requires that the arguments not be indexed). Developers may overcome this tradeoff and achieve both efficient search and arbitrary legibility by defining events with two arguments — one indexed, one not — intended to hold the same value.</p>
+<p>すべての固定長のSolidityの型において、 <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> 配列は32バイトでエンコードされた値を直接含みます。しかし、 <code class="docutils literal notranslate"><span class="pre">string</span></code> 、 <code class="docutils literal notranslate"><span class="pre">bytes</span></code> 、配列を含む <em>動的長</em> 型の場合、 <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> はパックされたエンコード値の <em>Keccakハッシュ</em> を含みます( <a class="reference internal" href="#abi-packed-mode"><span class="std std-ref">Strict Encoding Mode</span></a> を参照ください)。これにより、アプリケーションは(エンコードされた値のハッシュをトピックとして設定することによって)動的長の型の値を効率的に照会できますが、照会していない索引付きの値をデコードできません。動的長型の場合、アプリケーション開発者は、事前定義された値の高速検索(引数がインデックス付けされている場合)と任意の値の読みやすさ(引数にインデックスが付けられていないことが必要)との間のトレードオフに直面します。開発者はこのトレードオフを克服し、同じ値を保持することを目的とした2つの引数(1つはインデックス付き、1つはない)でイベントを定義することによって、効率的な検索と任意の読みやすさの両方を実現できます。</p>
 </div>
 <div class="section" id="json">
-<span id="abi-json"></span><h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
-<p>The JSON format for a contract’s interface is given by an array of function and/or event descriptions.
-A function description is a JSON object with the fields:</p>
+<span id="abi-json"></span><h1>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h1>
+<p>コントラクトインターフェースのJSONフォーマットは、関数やイベントのデスクリプションの配列によって指定されます。</p>
+<p>関数の説明はフィールドを持つJSONオブジェクトです:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code> (the <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">unnamed “default” function</span></a>);</li>
-<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the function;</li>
-<li><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: an array of objects, each of which contains:<ul>
-<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the parameter;</li>
-<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: the canonical type of the parameter (more below).</li>
-<li><code class="docutils literal notranslate"><span class="pre">components</span></code>: used for tuple types (more below).</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>、 <code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>、 及び <code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code> ( <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">unnamed “default” function</span></a>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: 関数の名前</li>
+<li><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: それぞれが含むオブジェクトの配列:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: パラメータの名前</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: パラメータの標準型(詳細は後述)</li>
+<li><code class="docutils literal notranslate"><span class="pre">components</span></code>: タプル型に使用されます(詳細は後述)</li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">outputs</span></code>: an array of objects similar to <code class="docutils literal notranslate"><span class="pre">inputs</span></code>, can be omitted if function doesn’t return anything;</li>
-<li><code class="docutils literal notranslate"><span class="pre">stateMutability</span></code>: a string with one of the following values: <code class="docutils literal notranslate"><span class="pre">pure</span></code> (<a class="reference internal" href="contracts.html#pure-functions"><span class="std std-ref">specified to not read blockchain state</span></a>), <code class="docutils literal notranslate"><span class="pre">view</span></code> (<a class="reference internal" href="contracts.html#view-functions"><span class="std std-ref">specified to not modify the blockchain state</span></a>), <code class="docutils literal notranslate"><span class="pre">nonpayable</span></code> (function does not accept Ether) and <code class="docutils literal notranslate"><span class="pre">payable</span></code> (function accepts Ether);</li>
-<li><code class="docutils literal notranslate"><span class="pre">payable</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if function accepts Ether, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise;</li>
-<li><code class="docutils literal notranslate"><span class="pre">constant</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if function is either <code class="docutils literal notranslate"><span class="pre">pure</span></code> or <code class="docutils literal notranslate"><span class="pre">view</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</li>
+<li><code class="docutils literal notranslate"><span class="pre">outputs</span></code>: functionが何も返さない場合は、 `` input``に似たオブジェクトの配列を省略することができます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">stateMutability</span></code>: 以下のいずれかの値を持つ文字列: <code class="docutils literal notranslate"><span class="pre">pure</span></code> (<a class="reference internal" href="contracts.html#pure-functions"><span class="std std-ref">specified to not read blockchain state</span></a>), <code class="docutils literal notranslate"><span class="pre">view</span></code> (<a class="reference internal" href="contracts.html#view-functions"><span class="std std-ref">specified to not modify the blockchain state</span></a>), <code class="docutils literal notranslate"><span class="pre">nonpayable</span></code> (function does not accept Ether) and <code class="docutils literal notranslate"><span class="pre">payable</span></code> (function accepts Ether);</li>
+<li><code class="docutils literal notranslate"><span class="pre">payable</span></code>: もし関数がEtherを受け付けるなら、 <code class="docutils literal notranslate"><span class="pre">true</span></code> 。そうでないなら、 <code class="docutils literal notranslate"><span class="pre">false</span></code> 。</li>
+<li><code class="docutils literal notranslate"><span class="pre">constant</span></code>: もし関数が <code class="docutils literal notranslate"><span class="pre">pure</span></code> か <code class="docutils literal notranslate"><span class="pre">view</span></code> のいづれかなら、 <code class="docutils literal notranslate"><span class="pre">true</span></code> 。 そうでないなら、 <code class="docutils literal notranslate"><span class="pre">false</span></code> 。</li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">type</span></code> can be omitted, defaulting to <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>, likewise <code class="docutils literal notranslate"><span class="pre">payable</span></code> and <code class="docutils literal notranslate"><span class="pre">constant</span></code> can be omitted, both defaulting to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
-<p>Constructor and fallback function never have <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">outputs</span></code>. Fallback function doesn’t have <code class="docutils literal notranslate"><span class="pre">inputs</span></code> either.</p>
+<p><a href="#id39"><span class="problematic" id="id40">``</span></a>type``は省略することができ、 `` “function” <a href="#id41"><span class="problematic" id="id42">``</span></a>にデフォルト設定され、同様に `` payable``と `` constant``は省略することができ、両方とも `` false``にデフォルト設定されます。</p>
+<p>コンストラクタとフォールバック関数は、 <code class="docutils literal notranslate"><span class="pre">name</span></code> や <a href="#id43"><span class="problematic" id="id44">``</span></a><a href="#id45"><span class="problematic" id="id46">`</span></a>outputs``などを持つことはありません。フォールバック関数も <a href="#id47"><span class="problematic" id="id48">``</span></a>inputs``を持つこともありません。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">The fields <code class="docutils literal notranslate"><span class="pre">constant</span></code> and <code class="docutils literal notranslate"><span class="pre">payable</span></code> are deprecated and will be removed in the future. Instead, the <code class="docutils literal notranslate"><span class="pre">stateMutability</span></code> field can be used to determine the same properties.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">constant</span></code> や <code class="docutils literal notranslate"><span class="pre">payable</span></code> は今後廃止予定であり、今後取り除かれます。代わりに、 <code class="docutils literal notranslate"><span class="pre">stateMutability</span></code> 領域が今後は同じプロパティを決定するために使うことができます。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Sending non-zero Ether to non-payable function will revert the transaction.</p>
+<p class="last">ゼロ以外の額のイーサリアムをnon-payable functionに送金するときは、トランザクションにリバートが発生します。</p>
 </div>
-<p>An event description is a JSON object with fairly similar fields:</p>
+<p>イベントの詳細は似たフィールドを持つJSONオブジェクトです：</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: always <code class="docutils literal notranslate"><span class="pre">&quot;event&quot;</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the event;</li>
-<li><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: an array of objects, each of which contains:<ul>
-<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the parameter;</li>
-<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: the canonical type of the parameter (more below).</li>
-<li><code class="docutils literal notranslate"><span class="pre">components</span></code>: used for tuple types (more below).</li>
-<li><code class="docutils literal notranslate"><span class="pre">indexed</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the field is part of the log’s topics, <code class="docutils literal notranslate"><span class="pre">false</span></code> if it one of the log’s data segment.</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: 常に <code class="docutils literal notranslate"><span class="pre">&quot;event&quot;</span></code> です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: イベントの名前;</li>
+<li><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: 以下の値を含むオブジェクトの配列：<ul>
+<li><code class="docutils literal notranslate"><span class="pre">name</span></code>: パラメータの名前</li>
+<li><code class="docutils literal notranslate"><span class="pre">type</span></code>: 標準的なパラメータの型 (詳細は以下を参照してください)</li>
+<li><code class="docutils literal notranslate"><span class="pre">components</span></code>: タプルに使用する(詳細は以下を参照してください)</li>
+<li><code class="docutils literal notranslate"><span class="pre">indexed</span></code>: もしフィールドがログトピックスの一部であるなら、<code class="docutils literal notranslate"><span class="pre">true</span></code>。もしログデータセグメントであるなら <code class="docutils literal notranslate"><span class="pre">false</span></code></li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">anonymous</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the event was declared as <code class="docutils literal notranslate"><span class="pre">anonymous</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">anonymous</span></code>: もしイベントが <code class="docutils literal notranslate"><span class="pre">anonymous``と宣言されていたなら</span> <span class="pre">``true</span></code></li>
 </ul>
-<p>For example,</p>
+<p>例えば、</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">Test</span> <span class="p">{</span>
@@ -629,7 +595,7 @@ A function description is a JSON object with the fields:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>would result in the JSON:</p>
+<p>これはJSONで表現すると以下のようになります:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span>
 <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;event&quot;</span><span class="p">,</span>
 <span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">},{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;bytes32&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">}],</span>
@@ -647,17 +613,14 @@ A function description is a JSON object with the fields:</p>
 </pre></div>
 </div>
 <div class="section" id="handling-tuple-types">
-<h3>Handling tuple types<a class="headerlink" href="#handling-tuple-types" title="Permalink to this headline">¶</a></h3>
-<p>Despite that names are intentionally not part of the ABI encoding they do make a lot of sense to be included
-in the JSON to enable displaying it to the end user. The structure is nested in the following way:</p>
-<p>An object with members <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code> and potentially <code class="docutils literal notranslate"><span class="pre">components</span></code> describes a typed variable.
-The canonical type is determined until a tuple type is reached and the string description up
-to that point is stored in <code class="docutils literal notranslate"><span class="pre">type</span></code> prefix with the word <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, i.e. it will be <code class="docutils literal notranslate"><span class="pre">tuple</span></code> followed by
-a sequence of <code class="docutils literal notranslate"><span class="pre">[]</span></code> and <code class="docutils literal notranslate"><span class="pre">[k]</span></code> with
-integers <code class="docutils literal notranslate"><span class="pre">k</span></code>. The components of the tuple are then stored in the member <code class="docutils literal notranslate"><span class="pre">components</span></code>,
-which is of array type and has the same structure as the top-level object except that
-<code class="docutils literal notranslate"><span class="pre">indexed</span></code> is not allowed there.</p>
-<p>As an example, the code</p>
+<h2>Handling tuple types<a class="headerlink" href="#handling-tuple-types" title="Permalink to this headline">¶</a></h2>
+<p>名前(names)はABIエンコーディングの一部にあたるわけではないですが、ABIに含めることには意味があります。これはJSON形式でエンドユーザーに表示できるという点にあります。
+その構造は次のようにネストされています:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">name``や</span> <span class="pre">``type</span></code>、潜在的には <a href="#id49"><span class="problematic" id="id50">``</span></a>components``などと共にオブジェクトは型付きの変数を記述します。</div></blockquote>
+<p>正規型はタプル型に達するまで決定され、それまでの文字列の説明は <a href="#id51"><span class="problematic" id="id52">``</span></a>type``プレフィックスに <a href="#id53"><span class="problematic" id="id54">``</span></a>tuple``という語で格納されます。つまり、 <a href="#id55"><span class="problematic" id="id56">``</span></a>tuple``の後に整数の <a href="#id57"><span class="problematic" id="id58">``</span></a>k``を持つ <a href="#id59"><span class="problematic" id="id60">``</span></a>[]``と <a href="#id61"><span class="problematic" id="id62">``</span></a>[k]``のシーケンスが続きます。
+タプルの構成要素はメンバの構成要素に格納されます。これは配列型で、インデックスが許可されていないことを除いて最上位オブジェクトと同じ構造を持ちます。</p>
+<p>例として、次のコードは</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">19</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 <span class="kr">pragma experimental</span> <span class="n">ABIEncoderV2</span><span class="p">;</span>
 
@@ -669,7 +632,7 @@ which is of array type and has the same structure as the top-level object except
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>would result in the JSON:</p>
+<p>以下のようなJSONとなります:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
   <span class="p">{</span>
     <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span>
@@ -730,23 +693,21 @@ which is of array type and has the same structure as the top-level object except
 </div>
 </div>
 <div class="section" id="strict-encoding-mode">
-<span id="abi-packed-mode"></span><h2>Strict Encoding Mode<a class="headerlink" href="#strict-encoding-mode" title="Permalink to this headline">¶</a></h2>
-<p>Strict encoding mode is the mode that leads to exactly the same encoding as defined in the formal specification above.
-This means offsets have to be as small as possible while still not creating overlaps in the data areas and thus no gaps are
-allowed.</p>
-<p>Usually, ABI decoders are written in a straightforward way just following offset pointers, but some decoders
-might enforce strict mode. The Solidity ABI decoder currently does not enforce strict mode, but the encoder
-always creates data in strict mode.</p>
+<span id="abi-packed-mode"></span><h1>Strict Encoding Mode<a class="headerlink" href="#strict-encoding-mode" title="Permalink to this headline">¶</a></h1>
+<p>Strict encoding modeは上記の仕様で定義されているものとまったく同じ符号化につながるモードです。
+これは、データ領域にオーバーラップが発生しないようにしながらオフセットをできるだけ小さくする必要があるため、あらゆるギャップが許容されないことを意味します。</p>
+<p>大抵の場合、ABIデコーダはオフセットポインタの直後に書かれていますが、Strict encoding modeを強制するデコーダもあります。 SolidityのABIデコーダは現在Strict encoding modeを強制しませんが、エンコーダは常にStrict encoding modeでデータを作成します。</p>
 </div>
 <div class="section" id="non-standard-packed-mode">
-<h2>Non-standard Packed Mode<a class="headerlink" href="#non-standard-packed-mode" title="Permalink to this headline">¶</a></h2>
-<p>Through <code class="docutils literal notranslate"><span class="pre">abi.encodePacked()</span></code>, Solidity supports a non-standard packed mode where:</p>
+<h1>Non-standard Packed Mode<a class="headerlink" href="#non-standard-packed-mode" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><a href="#id63"><span class="problematic" id="id64">``</span></a>abi.encodePacked()``を通じて、SolidityはNon-standard Packed Modeをサポートしています:</div></blockquote>
 <ul class="simple">
-<li>types shorter than 32 bytes are neither zero padded nor sign extended and</li>
-<li>dynamic types are encoded in-place and without the length.</li>
+<li>32バイトより短い型はゼロパディングも符号拡張もされず、</li>
+<li>動的型はその場でlengthを持たずにエンコードされます</li>
 </ul>
-<p>This packed mode is mainly used for indexed event parameters.</p>
-<p>As an example, the encoding of <code class="docutils literal notranslate"><span class="pre">int16(-1),</span> <span class="pre">bytes1(0x42),</span> <span class="pre">uint16(0x03),</span> <span class="pre">string(&quot;Hello,</span> <span class="pre">world!&quot;)</span></code> results in:</p>
+<p>Non-standard Packed Modeは主にインデックス付きイベントパラメータに使用されます。</p>
+<p>例として、 <a href="#id65"><span class="problematic" id="id66">``</span></a>int16(-1), bytes1(0x42), uint16(0x03), string(“Hello, world!”)``のエンコーディングは次のようになります:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xffff42000348656c6c6f2c20776f726c6421
   ^^^^                                 int16(-1)
       ^^                               bytes1(0x42)
@@ -755,23 +716,19 @@ always creates data in strict mode.</p>
 </pre></div>
 </div>
 <dl class="docutils">
-<dt>More specifically:</dt>
+<dt>より詳細にいうと:</dt>
 <dd><ul class="first last simple">
-<li>Each value type takes as many bytes as its range has.</li>
-<li>The encoding of a struct or fixed-size array is the concatenation of the
-encoding of its members/elements without any separator or padding.</li>
-<li>Mapping members of structs are ignored as usual.</li>
-<li>Dynamically-sized types like <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes</span></code> or <code class="docutils literal notranslate"><span class="pre">uint[]</span></code> are encoded without
-their length field.</li>
+<li>各値型は、その範囲と同じ数のバイトを取ります。</li>
+<li>構造体または固定長配列のエンコーディングは、そのメンバー/要素のエンコーディングを連結したもので、区切り文字やパディングはありません。</li>
+<li>構造体のマッピングメンバーは通常どおり認識されません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">string</span></code>、 <code class="docutils literal notranslate"><span class="pre">bytes</span></code>、 <a href="#id67"><span class="problematic" id="id68">``</span></a>uint []``のような動的型はそれらのlengthフィールドなしでエンコードされます。</li>
 </ul>
 </dd>
 </dl>
-<p>In general, the encoding is ambiguous as soon as there are two dynamically-sized elements,
-because of the missing length field.</p>
-<p>If padding is needed, explicit type conversions can be used: <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(uint16(0x12))</span> <span class="pre">==</span> <span class="pre">hex&quot;0012&quot;</span></code>.</p>
-<p>Since packed encoding is not used when calling functions, there is no special support
-for prepending a function selector. Since the encoding is ambiguous, there is no decoding function.</p>
-</div>
+<p>一般に、lengthフィールドが欠落しているため、2つの動的な要素があるとすぐに、エンコードはあいまいなものになってしまいます。</p>
+<p>もしパディングが必要であれば、次のような明示的な型変換が使えるでしょう:  <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(uint16(0x12))</span> <span class="pre">==</span> <span class="pre">hex&quot;0012&quot;</span></code></p>
+<p>パックエンコーディングは関数呼び出しの際に使われるものではないため、関数セレクタを準備するためのサポートがあるわけではありません。
+また、エンコーディングが曖昧であるため、復号化のための関数は存在しません。</p>
 </div>
 
 

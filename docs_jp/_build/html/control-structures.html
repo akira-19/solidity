@@ -125,12 +125,24 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -206,14 +218,14 @@
 <span class="target" id="index-0"></span><div class="section" id="control-structures">
 <span id="index-1"></span><h2>Control Structures<a class="headerlink" href="#control-structures" title="Permalink to this headline">¶</a></h2>
 <p>Curly-braces languageで使われる様な制御構造のほとんどはSolidityでも使用可能です:</p>
-<p>CやJavaScriptで知られる通常のセマンティクスに加えて、<code class="docutils literal notranslate"><span class="pre">if</span></code>、<code class="docutils literal notranslate"><span class="pre">else</span></code>、<code class="docutils literal notranslate"><span class="pre">while</span></code>、<code class="docutils literal notranslate"><span class="pre">do</span></code>、<code class="docutils literal notranslate"><span class="pre">for</span></code>、<code class="docutils literal notranslate"><span class="pre">break</span></code>、<code class="docutils literal notranslate"><span class="pre">continue</span></code>、<a href="#id1"><span class="problematic" id="id2">``</span></a>return``があります。</p>
+<p>CやJavaScriptで知られる通常のセマンティクスに加えて、<code class="docutils literal notranslate"><span class="pre">if</span></code>、<code class="docutils literal notranslate"><span class="pre">else</span></code>、<code class="docutils literal notranslate"><span class="pre">while</span></code>、<code class="docutils literal notranslate"><span class="pre">do</span></code>、<code class="docutils literal notranslate"><span class="pre">for</span></code>、<code class="docutils literal notranslate"><span class="pre">break</span></code>、<code class="docutils literal notranslate"><span class="pre">continue</span></code>、<code class="docutils literal notranslate"><span class="pre">return</span></code> があります。</p>
 <p>条件文では括弧は省略できませんが、単文の周りの波括弧は省略可能です。</p>
 <p>CやJavaScriptの様に非ブーリアンをブーリアンに変換することはできません。つまり <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(1)</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> はSolidityでは有効ではありません。</p>
 </div>
 <div class="section" id="function-calls">
-<span id="index-2"></span><span id="id3"></span><h2>Function Calls<a class="headerlink" href="#function-calls" title="Permalink to this headline">¶</a></h2>
+<span id="index-2"></span><span id="id1"></span><h2>Function Calls<a class="headerlink" href="#function-calls" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="internal-function-calls">
-<span id="id4"></span><h3>Internal Function Calls<a class="headerlink" href="#internal-function-calls" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3>Internal Function Calls<a class="headerlink" href="#internal-function-calls" title="Permalink to this headline">¶</a></h3>
 <p>現在のコントラクトのファンクションは直接（”内部的に”）呼び出すことができます。また、下記の無意味な例の様に再帰的に呼び出すこともできます。:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -227,7 +239,7 @@
 <p>全てのinternalファンクションの呼び出しは少なくとも1つのスタックのスロットを使い、最大で1024個しかそのスロットは使えないので、余計な再帰処理は避けたほうが良いでしょう。</p>
 </div>
 <div class="section" id="external-function-calls">
-<span id="id5"></span><h3>External Function Calls<a class="headerlink" href="#external-function-calls" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3>External Function Calls<a class="headerlink" href="#external-function-calls" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">this.g(8);</span></code> と <code class="docutils literal notranslate"><span class="pre">c.g(2);</span></code> という表現（<code class="docutils literal notranslate"><span class="pre">c</span></code> はコントラクトのインスタンス）も有効なファンクションの呼び出しですが、今回はファンクションは直接ジャンプするのではなく、メッセージコールを通じて “外部的に” 呼び出されます。
 実際のコントラクトは未だ作られていないため、<code class="docutils literal notranslate"><span class="pre">this</span></code> でのファンクションの呼び出しはコンストラクタでは使用することができないということを覚えておいてください。</p>
 <p>他のコントラクトのファンクションは外部的に呼び出す必要があります。外部コールに関して、全てのファンクションの引数はmemoryにコピーされなければいけません。</p>
@@ -459,9 +471,9 @@
 <p>例外を引き起こす方法が2つあります: <code class="docutils literal notranslate"><span class="pre">revert</span></code> ファンクションはエラーにフラグを立て、現在のコールをrevertするのに使用することができます。呼び出し元に対して、詳細を含むエラーメッセージを返すことができます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">以前は <code class="docutils literal notranslate"><span class="pre">throw</span></code> という <code class="docutils literal notranslate"><span class="pre">revert()</span></code> 同じセマンティクスのファンクションがありました。バージョン0.4.13で非推奨になり、バージョン0.5.0で削除されました。</p>
+<p class="last">以前は <code class="docutils literal notranslate"><span class="pre">throw</span></code> という <code class="docutils literal notranslate"><span class="pre">revert()</span></code> と同じセマンティクスのファンクションがありました。バージョン0.4.13で非推奨になり、バージョン0.5.0で削除されました。</p>
 </div>
-<p>サブコールで例外が発生した場合、その例外は自動的にどんどん出てきます（例外が再度投げられます）。このルールに対する例外は、<code class="docutils literal notranslate"><span class="pre">send``と低レベルファンクションの</span> <span class="pre">``call</span></code>、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> で、これらは例外がどんどん出てこない代わりに、<code class="docutils literal notranslate"><span class="pre">false</span></code> を返り値として最初に返します。</p>
+<p>サブコールで例外が発生した場合、その例外は自動的にどんどん出てきます（例外が再度投げられます）。このルールに対する例外は、<code class="docutils literal notranslate"><span class="pre">send</span></code> と低レベルファンクションの <code class="docutils literal notranslate"><span class="pre">call</span></code>、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> で、これらは例外がどんどん出てこない代わりに、<code class="docutils literal notranslate"><span class="pre">false</span></code> を返り値として最初に返します。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">低レベルファンクションの <code class="docutils literal notranslate"><span class="pre">call</span></code>、<code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> は、もし呼ばれたアカウントが存在しない場合、EVMの設計上、最初の返り値として <code class="docutils literal notranslate"><span class="pre">true</span></code> を返します。もし必要なら、呼び出す前に存在確認をしなければいけません。</p>

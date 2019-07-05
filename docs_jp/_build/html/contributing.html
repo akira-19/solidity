@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributing &mdash; Solidity 0.5.4 documentation</title>
+  <title>貢献 &mdash; Solidity 0.5.4 documentation</title>
   
 
   
@@ -88,25 +88,33 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-report-issues">How to Report Issues</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow-for-pull-requests">Workflow for Pull Requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-the-compiler-tests">Running the compiler tests</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#writing-and-running-syntax-tests">Writing and running syntax tests</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">貢献</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#issue">issueの報告方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-requests">Pull Requestsのためのワークフロー</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-the-fuzzer-via-afl">Running the Fuzzer via AFL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#whiskers">Whiskers</a></li>
 </ul>
@@ -160,7 +168,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Contributing</li>
+      <li>貢献</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -179,109 +187,113 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
-<p>Help is always appreciated!</p>
-<p>To get started, you can try <a class="reference internal" href="installing-solidity.html#building-from-source"><span class="std std-ref">Building from Source</span></a> in order to familiarize
-yourself with the components of Solidity and the build process. Also, it may be
-useful to become well-versed at writing smart-contracts in Solidity.</p>
-<p>In particular, we need help in the following areas:</p>
+  <div class="section" id="id1">
+<h1>貢献<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>貢献はいつでも歓迎します</p>
+<p>始めるには、まず、Solidityのコンポーネントとビルドプロセスを理解するため、<a class="reference internal" href="installing-solidity.html#building-from-source"><span class="std std-ref">Building from Source</span></a> を確認してください。
+また、Solidityでスマートコントラクトを書くことに精通することも役立つでしょう。</p>
+<p>以下の領域が特に手助けが必要です。</p>
 <ul class="simple">
-<li>Improving the documentation</li>
-<li>Responding to questions from other users on <a class="reference external" href="https://ethereum.stackexchange.com">StackExchange</a> and the <a class="reference external" href="https://gitter.im/ethereum/solidity">Solidity Gitter</a></li>
-<li>Fixing and responding to <a class="reference external" href="https://github.com/ethereum/solidity/issues">Solidity’s GitHub issues</a>, especially those tagged as
-<a class="reference external" href="https://github.com/ethereum/solidity/labels/good%20first%20issue">good first issue</a> which are
-meant as introductory issues for external contributors.</li>
+<li>ドキュメントを改善する</li>
+<li><a class="reference external" href="https://ethereum.stackexchange.com">StackExchange</a> や <a class="reference external" href="https://gitter.im/ethereum/solidity">Solidity Gitter</a> に投稿されたユーザーからの質問に答える</li>
+<li><a class="reference external" href="https://github.com/ethereum/solidity/issues">Solidity’s GitHub issues</a> に投稿されたissueに回答し修正する。特にこのタグがついた <a class="reference external" href="https://github.com/ethereum/solidity/labels/good%20first%20issue">good first issue</a> ものは外部貢献者のための入門的なissueになります。</li>
 </ul>
-<p>Please note that this project is released with a <a class="reference external" href="https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project - in the issues, pull requests, or Gitter channels - you agree to abide by its terms.</p>
-<div class="section" id="how-to-report-issues">
-<h2>How to Report Issues<a class="headerlink" href="#how-to-report-issues" title="Permalink to this headline">¶</a></h2>
-<p>To report an issue, please use the
-<a class="reference external" href="https://github.com/ethereum/solidity/issues">GitHub issues tracker</a>. When
-reporting issues, please mention the following details:</p>
+<p>このプロジェクト(issues, pull requests, Gitter channels含む) は <a class="reference external" href="https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a> でリリースされていることに注意してください。
+あなたはこの規約に同意することになります。</p>
+<div class="section" id="issue">
+<h2>issueの報告方法<a class="headerlink" href="#issue" title="Permalink to this headline">¶</a></h2>
+<p>issueの報告には、
+<a class="reference external" href="https://github.com/ethereum/solidity/issues">GitHub issues tracker</a>
+を使って、以下の項目を含めるようにしてください。</p>
 <ul class="simple">
-<li>Which version of Solidity you are using</li>
-<li>What was the source code (if applicable)</li>
-<li>Which platform are you running on</li>
-<li>How to reproduce the issue</li>
-<li>What was the result of the issue</li>
-<li>What the expected behaviour is</li>
+<li>どのSolidityバージョンをつかっているのか</li>
+<li>どんなソースコードだったのか(可能であれば)</li>
+<li>どのプラットフォームで実行していたか</li>
+<li>再現方法</li>
+<li>issueの結果はどのようなものか</li>
+<li>期待する動作はどのようなものか</li>
 </ul>
-<p>Reducing the source code that caused the issue to a bare minimum is always
-very helpful and sometimes even clarifies a misunderstanding.</p>
+<p>issueを再現するために最低限のソースコードにするのは有用で、誤解を明らかにします。</p>
 </div>
-<div class="section" id="workflow-for-pull-requests">
-<h2>Workflow for Pull Requests<a class="headerlink" href="#workflow-for-pull-requests" title="Permalink to this headline">¶</a></h2>
-<p>In order to contribute, please fork off of the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch and make your
-changes there. Your commit messages should detail <em>why</em> you made your change
-in addition to <em>what</em> you did (unless it is a tiny change).</p>
-<p>If you need to pull in any changes from <code class="docutils literal notranslate"><span class="pre">develop</span></code> after making your fork (for
-example, to resolve potential merge conflicts), please avoid using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span></code>
-and instead, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> your branch. This will help us review your change
-more easily.</p>
-<p>Additionally, if you are writing a new feature, please ensure you add appropriate
-test cases under <code class="docutils literal notranslate"><span class="pre">test/</span></code> (see below).</p>
-<p>However, if you are making a larger change, please consult with the <a class="reference external" href="https://gitter.im/ethereum/solidity-dev">Solidity Development Gitter channel</a> (different from the one mentioned above, this one is
-focused on compiler and language development instead of language use) first.</p>
-<p>New features and bugfixes should be added to the <code class="docutils literal notranslate"><span class="pre">Changelog.md</span></code> file: please
-follow the style of previous entries, when applicable.</p>
-<p>Finally, please make sure you respect the <a class="reference external" href="https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md">coding style</a>
-for this project. Also, even though we do CI testing, please test your code and
-ensure that it builds locally before submitting a pull request.</p>
-<p>Thank you for your help!</p>
-</div>
-<div class="section" id="running-the-compiler-tests">
-<h2>Running the compiler tests<a class="headerlink" href="#running-the-compiler-tests" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">./scripts/tests.sh</span></code> script executes most Solidity tests and
-runs <code class="docutils literal notranslate"><span class="pre">aleth</span></code> automatically if it is in the path, but does not download it,
-so you need to install it first. Please read on for the details.</p>
-<p>Solidity includes different types of tests, most of them bundled into the <code class="docutils literal notranslate"><span class="pre">soltest</span></code>
-application. Some of them require the <code class="docutils literal notranslate"><span class="pre">aleth</span></code> client in testing mode, others require <code class="docutils literal notranslate"><span class="pre">libz3</span></code>.</p>
-<p>To run a basic set of tests that require neither <code class="docutils literal notranslate"><span class="pre">aleth</span></code> nor <code class="docutils literal notranslate"><span class="pre">libz3</span></code>, run
-<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>. This script runs <code class="docutils literal notranslate"><span class="pre">./build/test/soltest</span></code>
-internally.</p>
+<div class="section" id="pull-requests">
+<h2>Pull Requestsのためのワークフロー<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h2>
+<p>貢献するために、 <code class="docutils literal notranslate"><span class="pre">develop</span></code> ブランチをフォークし、あなたの変更をそこにいれてください。
+コミットメッセージには、あなたの変更(小さな変更でなければ)の <em>what</em> に加えて <em>why</em> を詳細にいれるべきです。</p>
+<p>もしあなたが変更を加えた後に <code class="docutils literal notranslate"><span class="pre">develop</span></code> からpullする必要がある場合(例えばコンフリクトのマージする)、
+私たちがあなたの変更のレビューをするのを簡単にするため、
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span></code> を使うことは避けて、 <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> を使ってください。</p>
+<p>また、追加の機能を実装している場合、適切なテストケースを <code class="docutils literal notranslate"><span class="pre">test/</span></code> に追加してください。(下記参照)</p>
+<p>しかし、もし大きな変更をする場合、まず、
+<a class="reference external" href="https://gitter.im/ethereum/solidity-dev">Solidity Development Gitter channel</a>
+に相談してください。
+(上記で参照したものとは異なり、こちらはコンパイラと言語開発用です)</p>
+<p>新機能とバグ修正は <code class="docutils literal notranslate"><span class="pre">Changelog.md</span></code> に追加されるべきです。
+前回のエントリーのスタイルにしたがってください。</p>
+<p>最後に、このプロジェクトでは、<a class="reference external" href="https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md">coding style</a>
+を尊重してください。
+私たちがCIテストを実行してはいますが、pull requestsを送る前にはローカルでテストしビルドするようにしてください。</p>
+<p>あなたの貢献を感謝します。</p>
+<p>Running the compiler tests
+コンパイラテストの実行
+==========================</p>
+<p><code class="docutils literal notranslate"><span class="pre">./scripts/tests.sh</span></code> スクリプトはほとんどのSolidityテストを実行し、<code class="docutils literal notranslate"><span class="pre">aleth</span></code> を走らせます。
+<code class="docutils literal notranslate"><span class="pre">aleth</span></code> がパスに見つかる場合は実行しますが、ダウンロードは行いませんので、最初にインストールしておく必要があります。
+詳細を確認してください。</p>
+<p>Solidityは様々なテストを含んでおり、ほとんどが <code class="docutils literal notranslate"><span class="pre">soltest</span></code> アプリケーションに同包されています。
+それらのいくつかはテストモードで　<code class="docutils literal notranslate"><span class="pre">aleth</span></code> クライアントを必要とし、<code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするものもあります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">aleth</span></code> も <code class="docutils literal notranslate"><span class="pre">libz3</span></code> も必要としない基本的なテストセットを実行するには、
+<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。
+このスクリプトは <code class="docutils literal notranslate"><span class="pre">./build/test/soltest</span></code> を内部的に走らせます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Those working in a Windows environment wanting to run the above basic sets without aleth or libz3 in Git Bash, you would have to do: <code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.
+<p class="last">Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
+<code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> このコマンドを実行する必要があるでしょう。
+Those working in a Windows environment wanting to run the above basic sets without aleth or libz3 in Git Bash, you would have to do: <code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.
+もし標準のコマンドプロンプトで実行する場合は、 <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。
 If you’re running this in plain Command Prompt, use <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.</p>
 </div>
-<p>The option <code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> disables the tests that require <code class="docutils literal notranslate"><span class="pre">libz3</span></code> and
+<p><code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするテストを無効にし、 <code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">aleth</span></code> を必要とするテストを無効にします。
+The option <code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> disables the tests that require <code class="docutils literal notranslate"><span class="pre">libz3</span></code> and
 <code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> disables those that require <code class="docutils literal notranslate"><span class="pre">aleth</span></code>.</p>
-<p>If you want to run the ipc tests (that test the semantics of the generated code),
-you need to install <a class="reference external" href="https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz">aleth</a> and run it in testing mode: <code class="docutils literal notranslate"><span class="pre">aleth</span> <span class="pre">--db</span> <span class="pre">memorydb</span> <span class="pre">--test</span> <span class="pre">-d</span> <span class="pre">/tmp/testeth</span></code>.</p>
-<p>To run the actual tests, use: <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code>.</p>
-<p>To run a subset of tests, you can use filters:
-<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">TestSuite/TestName</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code>,
-where <code class="docutils literal notranslate"><span class="pre">TestName</span></code> can be a wildcard <code class="docutils literal notranslate"><span class="pre">*</span></code>.</p>
-<p>For example, here’s an example test you might run;
-<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">&quot;yulOptimizerTests/disambiguator/*&quot;</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.
-This will test all the tests for the disambiguator.</p>
-<p>To get a list of all tests, use
-<code class="docutils literal notranslate"><span class="pre">./build/test/soltest</span> <span class="pre">--list_content=HRF</span> <span class="pre">--</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/irrelevant</span></code>.</p>
-<p>If you want to debug using GDB, make sure you build differently than the “usual”.
-For example, you could run the following command in your <code class="docutils literal notranslate"><span class="pre">build</span></code> folder:</p>
+<p>ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
+<a class="reference external" href="https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz">aleth</a>
+をインストールします。
+その後、テストモードで実行します。
+<code class="docutils literal notranslate"><span class="pre">aleth</span> <span class="pre">--db</span> <span class="pre">memorydb</span> <span class="pre">--test</span> <span class="pre">-d</span> <span class="pre">/tmp/testeth</span></code></p>
+<p>実際のテストを実行するには、 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code> を使います。</p>
+<p>テストの一部を実行する場合は、フィルタを使います。
+<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">TestSuite/TestName</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code>
+<code class="docutils literal notranslate"><span class="pre">TestName</span></code> はワイルドカードを指定できます。 <code class="docutils literal notranslate"><span class="pre">*</span></code></p>
+<p>例えば、実行したテストがあるとして、
+<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">&quot;yulOptimizerTests/disambiguator/*&quot;</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>
+を実行すると、disambiguatorの全てのテストが実行されます。</p>
+<p>全てテストを確認するには、
+<code class="docutils literal notranslate"><span class="pre">./build/test/soltest</span> <span class="pre">--list_content=HRF</span> <span class="pre">--</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/irrelevant</span></code>
+を使います。</p>
+<p>もしGDBでデバッグしたい場合は、通常とは異なる方法でビルドしていることが必要です。
+以下のコマンドを <code class="docutils literal notranslate"><span class="pre">build</span></code> フォルダで実行します。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Debug</span> <span class="p">..</span>
 <span class="n">make</span>
 </pre></div>
 </div>
-<p>This will create symbols such that when you debug a test using the <code class="docutils literal notranslate"><span class="pre">--debug</span></code> flag, you will have access to functions and variables in which you can break or print with.</p>
-<p>The script <code class="docutils literal notranslate"><span class="pre">./scripts/tests.sh</span></code> also runs commandline tests and compilation tests
-in addition to those found in <code class="docutils literal notranslate"><span class="pre">soltest</span></code>.</p>
-<p>The CI runs additional tests (including <code class="docutils literal notranslate"><span class="pre">solc-js</span></code> and testing third party Solidity frameworks) that require compiling the Emscripten target.</p>
+<p>これは、あなたが <code class="docutils literal notranslate"><span class="pre">--debug</span></code> フラグを使いテストをデバッグする際のシンボルを生成します。
+これで、関数や変数をbreakしたりprintで表示したりすることができるようになります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">./scripts/tests.sh</span></code> スクリプトも、<code class="docutils literal notranslate"><span class="pre">soltest</span></code> で見つかったテストに加えて、コマンドラインテストを実行しテストをコンパイルします。</p>
+<p>CIはEmscriptenのコンパイルを必要とする追加のテスト( <code class="docutils literal notranslate"><span class="pre">solc-js</span></code> やサードパーティのSolidityフレームワークのテストを含みます)を実行します。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Some versions of <code class="docutils literal notranslate"><span class="pre">aleth</span></code> can not be used for testing. We suggest using
-the same version that the Solidity continuous integration tests use.
-Currently the CI uses version <code class="docutils literal notranslate"><span class="pre">1.5.0-alpha.7</span></code> of <code class="docutils literal notranslate"><span class="pre">aleth</span></code>.</p>
+<p class="last">いくつかの <code class="docutils literal notranslate"><span class="pre">aleth</span></code> のバージョンはテストに使うことはできません。
+SolidityのCIで使っているものと同じバージョンを使うことを推奨します。
+現在CIはバージョン <code class="docutils literal notranslate"><span class="pre">aleth</span></code> の <code class="docutils literal notranslate"><span class="pre">1.5.0-alpha.7</span></code> を使っています。</p>
 </div>
-<div class="section" id="writing-and-running-syntax-tests">
-<h3>Writing and running syntax tests<a class="headerlink" href="#writing-and-running-syntax-tests" title="Permalink to this headline">¶</a></h3>
-<p>Syntax tests check that the compiler generates the correct error messages for invalid code
-and properly accepts valid code.
-They are stored in individual files inside the <code class="docutils literal notranslate"><span class="pre">tests/libsolidity/syntaxTests</span></code> folder.
-These files must contain annotations, stating the expected result(s) of the respective test.
-The test suite compiles and checks them against the given expectations.</p>
-<p>For example: <code class="docutils literal notranslate"><span class="pre">./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol</span></code></p>
+<p>Writing and running syntax tests
+構文テストの実装と実行
+——————————–</p>
+<p>構文テストは、コンパイラが無効なコードに正しいエラーメッセージを生成し、適切に有効なコードを受け入れることをチェックします。
+それらは <code class="docutils literal notranslate"><span class="pre">tests/libsolidity/syntaxTests</span></code> フォルダ内へ個別のファイルに格納されます。
+それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
+テストスイートは、正しい結果に対してチェックしコンパイルします。</p>
+<p>例えば、 <code class="docutils literal notranslate"><span class="pre">./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol</span></code> では、</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
     <span class="kt">uint256</span> <span class="n">variable</span><span class="p">;</span>
     <span class="kt">uint128</span> <span class="n">variable</span><span class="p">;</span>
@@ -290,13 +302,15 @@ The test suite compiles and checks them against the given expectations.</p>
 <span class="c1">// DeclarationError: (36-52): Identifier already declared.</span>
 </pre></div>
 </div>
-<p>A syntax test must contain at least the contract under test itself, followed by the separator <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">----</span></code>. The comments that follow the separator are used to describe the
-expected compiler errors or warnings. The number range denotes the location in the source where the error occurred.
-If you want the contract to compile without any errors or warning you can leave
-out the separator and the comments that follow it.</p>
-<p>In the above example, the state variable <code class="docutils literal notranslate"><span class="pre">variable</span></code> was declared twice, which is not allowed. This results in a <code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code> stating that the identifier was already declared.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> tool is used for these tests and you can find it under <code class="docutils literal notranslate"><span class="pre">./build/test/tools/</span></code>. It is an interactive tool which allows
-editing of failing contracts using your preferred text editor. Let’s try to break this test by removing the second declaration of <code class="docutils literal notranslate"><span class="pre">variable</span></code>:</p>
+<p>構文テストは、少なくともセパレータ <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">----</span></code> に続くテスト自身のコントラクトを含まなければいけません。
+セパレータに続くコメントは、正しいコンパイラエラーやワーニングを記述するのに使われます。
+数字の範囲は、エラーが発生したソースコードの場所を指定しています。
+コントラクトにエラーやワーニングなしでコンパイルしたい場合、セパレータとコメントを削除することができます。</p>
+<p>上記の例だと、<code class="docutils literal notranslate"><span class="pre">variable``変数は２度宣言されてます。</span>
+<span class="pre">これは、すでに宣言されていますという識別子の</span> <span class="pre">``DeclarationError</span></code> となります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">isoltest``というツールはこれらのテストに使え、</span> <span class="pre">``./build/test/tools/</span></code> にあります。
+このツールは、対話的に、お好みのエディタを使って、失敗しているコントラクトを編集することができます。
+<code class="docutils literal notranslate"><span class="pre">variable</span></code> を削除して、このテストを突破してみましょう！</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
     <span class="kt">uint256</span> <span class="n">variable</span><span class="p">;</span>
 <span class="p">}</span>
@@ -304,7 +318,7 @@ editing of failing contracts using your preferred text editor. Let’s try to br
 <span class="c1">// DeclarationError: (36-52): Identifier already declared.</span>
 </pre></div>
 </div>
-<p>Running <code class="docutils literal notranslate"><span class="pre">./build/test/isoltest</span></code> again results in a test failure:</p>
+<p>再度 <a href="#id2"><span class="problematic" id="id3">``</span></a>./build/test/isoltest``を実行すると失敗します。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">syntaxTests</span><span class="o">/</span><span class="n">double_stateVariable_declaration</span><span class="p">.</span><span class="n">sol</span><span class="o">:</span> <span class="n">FAIL</span>
     <span class="n">Contract</span><span class="o">:</span>
         <span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
@@ -317,46 +331,43 @@ editing of failing contracts using your preferred text editor. Let’s try to br
         <span class="n">Success</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">isoltest</span></code> prints the expected result next to the obtained result, and also
-provides a way to edit, update or skip the current contract file, or quit the application.</p>
-<p>It offers several options for failing tests:</p>
+<p><code class="docutils literal notranslate"><span class="pre">isoltest</span></code> は得られた結果の次に期待する結果を表示します。また、現在のコントラクトの編集や更新、スキップする方法や、アプリケーションを終了する方法など方法も提供します。</p>
+<p>失敗してるテストのためにいくつかの選択肢を提供します。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> tries to open the contract in an editor so you can adjust it. It either uses the editor given on the command line (as <code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code>), in the environment variable <code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> or just <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> (in that order).</li>
-<li><code class="docutils literal notranslate"><span class="pre">update</span></code>: Updates the expectations for contract under test. This updates the annotations by removing unmet expectations and adding missing expectations. The test is then run again.</li>
-<li><code class="docutils literal notranslate"><span class="pre">skip</span></code>: Skips the execution of this particular test.</li>
-<li><code class="docutils literal notranslate"><span class="pre">quit</span></code>: Quits <code class="docutils literal notranslate"><span class="pre">isoltest</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> はエディタでコントラクトを開こうとし、修正できるます。 <code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code> としてコマンドラインで与えられたエディタか、,``EDITOR`` 環境変数で設定されいてるものか <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> を使います。(この順番で設定されます).</li>
+<li><code class="docutils literal notranslate"><span class="pre">update</span></code>: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">skip</span></code>: 特定のテストの実行をスキップします。</li>
+<li><code class="docutils literal notranslate"><span class="pre">quit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> を終了します。</li>
 </ul>
-<p>All of these options apply to the current contract, expect <code class="docutils literal notranslate"><span class="pre">quit</span></code> which stops the entire testing process.</p>
-<p>Automatically updating the test above changes it to</p>
+<p>全てのテスト実行を終了する <code class="docutils literal notranslate"><span class="pre">quit</span></code> をのぞいて全てのオプションは現在のコントラクトへ適用します。</p>
+<p>自動的、上記のテストは以下に変更され、</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
     <span class="kt">uint256</span> <span class="n">variable</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="c1">// ----</span>
 </pre></div>
 </div>
-<p>and re-run the test. It now passes again:</p>
+<p>再実行され、テストはパスします。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Re</span><span class="o">-</span><span class="n">running</span> <span class="n">test</span> <span class="n">case</span><span class="p">...</span>
 <span class="n">syntaxTests</span><span class="o">/</span><span class="n">double_stateVariable_declaration</span><span class="p">.</span><span class="n">sol</span><span class="o">:</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Choose a name for the contract file that explains what it tests, e.g. <code class="docutils literal notranslate"><span class="pre">double_variable_declaration.sol</span></code>.
-Do not put more than one contract into a single file, unless you are testing inheritance or cross-contract calls.
-Each file should test one aspect of your new feature.</p>
-</div>
+<p class="last">そのテストを説明するコントラクトファイルの名前を選んでみてください。例えば、<code class="docutils literal notranslate"><span class="pre">double_variable_declaration.sol</span></code> などです。
+継承のテストやクロスコントラクトのテスト以外で、1つのファイルに複数のコントラクトを配置していはいけません。
+各ファイルは新しい機能の側面のみテストすべきです。</p>
 </div>
 </div>
 <div class="section" id="running-the-fuzzer-via-afl">
 <h2>Running the Fuzzer via AFL<a class="headerlink" href="#running-the-fuzzer-via-afl" title="Permalink to this headline">¶</a></h2>
-<p>Fuzzing is a technique that runs programs on more or less random inputs to find exceptional execution
-states (segmentation faults, exceptions, etc). Modern fuzzers are clever and run a directed search
-inside the input. We have a specialized binary called <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> which takes source code as input
-and fails whenever it encounters an internal compiler error, segmentation fault or similar, but
-does not fail if e.g., the code contains an error. This way, fuzzing tools can find internal problems in the compiler.</p>
-<p>We mainly use <a class="reference external" href="http://lcamtuf.coredump.cx/afl/">AFL</a> for fuzzing. You need to download and
-install the AFL packages from your repositories (afl, afl-clang) or build them manually.
-Next, build Solidity (or just the <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> binary) with AFL as your compiler:</p>
+<p>Fuzzingは例外的な状態(segmentation faults, exceptions, etc)を見つけるための、ランダムインプットでプログラムを実行させるテクニックです。</p>
+<p>現代のfuzzersはかしこく、インプットの中で有向探索を実行します。
+インプットとして、ソースコードをとる <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> と呼ばれる特別なバイナリがあります。
+内部コンパイラエラー、やsegmentation faultや類似のエラーが発生した時は失敗しますが、
+コードにエラーが含まれていても失敗しません。こうして、fuzzingツールはコンパイラの中の内部的な問題を見つけることができます。</p>
+<p>私たちは主に、 <cite>AFL &lt;http://lcamtuf.coredump.cx/afl/&gt;</cite> をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
+次に、自分用のコンパイラとしてAFLとSolidityをビルドします（もしくは、単に <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> バイナリを使います）。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
 <span class="err">#</span> <span class="k">if</span> <span class="n">needed</span>
 <span class="n">make</span> <span class="n">clean</span>
@@ -364,7 +375,7 @@ Next, build Solidity (or just the <code class="docutils literal notranslate"><sp
 <span class="n">make</span> <span class="n">solfuzzer</span>
 </pre></div>
 </div>
-<p>At this stage you should be able to see a message similar to the following:</p>
+<p>この段階では以下のようなメッセージを見ることになるでしょう。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Scanning</span> <span class="n">dependencies</span> <span class="n">of</span> <span class="n">target</span> <span class="n">solfuzzer</span>
 <span class="p">[</span> <span class="mi">98</span><span class="o">%</span><span class="p">]</span> <span class="n">Building</span> <span class="n">CXX</span> <span class="n">object</span> <span class="n">test</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">CMakeFiles</span><span class="o">/</span><span class="n">solfuzzer</span><span class="p">.</span><span class="n">dir</span><span class="o">/</span><span class="n">fuzzer</span><span class="p">.</span><span class="n">cpp</span><span class="p">.</span><span class="n">o</span>
 <span class="n">afl</span><span class="o">-</span><span class="n">cc</span> <span class="mf">2.52</span><span class="n">b</span> <span class="n">by</span> <span class="o">&lt;</span><span class="n">lcamtuf</span><span class="err">@</span><span class="n">google</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span>
@@ -373,14 +384,14 @@ Next, build Solidity (or just the <code class="docutils literal notranslate"><sp
 <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="n">Linking</span> <span class="n">CXX</span> <span class="n">executable</span> <span class="n">solfuzzer</span>
 </pre></div>
 </div>
-<p>If the instrumentation messages did not appear, try switching the cmake flags pointing to AFL’s clang binaries:</p>
+<p>このようなメッセージ表示されない場合、cmakeフラグをAFLのclangバイナリに向けるようにしてみてください。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="err">#</span> <span class="k">if</span> <span class="n">previously</span> <span class="n">failed</span>
 <span class="n">make</span> <span class="n">clean</span>
 <span class="n">cmake</span> <span class="p">..</span> <span class="o">-</span><span class="n">DCMAKE_C_COMPILER</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">afl</span><span class="o">-</span><span class="n">clang</span> <span class="o">-</span><span class="n">DCMAKE_CXX_COMPILER</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">afl</span><span class="o">-</span><span class="n">clang</span><span class="o">++</span>
 <span class="n">make</span> <span class="n">solfuzzer</span>
 </pre></div>
 </div>
-<p>Otherwise, upon execution the fuzzer halts with an error saying binary is not instrumented:</p>
+<p>そうしなければ、直ちにバイナリはインスツルメントされてないというエラーと共にfuzzerは停止します。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">afl</span><span class="o">-</span><span class="n">fuzz</span> <span class="mf">2.52</span><span class="n">b</span> <span class="n">by</span> <span class="o">&lt;</span><span class="n">lcamtuf</span><span class="err">@</span><span class="n">google</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span>
 <span class="p">...</span> <span class="p">(</span><span class="n">truncated</span> <span class="n">messages</span><span class="p">)</span>
 <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="n">Validating</span> <span class="n">target</span> <span class="n">binary</span><span class="p">...</span>
@@ -399,9 +410,8 @@ Next, build Solidity (or just the <code class="docutils literal notranslate"><sp
          <span class="n">Location</span> <span class="o">:</span> <span class="n">check_binary</span><span class="p">(),</span> <span class="n">afl</span><span class="o">-</span><span class="n">fuzz</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">6920</span>
 </pre></div>
 </div>
-<p>Next, you need some example source files. This makes it much easier for the fuzzer
-to find errors. You can either copy some files from the syntax tests or extract test files
-from the documentation or the other tests:</p>
+<p>次に、サンプルソースファイルで、それはfuzzerに簡単にエラーを見つけられるようする実例のソースコードが必要です。
+あなたは、文法テストからファイルをコピーするか、ドキュメントや他のテストからテストファイルを抽出することができます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test_cases</span>
 <span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test_cases</span>
 <span class="err">#</span> <span class="n">extract</span> <span class="kr">from</span> <span class="n">tests</span><span class="o">:</span>
@@ -410,33 +420,28 @@ from the documentation or the other tests:</p>
 <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">solidity</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">isolate_tests</span><span class="p">.</span><span class="n">py</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">solidity</span><span class="o">/</span><span class="n">docs</span> <span class="n">docs</span>
 </pre></div>
 </div>
-<p>The AFL documentation states that the corpus (the initial input files) should not be
-too large. The files themselves should not be larger than 1 kB and there should be
-at most one input file per functionality, so better start with a small number of.
-There is also a tool called <code class="docutils literal notranslate"><span class="pre">afl-cmin</span></code> that can trim input files
-that result in similar behaviour of the binary.</p>
-<p>Now run the fuzzer (the <code class="docutils literal notranslate"><span class="pre">-m</span></code> extends the size of memory to 60 MB):</p>
+<p>AFLドキュメントはコーパス（初期のインプットファイル）が大きすぎないようにしています。これらのファイル自身は1 kBを超えず、機能あたり多くても１ファイルであるべきです。
+<code class="docutils literal notranslate"><span class="pre">afl-cmin</span></code> というインプットファイルをバイナリと似た動作に整えるツールもあります。</p>
+<p>fuzzerを実行してください( <code class="docutils literal notranslate"><span class="pre">-m</span></code> はメモリサイズを60 MBへ拡張します):</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">afl</span><span class="o">-</span><span class="n">fuzz</span> <span class="o">-</span><span class="n">m</span> <span class="mi">60</span> <span class="o">-</span><span class="n">i</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test_cases</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">fuzzer_reports</span> <span class="o">--</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">solfuzzer</span>
 </pre></div>
 </div>
-<p>The fuzzer creates source files that lead to failures in <code class="docutils literal notranslate"><span class="pre">/tmp/fuzzer_reports</span></code>.
-Often it finds many similar source files that produce the same error. You can
-use the tool <code class="docutils literal notranslate"><span class="pre">scripts/uniqueErrors.sh</span></code> to filter out the unique errors.</p>
+<p>fuzzerは <code class="docutils literal notranslate"><span class="pre">/tmp/fuzzer_reports</span></code> に失敗するソースファイルを生成します。
+同じエラーを発生させる似たソースファイルがあることもありますが、 <code class="docutils literal notranslate"><span class="pre">scripts/uniqueErrors.sh</span></code> を使うとユニークなエラーのみ絞り込むことができます。</p>
 </div>
 <div class="section" id="whiskers">
 <h2>Whiskers<a class="headerlink" href="#whiskers" title="Permalink to this headline">¶</a></h2>
-<p><em>Whiskers</em> is a string templating system similar to <a class="reference external" href="https://mustache.github.io">Mustache</a>. It is used by the
-compiler in various places to aid readability, and thus maintainability and verifiability, of the code.</p>
-<p>The syntax comes with a substantial difference to Mustache. The template markers <code class="docutils literal notranslate"><span class="pre">{{</span></code> and <code class="docutils literal notranslate"><span class="pre">}}</span></code> are
-replaced by <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> in order to aid parsing and avoid conflicts with <a class="reference internal" href="assembly.html#inline-assembly"><span class="std std-ref">Inline Assembly</span></a>
-(The symbols <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> are invalid in inline assembly, while <code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code> are used to delimit blocks).
-Another limitation is that lists are only resolved one depth and they do not recurse. This may change in the future.</p>
-<p>A rough specification is the following:</p>
-<p>Any occurrence of <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is replaced by the string-value of the supplied variable <code class="docutils literal notranslate"><span class="pre">name</span></code> without any
-escaping and without iterated replacements. An area can be delimited by <code class="docutils literal notranslate"><span class="pre">&lt;#name&gt;...&lt;/name&gt;</span></code>. It is replaced
-by as many concatenations of its contents as there were sets of variables supplied to the template system,
-each time replacing any <code class="docutils literal notranslate"><span class="pre">&lt;inner&gt;</span></code> items by their respective value. Top-level variables can also be used
-inside such areas.</p>
+<p><em>Whiskers</em> は <cite>Mustache &lt;https://mustache.github.io&gt;</cite> と似た文字型テンプレートシステムです。
+コードの保守性や検証可能性、可読性のため、様々な場所でコンパイラが使います。</p>
+<p>シンタックスはMustacheと大きく異なり、 <code class="docutils literal notranslate"><span class="pre">{{</span></code> と <code class="docutils literal notranslate"><span class="pre">}}</span></code> は　<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> に置き換わっています。
+それはパースしやすくするのと、 <a class="reference internal" href="assembly.html#inline-assembly"><span class="std std-ref">Inline Assembly</span></a> とコンフリクトするのを避けるためです(インラインアセンブラでは <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> は不正ですが、 <code class="docutils literal notranslate"><span class="pre">{</span></code> と <code class="docutils literal notranslate"><span class="pre">}</span></code> はブロックを区切るのに使います)
+リストは１階層のみ処理され再帰しない、という制限がありますが、将来は変更されるでしょう。</p>
+<p>A rough specification is the following:
+大まかな仕様として以下があります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> は全て文字型の <code class="docutils literal notranslate"><span class="pre">name</span></code> にエスケープや繰り返しの置換することなしに置き換われます。
+領域は <code class="docutils literal notranslate"><span class="pre">&lt;#name&gt;...&lt;/name&gt;</span></code> で区切ることができます。テンプレートシステムへ与えられた変数のセットとして、内容を連結したものに置きかわりますし、
+<code class="docutils literal notranslate"><span class="pre">&lt;inner&gt;</span></code> は毎回、それぞれの値で置き換わります。
+トップレベルの変数はその領域内部でも使うことができます。</p>
 </div>
 </div>
 

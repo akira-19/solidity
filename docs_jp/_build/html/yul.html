@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Style Guide" href="style-guide.html" />
-    <link rel="prev" title="Contract ABI Specification" href="abi-spec.html" /> 
+    <link rel="prev" title="Basic Design" href="abi-spec.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,14 +88,26 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Yul</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#specification-of-yul">Specification of Yul</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#restrictions-on-the-grammar">Restrictions on the Grammar</a></li>
@@ -115,7 +127,7 @@
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -186,31 +198,21 @@
             
   <div class="section" id="yul">
 <h1>Yul<a class="headerlink" href="#yul" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="id1"></span><p id="index-0">Yul (previously also called JULIA or IULIA) is an intermediate language that can
-compile to various different backends
-(EVM 1.0, EVM 1.5 and eWASM are planned).
-Because of that, it is designed to be a usable common denominator of all three
-platforms.
-It can already be used for “inline assembly” inside Solidity and
-future versions of the Solidity compiler will even use Yul as intermediate
-language. It should also be easy to build high-level optimizer stages for Yul.</p>
+<span class="target" id="id1"></span><p id="index-0">Yul(以前JULIAやIULIAと呼ばれていたものです)は複数の異なるバックエンド(EVM1.0やEVM1.5、eWASM)でコンパイルできる中間言語です。
+そのため、Yulは3つのプラットフォームすべての使用可能な共通分母になるように設計されています。
+YulはすでにSolidity内の”inline assembly”としても使用されており、Solidityコンパイラの将来のバージョンではYulを中間言語として使用できるようになります。
+また、Yul用の高水準オプティマイザステージを構築するのは簡単です。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Note that the flavour used for “inline assembly” does not have types
-(everything is <code class="docutils literal notranslate"><span class="pre">u256</span></code>) and the built-in functions are identical
-to the EVM opcodes. Please resort to the inline assembly documentation
-for details.</p>
+<p class="last">“inline assembly”として使用されるときに型を持つわけではありません(すべて <code class="docutils literal notranslate"><span class="pre">u256</span></code> になります)。
+そして、組み込み関数はEVMオペコードと同じです。詳細についてはinline assemblyのドキュメントを参照してください。</p>
 </div>
-<p>The core components of Yul are functions, blocks, variables, literals,
-for-loops, if-statements, switch-statements, expressions and assignments to variables.</p>
-<p>Yul is typed, both variables and literals must specify the type with postfix
-notation. The supported types are <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">u8</span></code>, <code class="docutils literal notranslate"><span class="pre">s8</span></code>, <code class="docutils literal notranslate"><span class="pre">u32</span></code>, <code class="docutils literal notranslate"><span class="pre">s32</span></code>,
-<code class="docutils literal notranslate"><span class="pre">u64</span></code>, <code class="docutils literal notranslate"><span class="pre">s64</span></code>, <code class="docutils literal notranslate"><span class="pre">u128</span></code>, <code class="docutils literal notranslate"><span class="pre">s128</span></code>, <code class="docutils literal notranslate"><span class="pre">u256</span></code> and <code class="docutils literal notranslate"><span class="pre">s256</span></code>.</p>
-<p>Yul in itself does not even provide operators. If the EVM is targeted,
-opcodes will be available as built-in functions, but they can be reimplemented
-if the backend changes. For a list of mandatory built-in functions, see the section below.</p>
-<p>The following example program assumes that the EVM opcodes <code class="docutils literal notranslate"><span class="pre">mul</span></code>, <code class="docutils literal notranslate"><span class="pre">div</span></code>
-and <code class="docutils literal notranslate"><span class="pre">mod</span></code> are available either natively or as functions and computes exponentiation.</p>
+<p>Yulのコアコンポーネントは関数、ブロック、変数、リテラル、forループ、if文、switch文、式と変数への代入です。</p>
+<p>Yulは型付けされ、変数とリテラルの両方が後置記法で型を指定しなければなりません。
+サポートしている型は、 <code class="docutils literal notranslate"><span class="pre">bool</span></code>、 <code class="docutils literal notranslate"><span class="pre">u8</span></code>、 <code class="docutils literal notranslate"><span class="pre">s8</span></code>、 <code class="docutils literal notranslate"><span class="pre">u32</span></code>、 <code class="docutils literal notranslate"><span class="pre">s32</span></code>、 <code class="docutils literal notranslate"><span class="pre">u64</span></code>、 <code class="docutils literal notranslate"><span class="pre">s64</span></code>、 <code class="docutils literal notranslate"><span class="pre">u128</span></code>、 <code class="docutils literal notranslate"><span class="pre">s128</span></code>、 <code class="docutils literal notranslate"><span class="pre">u256</span></code>、 <code class="docutils literal notranslate"><span class="pre">s256</span></code> です。</p>
+<p>Yul自体は、演算子すら持ちません。もしあるEVMが指定された場合、オペコードは組み込み関数として利用可能になりますが、バックエンドが変更された場合は再実装することができます。
+マンダトリーなビルドイン関数のリストは下のセクションを参照ください。</p>
+<p>次のプログラムの例では、EVMのオペコード <code class="docutils literal notranslate"><span class="pre">mul</span></code>、 <code class="docutils literal notranslate"><span class="pre">div</span></code>、および <code class="docutils literal notranslate"><span class="pre">mod</span></code> がネイティブでも関数としても利用可能であると仮定して、べき乗を計算します。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="kd">function</span> <span class="n">power</span><span class="p">(</span><span class="n">base</span><span class="o">:</span><span class="n">u256</span><span class="p">,</span> <span class="n">exponent</span><span class="o">:</span><span class="n">u256</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">result</span><span class="o">:</span><span class="n">u256</span>
     <span class="p">{</span>
@@ -227,9 +229,8 @@ and <code class="docutils literal notranslate"><span class="pre">mod</span></cod
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>It is also possible to implement the same function using a for-loop
-instead of with recursion. Here, we need the EVM opcodes <code class="docutils literal notranslate"><span class="pre">lt</span></code> (less-than)
-and <code class="docutils literal notranslate"><span class="pre">add</span></code> to be available.</p>
+<p>また、再帰ではなくforループを使用して同じ関数を実装することも可能です。
+ここで、利用可能なEVMオペコードの <code class="docutils literal notranslate"><span class="pre">lt</span></code> (less-than)と <code class="docutils literal notranslate"><span class="pre">add</span></code> が必要になります。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="kd">function</span> <span class="n">power</span><span class="p">(</span><span class="n">base</span><span class="o">:</span><span class="n">u256</span><span class="p">,</span> <span class="n">exponent</span><span class="o">:</span><span class="n">u256</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">result</span><span class="o">:</span><span class="n">u256</span>
     <span class="p">{</span>
@@ -244,7 +245,7 @@ and <code class="docutils literal notranslate"><span class="pre">add</span></cod
 </div>
 <div class="section" id="specification-of-yul">
 <h2>Specification of Yul<a class="headerlink" href="#specification-of-yul" title="Permalink to this headline">¶</a></h2>
-<p>This chapter describes Yul code. It is usually placed inside a Yul object, which is described in the following chapter.</p>
+<p>この章では、Yulのコードを記述します。通常、Yulオブジェクトの中に置かれるものです。これについては次の章で説明します。</p>
 <p>Grammar:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Block</span> <span class="o">=</span> <span class="s">&#39;{&#39;</span> <span class="n">Statement</span><span class="o">*</span> <span class="s">&#39;}&#39;</span>
 <span class="n">Statement</span> <span class="o">=</span>
@@ -298,73 +299,41 @@ and <code class="docutils literal notranslate"><span class="pre">add</span></cod
 </div>
 <div class="section" id="restrictions-on-the-grammar">
 <h3>Restrictions on the Grammar<a class="headerlink" href="#restrictions-on-the-grammar" title="Permalink to this headline">¶</a></h3>
-<p>Switches must have at least one case (including the default case).
-If all possible values of the expression are covered, a default case should
-not be allowed (i.e. a switch with a <code class="docutils literal notranslate"><span class="pre">bool</span></code> expression that has both a
-true and a false case should not allow a default case). All case values need to
-have the same type.</p>
-<p>Every expression evaluates to zero or more values. Identifiers and Literals
-evaluate to exactly
-one value and function calls evaluate to a number of values equal to the
-number of return values of the function called.</p>
-<p>In variable declarations and assignments, the right-hand-side expression
-(if present) has to evaluate to a number of values equal to the number of
-variables on the left-hand-side.
-This is the only situation where an expression evaluating
-to more than one value is allowed.</p>
-<p>Expressions that are also statements (i.e. at the block level) have to
-evaluate to zero values.</p>
-<p>In all other situations, expressions have to evaluate to exactly one value.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">continue</span></code> and <code class="docutils literal notranslate"><span class="pre">break</span></code> statements can only be used inside loop bodies
-and have to be in the same function as the loop (or both have to be at the
-top level).
-The condition part of the for-loop has to evaluate to exactly one value.</p>
-<p>Literals cannot be larger than the their type. The largest type defined is 256-bit wide.</p>
+<p>Switch文はdefault caseを含む最低でも1つのcaseを持ちます。
+もし式のすべての可能な値がカバーされている場合、defaultのcaseは許容するべきではありません(すなわち、真と偽の両方のケースを持つ <code class="docutils literal notranslate"><span class="pre">bool</span></code> を持つSwitch文)。
+また、すべてのcaseの値は同じ型である必要があります。</p>
+<p>すべての式はゼロ以上の値に評価されます。識別子とリテラルは厳密に1つの値であると評価され、関数呼び出しは呼び出された関数の戻り値の数と等しい数の値であると評価されます。</p>
+<p>変数宣言時や代入時、右辺の式は、左辺の変数の数と等しい数の値であると評価される必要があります。
+これが、複数の値に評価される式が許可される唯一の状況です。</p>
+<p>ステートメント(すなわち、ブロックレベル)でもある式は、0として評価される必要があります。
+そして、その他のすべてのシチュエーションにおいて、式は単一の値として評価する必要があります。</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">continue</span></code> や <code class="docutils literal notranslate"><span class="pre">break</span></code> 文はループ文中でのみ使用でき、ループ文と同じ関数内になければなりません(もしくは両方ともトップレベルになければなりません)。</div></blockquote>
+<p>for文の条件は、単一の値で評価される必要があります。</p>
+<p>リテラルは、その型以上に大きくなることはありません。最大値の型は、256ビット長であることが決められています。</p>
 </div>
 <div class="section" id="scoping-rules">
 <h3>Scoping Rules<a class="headerlink" href="#scoping-rules" title="Permalink to this headline">¶</a></h3>
-<p>Scopes in Yul are tied to Blocks (exceptions are functions and the for loop
-as explained below) and all declarations
-(<code class="docutils literal notranslate"><span class="pre">FunctionDefinition</span></code>, <code class="docutils literal notranslate"><span class="pre">VariableDeclaration</span></code>)
-introduce new identifiers into these scopes.</p>
-<p>Identifiers are visible in
-the block they are defined in (including all sub-nodes and sub-blocks).
-As an exception, identifiers defined in the “init” part of the for-loop
-(the first block) are visible in all other parts of the for-loop
-(but not outside of the loop).
-Identifiers declared in the other parts of the for loop respect the regular
-syntactical scoping rules.
-The parameters and return parameters of functions are visible in the
-function body and their names cannot overlap.</p>
-<p>Variables can only be referenced after their declaration. In particular,
-variables cannot be referenced in the right hand side of their own variable
-declaration.
-Functions can be referenced already before their declaration (if they are visible).</p>
-<p>Shadowing is disallowed, i.e. you cannot declare an identifier at a point
-where another identifier with the same name is also visible, even if it is
-not accessible.</p>
-<p>Inside functions, it is not possible to access a variable that was declared
-outside of that function.</p>
+<p>Yulのスコープはブロックと結びついており(関数とforループは例外です)、すべての宣言( <code class="docutils literal notranslate"><span class="pre">FunctionDefinition</span></code>、 <code class="docutils literal notranslate"><span class="pre">VariableDeclaration</span></code>)はこれらのスコープに新たな識別子をもたらします。</p>
+<p>識別子は、定義されたブロック内で表示することができます(すべてのサブノートやサブブロックを含みます)。
+例外として、forループの”init”部分(最初のブロック)で定義された識別子は、forループの他のすべての部分で表示することができます(ただし、ループの外側では表示できません)。
+関数のパラメータと戻り値は関数本体に表示され、それらの名前は同じものを使用することはできません。</p>
+<p>変数は宣言後に参照することができます。特に、変数はそれ自身の変数宣言の右側では参照できません。
+関数は宣言前にすでに参照できます(可視性である場合に限ります)。</p>
+<p>シャドーイングは使用できません。つまり、たとえアクセスできない場合でも、同じ名前の別の識別子も表示されている場所で識別子を宣言することはできません。</p>
+<p>また、関数の外側で宣言された変数にアクセスすることはできません。</p>
 </div>
 <div class="section" id="formal-specification">
 <h3>Formal Specification<a class="headerlink" href="#formal-specification" title="Permalink to this headline">¶</a></h3>
-<p>We formally specify Yul by providing an evaluation function E overloaded
-on the various nodes of the AST. Any functions can have side effects, so
-E takes two state objects and the AST node and returns two new
-state objects and a variable number of other values.
-The two state objects are the global state object
-(which in the context of the EVM is the memory, storage and state of the
-blockchain) and the local state object (the state of local variables, i.e. a
-segment of the stack in the EVM).
-If the AST node is a statement, E returns the two state objects and a “mode”,
-which is used for the <code class="docutils literal notranslate"><span class="pre">break</span></code> and <code class="docutils literal notranslate"><span class="pre">continue</span></code> statements.
-If the AST node is an expression, E returns the two state objects and
-as many values as the expression evaluates to.</p>
-<p>The exact nature of the global state is unspecified for this high level
-description. The local state <code class="docutils literal notranslate"><span class="pre">L</span></code> is a mapping of identifiers <code class="docutils literal notranslate"><span class="pre">i</span></code> to values <code class="docutils literal notranslate"><span class="pre">v</span></code>,
-denoted as <code class="docutils literal notranslate"><span class="pre">L[i]</span> <span class="pre">=</span> <span class="pre">v</span></code>.</p>
-<p>For an identifier <code class="docutils literal notranslate"><span class="pre">v</span></code>, let <code class="docutils literal notranslate"><span class="pre">$v</span></code> be the name of the identifier.</p>
-<p>We will use a destructuring notation for the AST nodes.</p>
+<p>私たちは、ASTのさまざまなノードにオーバーロードされた評価関数Eを提供して、Yulを形式的に指定します。
+どの関数にも副作用がある可能性があるため、評価関数Eは2つのステートオブジェクトとASTノードを取り、2つの新しいステートオブジェクトと可変数の他の値を返します。
+2つの状態オブジェクトとはグローバルステートオブジェクト(EVMのコンテキストではブロックチェーンのメモリ、ストレージ、およびステート)とローカルステートオブジェクト(ローカル変数のステート、つまりEVM内のスタックのセグメント)です。</p>
+<p>もしASTノードがステートメントである場合、評価関数Eは2つのステートオブジェクトと、 <code class="docutils literal notranslate"><span class="pre">break</span></code> と <code class="docutils literal notranslate"><span class="pre">continue</span></code> に使用される “mode”を返します。
+もしASTノードが式である場合、評価関数Eは2つのステートオブジェクトと式が評価する同じ数の値を返します。</p>
+<p>グローバルステートの正確な性質は、この上位レベルの説明では規定されていません。
+ローカルステート <code class="docutils literal notranslate"><span class="pre">L</span></code> は、識別子 <code class="docutils literal notranslate"><span class="pre">i</span></code> から値 <code class="docutils literal notranslate"><span class="pre">v</span></code> へのマッピングで、<code class="docutils literal notranslate"><span class="pre">L[i]</span> <span class="pre">=</span> <span class="pre">v</span></code> と表されます。</p>
+<p>識別子 <code class="docutils literal notranslate"><span class="pre">v</span></code> の場合、 <code class="docutils literal notranslate"><span class="pre">$v</span></code> を識別子の名前とします。</p>
+<p>また、ASTノードには分割表記を使用します。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="o">&lt;</span><span class="p">{</span><span class="n">St1</span><span class="p">,</span> <span class="p">...,</span> <span class="n">Stn</span><span class="p">}</span><span class="o">&gt;:</span> <span class="n">Block</span><span class="p">)</span> <span class="o">=</span>
     <span class="n">let</span> <span class="n">G1</span><span class="p">,</span> <span class="n">L1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">St1</span><span class="p">,</span> <span class="p">...,</span> <span class="n">Stn</span><span class="p">)</span>
     <span class="n">let</span> <span class="n">L2</span> <span class="n">be</span> <span class="n">a</span> <span class="n">restriction</span> <span class="n">of</span> <span class="n">L1</span> <span class="n">to</span> <span class="n">the</span> <span class="n">identifiers</span> <span class="n">of</span> <span class="n">L</span>
@@ -392,9 +361,9 @@ denoted as <code class="docutils literal notranslate"><span class="pre">L[i]</sp
 <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="o">&lt;</span><span class="k">for</span> <span class="p">{</span> <span class="n">i1</span><span class="p">,</span> <span class="p">...,</span> <span class="k">in</span> <span class="p">}</span> <span class="n">condition</span> <span class="n">post</span> <span class="n">body</span><span class="o">&gt;:</span> <span class="n">ForLoop</span><span class="p">)</span> <span class="o">=</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">:</span>
         <span class="n">let</span> <span class="n">G1</span><span class="p">,</span> <span class="n">L1</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="p">...,</span> <span class="k">in</span><span class="p">)</span>
-        <span class="c1">// mode has to be regular due to the syntactic restrictions</span>
+        <span class="c1">// 構文上の制限のため、modeは規則的でなければなりません</span>
         <span class="n">let</span> <span class="n">G2</span><span class="p">,</span> <span class="n">L2</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">L1</span><span class="p">,</span> <span class="k">for</span> <span class="p">{}</span> <span class="n">condition</span> <span class="n">post</span> <span class="n">body</span><span class="p">)</span>
-        <span class="c1">// mode has to be regular due to the syntactic restrictions</span>
+        <span class="c1">// 構文上の制限のため、modeは規則的でなければなりません</span>
         <span class="n">let</span> <span class="n">L3</span> <span class="n">be</span> <span class="n">the</span> <span class="n">restriction</span> <span class="n">of</span> <span class="n">L2</span> <span class="n">to</span> <span class="n">only</span> <span class="n">variables</span> <span class="n">of</span> <span class="n">L</span>
         <span class="n">G2</span><span class="p">,</span> <span class="n">L3</span><span class="p">,</span> <span class="n">regular</span>
     <span class="k">else</span><span class="o">:</span>
@@ -423,7 +392,7 @@ denoted as <code class="docutils literal notranslate"><span class="pre">L[i]</sp
 <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">switch</span> <span class="n">condition</span> <span class="n">case</span> <span class="n">l1</span><span class="o">:</span><span class="n">t1</span> <span class="n">st1</span> <span class="p">...</span> <span class="n">case</span> <span class="n">ln</span><span class="o">:</span><span class="n">tn</span> <span class="n">stn</span> <span class="kr">default</span> <span class="n">st</span><span class="s">&#39;&gt;: Switch) =</span>
     <span class="n">let</span> <span class="n">G0</span><span class="p">,</span> <span class="n">L0</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">condition</span><span class="p">)</span>
     <span class="c1">// i = 1 .. n</span>
-    <span class="c1">// Evaluate literals, context doesn&#39;t matter</span>
+    <span class="c1">// コンテキストに関係なくリテラルを評価します</span>
     <span class="n">let</span> <span class="kr">_</span><span class="p">,</span> <span class="kr">_</span><span class="p">,</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">L0</span><span class="p">,</span> <span class="n">l1</span><span class="p">)</span>
     <span class="p">...</span>
     <span class="n">let</span> <span class="kr">_</span><span class="p">,</span> <span class="kr">_</span><span class="p">,</span> <span class="n">vn</span> <span class="o">=</span> <span class="n">E</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">L0</span><span class="p">,</span> <span class="n">ln</span><span class="p">)</span>
@@ -459,10 +428,10 @@ denoted as <code class="docutils literal notranslate"><span class="pre">L[i]</sp
 </div>
 <div class="section" id="type-conversion-functions">
 <h3>Type Conversion Functions<a class="headerlink" href="#type-conversion-functions" title="Permalink to this headline">¶</a></h3>
-<p>Yul has no support for implicit type conversion and therefore functions exist to provide explicit conversion.
-When converting a larger type to a shorter type a runtime exception can occur in case of an overflow.</p>
+<p>Yulは暗黙的型変換をサポートしていないため、明示的変換を提供するための関数が存在します。
+大きな型からより小さな型へ変換するとき、オーバーフローの場合にruntime exceptionが発生する可能性があります。</p>
 <dl class="docutils">
-<dt>Truncating conversions are supported between the following types:</dt>
+<dt>以下の型間での変換の切り捨てがサポートされています:</dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal notranslate"><span class="pre">bool</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">u32</span></code></li>
@@ -472,17 +441,16 @@ When converting a larger type to a shorter type a runtime exception can occur in
 </ul>
 </dd>
 </dl>
-<p>For each of these a type conversion function exists having the prototype in the form of <code class="docutils literal notranslate"><span class="pre">&lt;input_type&gt;to&lt;output_type&gt;(x:&lt;input_type&gt;)</span> <span class="pre">-&gt;</span> <span class="pre">y:&lt;output_type&gt;</span></code>,
-such as <code class="docutils literal notranslate"><span class="pre">u32tobool(x:u32)</span> <span class="pre">-&gt;</span> <span class="pre">y:bool</span></code>, <code class="docutils literal notranslate"><span class="pre">u256tou32(x:u256)</span> <span class="pre">-&gt;</span> <span class="pre">y:u32</span></code> or <code class="docutils literal notranslate"><span class="pre">s256tou256(x:s256)</span> <span class="pre">-&gt;</span> <span class="pre">y:u256</span></code>.</p>
+<p>これらのそれぞれに対して、型変換関数は、 <code class="docutils literal notranslate"><span class="pre">u32tobool(x:u32)</span> <span class="pre">-&gt;</span> <span class="pre">y:bool</span></code>、 <code class="docutils literal notranslate"><span class="pre">u256tou32(x:u256)</span> <span class="pre">-&gt;</span> <span class="pre">y:u32</span></code> や <code class="docutils literal notranslate"><span class="pre">s256tou256(x:s256)</span> <span class="pre">-&gt;</span> <span class="pre">y:u256</span></code> などといった <code class="docutils literal notranslate"><span class="pre">&lt;input_type&gt;to&lt;output_type&gt;(x:&lt;input_type&gt;)</span> <span class="pre">-&gt;</span> <span class="pre">y:&lt;output_type&gt;</span></code> 形式のプロトタイプを持ちます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">u32tobool(x:u32)</span> <span class="pre">-&gt;</span> <span class="pre">y:bool</span></code> can be implemented as <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">:=</span> <span class="pre">not(iszerou256(x))</span></code> and
-<code class="docutils literal notranslate"><span class="pre">booltou32(x:bool)</span> <span class="pre">-&gt;</span> <span class="pre">y:u32</span></code> can be implemented as <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">true:bool</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">1:u32</span> <span class="pre">}</span> <span class="pre">case</span> <span class="pre">false:bool</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">0:u32</span> <span class="pre">}</span></code></p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">u32tobool(x:u32)</span> <span class="pre">-&gt;</span> <span class="pre">y:bool</span></code> は <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">:=</span> <span class="pre">not(iszerou256(x))</span></code> として実行され、
+<code class="docutils literal notranslate"><span class="pre">booltou32(x:bool)</span> <span class="pre">-&gt;</span> <span class="pre">y:u32</span></code> は <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">x</span> <span class="pre">case</span> <span class="pre">true:bool</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">1:u32</span> <span class="pre">}</span> <span class="pre">case</span> <span class="pre">false:bool</span> <span class="pre">{</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">0:u32</span> <span class="pre">}</span></code> として実行されます。</p>
 </div>
 </div>
 <div class="section" id="low-level-functions">
 <h3>Low-level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h3>
-<p>The following functions must be available:</p>
+<p>以下の関数が利用可能でなければなりません:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="41%" />
@@ -774,12 +742,12 @@ to memory at position dst</td>
 </div>
 <div class="section" id="backends">
 <h3>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h3>
-<p>Backends or targets are the translators from Yul to a specific bytecode. Each of the backends can expose functions
-prefixed with the name of the backend. We reserve <code class="docutils literal notranslate"><span class="pre">evm_</span></code> and <code class="docutils literal notranslate"><span class="pre">ewasm_</span></code> prefixes for the two proposed backends.</p>
+<p>バックエンドやターゲットはYulから特定のバイトコードへのtranslatorとなります。各バックエンドは、バックエンドの名前を接頭辞として持つ関数を公開することができます。
+また、バックエンドのために <code class="docutils literal notranslate"><span class="pre">evm</span></code> と <code class="docutils literal notranslate"><span class="pre">ewasm</span></code> の接頭辞を予約語としています。</p>
 </div>
 <div class="section" id="backend-evm">
 <h3>Backend: EVM<a class="headerlink" href="#backend-evm" title="Permalink to this headline">¶</a></h3>
-<p>The EVM target will have all the underlying EVM opcodes exposed with the <cite>evm_</cite> prefix.</p>
+<p>EVMターゲットは <code class="docutils literal notranslate"><span class="pre">evm_</span></code> 接頭辞で公開されているすべての基底のEVMオペコードを持ちます。</p>
 </div>
 <div class="section" id="backend-evm-1-5">
 <h3>Backend: “EVM 1.5”<a class="headerlink" href="#backend-evm-1-5" title="Permalink to this headline">¶</a></h3>
@@ -792,12 +760,10 @@ prefixed with the name of the backend. We reserve <code class="docutils literal 
 </div>
 <div class="section" id="specification-of-yul-object">
 <h2>Specification of Yul Object<a class="headerlink" href="#specification-of-yul-object" title="Permalink to this headline">¶</a></h2>
-<p>Yul objects are used to group named code and data sections.
-The functions <code class="docutils literal notranslate"><span class="pre">datasize</span></code>, <code class="docutils literal notranslate"><span class="pre">dataoffset</span></code> and <code class="docutils literal notranslate"><span class="pre">datacopy</span></code>
-can be used to access these sections from within code.
-Hex strings can be used to specify data in hex encoding,
-regular strings in native encoding. For code,
-<code class="docutils literal notranslate"><span class="pre">datacopy</span></code> will access its assembled binary representation.</p>
+<p>Yulオブジェクトは、名前付きコードとデータセクションをグループ化するために使用されます。
+関数 <code class="docutils literal notranslate"><span class="pre">datasize</span></code> 、 <code class="docutils literal notranslate"><span class="pre">dataoffset</span></code> および <code class="docutils literal notranslate"><span class="pre">datacopy</span></code> は、コード内からこれらのセクションにアクセスするために使用できます。
+また、16進数エンコーディングでデータを指定し、ネイティブエンコーディングで通常の文字列を指定するために16進数の文字列を使用できます。
+コードの場合、 <code class="docutils literal notranslate"><span class="pre">datacopy</span></code> はassembled binary representationにアクセスします。</p>
 <p>Grammar:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Object</span> <span class="o">=</span> <span class="s">&#39;object&#39;</span> <span class="n">StringLiteral</span> <span class="s">&#39;{&#39;</span> <span class="n">Code</span> <span class="p">(</span> <span class="n">Object</span> <span class="o">|</span> <span class="n">Data</span> <span class="p">)</span><span class="o">*</span> <span class="s">&#39;}&#39;</span>
 <span class="n">Code</span> <span class="o">=</span> <span class="s">&#39;code&#39;</span> <span class="n">Block</span>
@@ -806,32 +772,29 @@ regular strings in native encoding. For code,
 <span class="n">StringLiteral</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="p">([</span><span class="o">^</span><span class="s">&quot;</span><span class="se">\r\n\\</span><span class="s">] | &#39;</span><span class="se">\\</span><span class="s">&#39; .)* &#39;&quot;&#39;</span>
 </pre></div>
 </div>
-<p>Above, <code class="docutils literal notranslate"><span class="pre">Block</span></code> refers to <code class="docutils literal notranslate"><span class="pre">Block</span></code> in the Yul code grammar explained in the previous chapter.</p>
-<p>An example Yul Object is shown below:</p>
-<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// Code consists of a single object. A single &quot;code&quot; node is the code of the object.</span>
-<span class="c1">// Every (other) named object or data section is serialized and</span>
-<span class="c1">// made accessible to the special built-in functions datacopy / dataoffset / datasize</span>
-<span class="c1">// Access to nested objects can be performed by joining the names using ``.``.</span>
-<span class="c1">// The current object and sub-objects and data items inside the current object</span>
-<span class="c1">// are in scope without nested access.</span>
+<p>以上において、<code class="docutils literal notranslate"><span class="pre">Block</span></code> は前の章で説明したYulコード文法の <code class="docutils literal notranslate"><span class="pre">Block</span></code> を表します。</p>
+<p>Yulオブジェクトの例を以下に示します:</p>
+<div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// コードは単一のオブジェクトで構成されています。単一の &quot;code&quot;ノードはオブジェクトのコードです。</span>
+<span class="c1">// すべての（他の）名前付きオブジェクトまたはデータセクションはシリアライズされ、</span>
+<span class="c1">// 特別な組み込み関数 datacopy/dataoffset/datasize にアクセスできるようになります。</span>
+<span class="c1">// ネストされたオブジェクトへのアクセスは ``.`` を使って名前を結合することによって可能です。</span>
+<span class="c1">// 現在のオブジェクト、現在のオブジェクト内のサブオブジェクト、およびデータ項目は、ネストアクセスなしでスコープ内にあります。</span>
 <span class="n">object</span> <span class="s">&quot;Contract1&quot;</span> <span class="p">{</span>
     <span class="n">code</span> <span class="p">{</span>
-        <span class="c1">// first create &quot;runtime.Contract2&quot;</span>
+        <span class="c1">// 最初に &quot;runtime.Contract2&quot; を作成します</span>
         <span class="n">let</span> <span class="n">size</span> <span class="o">=</span> <span class="n">datasize</span><span class="p">(</span><span class="s">&quot;runtime.Contract2&quot;</span><span class="p">)</span>
         <span class="n">let</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-        <span class="c1">// This will turn into a memory-&gt;memory copy for eWASM and</span>
-        <span class="c1">// a codecopy for EVM</span>
+        <span class="c1">// 以下はeWASMの場合はmemory-&gt; memory、</span>
+        <span class="c1">// EVMの場合は &quot;runtime.Contract2&quot;のコードコピーになります</span>
         <span class="n">datacopy</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">dataoffset</span><span class="p">(</span><span class="s">&quot;runtime.Contract2&quot;</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
-        <span class="c1">// constructor parameter is a single number 0x1234</span>
+        <span class="c1">// コンストラクタパラメータは単一値0x1234になります</span>
         <span class="n">mstore</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="mh">0x1234</span><span class="p">)</span>
         <span class="n">create</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
 
-        <span class="c1">// now return the runtime object (this is</span>
-        <span class="c1">// constructor code)</span>
+        <span class="c1">// これでランタイムオブジェクトを返すようになりました（これはコンストラクタコードです）</span>
         <span class="n">size</span> <span class="o">:=</span> <span class="n">datasize</span><span class="p">(</span><span class="s">&quot;runtime&quot;</span><span class="p">)</span>
         <span class="n">offset</span> <span class="o">:=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-        <span class="c1">// This will turn into a memory-&gt;memory copy for eWASM and</span>
-        <span class="c1">// a codecopy for EVM</span>
+        <span class="c1">// 以下はeWASMの場合はmemory-&gt; memory、EVMの場合はcodecopyになります。</span>
         <span class="n">datacopy</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">dataoffset</span><span class="p">(</span><span class="s">&quot;runtime&quot;</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="p">}</span>
@@ -840,28 +803,27 @@ regular strings in native encoding. For code,
 
     <span class="n">object</span> <span class="s">&quot;runtime&quot;</span> <span class="p">{</span>
         <span class="n">code</span> <span class="p">{</span>
-            <span class="c1">// runtime code</span>
+            <span class="c1">// ランタイムコード</span>
 
             <span class="n">let</span> <span class="n">size</span> <span class="o">=</span> <span class="n">datasize</span><span class="p">(</span><span class="s">&quot;Contract2&quot;</span><span class="p">)</span>
             <span class="n">let</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-            <span class="c1">// This will turn into a memory-&gt;memory copy for eWASM and</span>
-            <span class="c1">// a codecopy for EVM</span>
+            <span class="c1">// 以下はeWASMの場合はmemory-&gt; memory、EVMの場合はcodecopyになります。</span>
             <span class="n">datacopy</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">dataoffset</span><span class="p">(</span><span class="s">&quot;Contract2&quot;</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
-            <span class="c1">// constructor parameter is a single number 0x1234</span>
+            <span class="c1">// コンストラクタパラメータは単一値0x1234になります</span>
             <span class="n">mstore</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="mh">0x1234</span><span class="p">)</span>
             <span class="n">create</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
         <span class="p">}</span>
 
-        <span class="c1">// Embedded object. Use case is that the outside is a factory contract,</span>
-        <span class="c1">// and Contract2 is the code to be created by the factory</span>
+        <span class="c1">// 埋め込みオブジェクト。ユースケースとして、オブジェクト外においてファクトリコントラクトであり、</span>
+        <span class="c1">// Contract2がファクトリによって作成されるコードです。</span>
         <span class="n">object</span> <span class="s">&quot;Contract2&quot;</span> <span class="p">{</span>
             <span class="n">code</span> <span class="p">{</span>
-                <span class="c1">// code here ...</span>
+                <span class="c1">// コード...</span>
             <span class="p">}</span>
 
             <span class="n">object</span> <span class="s">&quot;runtime&quot;</span> <span class="p">{</span>
                 <span class="n">code</span> <span class="p">{</span>
-                    <span class="c1">// code here ...</span>
+                    <span class="c1">// コード...</span>
                 <span class="p">}</span>
              <span class="p">}</span>
 
@@ -885,7 +847,7 @@ regular strings in native encoding. For code,
         <a href="style-guide.html" class="btn btn-neutral float-right" title="Style Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="abi-spec.html" class="btn btn-neutral float-left" title="Contract ABI Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="abi-spec.html" class="btn btn-neutral float-left" title="Basic Design" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

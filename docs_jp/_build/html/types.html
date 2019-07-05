@@ -146,12 +146,24 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -450,7 +462,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 </div>
 <div class="section" id="contract-types">
 <span id="index-6"></span><span id="id7"></span><h3>Contract Types<a class="headerlink" href="#contract-types" title="Permalink to this headline">¶</a></h3>
-<p>全ての <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a> は自分自身の肩を定義します。
+<p>全ての <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a> は自分自身の型を定義します。
 あるコントラクトからそのコントラクトが継承しているコントラクトへ暗黙的に変換することができます。
 コントラクトは他のコントラクト型から、もしくは他のコントラクト型へ明示的に変換することができます。さらに <code class="docutils literal notranslate"><span class="pre">address</span></code> 型への変換も可能です。</p>
 <p>コントラクト型がpayableのフォールバックファンクションを持っている時のみ、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型から、もしくは <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型への明示的な変換が可能です。
@@ -795,7 +807,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 <div class="section" id="arrays">
 <span id="index-15"></span><span id="id15"></span><h3>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h3>
 <p>配列はコンパイル時での固定サイズか動的サイズです。</p>
-<p>固定サイズ <code class="docutils literal notranslate"><span class="pre">k</span></code> で要素の型が <code class="docutils literal notranslate"><span class="pre">T</span></code> の配列は <code class="docutils literal notranslate"><span class="pre">T[k]`</span> <span class="pre">の様に記述されます。そして動的サイズの配列は</span> <span class="pre">``T[]</span></code> の様に書けます。</p>
+<p>固定サイズ <code class="docutils literal notranslate"><span class="pre">k</span></code> で要素の型が <code class="docutils literal notranslate"><span class="pre">T</span></code> の配列は <code class="docutils literal notranslate"><span class="pre">T[k]</span></code> の様に記述されます。そして動的サイズの配列は <code class="docutils literal notranslate"><span class="pre">T[]</span></code> の様に書けます。</p>
 <p>例えば、5個の <code class="docutils literal notranslate"><span class="pre">uint</span></code> 動的配列の配列は <code class="docutils literal notranslate"><span class="pre">uint[][5]</span></code> の様に書けます。この記法は他の記法でも使われています。Solidityでは、たとえ <code class="docutils literal notranslate"><span class="pre">X</span></code> 自体が配列だとしても <code class="docutils literal notranslate"><span class="pre">X[3]</span></code> は常に3つの要素を含んだ <code class="docutils literal notranslate"><span class="pre">X</span></code> 型となります。これは例えばC言語の様な他の言語とは異なっています。</p>
 <p>インデックスはゼロベースで、アクセスする際には宣言とは逆方向でアクセスします。</p>
 <p>例えば、もし <code class="docutils literal notranslate"><span class="pre">uint[][5]</span> <span class="pre">x</span> <span class="pre">memory</span></code> を持っていたら、3つ目の動的配列に入っている2つ目の <code class="docutils literal notranslate"><span class="pre">uint</span></code> には <code class="docutils literal notranslate"><span class="pre">x[2][1]</span></code> でアクセスできます。また、3つ目の動的配列自体には <code class="docutils literal notranslate"><span class="pre">x[2]</span></code> でアクセスします。繰り返しですが、<code class="docutils literal notranslate"><span class="pre">T[5]</span> <span class="pre">a</span></code> という配列（<code class="docutils literal notranslate"><span class="pre">T</span></code> 自体は配列でも良い）を持っていたら、<code class="docutils literal notranslate"><span class="pre">a[2]</span></code> というのは常に <code class="docutils literal notranslate"><span class="pre">T</span></code> という型になります。</p>
@@ -872,9 +884,9 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 そのサイズ以上の配列要素にアクセスしようとすると、自動でサイズを変更するのではなく、フェイルアサーションが発生します。
 長さを大きくすると、ゼロ初期化された要素が配列に加わります。長さを減らすと、削除された各要素に対して <code class="docutils literal notranslate"><span class="pre">delete</span></code> を暗黙的に行います。もしstorage出ない非動的配列のリサイズを行おうとすると、<code class="docutils literal notranslate"><span class="pre">Value</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">an</span> <span class="pre">lvalue</span></code> というエラーが発生します。</dd>
 <dt><strong>push</strong>:</dt>
-<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">push</span></code> というファンクションを持ち、配列の最後に要素を追加することができます。その要素はゼロ初期化されます。ファンクションは新しい長さを返します。</dd>
+<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（</span> <span class="pre">``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">push</span></code> というファンクションを持ち、配列の最後に要素を追加することができます。その要素はゼロ初期化されます。ファンクションは新しい長さを返します。</dd>
 <dt><strong>pop</strong>:</dt>
-<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">pop</span></code> というファンクションを持ち、配列の最後から一つの要素を削除することができます。これも暗黙的に削除する要素に対して <code class="docutils literal notranslate"><span class="pre">delete</span></code> を呼び出しています。</dd>
+<dd>動的storage配列と <code class="docutils literal notranslate"><span class="pre">bytes``（</span> <span class="pre">``string</span></code> ではなく）は <code class="docutils literal notranslate"><span class="pre">pop</span></code> というファンクションを持ち、配列の最後から一つの要素を削除することができます。これも暗黙的に削除する要素に対して <code class="docutils literal notranslate"><span class="pre">delete</span></code> を呼び出しています。</dd>
 </dl>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -1107,7 +1119,7 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 <span id="types-conversion-elementary-types"></span><span id="index-22"></span><h2>Conversions between Elementary Types<a class="headerlink" href="#conversions-between-elementary-types" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="implicit-conversions">
 <h3>Implicit Conversions<a class="headerlink" href="#implicit-conversions" title="Permalink to this headline">¶</a></h3>
-<p>もし演算子が違う型に使われた場合、コンパイラは暗黙のうちに演算対象の型を変換します（代入、割り当て時も同様です）。一般に、セマンティック的に同じ扱いができ、何の情報も失われないのであれば、暗黙の値型の変換は可能です: <code class="docutils literal notranslate"><span class="pre">uint8</span></code> は <code class="docutils literal notranslate"><span class="pre">uint16</span></code>　に、<code class="docutils literal notranslate"><span class="pre">int128</span></code> は <code class="docutils literal notranslate"><span class="pre">int256</span></code> に変換可能ですが、<cite>int8`</cite> は <code class="docutils literal notranslate"><span class="pre">uint256</span></code> に変換不可です（<code class="docutils literal notranslate"><span class="pre">uint256</span></code> は例えば <code class="docutils literal notranslate"><span class="pre">-1</span></code> を持てないからです）。</p>
+<p>もし演算子が違う型に使われた場合、コンパイラは暗黙のうちに演算対象の型を変換します（代入、割り当て時も同様です）。一般に、セマンティック的に同じ扱いができ、何の情報も失われないのであれば、暗黙の値型の変換は可能です: <code class="docutils literal notranslate"><span class="pre">uint8</span></code> は <code class="docutils literal notranslate"><span class="pre">uint16</span></code>　に、<code class="docutils literal notranslate"><span class="pre">int128</span></code> は <code class="docutils literal notranslate"><span class="pre">int256</span></code> に変換可能ですが、<code class="docutils literal notranslate"><span class="pre">int8</span></code> は <code class="docutils literal notranslate"><span class="pre">uint256</span></code> に変換不可です（<code class="docutils literal notranslate"><span class="pre">uint256</span></code> は例えば <code class="docutils literal notranslate"><span class="pre">-1</span></code> を持てないからです）。</p>
 <p>詳細は型のセクションを参照してください。</p>
 </div>
 <div class="section" id="explicit-conversions">

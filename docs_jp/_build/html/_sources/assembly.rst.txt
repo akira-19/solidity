@@ -141,10 +141,9 @@ Opcodes
 opcodeが引数をとる場合（常にスタックの上からとります）、括弧の中に引数が入ります。
 引数の順番はnon-functional styleでは逆さまに入っています（後述します）。
 ``-`` がついているopcodeは何もスタック上にプッシュしません（結果も返しません）。``*`` がついているopcodeは特別で、他のopcodeは1つだけスタック上にプッシュします（"返り値"）。
-``F``、``H``、``B``、``C`` がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.
+``F``、``H``、``B``、``C`` がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinopleは未だプラニングの段階ですので、そのマークがついているインストラクションは無効なインストラクションの例外を投げます。
 
-In the following, ``mem[a...b)`` signifies the bytes of memory starting at position ``a`` up to
-but not including position ``b`` and ``storage[p]`` signifies the storage contents at position ``p``.
+下記で、``mem[a...b)`` は 位置 ``a`` から始まって、``b`` で終わる（bは含まない）メモリのバイトを表しており、``storage[p]`` は 位置 ``p`` でのストレージの内容を表しています。
 
 ``pushi`` と ``jumpdest`` のopcodeは直接は使用できません。
 
@@ -324,11 +323,9 @@ but not including position ``b`` and ``storage[p]`` signifies the storage conten
 Literals
 --------
 
-You can use integer constants by typing them in decimal or hexadecimal notation and an
-appropriate ``PUSHi`` instruction will automatically be generated. The following creates code
-to add 2 and 3 resulting in 5 and then computes the bitwise ``AND`` with the string "abc".
-The final value is assigned to a local variable called ``x``.
-Strings are stored left-aligned and cannot be longer than 32 bytes.
+10進数か16進数の表記をつけることにより整数の定数を使用することができます。そして、適切な ``PUSHi`` インストラクションが自動的に生成されます。下記のコードは2と3を足して5になり、文字列"abc"とのビット積をとります。
+最終的な値はローカル変数の ``x`` に割り当てられます。
+文字列は左詰めで保存され、32バイト以下でなければいけません。
 
 .. code::
 
@@ -338,40 +335,29 @@ Strings are stored left-aligned and cannot be longer than 32 bytes.
 Functional Style
 -----------------
 
-For a sequence of opcodes, it is often hard to see what the actual
-arguments for certain opcodes are. In the following example,
-``3`` is added to the contents in memory at position ``0x80``.
+opcodeのシーケンスでは、あるopcodeの実際の引数が何であるか見るのが大変なことがままあります。下記の例では、位置 ``0x80`` にあるメモリの内容に ``3`` が足されます。
 
 .. code::
 
     3 0x80 mload add 0x80 mstore
 
-Solidity inline assembly has a "functional style" notation where the same code
-would be written as follows:
+Solidityのインラインアセンブリは下記のように書かれる"ファンクショナルスタイル"の表記を持っています:
 
 .. code::
 
     mstore(0x80, add(mload(0x80), 3))
 
-If you read the code from right to left, you end up with exactly the same
-sequence of constants and opcodes, but it is much clearer where the
-values end up.
+右から左に読むと、完全に同じ定数とopcodeのシーケンスとなりますが、とても読みやすいです。
 
-If you care about the exact stack layout, just note that the
-syntactically first argument for a function or opcode will be put at the
-top of the stack.
+もしスタックのレイアウトが気になるなら、覚えておいて欲しいのは、シンタックス的にファンクションもしくはopcodeの最初の引数はスタックの一番上に置かれるということです。
 
 Access to External Variables, Functions and Libraries
 -----------------------------------------------------
 
-You can access Solidity variables and other identifiers by using their name.
-For variables stored in the memory data location, this pushes the address, and not the value
-onto the stack. Variables stored in the storage data location are different, as they might not
-occupy a full storage slot, so their "address" is composed of a slot and a byte-offset
-inside that slot. To retrieve the slot pointed to by the variable ``x``, you
-use ``x_slot``, and to retrieve the byte-offset you use ``x_offset``.
+Solidityの変数や他の識別子にはその名前でアクセスすることができます。
+メモリに保存されている変数に関してはスタックに値ではなくアドレスをプッシュします。ストレージに保存されている変数はこれとは異なります。全てのストレージのスロットをおそらく占有しないので、"アドレス"はスロットとスロット内のバイトオフセットで構成されています。変数 ``x`` でポイントされているスロットを読み出すには ``x_slot`` を使用してください。バイトオフセットを読み出すには、``x_offset`` を使用してください。
 
-Local Solidity variables are available for assignments, for example:
+Solidityのローカル変数は割り当て可能です。例えば:
 
 .. code::
 
@@ -387,30 +373,23 @@ Local Solidity variables are available for assignments, for example:
     }
 
 .. warning::
-    If you access variables of a type that spans less than 256 bits
-    (for example ``uint64``, ``address``, ``bytes16`` or ``byte``),
-    you cannot make any assumptions about bits not part of the
-    encoding of the type. Especially, do not assume them to be zero.
-    To be safe, always clear the data properly before you use it
-    in a context where this is important:
+    256ビット未満の型の変数（例えば、``uint64``、``address``、``bytes16``、``byte``）にアクセスする場合、型のエンコーディングの一部ではないビットに対してどんな想定もできません。特にゼロと想定してはいけません。
+    安全のために、コンテキスト内で使う前に常にデータを適切にクリアしてください:
     ``uint32 x = f(); assembly { x := and(x, 0xffffffff) /* now use x */ }``
-    To clean signed types, you can use the ``signextend`` opcode.
+    符号付の型をクリアするのに ``signextend`` opcodeが使用できます。
 
 Labels
 ------
 
-Support for labels has been removed in version 0.5.0 of Solidity.
-Please use functions, loops, if or switch statements instead.
+ラベルのサポートはSolidity 0.5.0版で削除されました。
+ファンクション、ループ、if文、switch文を代わりに使用してください。
 
 Declaring Assembly-Local Variables
 ----------------------------------
 
-You can use the ``let`` keyword to declare variables that are only visible in
-inline assembly and actually only in the current ``{...}``-block. What happens
-is that the ``let`` instruction will create a new stack slot that is reserved
-for the variable and automatically removed again when the end of the block
-is reached. You need to provide an initial value for the variable which can
-be just ``0``, but it can also be a complex functional-style expression.
+変数を宣言するのに、``let`` キーワードを使用することができます。letはインラインアセンブリ内でのみ、実際には現在の ``{...}``-block内でのみのスコープです。
+``let`` は新しい変数のためのスタックのスロットを作り、ブロックの最後に達したら自動的に削除されます。
+その変数には初期値を与える必要があります。ただの ``0`` でも良いですが、複雑なファンクショナルスタイルの式でも構いません。
 
 .. code::
 
@@ -434,13 +413,10 @@ be just ``0``, but it can also be a complex functional-style expression.
 Assignments
 -----------
 
-Assignments are possible to assembly-local variables and to function-local
-variables. Take care that when you assign to variables that point to
-memory or storage, you will only change the pointer and not the data.
+値の割り当てはアセンブリのローカル変数とファンクションのローカル変数へ可能です。メモリやストレージの変数を割り当てる時に注意したいのは、それはポインタを変えるだけで、データを変えているわけではないということです。
 
-Variables can only be assigned expressions that result in exactly one value.
-If you want to assign the values returned from a function that has
-multiple return parameters, you have to provide multiple variables.
+1つの値に落ち着く式しか変数に割り当てることはできません。
+もし複数の値を返すファンクションから受け取った値を変数に割り当てたいときは、複数の変数を用意しなければいけません。
 
 .. code::
 
@@ -454,9 +430,8 @@ multiple return parameters, you have to provide multiple variables.
 If
 --
 
-The if statement can be used for conditionally executing code.
-There is no "else" part, consider using "switch" (see below) if
-you need multiple alternatives.
+if文は条件分岐で使用できます。
+"else"部分はありません。複数の条件分岐があるのであれば、"switch"の使用を検討してください（下記参照）。
 
 .. code::
 
@@ -464,17 +439,15 @@ you need multiple alternatives.
         if eq(value, 0) { revert(0, 0) }
     }
 
-The curly braces for the body are required.
+ボディには波括弧が必要です。
 
 Switch
 ------
 
-You can use a switch statement as a very basic version of "if/else".
-It takes the value of an expression and compares it to several constants.
-The branch corresponding to the matching constant is taken. Contrary to the
-error-prone behaviour of some programming languages, control flow does
-not continue from one case to the next. There can be a fallback or default
-case called ``default``.
+基本的な"if/else"文として、switch文が使用可能です。
+ある式の値をとって、それをいくつかの定数と比較します。
+条件に合う定数の分岐が選ばれます。
+間違いを起こしやすいいくつかのプログラミング言語とは異なり、操作フローはある条件から次の条件へコンテニューしません。フォールバックもしくは ``default`` というデフォルトの条件が使えます。
 
 .. code::
 
@@ -490,20 +463,15 @@ case called ``default``.
         sstore(0, div(x, 2))
     }
 
-The list of cases does not require curly braces, but the body of a
-case does require them.
+
+条件のリストでは波括弧は必要ありませんが、ボディでは必要となります。
 
 Loops
 -----
 
-Assembly supports a simple for-style loop. For-style loops have
-a header containing an initializing part, a condition and a post-iteration
-part. The condition has to be a functional-style expression, while
-the other two are blocks. If the initializing part
-declares any variables, the scope of these variables is extended into the
-body (including the condition and the post-iteration part).
+アセンブリは単純なforループをサポートしています。forループは初期化部分、条件、イテレーション後のパートを含むヘッダを持っています。条件はファンクショナルスタイルの式である必要がありますが、他の2つはブロックです。初期化部分で変数を宣言した場合、この変数のスコープは本体（条件、イテレーション後のパートを含む）に拡張されます。
 
-The following example computes the sum of an area in memory.
+次の例ではメモリ内のある領域の合計を計算しています。
 
 .. code::
 
@@ -514,8 +482,7 @@ The following example computes the sum of an area in memory.
         }
     }
 
-For loops can also be written so that they behave like while loops:
-Simply leave the initialization and post-iteration parts empty.
+　forループはwhileループの様に書くこともできます:単純に初期化部分とイテレーション後のパートを空にします。
 
 .. code::
 
@@ -531,20 +498,14 @@ Simply leave the initialization and post-iteration parts empty.
 Functions
 ---------
 
-Assembly allows the definition of low-level functions. These take their
-arguments (and a return PC) from the stack and also put the results onto the
-stack. Calling a function looks the same way as executing a functional-style
-opcode.
+アセンブリは低レベルファンクションの定義もできます。
+このファンクションは引数（とリターンPC）をスタックからとってきます。また、スタックに結果をプットします。ファンクションの呼び出しはファンクショナルスタイルの実行のopcodeと同様な方法に見えます。
 
-Functions can be defined anywhere and are visible in the block they are
-declared in. Inside a function, you cannot access local variables
-defined outside of that function. There is no explicit ``return``
-statement.
+ファンクションはどこでも定義することができて、宣言されたブロック内がスコープになります。ファンクション内では、ファンクション外で宣言されたローカル変数にはアクセスできません。明示的な ``return`` の宣言はありません。
 
-If you call a function that returns multiple values, you have to assign
-them to a tuple using ``a, b := f(x)`` or ``let a, b := f(x)``.
+複数の値を返すファンクションをコールする場合、``a, b := f(x)`` or ``let a, b := f(x)`` を使って、その値をタプルに割り当てなければいけません。
 
-The following example implements the power function by square-and-multiply.
+下記の例では二乗と乗算を使った累乗の計算をしています。
 
 .. code::
 
@@ -564,112 +525,64 @@ The following example implements the power function by square-and-multiply.
 Things to Avoid
 ---------------
 
-Inline assembly might have a quite high-level look, but it actually is extremely
-low-level. Function calls, loops, ifs and switches are converted by simple
-rewriting rules and after that, the only thing the assembler does for you is re-arranging
-functional-style opcodes, counting stack height for
-variable access and removing stack slots for assembly-local variables when the end
-of their block is reached.
+インラインアセンブリはかなり高いレベルに見えるかもしれませんが、実際は非常に低レベルです。ファンクションコール、ループ、if文、switch文は単純なルールの書き換えで変換されます。その後アセンブラがするのはファンクショナルスタイルのopcodeを再度並び替え、変数アクセスのためのスタックハイトを数え、ブロックの最後になったらアセンブリローカル変数のためのスタックのスロットを削除するということだけです。
 
 Conventions in Solidity
 -----------------------
 
-In contrast to EVM assembly, Solidity knows types which are narrower than 256 bits,
-e.g. ``uint24``. In order to make them more efficient, most arithmetic operations just
-treat them as 256-bit numbers and the higher-order bits are only cleaned at the
-point where it is necessary, i.e. just shortly before they are written to memory
-or before comparisons are performed. This means that if you access such a variable
-from within inline assembly, you might have to manually clean the higher order bits
-first.
+EVMアセンブリと異なり、Solidityは ``uint24`` の様な256ビットより小さい型を識別できます。効率的にするために、ほとんどの算術演算はその型を256ビットの値として扱い、はみ出た分のビットは必要な時に処理します。例えば、メモリに書き込まれる直前や、比較演算がされる時です。つまり、もしインラインアセンブリ内の変数にアクセスする時には、まずマニュアルでそのはみ出たビットを処理する必要があるかもしれません。
 
-Solidity manages memory in a very simple way: There is a "free memory pointer"
-at position ``0x40`` in memory. If you want to allocate memory, just use the memory
-starting from where this pointer points at and update it accordingly.
-There is no guarantee that the memory has not been used before and thus
-you cannot assume that its contents are zero bytes.
-There is no built-in mechanism to release or free allocated memory.
-Here is an assembly snippet that can be used for allocating memory::
+Solidityはメモリはとてもシンプルな方法で管理しています。
+メモリ内の ``0x40`` に"free memory pointer"があります。メモリを振り分ける時に、このポインタが示しているメモリから始めて、順にアップデートしていくだけです。
+そのメモリが以前に使われていたかどうかの保証はないので、その中身がゼロであると仮定はできません。
+メモリを解放したり、好きなところにメモリを割り当てる内蔵機能は付いていません。
+下記はメモリの割り当てのアセンブリの例です::
 
     function allocate(length) -> pos {
       pos := mload(0x40)
       mstore(0x40, add(pos, length))
     }
 
-The first 64 bytes of memory can be used as "scratch space" for short-term
-allocation. The 32 bytes after the free memory pointer (i.e. starting at ``0x60``)
-is meant to be zero permanently and is used as the initial value for
-empty dynamic memory arrays.
-This means that the allocatable memory starts at ``0x80``, which is the initial value
-of the free memory pointer.
+メモリの最初の64バイトは短期間の割り当てのための"scratch space"として使うことができます。フリーメモリポインタ（ ``0x60`` から始まる様な）の32バイト後はずっと0であるはずで、空の動的メモリ配列の初期値として使われます。
+つまり、割り当て可能なメモリは ``0x80`` から始まり、それはフリーメモリポインタの初期値です。
 
-Elements in memory arrays in Solidity always occupy multiples of 32 bytes (yes, this is
-even true for ``byte[]``, but not for ``bytes`` and ``string``). Multi-dimensional memory
-arrays are pointers to memory arrays. The length of a dynamic array is stored at the
-first slot of the array and followed by the array elements.
+Solidityのメモリ配列の要素は常に32バイトの倍数を占めています（これは ``byte[]`` では同じですが、``bytes`` と ``string`` では違います）。多次元メモリ配列はメモリ配列のポインタです。動的配列の長さは配列の最初のスロットに保存され、その他に配列の要素が続きます。
 
 .. warning::
-    Statically-sized memory arrays do not have a length field, but it might be added later
-    to allow better convertibility between statically- and dynamically-sized arrays, so
-    please do not rely on that.
+    静的サイズのメモリ配列は長さの領域を持っていません。しかし、今後静的配列と動的配列の互換性のために追加されるかもしれません。
 
 
 Standalone Assembly
 ===================
 
-The assembly language described as inline assembly above can also be used
-standalone and in fact, the plan is to use it as an intermediate language
-for the Solidity compiler. In this form, it tries to achieve several goals:
+上記でインラインアセンブリとして紹介したアセンブリ言語はスタンドアローンとしても使用可能で、実はSolidityのコンパイラとの中間言語として使用する予定です。ここでは、いくつか達成したいことがあります:
 
-1. Programs written in it should be readable, even if the code is generated by a compiler from Solidity.
-2. The translation from assembly to bytecode should contain as few "surprises" as possible.
-3. Control flow should be easy to detect to help in formal verification and optimization.
+1. その中で書かれたプログラムはSolidityからコンパイラを通じて生成されたとしても読んで理解できるものであるべきです。
+2. アセンブリからバイトコードへの変換は可能な限り"サプライズ"を含まない様にするべきです。
+3. 制御フローは形式的検証や最適化をしやすくするために、簡単に検知されるべきです。
 
-In order to achieve the first and last goal, assembly provides high-level constructs
-like ``for`` loops, ``if`` and ``switch`` statements and function calls. It should be possible
-to write assembly programs that do not make use of explicit ``SWAP``, ``DUP``,
-``JUMP`` and ``JUMPI`` statements, because the first two obfuscate the data flow
-and the last two obfuscate control flow. Furthermore, functional statements of
-the form ``mul(add(x, y), 7)`` are preferred over pure opcode statements like
-``7 y x add mul`` because in the first form, it is much easier to see which
-operand is used for which opcode.
+最初と最後の目標を達成するためにアセンブリでは ``for`` ループ、``if``、``switch`` 文の様な高レベルの概念やファンクションコールが使えます。明示的な ``SWAP``、``DUP``、``JUMP``、``JUMPI`` を使わないアセンブリのプログラムを書くことが可能であるべきです。なぜなら初めの2つはデータフローを分かりにくくし、後の2つは制御フローを分かりにくくするからです。
+さらに、``mul(add(x, y), 7)`` という形のファンクショナルステートメントは ``7 y x add mul`` の様なピュアなopcodeより好ましいです。なぜならば、最初の式の方がどっちのオペランドにどっちのopcodeを使うのか分かりやすいからです。
 
-The second goal is achieved by compiling the
-higher level constructs to bytecode in a very regular way.
-The only non-local operation performed
-by the assembler is name lookup of user-defined identifiers (functions, variables, ...),
-which follow very simple and regular scoping rules and cleanup of local variables from the stack.
+2つ目の目標に関しては、とても標準的な方法でより高いレベルの概念からバイトコードにコンパイルすることで達成します。
+アセンブラによって行われる唯一の非ローカル演算は、ユーザー定義の識別子（ファンクション、変数など）の名前検索です。その演算ではとてもシンプルで標準的なスコープのルールに則り、また標準的な方法でスタックからのローカル変数の削除します。
 
-Scoping: An identifier that is declared (label, variable, function, assembly)
-is only visible in the block where it was declared (including nested blocks
-inside the current block). It is not legal to access local variables across
-function borders, even if they would be in scope. Shadowing is not allowed.
-Local variables cannot be accessed before they were declared, but
-functions and assemblies can. Assemblies are special blocks that are used
-for e.g. returning runtime code or creating contracts. No identifier from an
-outer assembly is visible in a sub-assembly.
 
-If control flow passes over the end of a block, pop instructions are inserted
-that match the number of local variables declared in that block.
-Whenever a local variable is referenced, the code generator needs
-to know its current relative position in the stack and thus it needs to
-keep track of the current so-called stack height. Since all local variables
-are removed at the end of a block, the stack height before and after the block
-should be the same. If this is not the case, compilation fails.
 
-Using ``switch``, ``for`` and functions, it should be possible to write
-complex code without using ``jump`` or ``jumpi`` manually. This makes it much
-easier to analyze the control flow, which allows for improved formal
-verification and optimization.
+Scoping: 宣言された識別子（ラベル、変数、ファンクション、アセンブリ）は宣言されたブロック内（現在のブロックの内側のネストされたブロックも含む）のみがスコープとなります。たとえスコープ内だったとしてもファンクションの垣根を超えてローカル変数にはアクセスできません。シャドーイングは使えません。
+ローカル変数は宣言前には使えませんが、ファンクションやアセンブリは使用可能です。アセンブリはランタイムコードを返したり、コントラクトの作成に使われる特別なブロックです。アウターのアセンブリの識別子はサブアセンブリの中では使えません。
 
-Furthermore, if manual jumps are allowed, computing the stack height is rather complicated.
-The position of all local variables on the stack needs to be known, otherwise
-neither references to local variables nor removing local variables automatically
-from the stack at the end of a block will work properly.
+もし制御フローが最後のブロックを通ったら、ブロック内で宣言されたローカル変数の数だけポップの命令が挿入されます。
+ローカル変数がリファレンスされる時は、コードジェネレータはスタック内でのその変数の相対的な位置を把握している必要があり、そのためいわゆるブロックハイトをトラックしています。ブロックの最後に全てのローカル変数は削除されるので、スタックハイトはブロックの前後で同じのはずです。もし同じでない場合、コンパイルは失敗します。
+
+``switch``、``for``、ファンクションを使えば、手動で ``jump`` もしくは ``jumpi`` を使わずに複雑なコードが書けるはずです。これにより制御フローの分析がとても簡単になり、形式的検証や最適化が改善されます。
+
+さらに、手動でのジャンプができると、スタックハイトの計算はむしろ複雑になります。全てのスタック上のローカル変数の位置は既知である必要あり、そうでなければ、ローカル変数への参照やブロックの最後に自動でスタックからローカル変数を削除する機能はちゃんと動作しません。
 
 Example:
 
-We will follow an example compilation from Solidity to assembly.
-We consider the runtime bytecode of the following Solidity program::
+Solidityからアセンブリへのコンパイル例を見てみましょう。
+下記のラインタイムバイトコードを考えます::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -681,7 +594,7 @@ We consider the runtime bytecode of the following Solidity program::
       }
     }
 
-The following assembly will be generated::
+以下のアセンブリが生成されます::
 
     {
       mstore(0x40, 0x80) // store the "free memory pointer"
@@ -712,19 +625,15 @@ The following assembly will be generated::
 Assembly Grammar
 ----------------
 
-The tasks of the parser are the following:
+パーサのタスクは下記の通りです:
 
-- Turn the byte stream into a token stream, discarding C++-style comments
-  (a special comment exists for source references, but we will not explain it here).
-- Turn the token stream into an AST according to the grammar below
-- Register identifiers with the block they are defined in (annotation to the
-  AST node) and note from which point on, variables can be accessed.
+- バイトストリームをトークンストリームにし、C++スタイルのコメントを破棄します（参照ソースには特別なコメントがありますが、ここでは割愛します）。
+- 下記のグラマーに従って、トークンストリームをASTにします。
+- 識別子をその識別子が定義されたブロックと一緒に登録します（ASTノードへの注記）。どこから変数にアクセスできるか注意してください。
 
-The assembly lexer follows the one defined by Solidity itself.
+アセンブリの字句解析器はSolidityで定義されたものに従います。
 
-Whitespace is used to delimit tokens and it consists of the characters
-Space, Tab and Linefeed. Comments are regular JavaScript/C++ comments and
-are interpreted in the same way as Whitespace.
+ホワイトスペース（空白文字、タブ、改行）はトークンの範囲を決めるのに使用されます。コメントは標準のJavaScript/C++のコメントで、ホワイトスペースと同様に変換されます。
 
 Grammar::
 

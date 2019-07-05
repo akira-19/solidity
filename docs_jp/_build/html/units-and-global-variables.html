@@ -120,12 +120,24 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -344,15 +356,15 @@ payable``は返しません。復元されたアドレスで送金を行いた�
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.balance</span></code> (<code class="docutils literal notranslate"><span class="pre">uint256</span></code>):</dt>
 <dd><a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> のバランス（Wei）</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.transfer(uint256</span> <span class="pre">amount)</span></code>:</dt>
-<dd>与えられたWeiを:ref:<a href="#id9"><span class="problematic" id="id10">`</span></a>address`に送ります。失敗するとリバートし、固定で2300ガスを送ります。 （変更不可です。）</dd>
+<dd>与えられたWeiを <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> に送ります。失敗するとリバートし、固定で2300ガスを送ります。 （変更不可です。）</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.send(uint256</span> <span class="pre">amount)</span> <span class="pre">returns</span> <span class="pre">(bool)</span></code>:</dt>
-<dd>与えられたWeiを:ref:<a href="#id11"><span class="problematic" id="id12">`</span></a>address`に送ります。失敗すると``false``を返し、固定で2300ガスを送ります。 （変更不可です。）</dd>
+<dd>与えられたWeiを <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> に送ります。失敗すると <code class="docutils literal notranslate"><span class="pre">false</span></code> を返し、固定で2300ガスを送ります。 （変更不可です。）</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.call(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code>:</dt>
-<dd>低レベルの``CALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
+<dd>低レベルの <code class="docutils literal notranslate"><span class="pre">CALL</span></code> を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.delegatecall(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code>:</dt>
-<dd>低レベルの``DELEGATECALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
+<dd>低レベルの <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code> を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.staticcall(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code>:</dt>
-<dd>低レベルの``STATICCALL``を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
+<dd>低レベルの <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> を、与えられたペイロードと共に発行し、成否とデータを返し、使用可能なガスを全て送ります。（変更可能です。）</dd>
 </dl>
 <p>詳細は <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> を参照ください。</p>
 <div class="admonition warning">
@@ -383,7 +395,7 @@ payable``は返しません。復元されたアドレスで送金を行いた�
 <dt><code class="docutils literal notranslate"><span class="pre">this</span></code> (現在のコントラクトの型):</dt>
 <dd>現在のコントラクト、明示的に <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> と変換可能です。</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code>:</dt>
-<dd>現在のコントラクトを破壊し、与えられた:ref:<a href="#id13"><span class="problematic" id="id14">`</span></a>address`にファンドを送ります。</dd>
+<dd>現在のコントラクトを破壊し、与えられた:ref:<a href="#id9"><span class="problematic" id="id10">`</span></a>address`にファンドを送ります。</dd>
 </dl>
 <p>さらに、現在のコントラクトの全てのファンクションは現在のファンクションを含めて直接呼ぶことができます。</p>
 <div class="admonition note">

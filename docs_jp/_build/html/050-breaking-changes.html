@@ -88,13 +88,13 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Solidityソースファイルのレイアウト</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">コントラクトの構造</a></li>
-<li class="toctree-l2"><a class="reference internal" href="types.html">タイプ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">単位とグローバル変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html">Layout of a Solidity Source File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html">Structure of a Contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="assembly.html">Solidity Assembly</a></li>
@@ -123,12 +123,24 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -201,234 +213,158 @@
             
   <div class="section" id="solidity-v0-5-0-breaking-changes">
 <h1>Solidity v0.5.0 Breaking Changes<a class="headerlink" href="#solidity-v0-5-0-breaking-changes" title="Permalink to this headline">¶</a></h1>
-<p>This section highlights the main breaking changes introduced in Solidity
-version 0.5.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.5.0">the release changelog</a>.</p>
+<p>このセクションではSolidityバージョン0.5.0で導入された主要な変更を、変更の理由と影響あるコードをアップデートする方法と共に紹介します。
+フルリストは、<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.5.0">the release changelog</a> を参照ください。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Contracts compiled with Solidity v0.5.0 can still interface with contracts
-and even libraries compiled with older versions without recompiling or
-redeploying them.  Changing the interfaces to include data locations and
-visibility and mutability specifiers suffices. See the
-<a class="reference internal" href="#interoperability"><span class="std std-ref">Interoperability With Older Contracts</span></a> section below.</p>
+<p class="last">Solidityのバージョン0.5.0でコンパイルされたコントラクトは古いバージョンでコンパイルされたコントラクトやライブラリを再コンパイルもしくは再デプロイなしに使えます。
+データロケーション、可視性、ミュータビリティを含めるようにインターフェースを変えれば十分です。下記の <a class="reference internal" href="#interoperability"><span class="std std-ref">Interoperability With Older Contracts</span></a> を参照ください。</p>
 </div>
 <div class="section" id="semantic-only-changes">
 <h2>Semantic Only Changes<a class="headerlink" href="#semantic-only-changes" title="Permalink to this headline">¶</a></h2>
-<p>This section lists the changes that are semantic-only, thus potentially
-hiding new and different behavior in existing code.</p>
+<p>このセクションはセマンティクス上の変更だけのリストです。そのため、潜在的には現状のコードで、新しいもしくは異なる動作をしてしまうかもしれません。</p>
 <ul class="simple">
-<li>Signed right shift now uses proper arithmetic shift, i.e. rounding towards
-negative infinity, instead of rounding towards zero.  Signed and unsigned
-shift will have dedicated opcodes in Constantinople, and are emulated by
-Solidity for the moment.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">continue</span></code> statement in a <code class="docutils literal notranslate"><span class="pre">do...while</span></code> loop now jumps to the
-condition, which is the common behavior in such cases. It used to jump to the
-loop body. Thus, if the condition is false, the loop terminates.</li>
-<li>The functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> do not
-pad anymore when given a single <code class="docutils literal notranslate"><span class="pre">bytes</span></code> parameter.</li>
-<li>Pure and view functions are now called using the opcode <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code>
-instead of <code class="docutils literal notranslate"><span class="pre">CALL</span></code> if the EVM version is Byzantium or later. This
-disallows state changes on the EVM level.</li>
-<li>The ABI encoder now properly pads byte arrays and strings from calldata
-(<code class="docutils literal notranslate"><span class="pre">msg.data</span></code> and external function parameters) when used in external
-function calls and in <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code>. For unpadded encoding, use
-<code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code>.</li>
-<li>The ABI decoder reverts in the beginning of functions and in
-<code class="docutils literal notranslate"><span class="pre">abi.decode()</span></code> if passed calldata is too short or points out of bounds.
-Note that dirty higher order bits are still simply ignored.</li>
-<li>Forward all available gas with external function calls starting from
-Tangerine Whistle.</li>
+<li>符号付右シフトは現在適切な算術シフトを使っています。つまり、0への丸めの代わりに負の無限大への丸めとなります。符号付、符号なしのシフトはConstantinopleで専用のopcodeになり、その間Solidityによってエミュレートされます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">do...while</span></code> ループの中の <code class="docutils literal notranslate"><span class="pre">continue</span></code> は現在条件文にjumpします。そのような場合になる一般的な挙動です。以前はループの本体にjumpしていました。もし条件文がfalseだった場合、ループは終了します。</li>
+<li><code class="docutils literal notranslate"><span class="pre">bytes</span></code> が1つ与えられた時に、ファンクションの <code class="docutils literal notranslate"><span class="pre">.call()</span></code>、<code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>、<code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> はもうパディングしません。</li>
+<li>pureとviewファンクションはEVMバージョンがByzantium以降であれば、<code class="docutils literal notranslate"><span class="pre">CALL</span></code> の代わりに <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> を使って呼ばれます。このopcodeではEVMレベルで、状態変更ができません。</li>
+<li>外部のファンクションコールと <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code> で使われた時、ABIエンコーダは現在calldata（ <code class="docutils literal notranslate"><span class="pre">msg.data</span></code> と外部のファンクションパラメータ）のバイト配列と文字列を適切にパディングします。パディングされないエンコードしたい時は、<code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> を使用してください。</li>
+<li>ABIデコーダは渡されたcalldataが短すぎるもしくは範囲外を指し示していたら、ファンクションの始めと <code class="docutils literal notranslate"><span class="pre">abi.decode()</span></code> で状態を全て元に戻します。</li>
+</ul>
+<p>汚れた高次ビットは単純に無視されるということを覚えておいてください。</p>
+<ul class="simple">
+<li>Tangerine Whistleからは外部のファンクションコールで使用可能な全てのガスを転送します。</li>
 </ul>
 </div>
 <div class="section" id="semantic-and-syntactic-changes">
 <h2>Semantic and Syntactic Changes<a class="headerlink" href="#semantic-and-syntactic-changes" title="Permalink to this headline">¶</a></h2>
-<p>This section highlights changes that affect syntax and semantics.</p>
+<p>このセクションではシンタックスとセマンティクスに関連する変更を紹介します。</p>
 <ul class="simple">
-<li>The functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>, <code class="docutils literal notranslate"><span class="pre">staticcall()</span></code>,
-<code class="docutils literal notranslate"><span class="pre">keccak256()</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256()</span></code> and <code class="docutils literal notranslate"><span class="pre">ripemd160()</span></code> now accept only a single
-<code class="docutils literal notranslate"><span class="pre">bytes</span></code> argument. Moreover, the argument is not padded. This was changed to
-make more explicit and clear how the arguments are concatenated. Change every
-<code class="docutils literal notranslate"><span class="pre">.call()</span></code> (and family) to a <code class="docutils literal notranslate"><span class="pre">.call(&quot;&quot;)</span></code> and every <code class="docutils literal notranslate"><span class="pre">.call(signature,</span> <span class="pre">a,</span>
-<span class="pre">b,</span> <span class="pre">c)</span></code> to use <code class="docutils literal notranslate"><span class="pre">.call(abi.encodeWithSignature(signature,</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code> (the
-last one only works for value types).  Change every <code class="docutils literal notranslate"><span class="pre">keccak256(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code> to
-<code class="docutils literal notranslate"><span class="pre">keccak256(abi.encodePacked(a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code>. Even though it is not a breaking
-change, it is suggested that developers change
-<code class="docutils literal notranslate"><span class="pre">x.call(bytes4(keccak256(&quot;f(uint256)&quot;),</span> <span class="pre">a,</span> <span class="pre">b)</span></code> to
-<code class="docutils literal notranslate"><span class="pre">x.call(abi.encodeWithSignature(&quot;f(uint256)&quot;,</span> <span class="pre">a,</span> <span class="pre">b))</span></code>.</li>
-<li>Functions <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> now return
-<code class="docutils literal notranslate"><span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code> to provide access to the return data.  Change
-<code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">success</span> <span class="pre">=</span> <span class="pre">otherContract.call(&quot;f&quot;)</span></code> to <code class="docutils literal notranslate"><span class="pre">(bool</span> <span class="pre">success,</span> <span class="pre">bytes</span> <span class="pre">memory</span>
-<span class="pre">data)</span> <span class="pre">=</span> <span class="pre">otherContract.call(&quot;f&quot;)</span></code>.</li>
-<li>Solidity now implements C99-style scoping rules for function local
-variables, that is, variables can only be used after they have been
-declared and only in the same or nested scopes. Variables declared in the
-initialization block of a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop are valid at any point inside the
-loop.</li>
+<li><code class="docutils literal notranslate"><span class="pre">.call()</span></code>、<code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>、<code class="docutils literal notranslate"><span class="pre">staticcall()</span></code>、<code class="docutils literal notranslate"><span class="pre">keccak256()</span></code>、<code class="docutils literal notranslate"><span class="pre">sha256()</span></code>、<code class="docutils literal notranslate"><span class="pre">ripemd160()</span></code> は1つの <code class="docutils literal notranslate"><span class="pre">bytes</span></code> 引数だけを受け入れます。さらに引数はパディングされません。これは引数がどのように連結させるかをわかりやすくするためです。</li>
+</ul>
+<dl class="docutils">
+<dt>全ての <code class="docutils literal notranslate"><span class="pre">.call()</span></code> (and family) を <code class="docutils literal notranslate"><span class="pre">.call(&quot;&quot;)</span></code> に代えてください。<a href="#id1"><span class="problematic" id="id2">``</span></a>.call(signature, a,</dt>
+<dd>b, c)`` の代わりに <code class="docutils literal notranslate"><span class="pre">.call(abi.encodeWithSignature(signature,</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code> (最後のものは値型にしか使えません)を使ってください。また、<code class="docutils literal notranslate"><span class="pre">keccak256(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code> を <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encodePacked(a,</span> <span class="pre">b,</span> <span class="pre">c))</span></code> に代えてください。ブレーキングチェンジではありませんが、<code class="docutils literal notranslate"><span class="pre">x.call(bytes4(keccak256(&quot;f(uint256)&quot;),</span> <span class="pre">a,</span> <span class="pre">b)</span></code> から <code class="docutils literal notranslate"><span class="pre">x.call(abi.encodeWithSignature(&quot;f(uint256)&quot;,</span> <span class="pre">a,</span> <span class="pre">b))</span></code> に代えることをお勧めします。</dd>
+</dl>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">.call()</span></code>、<code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>、<code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code> は返ってきたデータにアクセスできるように現在 <code class="docutils literal notranslate"><span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code> を返します。<code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">success</span> <span class="pre">=</span> <span class="pre">otherContract.call(&quot;f&quot;)</span></code> を <a href="#id3"><span class="problematic" id="id4">``</span></a>(bool success, bytes memory</li>
+</ul>
+<p>data) = otherContract.call(“f”)`` に変更して下さい。</p>
+<ul class="simple">
+<li>Solidityは現在ファンクションのローカル変数に対してC99-styleのスコーピングのルールを使っています。その中で、変数は宣言された後でのみ有効で、同じもしくはネストされたスコープでのみ使えます。<code class="docutils literal notranslate"><span class="pre">for</span></code> ループの初期化ブロックの中で宣言された変数はループ内のどこでも有効です。</li>
 </ul>
 </div>
 <div class="section" id="explicitness-requirements">
 <h2>Explicitness Requirements<a class="headerlink" href="#explicitness-requirements" title="Permalink to this headline">¶</a></h2>
-<p>This section lists changes where the code now needs to be more explicit.
-For most of the topics the compiler will provide suggestions.</p>
+<p>このセクションはコードをもっと明示的にする様な変更のリストです。
+ほとんどの場合、コンパイラが忠告を出してくれます。</p>
 <ul class="simple">
-<li>Explicit function visibility is now mandatory.  Add <code class="docutils literal notranslate"><span class="pre">public</span></code> to every
-function and constructor, and <code class="docutils literal notranslate"><span class="pre">external</span></code> to every fallback or interface
-function that does not specify its visibility already.</li>
-<li>Explicit data location for all variables of struct, array or mapping types is
-now mandatory. This is also applied to function parameters and return
-variables.  For example, change <code class="docutils literal notranslate"><span class="pre">uint[]</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">m_x</span></code> to <code class="docutils literal notranslate"><span class="pre">uint[]</span> <span class="pre">storage</span> <span class="pre">x</span> <span class="pre">=</span>
-<span class="pre">m_x</span></code>, and <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">x)</span></code> to <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">memory</span> <span class="pre">x)</span></code>
-where <code class="docutils literal notranslate"><span class="pre">memory</span></code> is the data location and might be replaced by <code class="docutils literal notranslate"><span class="pre">storage</span></code> or
-<code class="docutils literal notranslate"><span class="pre">calldata</span></code> accordingly.  Note that <code class="docutils literal notranslate"><span class="pre">external</span></code> functions require
-parameters with a data location of <code class="docutils literal notranslate"><span class="pre">calldata</span></code>.</li>
-<li>Contract types do not include <code class="docutils literal notranslate"><span class="pre">address</span></code> members anymore in
-order to separate the namespaces.  Therefore, it is now necessary to
-explicitly convert values of contract type to addresses before using an
-<code class="docutils literal notranslate"><span class="pre">address</span></code> member.  Example: if <code class="docutils literal notranslate"><span class="pre">c</span></code> is a contract, change
-<code class="docutils literal notranslate"><span class="pre">c.transfer(...)</span></code> to <code class="docutils literal notranslate"><span class="pre">address(c).transfer(...)</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">c.balance</span></code> to <code class="docutils literal notranslate"><span class="pre">address(c).balance</span></code>.</li>
-<li>Explicit conversions between unrelated contract types are now disallowed. You can only
-convert from a contract type to one of its base or ancestor types. If you are sure that
-a contract is compatible with the contract type you want to convert to, although it does not
-inherit from it, you can work around this by converting to <code class="docutils literal notranslate"><span class="pre">address</span></code> first.
-Example: if <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are contract types, <code class="docutils literal notranslate"><span class="pre">B</span></code> does not inherit from <code class="docutils literal notranslate"><span class="pre">A</span></code> and
-<code class="docutils literal notranslate"><span class="pre">b</span></code> is a contract of type <code class="docutils literal notranslate"><span class="pre">B</span></code>, you can still convert <code class="docutils literal notranslate"><span class="pre">b</span></code> to type <code class="docutils literal notranslate"><span class="pre">A</span></code> using <code class="docutils literal notranslate"><span class="pre">A(address(b))</span></code>.
-Note that you still need to watch out for matching payable fallback functions, as explained below.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">address</span></code> type  was split into <code class="docutils literal notranslate"><span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>,
-where only <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> provides the <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function.  An
-<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> can be directly converted to an <code class="docutils literal notranslate"><span class="pre">address</span></code>, but the
-other way around is not allowed. Converting <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span>
-<span class="pre">payable</span></code> is possible via conversion through <code class="docutils literal notranslate"><span class="pre">uint160</span></code>. If <code class="docutils literal notranslate"><span class="pre">c</span></code> is a
-contract, <code class="docutils literal notranslate"><span class="pre">address(c)</span></code> results in <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> only if <code class="docutils literal notranslate"><span class="pre">c</span></code> has a
-payable fallback function. If you use the <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdraw pattern</span></a>,
-you most likely do not have to change your code because <code class="docutils literal notranslate"><span class="pre">transfer</span></code>
-is only used on <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> instead of stored addresses and <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>
-is an <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>.</li>
-<li>Conversions between <code class="docutils literal notranslate"><span class="pre">bytesX</span></code> and <code class="docutils literal notranslate"><span class="pre">uintY</span></code> of different size are now
-disallowed due to <code class="docutils literal notranslate"><span class="pre">bytesX</span></code> padding on the right and <code class="docutils literal notranslate"><span class="pre">uintY</span></code> padding on
-the left which may cause unexpected conversion results.  The size must now be
-adjusted within the type before the conversion.  For example, you can convert
-a <code class="docutils literal notranslate"><span class="pre">bytes4</span></code> (4 bytes) to a <code class="docutils literal notranslate"><span class="pre">uint64</span></code> (8 bytes) by first converting the
-<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> variable to <code class="docutils literal notranslate"><span class="pre">bytes8</span></code> and then to <code class="docutils literal notranslate"><span class="pre">uint64</span></code>. You get the
-opposite padding when converting through <code class="docutils literal notranslate"><span class="pre">uint32</span></code>.</li>
-<li>Using <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> in non-payable functions (or introducing it via a
-modifier) is disallowed as a security feature. Turn the function into
-<code class="docutils literal notranslate"><span class="pre">payable</span></code> or create a new internal function for the program logic that
-uses <code class="docutils literal notranslate"><span class="pre">msg.value</span></code>.</li>
-<li>For clarity reasons, the command line interface now requires <code class="docutils literal notranslate"><span class="pre">-</span></code> if the
-standard input is used as source.</li>
+<li>明示的なファンクションの可視性は現在必須です。可視性を特に指示していないものに関して、ファンクションとコンストラクタには <code class="docutils literal notranslate"><span class="pre">public</span></code> を追加し、fallbackとインターフェースには <code class="docutils literal notranslate"><span class="pre">external</span></code> を追加して下さい。</li>
+<li>構造体、配列、マッピングに関して明示的なデータロケーションは現在必須です。これはファンクションのパラメータや返り値にも適用されます。例えば、<code class="docutils literal notranslate"><span class="pre">uint[]</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">m_x</span></code> は <a href="#id5"><span class="problematic" id="id6">``</span></a>uint[] storage x =</li>
+</ul>
+<p>m_x`` に、<code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">x)</span></code> は <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(uint[][]</span> <span class="pre">memory</span> <span class="pre">x)</span></code> に代えてください。
+ここで、<code class="docutils literal notranslate"><span class="pre">memory</span></code> はデータロケーションで、場合によって <code class="docutils literal notranslate"><span class="pre">storage</span></code> や <code class="docutils literal notranslate"><span class="pre">calldata</span></code> に置き換えられます。<code class="docutils literal notranslate"><span class="pre">external</span></code> のファンクションはデータロケーションとして　<code class="docutils literal notranslate"><span class="pre">calldata</span></code> が必要なことを覚えておいてください。</p>
+<ul class="simple">
+<li>名前空間を分けるために、コントラクト型は <code class="docutils literal notranslate"><span class="pre">address</span></code> メンバをもう持っていません。そのため、<code class="docutils literal notranslate"><span class="pre">address</span></code> メンバを使う前に明示的にコントラクト型の値をアドレスに変換する必要があります。例： <code class="docutils literal notranslate"><span class="pre">c</span></code> がコントラクトの場合、<code class="docutils literal notranslate"><span class="pre">c.transfer(...)</span></code> から <code class="docutils literal notranslate"><span class="pre">address(c).transfer(...)</span></code> に、<code class="docutils literal notranslate"><span class="pre">c.balance</span></code> は <code class="docutils literal notranslate"><span class="pre">address(c).balance</span></code> に代えてください。</li>
+<li>関係ないコントラクト型同士の明示的な変換は現在できません。あるコントラクト型から、そのベースもしくは親（祖先）のコントラクト型への変換のみ可能です。もし継承していないのにも関わらず、あるコントラクトから別のコントラクトへの変換ができると考えているのであれば、まず <code class="docutils literal notranslate"><span class="pre">address</span></code> へ変換することで対処できます。</li>
+</ul>
+<p>例: <code class="docutils literal notranslate"><span class="pre">A</span></code> と <code class="docutils literal notranslate"><span class="pre">B</span></code> がコントラクト型で``B`` が <code class="docutils literal notranslate"><span class="pre">A</span></code> を継承しておらず、<code class="docutils literal notranslate"><span class="pre">b</span></code> が <code class="docutils literal notranslate"><span class="pre">B</span></code> 型のコントラクトである場合、<code class="docutils literal notranslate"><span class="pre">A(address(b))</span></code> を使うことで <code class="docutils literal notranslate"><span class="pre">b</span></code> を <code class="docutils literal notranslate"><span class="pre">A</span></code> 型に変換できます。
+下記で説明されている通り、payable fallbackファンクションのマッチングに気をつける必要があります。</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">address</span></code> 型は <code class="docutils literal notranslate"><span class="pre">address</span></code> と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> に分けられ、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> だけが <code class="docutils literal notranslate"><span class="pre">transfer</span></code> ファンクションを使えます。<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> は直接 <code class="docutils literal notranslate"><span class="pre">address</span></code> に変換可能ですが、逆はできません。<code class="docutils literal notranslate"><span class="pre">address</span></code> から <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> への変換は <code class="docutils literal notranslate"><span class="pre">uint160</span></code> を通じて行うことで可能です。<code class="docutils literal notranslate"><span class="pre">c</span></code> がコントラクトで、payable fallbackファンクションを持っていた場合、<code class="docutils literal notranslate"><span class="pre">address(c)</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> になります。もし <a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdraw pattern</span></a> を使っているのであれば、コードを変える必要はきっとないでしょう。なぜなら、<code class="docutils literal notranslate"><span class="pre">transfer</span></code> は 保存されているアドレスの代わりに <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> にのみ使われ、<code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> だからです。</li>
+<li>異なるサイズの <code class="docutils literal notranslate"><span class="pre">bytesX</span></code> と <code class="docutils literal notranslate"><span class="pre">uintY</span></code> 間の変換は現在できません。なぜなら、<code class="docutils literal notranslate"><span class="pre">bytesX</span></code> は右パディングで <code class="docutils literal notranslate"><span class="pre">uintY</span></code> は左パディングのため、予期しない変換結果を生じる可能性があるためです。変換前に型内でサイズは調整される必要があります。例えば、始めに <code class="docutils literal notranslate"><span class="pre">bytes4</span></code> を <code class="docutils literal notranslate"><span class="pre">bytes8</span></code> に変換してから <code class="docutils literal notranslate"><span class="pre">uint64</span></code> に変換することで <code class="docutils literal notranslate"><span class="pre">bytes4</span></code> (4 bytes) を <code class="docutils literal notranslate"><span class="pre">uint64</span></code> (8 bytes) に変換することができます。<code class="docutils literal notranslate"><span class="pre">uint32</span></code> を通じて変換すると逆側のパディングをすることになります。</li>
+<li>payableではないファンクションで <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> を使うこと（もしくはmodifierを使って実行する）はセキュリティの機能によりできません。</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">payable</span></code> のファンクションに変換するか、<code class="docutils literal notranslate"><span class="pre">msg.value</span></code> を使う新しいinternalのファンクションを作ってください。</p>
+<ul class="simple">
+<li>分かりやすくするため、標準入力がソースとして使用される場合、コマンドラインインターフェースに <code class="docutils literal notranslate"><span class="pre">-</span></code> が必要です。</li>
 </ul>
 </div>
 <div class="section" id="deprecated-elements">
 <h2>Deprecated Elements<a class="headerlink" href="#deprecated-elements" title="Permalink to this headline">¶</a></h2>
-<p>This section lists changes that deprecate prior features or syntax.  Note that
-many of these changes were already enabled in the experimental mode
-<code class="docutils literal notranslate"><span class="pre">v0.5.0</span></code>.</p>
+<p>このセクションでは以前の機能やシンタックスで非推奨に変更になったリストを紹介します。これらの多くは既に <code class="docutils literal notranslate"><span class="pre">v0.5.0</span></code> のexperimental modeでは使用できません。</p>
 <div class="section" id="command-line-and-json-interfaces">
 <h3>Command Line and JSON Interfaces<a class="headerlink" href="#command-line-and-json-interfaces" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>The command line option <code class="docutils literal notranslate"><span class="pre">--formal</span></code> (used to generate Why3 output for
-further formal verification) was deprecated and is now removed.  A new
-formal verification module, the SMTChecker, is enabled via <code class="docutils literal notranslate"><span class="pre">pragma</span>
-<span class="pre">experimental</span> <span class="pre">SMTChecker;</span></code>.</li>
-<li>The command line option <code class="docutils literal notranslate"><span class="pre">--julia</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">--yul</span></code> due to the
-renaming of the intermediate language <code class="docutils literal notranslate"><span class="pre">Julia</span></code> to <code class="docutils literal notranslate"><span class="pre">Yul</span></code>.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">--clone-bin</span></code> and <code class="docutils literal notranslate"><span class="pre">--combined-json</span> <span class="pre">clone-bin</span></code> command line options
-were removed.</li>
-<li>Remappings with empty prefix are disallowed.</li>
-<li>The JSON AST fields <code class="docutils literal notranslate"><span class="pre">constant</span></code> and <code class="docutils literal notranslate"><span class="pre">payable</span></code> were removed. The
-information is now present in the <code class="docutils literal notranslate"><span class="pre">stateMutability</span></code> field.</li>
-<li>The JSON AST field <code class="docutils literal notranslate"><span class="pre">isConstructor</span></code> of the <code class="docutils literal notranslate"><span class="pre">FunctionDefinition</span></code>
-node was replaced by a field called <code class="docutils literal notranslate"><span class="pre">kind</span></code> which can have the
-value <code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>.</li>
-<li>In unlinked binary hex files, library address placeholders are now
-the first 36 hex characters of the keccak256 hash of the fully qualified
-library name, surrounded by <code class="docutils literal notranslate"><span class="pre">$...$</span></code>. Previously,
-just the fully qualified library name was used.
-This reduces the chances of collisions, especially when long paths are used.
-Binary files now also contain a list of mappings from these placeholders
-to the fully qualified names.</li>
+<li>コマンドラインオプションの <code class="docutils literal notranslate"><span class="pre">--formal</span></code> （形式的検証のため以前はWhy3のアウトプットを生成していた）は非推奨隣、現在は削除されました。新しい形式的検証のモジュールのSMTCheckerは <a href="#id7"><span class="problematic" id="id8">``</span></a>pragma</li>
 </ul>
+<p>experimental SMTChecker;`` で使うことができます。</p>
+<ul class="simple">
+<li>中間言語の名前が <code class="docutils literal notranslate"><span class="pre">Julia</span></code> から <code class="docutils literal notranslate"><span class="pre">Yul</span></code> へ変更になったためコマンドラインオプションの <code class="docutils literal notranslate"><span class="pre">--julia</span></code> は <code class="docutils literal notranslate"><span class="pre">--yul</span></code> へ名前が変更されました。</li>
+<li>コマンドラインオプションの <code class="docutils literal notranslate"><span class="pre">--clone-bin</span></code> と <code class="docutils literal notranslate"><span class="pre">--combined-json</span> <span class="pre">clone-bin</span></code> は削除されました。</li>
+<li>空の接頭辞での理マッピングはできません。</li>
+<li>JSON ASTフィールドの``constant`` と <code class="docutils literal notranslate"><span class="pre">payable</span></code> は削除されました。その情報は現在 <code class="docutils literal notranslate"><span class="pre">stateMutability</span></code> フィールドにあります。</li>
+<li>JSON ASTフィールドの <code class="docutils literal notranslate"><span class="pre">FunctionDefinition</span></code> ノード</li>
+</ul>
+<p>の <code class="docutils literal notranslate"><span class="pre">isConstructor</span></code> は <code class="docutils literal notranslate"><span class="pre">kind</span></code> というフィールドに置き換えられ、<code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>、<code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code>、<a href="#id9"><span class="problematic" id="id10">``</span></a>”function”` という値を持つことができます。</p>
+<ul class="simple">
+<li>リンクしてないbinary hexファイルでは、ライブラリアドレスのプレースホルダは正規のライブラリの名前全体のkeccak256ハッシュの最初の16進数の36文字で、<code class="docutils literal notranslate"><span class="pre">$...$</span></code> に囲われています。</li>
+</ul>
+<p>以前は正規のライブラリの名前だけ使われていました。これにより、特にパスが長い時は名前が衝突する可能性が減ります。バイナリファイルは現在、このプレースホルダから正規の名前全体のマッピングのリストを含んでいます。</p>
 </div>
 <div class="section" id="constructors">
 <h3>Constructors<a class="headerlink" href="#constructors" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Constructors must now be defined using the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> keyword.</li>
-<li>Calling base constructors without parentheses is now disallowed.</li>
-<li>Specifying base constructor arguments multiple times in the same inheritance
-hierarchy is now disallowed.</li>
-<li>Calling a constructor with arguments but with wrong argument count is now
-disallowed.  If you only want to specify an inheritance relation without
-giving arguments, do not provide parentheses at all.</li>
+<li>コンストラクトは現在、<code class="docutils literal notranslate"><span class="pre">constructor</span></code> を使って定義しなければいけません。</li>
+<li>括弧なしのベースのコンストラクトを呼び出すことは現在できません。</li>
+<li>同じ継承の階層でベースのコンストラクトの引数をな何度も決めることは現在できません。</li>
+<li>間違った数の引数でコンストラクタを呼ぶことはできません。もし引数を渡さないで継承の関係を指定したい場合は、括弧をつけないで下さい。</li>
 </ul>
 </div>
 <div class="section" id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Function <code class="docutils literal notranslate"><span class="pre">callcode</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>). It
-is still possible to use it via inline assembly.</li>
-<li><code class="docutils literal notranslate"><span class="pre">suicide</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>).</li>
-<li><code class="docutils literal notranslate"><span class="pre">sha3</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>).</li>
-<li><code class="docutils literal notranslate"><span class="pre">throw</span></code> is now disallowed (in favor of <code class="docutils literal notranslate"><span class="pre">revert</span></code>, <code class="docutils literal notranslate"><span class="pre">require</span></code> and
-<code class="docutils literal notranslate"><span class="pre">assert</span></code>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">callcode</span></code> ファンクションは現在使えません（）。</li>
+</ul>
+<p>Function <code class="docutils literal notranslate"><span class="pre">callcode</span></code> is now disallowed ( <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> が使われます)。インラインアセンブリを使えば使うことができます。</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">suicide</span></code> は現在使えません( <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> が使われます).</li>
+<li><code class="docutils literal notranslate"><span class="pre">sha3</span></code> は現在使えません( <code class="docutils literal notranslate"><span class="pre">keccak256</span></code> が使われます).</li>
+<li><code class="docutils literal notranslate"><span class="pre">throw</span></code> は現在使えません( <code class="docutils literal notranslate"><span class="pre">revert</span></code>、<code class="docutils literal notranslate"><span class="pre">require</span></code>、<code class="docutils literal notranslate"><span class="pre">assert</span></code> が使われます)。</li>
 </ul>
 </div>
 <div class="section" id="conversions">
 <h3>Conversions<a class="headerlink" href="#conversions" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Explicit and implicit conversions from decimal literals to <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> types
-is now disallowed.</li>
-<li>Explicit and implicit conversions from hex literals to <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> types
-of different size is now disallowed.</li>
+<li>明示的にも暗示的にも10進数リテラルの <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> 型への変換は現在使えません。</li>
+<li>明示的にも暗示的にも16進数リテラルの異なるサイズの <code class="docutils literal notranslate"><span class="pre">bytesXX</span></code> 型への変換は現在使えません。</li>
 </ul>
 </div>
 <div class="section" id="literals-and-suffixes">
 <h3>Literals and Suffixes<a class="headerlink" href="#literals-and-suffixes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>The unit denomination <code class="docutils literal notranslate"><span class="pre">years</span></code> is now disallowed due to complications and
-confusions about leap years.</li>
-<li>Trailing dots that are not followed by a number are now disallowed.</li>
-<li>Combining hex numbers with unit denominations (e.g. <code class="docutils literal notranslate"><span class="pre">0x1e</span> <span class="pre">wei</span></code>) is now
-disallowed.</li>
-<li>The prefix <code class="docutils literal notranslate"><span class="pre">0X</span></code> for hex numbers is disallowed, only <code class="docutils literal notranslate"><span class="pre">0x</span></code> is possible.</li>
+<li>閏年で混乱してしまうため <code class="docutils literal notranslate"><span class="pre">years</span></code> という単位名は現在使えません。数字の後に</li>
+<li>数字の続かない末尾のドットは使えません。</li>
+<li>16進数の数字とuintの単位名(例: <code class="docutils literal notranslate"><span class="pre">0x1e</span> <span class="pre">wei</span></code>) は一緒に使えません。</li>
+<li>16進数に接頭辞 <code class="docutils literal notranslate"><span class="pre">0X</span></code> は使えません。<code class="docutils literal notranslate"><span class="pre">0x</span></code> だけ使えます。</li>
 </ul>
 </div>
 <div class="section" id="variables">
 <h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Declaring empty structs is now disallowed for clarity.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">var</span></code> keyword is now disallowed to favor explicitness.</li>
-<li>Assignments between tuples with different number of components is now
-disallowed.</li>
-<li>Values for constants that are not compile-time constants are disallowed.</li>
-<li>Multi-variable declarations with mismatching number of values are now
-disallowed.</li>
-<li>Uninitialized storage variables are now disallowed.</li>
-<li>Empty tuple components are now disallowed.</li>
-<li>Detecting cyclic dependencies in variables and structs is limited in
-recursion to 256.</li>
-<li>Fixed-size arrays with a length of zero are now disallowed.</li>
+<li>分かりやすさのため、空の構造体の宣言は現在できません。</li>
+<li>分かりやすさのため、現在 <code class="docutils literal notranslate"><span class="pre">var</span></code> キーワードは使えません。</li>
+<li>タプルへの異なった要素数の割り当ては現在できません。</li>
+<li>コンパイル時に定数でない定数値は使えません。</li>
+<li>値の数と変数の数が合わない複数変数の宣言は現在使えません。</li>
+<li>初期化されていないストレージ変数は現在使えません。</li>
+<li>空のタプル要素は現在使えません。</li>
+<li>変数と構造体の循環参照の検知の繰り返しは256回までと制限されています。</li>
+<li>長さが0の固定長さ配列は現在使えません。</li>
 </ul>
 </div>
 <div class="section" id="syntax">
 <h3>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Using <code class="docutils literal notranslate"><span class="pre">constant</span></code> as function state mutability modifier is now disallowed.</li>
-<li>Boolean expressions cannot use arithmetic operations.</li>
-<li>The unary <code class="docutils literal notranslate"><span class="pre">+</span></code> operator is now disallowed.</li>
-<li>Literals cannot anymore be used with <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> without prior
-conversion to an explicit type.</li>
-<li>Empty return statements for functions with one or more return values are now
-disallowed.</li>
-<li>The “loose assembly” syntax is now disallowed entirely, that is, jump labels,
-jumps and non-functional instructions cannot be used anymore. Use the new
-<code class="docutils literal notranslate"><span class="pre">while</span></code>, <code class="docutils literal notranslate"><span class="pre">switch</span></code> and <code class="docutils literal notranslate"><span class="pre">if</span></code> constructs instead.</li>
-<li>Functions without implementation cannot use modifiers anymore.</li>
-<li>Function types with named return values are now disallowed.</li>
-<li>Single statement variable declarations inside if/while/for bodies that are
-not blocks are now disallowed.</li>
+<li>ファンクションのstate mutability modifierとしての <code class="docutils literal notranslate"><span class="pre">constant</span></code> は現在使えません。</li>
+<li>真偽式は算術演算を行えません。</li>
+<li>単項の <code class="docutils literal notranslate"><span class="pre">+</span></code> 演算子は使えません。</li>
+<li>リテラルは以前の明示的な型への変換なしでは <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> を使えません。</li>
+<li>返り値があるファンクションでの空のリターンは現在使えません。</li>
+<li>“loose assembly”シンタックスは現在完全に使えません。つまりjump label、jump、非ファンクショナルな指示はもう使えません。新しい <code class="docutils literal notranslate"><span class="pre">while</span></code>、<code class="docutils literal notranslate"><span class="pre">switch</span></code>、<code class="docutils literal notranslate"><span class="pre">if</span></code> を代わりに使ってください。</li>
+<li>実行されないファンクションではmodifierは使えません。</li>
+<li>名前のついた返り値のファンクション型は使えません。</li>
+<li>if/while/forのブロックでないボディ内での単文での変数の宣言はできません。</li>
 <li>New keywords: <code class="docutils literal notranslate"><span class="pre">calldata</span></code> and <code class="docutils literal notranslate"><span class="pre">constructor</span></code>.</li>
 <li>New reserved keywords: <code class="docutils literal notranslate"><span class="pre">alias</span></code>, <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">copyof</span></code>,
 <code class="docutils literal notranslate"><span class="pre">define</span></code>, <code class="docutils literal notranslate"><span class="pre">immutable</span></code>, <code class="docutils literal notranslate"><span class="pre">implements</span></code>, <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">mutable</span></code>,
@@ -439,9 +375,8 @@ not blocks are now disallowed.</li>
 </div>
 <div class="section" id="interoperability-with-older-contracts">
 <span id="interoperability"></span><h2>Interoperability With Older Contracts<a class="headerlink" href="#interoperability-with-older-contracts" title="Permalink to this headline">¶</a></h2>
-<p>It is still possible to interface with contracts written for Solidity versions prior to
-v0.5.0 (or the other way around) by defining interfaces for them.
-Consider you have the following pre-0.5.0 contract already deployed:</p>
+<p>インターフェースを定義すれば、Solidityバージョン0.5.0以前（もしくは以降）で書かれたコントラクトで使うことができます。
+0.5.0以前のバージョンで作った以下のコントラクトを見てください。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// This will not compile with the current version of the compiler</span>
 <span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">25</span><span class="p">;</span>
 <span class="kd">contract</span> <span class="n">OldContract</span> <span class="p">{</span>
@@ -455,7 +390,7 @@ Consider you have the following pre-0.5.0 contract already deployed:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>This will no longer compile with Solidity v0.5.0. However, you can define a compatible interface for it:</p>
+<p>これは0.5.0ではコンパイルできませんが、互換性のあるインターフェースは定義できます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 <span class="kd">interface</span> <span class="n">OldContract</span> <span class="p">{</span>
    <span class="kd">function</span> <span class="n">someOldFunction</span><span class="p">(</span><span class="kt">uint8</span> <span class="n">a</span><span class="p">)</span> <span class="kr">external</span><span class="p">;</span>
@@ -463,13 +398,10 @@ Consider you have the following pre-0.5.0 contract already deployed:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that we did not declare <code class="docutils literal notranslate"><span class="pre">anotherOldFunction</span></code> to be <code class="docutils literal notranslate"><span class="pre">view</span></code>, despite it being declared <code class="docutils literal notranslate"><span class="pre">constant</span></code> in the original
-contract. This is due to the fact that starting with Solidity v0.5.0 <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> is used to call <code class="docutils literal notranslate"><span class="pre">view</span></code> functions.
-Prior to v0.5.0 the <code class="docutils literal notranslate"><span class="pre">constant</span></code> keyword was not enforced, so calling a function declared <code class="docutils literal notranslate"><span class="pre">constant</span></code> with <code class="docutils literal notranslate"><span class="pre">staticcall</span></code>
-may still revert, since the <code class="docutils literal notranslate"><span class="pre">constant</span></code> function may still attempt to modify storage. Consequently, when defining an
-interface for older contracts, you should only use <code class="docutils literal notranslate"><span class="pre">view</span></code> in place of <code class="docutils literal notranslate"><span class="pre">constant</span></code> in case you are absolutely sure that
-the function will work with <code class="docutils literal notranslate"><span class="pre">staticcall</span></code>.</p>
-<p>Given the interface defined above, you can now easily use the already deployed pre-0.5.0 contract:</p>
+<p>オリジナルのコントラクトでは <code class="docutils literal notranslate"><span class="pre">constant</span></code> と宣言されているのにも関わらず、<code class="docutils literal notranslate"><span class="pre">anotherOldFunction</span></code> を <code class="docutils literal notranslate"><span class="pre">view</span></code> で宣言していないことに注目して下さい。これはSolidity v0.5.0から <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> が <code class="docutils literal notranslate"><span class="pre">view</span></code> ファンクションを呼ぶのに使われ始めたからです。
+v0.5.0以前では <code class="docutils literal notranslate"><span class="pre">constant</span></code> キーワードは強制ではありませんでしたので、<code class="docutils literal notranslate"><span class="pre">constant</span></code> と宣言されたファンクションを <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> で呼び出してもrevertする可能性がありました。なぜなら、<code class="docutils literal notranslate"><span class="pre">constant</span></code> ファンクションはストレージを修正しようとする可能性があったためです。
+結論としては、古いコントラクト用のインターフェースを定義するときには、<code class="docutils literal notranslate"><span class="pre">staticcall</span></code> で確実にファンクションが動作する様に、<code class="docutils literal notranslate"><span class="pre">constant</span></code> の代わりに <code class="docutils literal notranslate"><span class="pre">view</span></code> を使った方が良いでしょう。</p>
+<p>上記で定義されたインターフェースがあれば、もう簡単に0.5.0以前のコントラクトをデプロイできます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">interface</span> <span class="n">OldContract</span> <span class="p">{</span>
@@ -485,9 +417,7 @@ the function will work with <code class="docutils literal notranslate"><span cla
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Similarly, pre-0.5.0 libraries can be used by defining the functions of the library without implementation and
-supplying the address of the pre-0.5.0 library during linking (see <a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a> for how to use the
-commandline compiler for linking):</p>
+<p>同様に、0.5.0以前のライブラリは実行せず、リンク中にそのライブラリのアドレスを渡さなくても、そのライブラリのファンクションを定義することで、使用することができます（リンキングにどうやってコマンドラインコンパイラを使うかは <a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a> を参照ください）。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">library</span> <span class="n">OldLibrary</span> <span class="p">{</span>
@@ -504,8 +434,7 @@ commandline compiler for linking):</p>
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<p>The following example shows a contract and its updated version for Solidity
-v0.5.0 with some of the changes listed in this section.</p>
+<p>下記の例ではあるコントラクトとこのセクションで紹介したいくつかの変更を加えたSolidityバージョン0.5.0のコントラクトを紹介します。</p>
 <p>Old version:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// This will not compile</span>
 <span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">25</span><span class="p">;</span>

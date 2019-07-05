@@ -8,25 +8,20 @@ Style Guide
 Introduction
 ************
 
-This guide is intended to provide coding conventions for writing solidity code.
-This guide should be thought of as an evolving document that will change over
-time as useful conventions are found and old conventions are rendered obsolete.
+このガイドの目的は、Solidityコードを書くためのコーディング規約を提供することです。
+また、このガイドでは、みなさんが役に立つ規約が見つけられて、過去の規約が時代遅れとなれば、時間の経過とともに変化し進化するドキュメントとして考えてください。
 
-Many projects will implement their own style guides.  In the event of
-conflicts, project specific style guides take precedence.
+多くのプロジェクトでは独自のスタイルガイドが実装されます。
+つまり、コンフリクトが発生した場合は、プロジェクト固有のスタイルガイドが優先されるということです。
 
-The structure and many of the recommendations within this style guide were
-taken from python's
-`pep8 style guide <https://www.python.org/dev/peps/pep-0008/>`_.
+スタイルガイド内の構造と多くのレコメンデーションはpythonの `pep8 style guide <https://www.python.org/dev/peps/pep-0008/>`_. をもとにしています。
 
-The goal of this guide is *not* to be the right way or the best way to write
-solidity code.  The goal of this guide is *consistency*.  A quote from python's
-`pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
-captures this concept well.
-
-    A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.
-    But most importantly: know when to be inconsistent -- sometimes the style guide just doesn't apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don't hesitate to ask!
-
+また、このガイドの目的は、堅実なコードを書くための正しい方法や最良の方法を提供することではありません。
+ガイドのゴールは、Solidityにおける *consistency* について知ってもらうことです。pythonの `pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_ からの引用により、この目的を達成できるようします。
+    
+    このスタイルガイドは一貫性(consistency)について述べます。このスタイルガイドのconsistencyは重要です。もっというと、プロジェクトのconsistencyはもっと重要です。
+    さらには、1つのモジュールにおけるconsistency、1つの関数におけるconsistencyはより重要なものです。
+    しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。 -- 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！
 
 ***********
 Code Layout
@@ -36,19 +31,18 @@ Code Layout
 Indentation
 ===========
 
-Use 4 spaces per indentation level.
+インデントには4つのスペースを使ってください。
 
 Tabs or Spaces
 ==============
 
-Spaces are the preferred indentation method.
-
-Mixing tabs and spaces should be avoided.
+スペースはタブよりもインデントに適しています。
+また、スペースとタブの混合は避けるべきです。
 
 Blank Lines
 ===========
 
-Surround top level declarations in solidity source with two blank lines.
+2行の空白行を持つSolidityソースでの最上位の宣言を囲むようにします。
 
 Yes::
 
@@ -83,9 +77,8 @@ No::
         // ...
     }
 
-Within a contract surround function declarations with a single blank line.
-
-Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)
+コントラクト内では、関数宣言は1行の空白行で囲むようにします。
+関連するワンライナーのグループ間で空白行を省略することができます(抽象コントラクトのスタブ関数など)。
 
 Yes::
 
@@ -125,15 +118,15 @@ No::
 Maximum Line Length
 ===================
 
-Keeping lines under the `PEP 8 recommendation <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ to a maximum of 79 (or 99)
-characters helps readers easily parse the code.
+ `PEP 8 recommendation <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ に従い、行数は最大で79行(または99行)にとどめましょう。
+これによりコードの可読性が向上します。
 
-Wrapped lines should conform to the following guidelines.
+折り返し行は、次のガイドラインに従ってください。
 
-1. The first argument should not be attached to the opening parenthesis.
-2. One, and only one, indent should be used.
-3. Each argument should fall on its own line.
-4. The terminating element, :code:`);`, should be placed on the final line by itself.
+1. 最初の引数は左括弧に付けないでください
+2. 折り返し後のインデントは1つのみ使用してください
+3. 各引数は1行で表現できるようにします
+4. 最後の要素 :code:`);` は最終行に単独で置いてください
 
 Function Calls
 
@@ -228,12 +221,12 @@ No::
 Source File Encoding
 ====================
 
-UTF-8 or ASCII encoding is preferred.
+UTF-8とASCIIを使いましょう。
 
 Imports
 =======
 
-Import statements should always be placed at the top of the file.
+Import文は常にファイルの先頭に置きましょう。
 
 Yes::
 
@@ -268,18 +261,19 @@ No::
 Order of Functions
 ==================
 
-Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.
+関数レベルの順序付けは、読者がどの関数を呼び出すことができるかを識別することを簡単にします。
+これにより、コンストラクタとフォールバック定義を簡単に見つけるのに役立ちます。
 
-Functions should be grouped according to their visibility and ordered:
+関数は可視性(可視性修飾子を含む)に従って分類され、順序付けされるべきです:
 
 - constructor
-- fallback function (if exists)
+- fallback function(もしあるなら)
 - external
 - public
 - internal
 - private
 
-Within a grouping, place the ``view`` and ``pure`` functions last.
+グループ内では、関数の最後に ``view`` や ``pure`` を付けましょう。
 
 Yes::
 
@@ -343,9 +337,9 @@ No::
 Whitespace in Expressions
 =========================
 
-Avoid extraneous whitespace in the following  situations:
+次の場合は、余分なスペースを避けましょう:
 
-Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.
+単一行の関数宣言以外の、括弧、大括弧または大括弧のすぐ内側:
 
 Yes::
 
@@ -359,7 +353,7 @@ Exception::
 
     function singleLine() public { spam(); }
 
-Immediately before a comma, semicolon:
+コンマ、セミコロンの直前:
 
 Yes::
 
@@ -369,8 +363,7 @@ No::
 
     function spam(uint i , Coin coin) public ;
 
-More than one space around an assignment or other operator to align with
-  another:
+代入または他の演算子の周囲に、他のものと位置を合わせるためのスペースが複数ある場合:
 
 Yes::
 
@@ -384,7 +377,7 @@ No::
     y             = 2;
     long_variable = 3;
 
-Don't include a whitespace in the fallback function:
+フォールバック関数内にはホワイトスペースを含めないでください:
 
 Yes::
 
@@ -401,13 +394,11 @@ No::
 Control Structures
 ==================
 
-The braces denoting the body of a contract, library, functions and structs
-should:
+コントラクトボディ、ライブラリ、関数、および構造体を示す波括弧は、次のようになります。
 
-* open on the same line as the declaration
-* close on their own line at the same indentation level as the beginning of the
-  declaration.
-* The opening brace should be proceeded by a single space.
+* 宣言と同じ行で開きます
+* 宣言の始めと同じインデントレベルで、それぞれの行を閉じます
+* 波括弧を開くときは、シングルスペースに続きます
 
 Yes::
 
@@ -432,13 +423,10 @@ No::
         }
     }
 
-The same recommendations apply to the control structures ``if``, ``else``, ``while``,
-and ``for``.
+これらのレコメンデーションは``if`` や ``else`` 、 ``while`` 、 ``for`` といった制御構造にも適用されます。
 
-Additionally there should be a single space between the control structures
-``if``, ``while``, and ``for`` and the parenthetic block representing the
-conditional, as well as a single space between the conditional parenthetic
-block and the opening brace.
+さらに、制御構造 ``if`` 、 ``while`` 、 ``for`` と、条件を表す括弧ブロックの間、
+および条件括弧ブロックと括弧の間には、シングルスペースがあるべきです。
 
 Yes::
 
@@ -463,8 +451,8 @@ No::
     for (...) {
         ...;}
 
-For control structures whose body contains a single statement, omitting the
-braces is ok *if* the statement is contained on a single line.
+コントラクトボディに単一のステートメントが含まれる制御構造の場合、波括弧は省略しても構いません。
+ただし、ステートメントが1行で表せられる場合に限ります。
 
 Yes::
 
@@ -479,9 +467,8 @@ No::
             value: 42
         }));
 
-For ``if`` blocks which have an ``else`` or ``else if`` clause, the ``else`` should be
-placed on the same line as the ``if``'s closing brace. This is an exception compared
-to the rules of other block-like structures.
+``else`` または ``else if`` 節を持つ ``if`` ブロックの場合、 ``else``は ``if`` の閉じ括弧と同じ行に配置する必要があります。
+これは他のブロックのような構造の規則と比較して例外です。
 
 Yes::
 
@@ -511,13 +498,11 @@ No::
 Function Declaration
 ====================
 
-For short function declarations, it is recommended for the opening brace of the
-function body to be kept on the same line as the function declaration.
+短い関数の宣言時は、関数内の左波括弧を関数宣言と同じ行に置くことを推奨します。
 
-The closing brace should be at the same indentation level as the function
-declaration.
+また、右波括弧は、関数宣言と同じインデントレベルになければなりません。
 
-The opening brace should be preceded by a single space.
+さらに、左波括弧の前には、単一のスペースを入れます。
 
 Yes::
 
@@ -547,7 +532,7 @@ No::
     function increment(uint x) public pure returns (uint) {
         return x + 1;}
 
-You should explicitly label the visibility of all functions, including constructors.
+コンストラクタを含むすべての関数の可視性に明示的にラベルを付ける必要があります。
 
 Yes::
 
@@ -561,8 +546,7 @@ No::
         doSomething();
     }
 
-The visibility modifier for a function should come before any custom
-modifiers.
+関数の可視性修飾子は、どのカスタム修飾子よりも先に来る必要があります。
 
 Yes::
 
@@ -576,10 +560,8 @@ No::
         selfdestruct(owner);
     }
 
-For long function declarations, it is recommended to drop each argument onto
-it's own line at the same indentation level as the function body.  The closing
-parenthesis and opening bracket should be placed on their own line as well at
-the same indentation level as the function declaration.
+長い関数の宣言時は、関数本体と同じインデントレベルで、各引数を独自の行に配置することを推奨します。
+また、右括弧と左角括弧は、関数宣言と同じインデントレベルで、新しい行に単一に配置する必要があります。
 
 Yes::
 
@@ -622,8 +604,7 @@ No::
         doSomething();
     }
 
-If a long function declaration has modifiers, then each modifier should be
-dropped to its own line.
+もしこの長い関数の宣言時に関数が修飾子を持つ場合、各修飾子は新しい行に単一に配置する必要があります。
 
 Yes::
 
@@ -673,7 +654,7 @@ No::
         doSomething();
     }
 
-Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the :ref:`Maximum Line Length <maximum_line_length>` section.
+複数のアウトプットパラメータとそのreturn文は :ref:`Maximum Line Length <maximum_line_length>` セクションにある複数行をラップする場合と同じように行います。
 
 Yes::
 
@@ -717,9 +698,8 @@ No::
                 veryLongReturnArg1);
     }
 
-For constructor functions on inherited contracts whose bases require arguments,
-it is recommended to drop the base constructors onto new lines in the same
-manner as modifiers if the function declaration is long or hard to read.
+引数が必要なコントラクトを継承するコンストラクタ関数において、関数宣言が長い場合や読みにくい場合は、
+修飾子と同じ方法でベースコンストラクタを新しい行に配置することを推奨しています。
 
 Yes::
 
@@ -796,22 +776,20 @@ No::
         }
     }
 
-When declaring short functions with a single statement, it is permissible to do it on a single line.
+短い関数を1つのステートメントで宣言するときは、1行で宣言してもかまいません。
 
 Permissible::
 
     function shortFunction() public { doSomething(); }
 
-These guidelines for function declarations are intended to improve readability.
-Authors should use their best judgement as this guide does not try to cover all
-possible permutations for function declarations.
+関数宣言に関するこれらのガイドラインは、可読性を向上させることを目的としています。
+このガイドは関数宣言時のすべてのケースを網羅しようとするものではないので、コードを書く場合はその都度最善の判断に従うべきでしょう。
 
 Mappings
 ========
 
-In variable declarations, do not separate the keyword ``mapping`` from its
-type by a space. Do not separate any nested ``mapping`` keyword from its type by
-whitespace.
+変数の宣言時には、キーワード ``mapping`` をその型とスペースで区切らないでください。
+また、ネストされた `` mapping``キーワードをそのタイプとスペースで区切らないでください。
 
 Yes::
 
@@ -830,8 +808,7 @@ No::
 Variable Declarations
 =====================
 
-Declarations of array variables should not have a space between the type and
-the brackets.
+配列変数の宣言時には、型と角括弧の間にスペースを入れないでください。
 
 Yes::
 
@@ -845,7 +822,7 @@ No::
 Other Recommendations
 =====================
 
-* Strings should be quoted with double-quotes instead of single-quotes.
+* 文字列は、シングルクオーテーションではなくダブルクオーテーションで囲む必要があります:
 
 Yes::
 
@@ -857,7 +834,7 @@ No::
     str = 'bar';
     str = '"Be yourself; everyone else is already taken." -Oscar Wilde';
 
-* Surround operators with a single space on either side.
+* 演算子はシングルスペースで囲ってください:
 
 Yes::
 
@@ -873,10 +850,9 @@ No::
     x += 3+4;
     x |= y&&z;
 
-* Operators with a higher priority than others can exclude surrounding
-  whitespace in order to denote precedence.  This is meant to allow for
-  improved readability for complex statement. You should always use the same
-  amount of whitespace on either side of an operator:
+* 高い優先順位を持つ演算子は、優先順位を示すために周囲のスペースを除外することができます。
+  これは複雑な代入文の可読性を向上させることを目的としています。
+  また、演算子の両側には常に同じ量の空白を使用してください:
 
 Yes::
 
@@ -894,7 +870,7 @@ No::
 Order of Layout
 ***************
 
-Layout contract elements in the following order:
+コントラクト内にある要素のレイアウトは次の順序に従ってください: 
 
 1. Pragma statements
 2. Import statements
@@ -902,72 +878,64 @@ Layout contract elements in the following order:
 4. Libraries
 5. Contracts
 
-Inside each contract, library or interface, use the following order:
+各コントラクトやライブラリ、インターフェース内においては次の順序に従ってください: 
 
-1. Type declarations
-2. State variables
-3. Events
-4. Functions
+1. 型宣言
+2. 状態変数
+3. イベント
+4. 関数
 
 .. note::
-
-    It might be clearer to declare types close to their use in events or state
-    variables.
+    
+    イベントや状態変数での使用に近い型を宣言する方が明確な場合があります。
 
 ******************
 Naming Conventions
 ******************
 
-Naming conventions are powerful when adopted and used broadly.  The use of
-different conventions can convey significant *meta* information that would
-otherwise not be immediately available.
+命名規則は、採用され広く使用されている場合に強力なものとなります。
+異なる規則を使用すると、利用できない重要な *meta* 情報を伝えることができます。
 
-The naming recommendations given here are intended to improve the readability,
-and thus they are not rules, but rather guidelines to try and help convey the
-most information through the names of things.
+ここで与えられた命名規則は可読性を改善することを目的としています。
+そのため、それらは規則というより、むしろ名前を通してほとんどの情報を伝えられるという点に着目します。
 
-Lastly, consistency within a codebase should always supersede any conventions
-outlined in this document.
-
+最後に、コードベース内における一貫性は、この文書で説明されている規約よりも常に優先されるべきです。
 
 Naming Styles
 =============
 
-To avoid confusion, the following names will be used to refer to different
-naming styles.
+混乱を避けるために、以下の名前はさまざまな命名スタイルを指すために使用されます。
 
-* ``b`` (single lowercase letter)
-* ``B`` (single uppercase letter)
+* ``b`` (単一の小文字)
+* ``B`` (単一の大文字)
 * ``lowercase``
 * ``lower_case_with_underscores``
 * ``UPPERCASE``
 * ``UPPER_CASE_WITH_UNDERSCORES``
-* ``CapitalizedWords`` (or CapWords)
-* ``mixedCase`` (differs from CapitalizedWords by initial lowercase character!)
+* ``CapitalizedWords`` (もしくはCapWords)
+* ``mixedCase`` (頭文字が小文字である点がCapitalizedWordsと異なります！)
 * ``Capitalized_Words_With_Underscores``
 
-.. note:: When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms is mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.
-
+.. note:: CapWordsでイニシャリズムを使用するときは、イニシャリズムのすべての文字を大文字にします。そのため、HTTPServerError は HttpServerError よりも良い命名といえます。イニシャルを使用する場合は、mixedCaseを使用します。名前の頭文字である場合は最初の1文字を小文字にする以外は、イニシャルのすべての文字を大文字にします。そのため、xmlHTTPRequest は XMLHTTPRequest よりも良い命名です。
 
 Names to Avoid
 ==============
 
-* ``l`` - Lowercase letter el
-* ``O`` - Uppercase letter oh
-* ``I`` - Uppercase letter eye
+* ``l`` - 小文字の el
+* ``O`` - 大文字の oh
+* ``I`` - 大文字の eye
 
-Never use any of these for single letter variable names.  They are often
-indistinguishable from the numerals one and zero.
-
+1文字の変数名にこれらのいずれも使用しないでください。数字の1と0と区別がつかないケースがよくあります。
 
 Contract and Library Names
 ==========================
 
-* Contracts and libraries should be named using the CapWords style. Examples: ``SimpleToken``, ``SmartBank``, ``CertificateHashRepository``, ``Player``, ``Congress``, ``Owned``.
-* Contract and library names should also match their filenames.
-* If a contract file includes multiple contracts and/or libraries, then the filename should match the *core contract*. This is not recommended however if it can be avoided.
+* コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。 例: ``SimpleToken`` 、 ``SmartBank`` 、 ``CertificateHashRepository`` 、 ``Player`` 、 ``Congress`` 、 ``Owned`` など。
+* コントラクトとライブラリの名前もそれらのファイル名と一致する必要があります。
+* コントラクトファイルに複数のコントラクトやライブラリが含まれている場合、ファイル名は *core contract* と一致させる必要があります。ただしこの構造はお勧めできないため、でいるだけ回避しましょう。
 
-As shown in the example below, if the contract name is `Congress` and the library name is `Owned`, then their associated filenames should be `Congress.sol` and `Owned.sol`.
+
+以下の例に示すように、コントラクト名が `Congress` でライブラリ名が `Owned` の場合、それらに関連するファイル名は `Congress.sol` と ` Owned.sol` になります。
 
 Yes::
 
@@ -1031,53 +999,52 @@ No::
 Struct Names
 ==========================
 
-Structs should be named using the CapWords style. Examples: ``MyCoin``, ``Position``, ``PositionXY``.
+構造体はCapWordsスタイルを使用して命名する必要があります。例: ``MyCoin`` 、 ``Position`` 、 ``PositionXY`` など。
 
 
 Event Names
 ===========
 
-Events should be named using the CapWords style. Examples: ``Deposit``, ``Transfer``, ``Approval``, ``BeforeTransfer``, ``AfterTransfer``.
+イベントはCapWordsスタイルを使って命名されるべきです。例: ``Deposit`` 、 ``Transfer`` 、 ``Approval`` 、 ``BeforeTransfer`` 、 ``AfterTransfer`` など。
 
 
 Function Names
 ==============
 
-Functions other than constructors should use mixedCase. Examples: ``getBalance``, ``transfer``, ``verifyOwner``, ``addMember``, ``changeOwner``.
+コンストラクタ以外の関数はmixedCaseを使用するべきです。例: ``getBalance`` 、 ``transfer`` 、 ``verifyOwner`` 、 ``addMember`` 、 ``changeOwner`` など。
 
 
 Function Argument Names
 =======================
 
-Function arguments should use mixedCase. Examples: ``initialSupply``, ``account``, ``recipientAddress``, ``senderAddress``, ``newOwner``.
+関数の引数はmixedCaseを使用するべきです。例: ``initialSupply`` 、 ``account`` 、 ``recipientAddress`` 、 ``senderAddress`` 、 ``newOwner`` など。
 
-When writing library functions that operate on a custom struct, the struct
-should be the first argument and should always be named ``self``.
+カスタム構造体を操作するライブラリ関数を書くときは、その構造体を最初の引数にして、常に ``self`` という名前にします。
 
 
 Local and State Variable Names
 ==============================
 
-Use mixedCase. Examples: ``totalSupply``, ``remainingSupply``, ``balancesOf``, ``creatorAddress``, ``isPreSale``, ``tokenExchangeRate``.
+mixedCaseを使用してください。 例: ``totalSupply`` 、 ``remainingSupply`` 、 ``balancesOf`` 、 ``creatorAddress`` 、 ``isPreSale`` 、 ``tokenExchangeRate`` など。
 
 
 Constants
 =========
 
-Constants should be named with all capital letters with underscores separating
-words. Examples: ``MAX_BLOCKS``, ``TOKEN_NAME``, ``TOKEN_TICKER``, ``CONTRACT_VERSION``.
+定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: ``MAX_BLOCKS`` 、 ``TOKEN_NAME`` 、 ``TOKEN_TICKER`` 、 ``CONTRACT_VERSION`` など。
+
 
 
 Modifier Names
 ==============
 
-Use mixedCase. Examples: ``onlyBy``, ``onlyAfter``, ``onlyDuringThePreSale``.
+mixedCaseを使用してください。 例: ``onlyBy`` 、 ``onlyAfter`` 、 ``onlyDuringThePreSale`` など。
 
 
 Enums
 =====
 
-Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: ``TokenGroup``, ``Frame``, ``HashStyle``, ``CharacterLocation``.
+列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: ``TokenGroup`` 、 ``Frame`` 、 ``HashStyle`` 、 ``CharacterLocation`` など。
 
 
 Avoiding Naming Collisions
@@ -1085,8 +1052,7 @@ Avoiding Naming Collisions
 
 * ``single_trailing_underscore_``
 
-This convention is suggested when the desired name collides with that of a
-built-in or otherwise reserved name.
+この規則は、命名する名前が組み込み名または予約語と競合する場合に推奨されます。
 
 
 General Recommendations
@@ -1100,15 +1066,11 @@ TODO
 NatSpec
 *******
 
-Solidity contracts can have a form of comments that are the basis of the
-Ethereum Natural Language Specification Format.
+Solidityコントラクトは、Ethereum Natural Language Specification Format のベースとなっている形式のコメントを付けることができます。
 
-Add comments above functions or contracts following `doxygen <http://www.doxygen.nl>`_ notation
-of one or multiple lines starting with `///` or a
-multiline comment starting with `/**` and ending with `*/`.
+`///` またはaで始まる1行または複数行の `doxygen <http://www.doxygen.nl>`_ 表記に続く関数または規約の上にコメントを追加します。
 
-For example, the contract from `a simple smart contract <simple-smart-contract>`_ with the comments
-added looks like the one below::
+例えば、コメントが追加された `a simple smart contract <simple-smart-contract>`_ のコントラクトは以下のようになります::
 
     pragma solidity >=0.4.0 <0.6.0;
 
@@ -1132,12 +1094,11 @@ added looks like the one below::
         }
     }
 
-Natspec uses doxygen style tags with some special meaning.
-If no tag is used, then the comment applies to ``@notice``.
-The ``@notice`` tag is the main NatSpec tag and its audience is
-users of the contract who have never seen the source code, so it should make
-as little assumptions about the inner details as possible.
-All tags are optional.
+Natspecは特別な意味を持つdoxygenスタイルのタグを使います。
+タグが使用されていない場合、コメントは ``@notice`` として適用されます。
+``@notice`` タグはNatSpecのメインタグで、読み手はソースコードを読んだことのないコントラクトユーザーを想定しています。
+そのため、できるだけ内部の詳細についての推測させないようにするべきです。
+また、すべてのタグはオプショナルです。
 
 +-------------+-------------------------------------------+-------------------------------+
 | Tag         | Description                               | Context                       |

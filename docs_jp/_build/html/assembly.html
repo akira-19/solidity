@@ -130,12 +130,24 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -335,9 +347,8 @@
 <p>opcodeが引数をとる場合（常にスタックの上からとります）、括弧の中に引数が入ります。
 引数の順番はnon-functional styleでは逆さまに入っています（後述します）。
 <code class="docutils literal notranslate"><span class="pre">-</span></code> がついているopcodeは何もスタック上にプッシュしません（結果も返しません）。<code class="docutils literal notranslate"><span class="pre">*</span></code> がついているopcodeは特別で、他のopcodeは1つだけスタック上にプッシュします（”返り値”）。
-<code class="docutils literal notranslate"><span class="pre">F</span></code>、<code class="docutils literal notranslate"><span class="pre">H</span></code>、<code class="docutils literal notranslate"><span class="pre">B</span></code>、<code class="docutils literal notranslate"><span class="pre">C</span></code> がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinople is still in planning and all instructions marked as such will result in an invalid instruction exception.</p>
-<p>In the following, <code class="docutils literal notranslate"><span class="pre">mem[a...b)</span></code> signifies the bytes of memory starting at position <code class="docutils literal notranslate"><span class="pre">a</span></code> up to
-but not including position <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">storage[p]</span></code> signifies the storage contents at position <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">F</span></code>、<code class="docutils literal notranslate"><span class="pre">H</span></code>、<code class="docutils literal notranslate"><span class="pre">B</span></code>、<code class="docutils literal notranslate"><span class="pre">C</span></code> がついているopcodeはそれぞれFrontier、Homestead、Byzantium、Constantinople から導入されました。Constantinopleは未だプラニングの段階ですので、そのマークがついているインストラクションは無効なインストラクションの例外を投げます。</p>
+<p>下記で、<code class="docutils literal notranslate"><span class="pre">mem[a...b)</span></code> は 位置 <code class="docutils literal notranslate"><span class="pre">a</span></code> から始まって、<code class="docutils literal notranslate"><span class="pre">b</span></code> で終わる（bは含まない）メモリのバイトを表しており、<code class="docutils literal notranslate"><span class="pre">storage[p]</span></code> は 位置 <code class="docutils literal notranslate"><span class="pre">p</span></code> でのストレージの内容を表しています。</p>
 <p><code class="docutils literal notranslate"><span class="pre">pushi</span></code> と <code class="docutils literal notranslate"><span class="pre">jumpdest</span></code> のopcodeは直接は使用できません。</p>
 <p>グラマー上、opcodeは事前に定義された識別子として表されます。</p>
 <table border="1" class="docutils">
@@ -762,44 +773,31 @@ t4)</td>
 </div>
 <div class="section" id="literals">
 <h3>Literals<a class="headerlink" href="#literals" title="Permalink to this headline">¶</a></h3>
-<p>You can use integer constants by typing them in decimal or hexadecimal notation and an
-appropriate <code class="docutils literal notranslate"><span class="pre">PUSHi</span></code> instruction will automatically be generated. The following creates code
-to add 2 and 3 resulting in 5 and then computes the bitwise <code class="docutils literal notranslate"><span class="pre">AND</span></code> with the string “abc”.
-The final value is assigned to a local variable called <code class="docutils literal notranslate"><span class="pre">x</span></code>.
-Strings are stored left-aligned and cannot be longer than 32 bytes.</p>
+<p>10進数か16進数の表記をつけることにより整数の定数を使用することができます。そして、適切な <code class="docutils literal notranslate"><span class="pre">PUSHi</span></code> インストラクションが自動的に生成されます。下記のコードは2と3を足して5になり、文字列”abc”とのビット積をとります。
+最終的な値はローカル変数の <code class="docutils literal notranslate"><span class="pre">x</span></code> に割り当てられます。
+文字列は左詰めで保存され、32バイト以下でなければいけません。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">assembly</span> <span class="p">{</span> <span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="nf">and</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="nf">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="functional-style">
 <h3>Functional Style<a class="headerlink" href="#functional-style" title="Permalink to this headline">¶</a></h3>
-<p>For a sequence of opcodes, it is often hard to see what the actual
-arguments for certain opcodes are. In the following example,
-<code class="docutils literal notranslate"><span class="pre">3</span></code> is added to the contents in memory at position <code class="docutils literal notranslate"><span class="pre">0x80</span></code>.</p>
+<p>opcodeのシーケンスでは、あるopcodeの実際の引数が何であるか見るのが大変なことがままあります。下記の例では、位置 <code class="docutils literal notranslate"><span class="pre">0x80</span></code> にあるメモリの内容に <code class="docutils literal notranslate"><span class="pre">3</span></code> が足されます。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="mi">3</span> <span class="mh">0x80</span> <span class="n">mload</span> <span class="n">add</span> <span class="mh">0x80</span> <span class="n">mstore</span>
 </pre></div>
 </div>
-<p>Solidity inline assembly has a “functional style” notation where the same code
-would be written as follows:</p>
+<p>Solidityのインラインアセンブリは下記のように書かれる”ファンクショナルスタイル”の表記を持っています:</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">mstore</span><span class="p">(</span><span class="mh">0x80</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">mload</span><span class="p">(</span><span class="mh">0x80</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>If you read the code from right to left, you end up with exactly the same
-sequence of constants and opcodes, but it is much clearer where the
-values end up.</p>
-<p>If you care about the exact stack layout, just note that the
-syntactically first argument for a function or opcode will be put at the
-top of the stack.</p>
+<p>右から左に読むと、完全に同じ定数とopcodeのシーケンスとなりますが、とても読みやすいです。</p>
+<p>もしスタックのレイアウトが気になるなら、覚えておいて欲しいのは、シンタックス的にファンクションもしくはopcodeの最初の引数はスタックの一番上に置かれるということです。</p>
 </div>
 <div class="section" id="access-to-external-variables-functions-and-libraries">
 <h3>Access to External Variables, Functions and Libraries<a class="headerlink" href="#access-to-external-variables-functions-and-libraries" title="Permalink to this headline">¶</a></h3>
-<p>You can access Solidity variables and other identifiers by using their name.
-For variables stored in the memory data location, this pushes the address, and not the value
-onto the stack. Variables stored in the storage data location are different, as they might not
-occupy a full storage slot, so their “address” is composed of a slot and a byte-offset
-inside that slot. To retrieve the slot pointed to by the variable <code class="docutils literal notranslate"><span class="pre">x</span></code>, you
-use <code class="docutils literal notranslate"><span class="pre">x_slot</span></code>, and to retrieve the byte-offset you use <code class="docutils literal notranslate"><span class="pre">x_offset</span></code>.</p>
-<p>Local Solidity variables are available for assignments, for example:</p>
+<p>Solidityの変数や他の識別子にはその名前でアクセスすることができます。
+メモリに保存されている変数に関してはスタックに値ではなくアドレスをプッシュします。ストレージに保存されている変数はこれとは異なります。全てのストレージのスロットをおそらく占有しないので、”アドレス”はスロットとスロット内のバイトオフセットで構成されています。変数 <code class="docutils literal notranslate"><span class="pre">x</span></code> でポイントされているスロットを読み出すには <code class="docutils literal notranslate"><span class="pre">x_slot</span></code> を使用してください。バイトオフセットを読み出すには、<code class="docutils literal notranslate"><span class="pre">x_offset</span></code> を使用してください。</p>
+<p>Solidityのローカル変数は割り当て可能です。例えば:</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
@@ -814,29 +812,22 @@ use <code class="docutils literal notranslate"><span class="pre">x_slot</span></
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">If you access variables of a type that spans less than 256 bits
-(for example <code class="docutils literal notranslate"><span class="pre">uint64</span></code>, <code class="docutils literal notranslate"><span class="pre">address</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes16</span></code> or <code class="docutils literal notranslate"><span class="pre">byte</span></code>),
-you cannot make any assumptions about bits not part of the
-encoding of the type. Especially, do not assume them to be zero.
-To be safe, always clear the data properly before you use it
-in a context where this is important:
+<p class="last">256ビット未満の型の変数（例えば、<code class="docutils literal notranslate"><span class="pre">uint64</span></code>、<code class="docutils literal notranslate"><span class="pre">address</span></code>、<code class="docutils literal notranslate"><span class="pre">bytes16</span></code>、<code class="docutils literal notranslate"><span class="pre">byte</span></code>）にアクセスする場合、型のエンコーディングの一部ではないビットに対してどんな想定もできません。特にゼロと想定してはいけません。
+安全のために、コンテキスト内で使う前に常にデータを適切にクリアしてください:
 <code class="docutils literal notranslate"><span class="pre">uint32</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">f();</span> <span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">and(x,</span> <span class="pre">0xffffffff)</span> <span class="pre">/*</span> <span class="pre">now</span> <span class="pre">use</span> <span class="pre">x</span> <span class="pre">*/</span> <span class="pre">}</span></code>
-To clean signed types, you can use the <code class="docutils literal notranslate"><span class="pre">signextend</span></code> opcode.</p>
+符号付の型をクリアするのに <code class="docutils literal notranslate"><span class="pre">signextend</span></code> opcodeが使用できます。</p>
 </div>
 </div>
 <div class="section" id="labels">
 <h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
-<p>Support for labels has been removed in version 0.5.0 of Solidity.
-Please use functions, loops, if or switch statements instead.</p>
+<p>ラベルのサポートはSolidity 0.5.0版で削除されました。
+ファンクション、ループ、if文、switch文を代わりに使用してください。</p>
 </div>
 <div class="section" id="declaring-assembly-local-variables">
 <h3>Declaring Assembly-Local Variables<a class="headerlink" href="#declaring-assembly-local-variables" title="Permalink to this headline">¶</a></h3>
-<p>You can use the <code class="docutils literal notranslate"><span class="pre">let</span></code> keyword to declare variables that are only visible in
-inline assembly and actually only in the current <code class="docutils literal notranslate"><span class="pre">{...}</span></code>-block. What happens
-is that the <code class="docutils literal notranslate"><span class="pre">let</span></code> instruction will create a new stack slot that is reserved
-for the variable and automatically removed again when the end of the block
-is reached. You need to provide an initial value for the variable which can
-be just <code class="docutils literal notranslate"><span class="pre">0</span></code>, but it can also be a complex functional-style expression.</p>
+<p>変数を宣言するのに、<code class="docutils literal notranslate"><span class="pre">let</span></code> キーワードを使用することができます。letはインラインアセンブリ内でのみ、実際には現在の <code class="docutils literal notranslate"><span class="pre">{...}</span></code>-block内でのみのスコープです。
+<code class="docutils literal notranslate"><span class="pre">let</span></code> は新しい変数のためのスタックのスロットを作り、ブロックの最後に達したら自動的に削除されます。
+その変数には初期値を与える必要があります。ただの <code class="docutils literal notranslate"><span class="pre">0</span></code> でも良いですが、複雑なファンクショナルスタイルの式でも構いません。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
@@ -857,12 +848,9 @@ be just <code class="docutils literal notranslate"><span class="pre">0</span></c
 </div>
 <div class="section" id="assignments">
 <h3>Assignments<a class="headerlink" href="#assignments" title="Permalink to this headline">¶</a></h3>
-<p>Assignments are possible to assembly-local variables and to function-local
-variables. Take care that when you assign to variables that point to
-memory or storage, you will only change the pointer and not the data.</p>
-<p>Variables can only be assigned expressions that result in exactly one value.
-If you want to assign the values returned from a function that has
-multiple return parameters, you have to provide multiple variables.</p>
+<p>値の割り当てはアセンブリのローカル変数とファンクションのローカル変数へ可能です。メモリやストレージの変数を割り当てる時に注意したいのは、それはポインタを変えるだけで、データを変えているわけではないということです。</p>
+<p>1つの値に落ち着く式しか変数に割り当てることはできません。
+もし複数の値を返すファンクションから受け取った値を変数に割り当てたいときは、複数の変数を用意しなければいけません。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">let</span> <span class="n">v</span> <span class="o">:=</span> <span class="mi">0</span>
     <span class="n">let</span> <span class="n">g</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -874,24 +862,21 @@ multiple return parameters, you have to provide multiple variables.</p>
 </div>
 <div class="section" id="if">
 <h3>If<a class="headerlink" href="#if" title="Permalink to this headline">¶</a></h3>
-<p>The if statement can be used for conditionally executing code.
-There is no “else” part, consider using “switch” (see below) if
-you need multiple alternatives.</p>
+<p>if文は条件分岐で使用できます。
+“else”部分はありません。複数の条件分岐があるのであれば、”switch”の使用を検討してください（下記参照）。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="k">if</span> <span class="n">eq</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nf">revert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The curly braces for the body are required.</p>
+<p>ボディには波括弧が必要です。</p>
 </div>
 <div class="section" id="switch">
 <h3>Switch<a class="headerlink" href="#switch" title="Permalink to this headline">¶</a></h3>
-<p>You can use a switch statement as a very basic version of “if/else”.
-It takes the value of an expression and compares it to several constants.
-The branch corresponding to the matching constant is taken. Contrary to the
-error-prone behaviour of some programming languages, control flow does
-not continue from one case to the next. There can be a fallback or default
-case called <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<p>基本的な”if/else”文として、switch文が使用可能です。
+ある式の値をとって、それをいくつかの定数と比較します。
+条件に合う定数の分岐が選ばれます。
+間違いを起こしやすいいくつかのプログラミング言語とは異なり、操作フローはある条件から次の条件へコンテニューしません。フォールバックもしくは <code class="docutils literal notranslate"><span class="pre">default</span></code> というデフォルトの条件が使えます。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
     <span class="n">switch</span> <span class="n">calldataload</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -905,18 +890,12 @@ case called <code class="docutils literal notranslate"><span class="pre">default
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The list of cases does not require curly braces, but the body of a
-case does require them.</p>
+<p>条件のリストでは波括弧は必要ありませんが、ボディでは必要となります。</p>
 </div>
 <div class="section" id="loops">
 <h3>Loops<a class="headerlink" href="#loops" title="Permalink to this headline">¶</a></h3>
-<p>Assembly supports a simple for-style loop. For-style loops have
-a header containing an initializing part, a condition and a post-iteration
-part. The condition has to be a functional-style expression, while
-the other two are blocks. If the initializing part
-declares any variables, the scope of these variables is extended into the
-body (including the condition and the post-iteration part).</p>
-<p>The following example computes the sum of an area in memory.</p>
+<p>アセンブリは単純なforループをサポートしています。forループは初期化部分、条件、イテレーション後のパートを含むヘッダを持っています。条件はファンクショナルスタイルの式である必要がありますが、他の2つはブロックです。初期化部分で変数を宣言した場合、この変数のスコープは本体（条件、イテレーション後のパートを含む）に拡張されます。</p>
+<p>次の例ではメモリ内のある領域の合計を計算しています。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="p">{</span> <span class="n">let</span> <span class="n">i</span> <span class="o">:=</span> <span class="mi">0</span> <span class="p">}</span> <span class="n">lt</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x100</span><span class="p">)</span> <span class="p">{</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span> <span class="p">}</span> <span class="p">{</span>
@@ -925,8 +904,7 @@ body (including the condition and the post-iteration part).</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>For loops can also be written so that they behave like while loops:
-Simply leave the initialization and post-iteration parts empty.</p>
+<p>　forループはwhileループの様に書くこともできます:単純に初期化部分とイテレーション後のパートを空にします。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">let</span> <span class="n">x</span> <span class="o">:=</span> <span class="mi">0</span>
     <span class="n">let</span> <span class="n">i</span> <span class="o">:=</span> <span class="mi">0</span>
@@ -940,17 +918,11 @@ Simply leave the initialization and post-iteration parts empty.</p>
 </div>
 <div class="section" id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
-<p>Assembly allows the definition of low-level functions. These take their
-arguments (and a return PC) from the stack and also put the results onto the
-stack. Calling a function looks the same way as executing a functional-style
-opcode.</p>
-<p>Functions can be defined anywhere and are visible in the block they are
-declared in. Inside a function, you cannot access local variables
-defined outside of that function. There is no explicit <code class="docutils literal notranslate"><span class="pre">return</span></code>
-statement.</p>
-<p>If you call a function that returns multiple values, you have to assign
-them to a tuple using <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code>.</p>
-<p>The following example implements the power function by square-and-multiply.</p>
+<p>アセンブリは低レベルファンクションの定義もできます。
+このファンクションは引数（とリターンPC）をスタックからとってきます。また、スタックに結果をプットします。ファンクションの呼び出しはファンクショナルスタイルの実行のopcodeと同様な方法に見えます。</p>
+<p>ファンクションはどこでも定義することができて、宣言されたブロック内がスコープになります。ファンクション内では、ファンクション外で宣言されたローカル変数にはアクセスできません。明示的な <code class="docutils literal notranslate"><span class="pre">return</span></code> の宣言はありません。</p>
+<p>複数の値を返すファンクションをコールする場合、<code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a,</span> <span class="pre">b</span> <span class="pre">:=</span> <span class="pre">f(x)</span></code> を使って、その値をタプルに割り当てなければいけません。</p>
+<p>下記の例では二乗と乗算を使った累乗の計算をしています。</p>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="kd">function</span> <span class="n">power</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">result</span> <span class="p">{</span>
         <span class="n">switch</span> <span class="n">exponent</span>
@@ -968,102 +940,52 @@ them to a tuple using <code class="docutils literal notranslate"><span class="pr
 </div>
 <div class="section" id="things-to-avoid">
 <h3>Things to Avoid<a class="headerlink" href="#things-to-avoid" title="Permalink to this headline">¶</a></h3>
-<p>Inline assembly might have a quite high-level look, but it actually is extremely
-low-level. Function calls, loops, ifs and switches are converted by simple
-rewriting rules and after that, the only thing the assembler does for you is re-arranging
-functional-style opcodes, counting stack height for
-variable access and removing stack slots for assembly-local variables when the end
-of their block is reached.</p>
+<p>インラインアセンブリはかなり高いレベルに見えるかもしれませんが、実際は非常に低レベルです。ファンクションコール、ループ、if文、switch文は単純なルールの書き換えで変換されます。その後アセンブラがするのはファンクショナルスタイルのopcodeを再度並び替え、変数アクセスのためのスタックハイトを数え、ブロックの最後になったらアセンブリローカル変数のためのスタックのスロットを削除するということだけです。</p>
 </div>
 <div class="section" id="conventions-in-solidity">
 <h3>Conventions in Solidity<a class="headerlink" href="#conventions-in-solidity" title="Permalink to this headline">¶</a></h3>
-<p>In contrast to EVM assembly, Solidity knows types which are narrower than 256 bits,
-e.g. <code class="docutils literal notranslate"><span class="pre">uint24</span></code>. In order to make them more efficient, most arithmetic operations just
-treat them as 256-bit numbers and the higher-order bits are only cleaned at the
-point where it is necessary, i.e. just shortly before they are written to memory
-or before comparisons are performed. This means that if you access such a variable
-from within inline assembly, you might have to manually clean the higher order bits
-first.</p>
-<p>Solidity manages memory in a very simple way: There is a “free memory pointer”
-at position <code class="docutils literal notranslate"><span class="pre">0x40</span></code> in memory. If you want to allocate memory, just use the memory
-starting from where this pointer points at and update it accordingly.
-There is no guarantee that the memory has not been used before and thus
-you cannot assume that its contents are zero bytes.
-There is no built-in mechanism to release or free allocated memory.
-Here is an assembly snippet that can be used for allocating memory:</p>
+<p>EVMアセンブリと異なり、Solidityは <code class="docutils literal notranslate"><span class="pre">uint24</span></code> の様な256ビットより小さい型を識別できます。効率的にするために、ほとんどの算術演算はその型を256ビットの値として扱い、はみ出た分のビットは必要な時に処理します。例えば、メモリに書き込まれる直前や、比較演算がされる時です。つまり、もしインラインアセンブリ内の変数にアクセスする時には、まずマニュアルでそのはみ出たビットを処理する必要があるかもしれません。</p>
+<p>Solidityはメモリはとてもシンプルな方法で管理しています。
+メモリ内の <code class="docutils literal notranslate"><span class="pre">0x40</span></code> に”free memory pointer”があります。メモリを振り分ける時に、このポインタが示しているメモリから始めて、順にアップデートしていくだけです。
+そのメモリが以前に使われていたかどうかの保証はないので、その中身がゼロであると仮定はできません。
+メモリを解放したり、好きなところにメモリを割り当てる内蔵機能は付いていません。
+下記はメモリの割り当てのアセンブリの例です:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="n">allocate</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pos</span> <span class="p">{</span>
   <span class="n">pos</span> <span class="o">:=</span> <span class="n">mload</span><span class="p">(</span><span class="mh">0x40</span><span class="p">)</span>
   <span class="n">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The first 64 bytes of memory can be used as “scratch space” for short-term
-allocation. The 32 bytes after the free memory pointer (i.e. starting at <code class="docutils literal notranslate"><span class="pre">0x60</span></code>)
-is meant to be zero permanently and is used as the initial value for
-empty dynamic memory arrays.
-This means that the allocatable memory starts at <code class="docutils literal notranslate"><span class="pre">0x80</span></code>, which is the initial value
-of the free memory pointer.</p>
-<p>Elements in memory arrays in Solidity always occupy multiples of 32 bytes (yes, this is
-even true for <code class="docutils literal notranslate"><span class="pre">byte[]</span></code>, but not for <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>). Multi-dimensional memory
-arrays are pointers to memory arrays. The length of a dynamic array is stored at the
-first slot of the array and followed by the array elements.</p>
+<p>メモリの最初の64バイトは短期間の割り当てのための”scratch space”として使うことができます。フリーメモリポインタ（ <code class="docutils literal notranslate"><span class="pre">0x60</span></code> から始まる様な）の32バイト後はずっと0であるはずで、空の動的メモリ配列の初期値として使われます。
+つまり、割り当て可能なメモリは <code class="docutils literal notranslate"><span class="pre">0x80</span></code> から始まり、それはフリーメモリポインタの初期値です。</p>
+<p>Solidityのメモリ配列の要素は常に32バイトの倍数を占めています（これは <code class="docutils literal notranslate"><span class="pre">byte[]</span></code> では同じですが、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> では違います）。多次元メモリ配列はメモリ配列のポインタです。動的配列の長さは配列の最初のスロットに保存され、その他に配列の要素が続きます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Statically-sized memory arrays do not have a length field, but it might be added later
-to allow better convertibility between statically- and dynamically-sized arrays, so
-please do not rely on that.</p>
+<p class="last">静的サイズのメモリ配列は長さの領域を持っていません。しかし、今後静的配列と動的配列の互換性のために追加されるかもしれません。</p>
 </div>
 </div>
 </div>
 <div class="section" id="standalone-assembly">
 <h2>Standalone Assembly<a class="headerlink" href="#standalone-assembly" title="Permalink to this headline">¶</a></h2>
-<p>The assembly language described as inline assembly above can also be used
-standalone and in fact, the plan is to use it as an intermediate language
-for the Solidity compiler. In this form, it tries to achieve several goals:</p>
+<p>上記でインラインアセンブリとして紹介したアセンブリ言語はスタンドアローンとしても使用可能で、実はSolidityのコンパイラとの中間言語として使用する予定です。ここでは、いくつか達成したいことがあります:</p>
 <ol class="arabic simple">
-<li>Programs written in it should be readable, even if the code is generated by a compiler from Solidity.</li>
-<li>The translation from assembly to bytecode should contain as few “surprises” as possible.</li>
-<li>Control flow should be easy to detect to help in formal verification and optimization.</li>
+<li>その中で書かれたプログラムはSolidityからコンパイラを通じて生成されたとしても読んで理解できるものであるべきです。</li>
+<li>アセンブリからバイトコードへの変換は可能な限り”サプライズ”を含まない様にするべきです。</li>
+<li>制御フローは形式的検証や最適化をしやすくするために、簡単に検知されるべきです。</li>
 </ol>
-<p>In order to achieve the first and last goal, assembly provides high-level constructs
-like <code class="docutils literal notranslate"><span class="pre">for</span></code> loops, <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">switch</span></code> statements and function calls. It should be possible
-to write assembly programs that do not make use of explicit <code class="docutils literal notranslate"><span class="pre">SWAP</span></code>, <code class="docutils literal notranslate"><span class="pre">DUP</span></code>,
-<code class="docutils literal notranslate"><span class="pre">JUMP</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> statements, because the first two obfuscate the data flow
-and the last two obfuscate control flow. Furthermore, functional statements of
-the form <code class="docutils literal notranslate"><span class="pre">mul(add(x,</span> <span class="pre">y),</span> <span class="pre">7)</span></code> are preferred over pure opcode statements like
-<code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">y</span> <span class="pre">x</span> <span class="pre">add</span> <span class="pre">mul</span></code> because in the first form, it is much easier to see which
-operand is used for which opcode.</p>
-<p>The second goal is achieved by compiling the
-higher level constructs to bytecode in a very regular way.
-The only non-local operation performed
-by the assembler is name lookup of user-defined identifiers (functions, variables, …),
-which follow very simple and regular scoping rules and cleanup of local variables from the stack.</p>
-<p>Scoping: An identifier that is declared (label, variable, function, assembly)
-is only visible in the block where it was declared (including nested blocks
-inside the current block). It is not legal to access local variables across
-function borders, even if they would be in scope. Shadowing is not allowed.
-Local variables cannot be accessed before they were declared, but
-functions and assemblies can. Assemblies are special blocks that are used
-for e.g. returning runtime code or creating contracts. No identifier from an
-outer assembly is visible in a sub-assembly.</p>
-<p>If control flow passes over the end of a block, pop instructions are inserted
-that match the number of local variables declared in that block.
-Whenever a local variable is referenced, the code generator needs
-to know its current relative position in the stack and thus it needs to
-keep track of the current so-called stack height. Since all local variables
-are removed at the end of a block, the stack height before and after the block
-should be the same. If this is not the case, compilation fails.</p>
-<p>Using <code class="docutils literal notranslate"><span class="pre">switch</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code> and functions, it should be possible to write
-complex code without using <code class="docutils literal notranslate"><span class="pre">jump</span></code> or <code class="docutils literal notranslate"><span class="pre">jumpi</span></code> manually. This makes it much
-easier to analyze the control flow, which allows for improved formal
-verification and optimization.</p>
-<p>Furthermore, if manual jumps are allowed, computing the stack height is rather complicated.
-The position of all local variables on the stack needs to be known, otherwise
-neither references to local variables nor removing local variables automatically
-from the stack at the end of a block will work properly.</p>
+<p>最初と最後の目標を達成するためにアセンブリでは <code class="docutils literal notranslate"><span class="pre">for</span></code> ループ、<code class="docutils literal notranslate"><span class="pre">if</span></code>、<code class="docutils literal notranslate"><span class="pre">switch</span></code> 文の様な高レベルの概念やファンクションコールが使えます。明示的な <code class="docutils literal notranslate"><span class="pre">SWAP</span></code>、<code class="docutils literal notranslate"><span class="pre">DUP</span></code>、<code class="docutils literal notranslate"><span class="pre">JUMP</span></code>、<code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> を使わないアセンブリのプログラムを書くことが可能であるべきです。なぜなら初めの2つはデータフローを分かりにくくし、後の2つは制御フローを分かりにくくするからです。
+さらに、<code class="docutils literal notranslate"><span class="pre">mul(add(x,</span> <span class="pre">y),</span> <span class="pre">7)</span></code> という形のファンクショナルステートメントは <code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">y</span> <span class="pre">x</span> <span class="pre">add</span> <span class="pre">mul</span></code> の様なピュアなopcodeより好ましいです。なぜならば、最初の式の方がどっちのオペランドにどっちのopcodeを使うのか分かりやすいからです。</p>
+<p>2つ目の目標に関しては、とても標準的な方法でより高いレベルの概念からバイトコードにコンパイルすることで達成します。
+アセンブラによって行われる唯一の非ローカル演算は、ユーザー定義の識別子（ファンクション、変数など）の名前検索です。その演算ではとてもシンプルで標準的なスコープのルールに則り、また標準的な方法でスタックからのローカル変数の削除します。</p>
+<p>Scoping: 宣言された識別子（ラベル、変数、ファンクション、アセンブリ）は宣言されたブロック内（現在のブロックの内側のネストされたブロックも含む）のみがスコープとなります。たとえスコープ内だったとしてもファンクションの垣根を超えてローカル変数にはアクセスできません。シャドーイングは使えません。
+ローカル変数は宣言前には使えませんが、ファンクションやアセンブリは使用可能です。アセンブリはランタイムコードを返したり、コントラクトの作成に使われる特別なブロックです。アウターのアセンブリの識別子はサブアセンブリの中では使えません。</p>
+<p>もし制御フローが最後のブロックを通ったら、ブロック内で宣言されたローカル変数の数だけポップの命令が挿入されます。
+ローカル変数がリファレンスされる時は、コードジェネレータはスタック内でのその変数の相対的な位置を把握している必要があり、そのためいわゆるブロックハイトをトラックしています。ブロックの最後に全てのローカル変数は削除されるので、スタックハイトはブロックの前後で同じのはずです。もし同じでない場合、コンパイルは失敗します。</p>
+<p><code class="docutils literal notranslate"><span class="pre">switch</span></code>、<code class="docutils literal notranslate"><span class="pre">for</span></code>、ファンクションを使えば、手動で <code class="docutils literal notranslate"><span class="pre">jump</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">jumpi</span></code> を使わずに複雑なコードが書けるはずです。これにより制御フローの分析がとても簡単になり、形式的検証や最適化が改善されます。</p>
+<p>さらに、手動でのジャンプができると、スタックハイトの計算はむしろ複雑になります。全てのスタック上のローカル変数の位置は既知である必要あり、そうでなければ、ローカル変数への参照やブロックの最後に自動でスタックからローカル変数を削除する機能はちゃんと動作しません。</p>
 <p>Example:</p>
-<p>We will follow an example compilation from Solidity to assembly.
-We consider the runtime bytecode of the following Solidity program:</p>
+<p>Solidityからアセンブリへのコンパイル例を見てみましょう。
+下記のラインタイムバイトコードを考えます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">16</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
@@ -1075,7 +997,7 @@ We consider the runtime bytecode of the following Solidity program:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The following assembly will be generated:</p>
+<p>以下のアセンブリが生成されます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="n">mstore</span><span class="p">(</span><span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">)</span> <span class="c1">// store the &quot;free memory pointer&quot;</span>
   <span class="c1">// function dispatcher</span>
@@ -1104,18 +1026,14 @@ We consider the runtime bytecode of the following Solidity program:</p>
 </div>
 <div class="section" id="assembly-grammar">
 <h3>Assembly Grammar<a class="headerlink" href="#assembly-grammar" title="Permalink to this headline">¶</a></h3>
-<p>The tasks of the parser are the following:</p>
+<p>パーサのタスクは下記の通りです:</p>
 <ul class="simple">
-<li>Turn the byte stream into a token stream, discarding C++-style comments
-(a special comment exists for source references, but we will not explain it here).</li>
-<li>Turn the token stream into an AST according to the grammar below</li>
-<li>Register identifiers with the block they are defined in (annotation to the
-AST node) and note from which point on, variables can be accessed.</li>
+<li>バイトストリームをトークンストリームにし、C++スタイルのコメントを破棄します（参照ソースには特別なコメントがありますが、ここでは割愛します）。</li>
+<li>下記のグラマーに従って、トークンストリームをASTにします。</li>
+<li>識別子をその識別子が定義されたブロックと一緒に登録します（ASTノードへの注記）。どこから変数にアクセスできるか注意してください。</li>
 </ul>
-<p>The assembly lexer follows the one defined by Solidity itself.</p>
-<p>Whitespace is used to delimit tokens and it consists of the characters
-Space, Tab and Linefeed. Comments are regular JavaScript/C++ comments and
-are interpreted in the same way as Whitespace.</p>
+<p>アセンブリの字句解析器はSolidityで定義されたものに従います。</p>
+<p>ホワイトスペース（空白文字、タブ、改行）はトークンの範囲を決めるのに使用されます。コメントは標準のJavaScript/C++のコメントで、ホワイトスペースと同様に変換されます。</p>
 <p>Grammar:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">AssemblyBlock</span> <span class="o">=</span> <span class="s">&#39;{&#39;</span> <span class="n">AssemblyItem</span><span class="o">*</span> <span class="s">&#39;}&#39;</span>
 <span class="n">AssemblyItem</span> <span class="o">=</span>

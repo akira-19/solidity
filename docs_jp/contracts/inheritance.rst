@@ -4,22 +4,15 @@
 Inheritance
 ***********
 
-Solidity supports multiple inheritance including polymorphism.
+Solidityはポリモフィズムを含めた多重継承をサポートしています。
 
-All function calls are virtual, which means that the most derived function
-is called, except when the contract name is explicitly given or the
-``super`` keyword is used.
+全てのファンクションコールは仮想です。つまりコントラクト名が明示的に与えられた場合、``super`` が使われた場合を除いて、最後に派生されたファンクションが呼ばれます。
 
-When a contract inherits from other contracts, only a single
-contract is created on the blockchain, and the code from all the base contracts
-is compiled into the created contract.
+あるコントラクトがある他のコントラクトを継承するとき、1つのコントラクトだけがブロックチェーン上に生成されます。全てのベースコントラクトからのコードは生成したコントラクトにコンパイルされます。
 
-The general inheritance system is very similar to
-`Python's <https://docs.python.org/3/tutorial/classes.html#inheritance>`_,
-especially concerning multiple inheritance, but there are also
-some :ref:`differences <multi-inheritance>`.
+継承のシステム全般は `Python <https://docs.python.org/3/tutorial/classes.html#inheritance>`_ にとても似ています。特に多重継承は似ていますが、いくつかの :ref:`違い <multi-inheritance>` もあります。
 
-Details are given in the following example.
+詳細は下記の例で示します。
 
 ::
 
@@ -91,9 +84,7 @@ Details are given in the following example.
        uint info;
     }
 
-Note that above, we call ``mortal.kill()`` to "forward" the
-destruction request. The way this is done is problematic, as
-seen in the following example::
+上記注目して頂きたいのですが、破壊の要求を"転送"するのに ``mortal.kill()`` を呼んでいます。これは下記の例で見られる様に問題があります::
 
     pragma solidity >=0.4.22 <0.6.0;
 
@@ -119,10 +110,7 @@ seen in the following example::
     contract Final is Base1, Base2 {
     }
 
-A call to ``Final.kill()`` will call ``Base2.kill`` as the most
-derived override, but this function will bypass
-``Base1.kill``, basically because it does not even know about
-``Base1``.  The way around this is to use ``super``::
+``Final.kill()`` の呼び出しは、最後にオーバーライドされたものとして ``Base2.kill`` を呼び出します。しかし、このファンクションは ``Base1.kill`` をバイパスします。なぜなら、そのファンクションは ``Base1`` を把握していないからです。これの回避策は ``super`` を使うことです::
 
     pragma solidity >=0.4.22 <0.6.0;
 

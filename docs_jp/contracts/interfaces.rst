@@ -6,6 +6,7 @@
 Interfaces
 **********
 
+インターフェースはアブストラクトコントラクトに似ています。
 Interfaces are similar to abstract contracts, but they cannot have any functions implemented. There are further restrictions:
 
 - They cannot inherit other contracts or interfaces.

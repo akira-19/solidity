@@ -6,44 +6,20 @@
 Libraries
 *********
 
-Libraries are similar to contracts, but their purpose is that they are deployed
-only once at a specific address and their code is reused using the ``DELEGATECALL``
-(``CALLCODE`` until Homestead)
-feature of the EVM. This means that if library functions are called, their code
-is executed in the context of the calling contract, i.e. ``this`` points to the
-calling contract, and especially the storage from the calling contract can be
-accessed. As a library is an isolated piece of source code, it can only access
-state variables of the calling contract if they are explicitly supplied (it
-would have no way to name them, otherwise). Library functions can only be
-called directly (i.e. without the use of ``DELEGATECALL``) if they do not modify
-the state (i.e. if they are ``view`` or ``pure`` functions),
-because libraries are assumed to be stateless. In particular, it is
-not possible to destroy a library.
+ライブラリはコントラクトに似ていますが、ある特定のアドレスに一度だけデプロイされ、``DELEGATECALL`` (Homesteadまでは ``CALLCODE``)を使って、そのコードを再利用するのが目的です。つまり、ライブラリのファンクションが呼び出されたら、呼び出したコントラクトのコンテキストで実行されます。``this`` は呼び出したコントラクトを指しますし、特に呼び出し元のコントラクトのストレージもアクセス可能です。ライブラリは独立したソースコードなので、状態変数が明示的に渡された場合、呼び出したコントラクトの状態変数にアクセスできます（そうでないと名前をつけられません）。
+ライブラリのファンクションはステートを変更しない場合（ ``view`` もしくは ``pure`` の場合）、直接呼び出すことしかできません（つまり ``DELEGATECALL`` を使わない）。なぜなら、ライブラリはステートレスと想定されているからです。つまり、ライブラリを破棄することはできません。
 
 .. note::
-    Until version 0.4.20, it was possible to destroy libraries by
-    circumventing Solidity's type system. Starting from that version,
-    libraries contain a :ref:`mechanism<call-protection>` that
-    disallows state-modifying functions
-    to be called directly (i.e. without ``DELEGATECALL``).
+    バージョン0.4.20までは、Solidityのタイプシステムを迂回することで、ライブラリの破棄が可能でした。
+    そのバージョンから、ライブラリがステートを変更するファンクションを直接呼び出す :ref:`mechanism<call-protection>` を導入しました（つまり ``DELEGATECALL`` を使わない）。
 
-Libraries can be seen as implicit base contracts of the contracts that use them.
-They will not be explicitly visible in the inheritance hierarchy, but calls
-to library functions look just like calls to functions of explicit base
-contracts (``L.f()`` if ``L`` is the name of the library). Furthermore,
-``internal`` functions of libraries are visible in all contracts, just as
-if the library were a base contract. Of course, calls to internal functions
-use the internal calling convention, which means that all internal types
-can be passed and types :ref:`stored in memory <data-location>` will be passed by reference and not copied.
-To realize this in the EVM, code of internal library functions
-and all functions called from therein will at compile time be pulled into the calling
-contract, and a regular ``JUMP`` call will be used instead of a ``DELEGATECALL``.
+
+ライブラリはコントラクトが使う暗示的なベースコントラクトと見做すことができます。ライブラリは継承の階層の中で明示的に可視ではないですが、ライブラリのファンクションを呼ぶのは、明示的なベースファンクションを呼ぶ様なものです（ ``L`` がライブラリの名前の時に ``L.f()`` ）。さらに、ライブラリの ``internal`` ファンクションはまるでライブラリがベースコントラクトであるかの様に、全てのコントラクトからアクセスできます。もちろんinternalのファンクションを呼び出すにはinternalの呼び出しのルールに従う必要があります。それは全てのinternalタイプは受け渡されて、:ref:`メモリに保存 <data-location>` された型は参照として渡され、コピーされないということです。
+EVMでこれを実現するために、internalのライブラリファンクションのコードとその中から呼ばれるファンクションはコンパイル時に呼び出し元のコントラクトに入り、``DELEGATECALL`` の代わりに通常の ``JUMP`` コールが使用されます。
 
 .. index:: using for, set
 
-The following example illustrates how to use libraries (but manual method
-be sure to check out :ref:`using for <using-for>` for a
-more advanced example to implement a set).
+次の例ではどの様にライブラリを使うかを説明します（マニュアルメソッドに関してはより詳細な例 :ref:`using for <using-for>` を参照ください）。
 
 ::
 
@@ -101,23 +77,11 @@ more advanced example to implement a set).
         // In this contract, we can also directly access knownValues.flags, if we want.
     }
 
-Of course, you do not have to follow this way to use
-libraries: they can also be used without defining struct
-data types. Functions also work without any storage
-reference parameters, and they can have multiple storage reference
-parameters and in any position.
+もちろん、ライブラリを使うのにこの方法に従う必要はありません。構造体型を定義しなくても使えます。ファンクションはストレージの参照型を使わなくても動きますし、どこでも複数のストレージの参照型を持つことができます。
 
-The calls to ``Set.contains``, ``Set.insert`` and ``Set.remove``
-are all compiled as calls (``DELEGATECALL``) to an external
-contract/library. If you use libraries, be aware that an
-actual external function call is performed.
-``msg.sender``, ``msg.value`` and ``this`` will retain their values
-in this call, though (prior to Homestead, because of the use of ``CALLCODE``, ``msg.sender`` and
-``msg.value`` changed, though).
+``Set.contains``、``Set.insert``、``Set.remove`` の呼び出しは外部のコントラクト、ライブラリの呼び出し(``DELEGATECALL``)としてコンパイルされます。もしライブラリを使うなら、1つの実際のexternalのファンクションコールが実行されることを覚えておいてください。``msg.sender``、``msg.value``、``this`` はその値をこのコール中に保持します（ ``CALLCODE``、``msg.sender``、``msg.value`` の使用方法が変わったため、Homestead以前で有効です）。
 
-The following example shows how to use :ref:`types stored in memory <data-location>` and
-internal functions in libraries in order to implement
-custom types without the overhead of external function calls:
+以下の例では、externalファンクションコールのオーバーヘッドなしでカスタム型を実行するために、:ref:`メモリに保存される型 <data-location>` とライブラリのinternalファンクションをどの様に使用するか示しています。
 
 ::
 
@@ -176,55 +140,27 @@ custom types without the overhead of external function calls:
         }
     }
 
-As the compiler cannot know where the library will be
-deployed at, these addresses have to be filled into the
-final bytecode by a linker
-(see :ref:`commandline-compiler` for how to use the
-commandline compiler for linking). If the addresses are not
-given as arguments to the compiler, the compiled hex code
-will contain placeholders of the form ``__Set______`` (where
-``Set`` is the name of the library). The address can be filled
-manually by replacing all those 40 symbols by the hex
-encoding of the address of the library contract.
+ライブラリがどこにデプロイされるかコンパイラは分からないので、アドレスはlinkerで最後のバイトコードに入れられる必要があります（リンキングのためのコマンドラインコンパイラの使い方は :ref:`commandline-compiler` を参照下さい）。もしアドレスが引数としてコンパイラに渡されない場合、コンパイラの16進数コードは ``__Set______`` (
+``Set`` はライブラリの名前) のプレースホルダを含みます。ライブラリコントラクトのアドレスの16進数エンコーディングによって、アドレスは手動で40個の記号で置き換えられ、埋められます。
 
 .. note::
-    Manually linking libraries on the generated bytecode is discouraged, because
-    it is restricted to 36 characters.
-    You should ask the compiler to link the libraries at the time
-    a contract is compiled by either using
-    the ``--libraries`` option of ``solc`` or the ``libraries`` key if you use
-    the standard-JSON interface to the compiler.
+    生成されたバイトコード上でのライブラリの手動のリンキングは推奨されません。なぜなら、36文字に制限されているからです。コントラクトが ``solc`` の ``--libraries`` オプションか、コンパイラにstandard-JSONインターフェースを使っているなら、``libraries`` キーを使ってコンパイルされている時に、コンパイラにライブラリをリンクすることをお願いした方が良いです。
 
-Restrictions for libraries in comparison to contracts:
+コントラクトと比べた時のライブラリの制限は:
 
-- No state variables
-- Cannot inherit nor be inherited
-- Cannot receive Ether
+- 状態変数がありません
+- 継承する、継承されることはありません
+- Etherを受け取ることができません
 
-(These might be lifted at a later point.)
+(これらはいつか撤廃されるかもしれません)
 
 .. _call-protection:
 
 Call Protection For Libraries
 =============================
 
-As mentioned in the introduction, if a library's code is executed
-using a ``CALL`` instead of a ``DELEGATECALL`` or ``CALLCODE``,
-it will revert unless a ``view`` or ``pure`` function is called.
+イントロダクションで言及した通り、ライブラリのコードが ``DELEGATECALL`` もしくは ``CALLCODE`` の代わりに ``CALL`` で実行された時、``view`` か ``pure`` でなければrevertします。
 
-The EVM does not provide a direct way for a contract to detect
-whether it was called using ``CALL`` or not, but a contract
-can use the ``ADDRESS`` opcode to find out "where" it is
-currently running. The generated code compares this address
-to the address used at construction time to determine the mode
-of calling.
+EVMではコントラクトが ``CALL`` で呼ばれたかどうか直接検知する方法はありませんが、そのコードが現在"どこ"で動作しているか調べる ``ADDRESS`` opcodeは使えます。生成されたコードは呼び出しの種類を決めるために、このアドレスとコード生成時に使われたアドレスを比較します。
 
-More specifically, the runtime code of a library always starts
-with a push instruction, which is a zero of 20 bytes at
-compilation time. When the deploy code runs, this constant
-is replaced in memory by the current address and this
-modified code is stored in the contract. At runtime,
-this causes the deploy time address to be the first
-constant to be pushed onto the stack and the dispatcher
-code compares the current address against this constant
-for any non-view and non-pure function.
+特に、ライブラリのラインタイムコードはpushから始まります。それはコンパイル時に20バイトの0で構成されています。デプロイコードがまわっている時、この定数は現在のアドレスでメモリ内で置き換えられ、修正されたコードがコントラクトに保存されます。ランタイム時に、デプロイ時のアドレスが最初の定数となって、スタック上にプッシュされ、ディスパッチャーコードが現在のアドレスとその定数をviewでもpureでもないファンクションのために比較します。

@@ -88,7 +88,7 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
@@ -110,12 +110,24 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
@@ -190,63 +202,54 @@
 <span id="commandline-compiler"></span><span id="index-0"></span><h2>Using the Commandline Compiler<a class="headerlink" href="#using-the-commandline-compiler" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This section does not apply to <a class="reference internal" href="installing-solidity.html#solcjs"><span class="std std-ref">solcjs</span></a>, not even if it is used in commandline mode.</p>
+<p class="last">この章の内容は、コマンドラインモードも含めて  <a class="reference internal" href="installing-solidity.html#solcjs"><span class="std std-ref">solcjs</span></a> には使用することができません。</p>
 </div>
-<p>One of the build targets of the Solidity repository is <code class="docutils literal notranslate"><span class="pre">solc</span></code>, the solidity commandline compiler.
-Using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--help</span></code> provides you with an explanation of all options. The compiler can produce various outputs, ranging from simple binaries and assembly over an abstract syntax tree (parse tree) to estimations of gas usage.
-If you only want to compile a single file, you run it as <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code> and it will print the binary. If you want to get some of the more advanced output variants of <code class="docutils literal notranslate"><span class="pre">solc</span></code>, it is probably better to tell it to output everything to separate files using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">-o</span> <span class="pre">outputDirectory</span> <span class="pre">--bin</span> <span class="pre">--ast</span> <span class="pre">--asm</span> <span class="pre">sourceFile.sol</span></code>.</p>
-<p>Before you deploy your contract, activate the optimizer when compiling using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--optimize</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code>.
-By default, the optimizer will optimize the contract assuming it is called 200 times across its lifetime.
-If you want the initial contract deployment to be cheaper and the later function executions to be more expensive,
-set it to <code class="docutils literal notranslate"><span class="pre">--optimize-runs=1</span></code>. If you expect many transactions and do not care for higher deployment cost and
-output size, set <code class="docutils literal notranslate"><span class="pre">--optimize-runs</span></code> to a high number.</p>
-<p>The commandline compiler will automatically read imported files from the filesystem, but
-it is also possible to provide path redirects using <code class="docutils literal notranslate"><span class="pre">prefix=path</span></code> in the following way:</p>
+<p>Solidityレポジトリのビルドターゲットの1つはsolidityコマンドラインコンパイラである <code class="docutils literal notranslate"><span class="pre">solc</span></code> です。
+<code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--help</span></code> を使ってオプションを表示できます。このコンパイラは、単純なバイナリから抽象構文木(構文解析ツリー)へのアセンブリからガス代の見積もりまで、さまざまな出力を生成することができます。
+単一ファイルのみをコンパイルしたい場合、該当のファイルを <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code> として実行すると、バイナリが出力されます。
+<code class="docutils literal notranslate"><span class="pre">solc</span></code> のより高度なアウトプットを取得したい場合は、 <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">-o</span> <span class="pre">outputDirectory</span> <span class="pre">--bin</span> <span class="pre">--ast</span> <span class="pre">--asm</span> <span class="pre">sourceFile</span></code> を使用してすべてを別々のファイルに出力するように指定したほうがよいでしょう。</p>
+<p>また、コントラクトをデプロイする前に、 <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--optimize</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code> を使用してコンパイルするときにオプティマイザを有効にしてください。
+デフォルトでは、オプティマイザは、コントラクトがそのライフタイムにわたって200回呼び出されると仮定して、コントラクトを最適化します。
+イニシャルコントラクトのデプロイのガス代をより安く、その後の関数実行時のガス代をより高くしたい場合は、<code class="docutils literal notranslate"><span class="pre">--optimize-runs=1</span></code> と設定してください。
+多くのトランザクションを想定していて、デフォルトより高いデプロイコストとアウトプットサイズを気にしないのであれば、 <code class="docutils literal notranslate"><span class="pre">--optimize-runs</span></code> を大きな数に設定してください。</p>
+<p>コマンドラインコンパイラはファイルシステムからインポートされたファイルを自動的に読み込みますが、以下のように <code class="docutils literal notranslate"><span class="pre">prefix=path</span></code> を使ってリダイレクトするパスを明示することも可能です:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">solc</span> <span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">ethereum</span><span class="o">/</span><span class="n">dapp</span><span class="o">-</span><span class="n">bin</span><span class="o">/=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dapp</span><span class="o">-</span><span class="n">bin</span><span class="o">/</span> <span class="n">file</span><span class="p">.</span><span class="n">sol</span>
 </pre></div>
 </div>
-<p>This essentially instructs the compiler to search for anything starting with
-<code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/</span></code> under <code class="docutils literal notranslate"><span class="pre">/usr/local/lib/dapp-bin</span></code>.
-<code class="docutils literal notranslate"><span class="pre">solc</span></code> will not read files from the filesystem that lie outside of
-the remapping targets and outside of the directories where explicitly specified source
-files reside, so things like <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;/etc/passwd&quot;;</span></code> only work if you add <code class="docutils literal notranslate"><span class="pre">/=/</span></code> as a remapping.</p>
-<p>An empty remapping prefix is not allowed.</p>
-<p>If there are multiple matches due to remappings, the one with the longest common prefix is selected.</p>
-<p>For security reasons the compiler has restrictions what directories it can access. Paths (and their subdirectories) of source files specified on the commandline and paths defined by remappings are allowed for import statements, but everything else is rejected. Additional paths (and their subdirectories) can be allowed via the <code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">/sample/path,/another/sample/path</span></code> switch.</p>
-<p>If your contracts use <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">libraries</span></a>, you will notice that the bytecode contains substrings of the form <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>. These are placeholders for the actual library addresses.
-The placeholder is a 34 character prefix of the hex encoding of the keccak256 hash of the fully qualified library name.
-The bytecode file will also contain lines of the form <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">&lt;placeholder&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;fq</span> <span class="pre">library</span> <span class="pre">name&gt;</span></code> at the end to help
-identify which libraries the placeholders represent. Note that the fully qualified library name
-is the path of its source file and the library name separated by <code class="docutils literal notranslate"><span class="pre">:</span></code>.
-You can use <code class="docutils literal notranslate"><span class="pre">solc</span></code> as a linker meaning that it will insert the library addresses for you at those points:</p>
-<p>Either add <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">&quot;file.sol:Math:0x1234567890123456789012345678901234567890</span> <span class="pre">file.sol:Heap:0xabCD567890123456789012345678901234567890&quot;</span></code> to your command to provide an address for each library or store the string in a file (one library per line) and run <code class="docutils literal notranslate"><span class="pre">solc</span></code> using <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">fileName</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--link</span></code>, all input files are interpreted to be unlinked binaries (hex-encoded) in the <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>-format given above and are linked in-place (if the input is read from stdin, it is written to stdout). All options except <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> are ignored (including <code class="docutils literal notranslate"><span class="pre">-o</span></code>) in this case.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--standard-json</span></code>, it will expect a JSON input (as explained below) on the standard input, and return a JSON output on the standard output. This is the recommended interface for more complex and especially automated uses.</p>
+<p>これはコンパイラに <code class="docutils literal notranslate"><span class="pre">/usr/local/lib/dapp-bin</span></code> 下の <code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/</span></code> で始まるものを検索するように指示します。
+<code class="docutils literal notranslate"><span class="pre">solc</span></code> は再マッピングターゲットの外側にあるファイルシステムからファイルを読みません。ただし、 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;/etc/passwd&quot;;</span></code> のように明示的に指定したディレクトリ外の再マッピングターゲットファイルが存在するときは <code class="docutils literal notranslate"><span class="pre">/=/</span></code> を追加すれば読み込むことができるようになります。</p>
+<p>また、空の再マッピングプレフィックスは許可されていません。</p>
+<p>再マッピングを行う対象が複数個ある場合は、最も長い共通プレフィックスを持つものが選択されます。</p>
+<p>セキュリティ上の理由から、コンパイラがアクセスできるディレクトリには制限があります。
+コマンドラインで指定されたソースファイルのパス(そのサブディレクトリを含む)と再マッピングで定義されたパスはimport文で使用できますが、それ以外はすべてリジェクトされます。追加のパス(そのサブディレクトリを含む)は <code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">/sample/path,</span> <span class="pre">/another/sample/path</span></code> を使用することで許可することができます。</p>
+<p>コントラクト内に <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">libraries</span></a> を使用している場合、バイトコードが <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code> 形式の部分文字列を含んでいることに気付くはずです。これらは実際のライブラリアドレスのプレースホルダになります。
+このプレースホルダは、完全修飾ライブラリ名のkeccak256ハッシュをhexエンコーディングした34文字のプレフィックスです。
+また、バイトコードファイルの最後には、 <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">&lt;プレースホルダ&gt;</span>&#160; <span class="pre">-&gt;</span> <span class="pre">&lt;完全修飾ライブラリ名&gt;</span></code> という形式の行も含まれます。
+そして、プレースホルダがどのライブラリを表すかを識別するための完全修飾ライブラリ名ソースファイルのパスとライブラリ名を <code class="docutils literal notranslate"><span class="pre">:</span></code> で区切って指定します。
+さらにリンカ(linker)として <code class="docutils literal notranslate"><span class="pre">solc</span></code> を使うことができます。これはリンカがある場所にライブラリアドレスを挿入することを意味します:</p>
+<p>各ライブラリのアドレスを指定するか、ファイルごとに文字列(1行ごとに1つライブラリを指定してください)を格納するには、 <code class="docutils literal notranslate"><span class="pre">solc</span></code> で <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">fileName</span></code> オプションを使って <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">&quot;file.sol:Math:0x1234567890123456789012345678901234567890</span> <span class="pre">file.sol:Heap:0xabCD567890123456789012345678901234567890&quot;</span></code> とコマンドに追加します。</p>
+<p>オプション <code class="docutils literal notranslate"><span class="pre">--link</span></code> を付けて <code class="docutils literal notranslate"><span class="pre">solc</span></code> を呼び出すと、すべての入力ファイルは上記の <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code> 形式のリンクされていないバイナリ(hexエンコーディング)として解釈され、インプレースリンクとなります(入力が標準入力から読み取られる場合は、標準出力に書き込まれます)。この場合、 <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> 以外のすべてのオプションは無視されます( <code class="docutils literal notranslate"><span class="pre">-o</span></code> を含みます)。</p>
+<p><code class="docutils literal notranslate"><span class="pre">solc</span></code> が <code class="docutils literal notranslate"><span class="pre">--standard-json</span></code> オプション付きで呼び出された場合、(以下で説明するように)標準入力にJSONでの入力が求められ、標準出力にJSON出力が返されます。これは、より複雑で特に自動化された用途の場合に推奨されるインターフェースです。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The library placeholder used to be the fully qualified name of the library itself
-instead of the hash of it. This format is still supported by <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--link</span></code> but
-the compiler will no longer output it. This change was made to reduce
-the likelihood of a collision between libraries, since only the first 36 characters
-of the fully qualified library name could be used.</p>
+<p class="last">ライブラリのプレースホルダは、以前はライブラリのハッシュではなく、ライブラリ自体の完全修飾名でした。
+このフォーマットはまだ <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--link</span></code> によってサポートされてはいますが、コンパイラはもうその出力に対応していません。
+この変更は、完全修飾ライブラリ名の最初の36文字しか使用できないことから、ライブラリ間でのコンフリクトが発生する可能性を減らすために採用されました。</p>
 </div>
 <span class="target" id="evm-version"></span></div>
 <div class="section" id="setting-the-evm-version-to-target">
 <span id="index-1"></span><h2>Setting the EVM version to target<a class="headerlink" href="#setting-the-evm-version-to-target" title="Permalink to this headline">¶</a></h2>
-<p>When you compile your contract code you can specify the Ethereum virtual machine
-version to compile for to avoid particular features or behaviours.</p>
+<p>コントラクトコードをコンパイルする際、特定の機能や動作を回避するために、コンパイルするEthereum virtual machine(EVM)のバージョンを指定できます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Compiling for the wrong EVM version can result in wrong, strange and failing
-behaviour. Please ensure, especially if running a private chain, that you
-use matching EVM versions.</p>
+<p class="last">誤ったEVMバージョンでコンパイルすると、誤った、奇妙な、そして失敗するような振る舞いをするかもしれません。
+特にプライベートチェーンを実行している場合は、必ず一致するEVMバージョンを使用してください。</p>
 </div>
-<p>On the command line, you can select the EVM version as follows:</p>
+<p>コマンドラインでは、次のようにEVMのバージョンを指定できます:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>solc --evm-version &lt;VERSION&gt; contract.sol
 </pre></div>
 </div>
-<p>In the <a class="reference internal" href="#compiler-api"><span class="std std-ref">standard JSON interface</span></a>, use the <code class="docutils literal notranslate"><span class="pre">&quot;evmVersion&quot;</span></code>
-key in the <code class="docutils literal notranslate"><span class="pre">&quot;settings&quot;</span></code> field:</p>
+<p><a class="reference internal" href="#compiler-api"><span class="std std-ref">standard JSON interface</span></a> 内では、 <code class="docutils literal notranslate"><span class="pre">&quot;settings&quot;</span></code> フィールド内の <code class="docutils literal notranslate"><span class="pre">&quot;evmVersion&quot;</span></code> キーを使用してください:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
   &quot;sources&quot;: { ... },
   &quot;settings&quot;: {
@@ -258,15 +261,15 @@ key in the <code class="docutils literal notranslate"><span class="pre">&quot;se
 </div>
 <div class="section" id="target-options">
 <h3>Target options<a class="headerlink" href="#target-options" title="Permalink to this headline">¶</a></h3>
-<p>Below is a list of target EVM versions and the compiler-relevant changes introduced
-at each version. Backward compatibility is not guaranteed between each version.</p>
+<p>以下は、ターゲットEVMのバージョンと、各バージョンで導入されたコンパイラ関連の変更のリストです。
+各バージョン間の下位互換性は保証されていません。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">homestead</span></code> (oldest version)</li>
+<li><code class="docutils literal notranslate"><span class="pre">homestead</span></code> (１番古いバージョン)</li>
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">tangerineWhistle</span></code></dt>
 <dd><ul class="first last">
-<li>gas cost for access to other accounts increased, relevant for gas estimation and the optimizer.</li>
-<li>all gas sent by default for external calls, previously a certain amount had to be retained.</li>
+<li>他のアカウントにアクセスするためのガス代が増加します。これはガス見積もりとオプティマイザに関連することにより起こります。</li>
+<li>すべてのガスは、デフォルトでは外部コールとして送信されていましたが、以前は一定量を保持する必要がありました。</li>
 </ul>
 </dd>
 </dl>
@@ -274,7 +277,7 @@ at each version. Backward compatibility is not guaranteed between each version.<
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">spuriousDragon</span></code></dt>
 <dd><ul class="first last">
-<li>gas cost for the <code class="docutils literal notranslate"><span class="pre">exp</span></code> opcode increased, relevant for gas estimation and the optimizer.</li>
+<li><code class="docutils literal notranslate"><span class="pre">exp</span></code> オペコードのガスコストが増加します。これはガス推定とオプティマイザに関連することにより起こります。</li>
 </ul>
 </dd>
 </dl>
@@ -282,19 +285,19 @@ at each version. Backward compatibility is not guaranteed between each version.<
 <li><dl class="first docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">byzantium</span></code> (<strong>default</strong>)</dt>
 <dd><ul class="first last">
-<li>opcodes <code class="docutils literal notranslate"><span class="pre">returndatacopy</span></code>, <code class="docutils literal notranslate"><span class="pre">returndatasize</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are available in assembly.</li>
-<li>the <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> opcode is used when calling non-library view or pure functions, which prevents the functions from modifying state at the EVM level, i.e., even applies when you use invalid type conversions.</li>
-<li>it is possible to access dynamic data returned from function calls.</li>
-<li><code class="docutils literal notranslate"><span class="pre">revert</span></code> opcode introduced, which means that <code class="docutils literal notranslate"><span class="pre">revert()</span></code> will not waste gas.</li>
+<li>オペコード <code class="docutils literal notranslate"><span class="pre">returndatacopy</span></code> 、 <code class="docutils literal notranslate"><span class="pre">returndatasize</span></code> 、 <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> はアセンブリで利用可能です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">staticcall</span></code> オペコードは、ライブラリ以外のviewやpureの修飾子が付いた関数を呼び出すときに使われます。これはEVMレベルで関数が状態を変更するのを防ぎます。つまり、無効な型変換を使ったときにも適用されます。</li>
+<li>関数呼び出しから返された動的データにアクセスすることが可能です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">revert</span></code> オペコードが導入されました。 <code class="docutils literal notranslate"><span class="pre">revert()</span></code> がガスを無駄にしません。</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">constantinople</span></code> (still in progress)</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">constantinople</span></code> (開発中)</dt>
 <dd><ul class="first last">
-<li>opcodes <code class="docutils literal notranslate"><span class="pre">shl</span></code>, <code class="docutils literal notranslate"><span class="pre">shr</span></code> and <code class="docutils literal notranslate"><span class="pre">sar</span></code> are available in assembly.</li>
-<li>shifting operators use shifting opcodes and thus need less gas.</li>
+<li>オペコード <code class="docutils literal notranslate"><span class="pre">shl</span></code> 、 <code class="docutils literal notranslate"><span class="pre">shr</span></code> および <code class="docutils literal notranslate"><span class="pre">sar</span></code> はアセンブリで利用できます。</li>
+<li>シフト演算子はシフト演算コードを使用するため、必要なガスが少なくて済みます。</li>
 </ul>
 </dd>
 </dl>
@@ -304,33 +307,32 @@ at each version. Backward compatibility is not guaranteed between each version.<
 </div>
 <div class="section" id="compiler-input-and-output-json-description">
 <span id="compiler-api"></span><h2>Compiler Input and Output JSON Description<a class="headerlink" href="#compiler-input-and-output-json-description" title="Permalink to this headline">¶</a></h2>
-<p>The recommended way to interface with the Solidity compiler especially for
-more complex and automated setups is the so-called JSON-input-output interface.
-The same interface is provided by all distributions of the compiler.</p>
-<p>The fields are generally subject to change,
-some are optional (as noted), but we try to only make backwards compatible changes.</p>
-<p>The compiler API expects a JSON formatted input and outputs the compilation result in a JSON formatted output.</p>
-<p>The following subsections describe the format through an example.
-Comments are of course not permitted and used here only for explanatory purposes.</p>
+<p>Solidityコンパイラとインターフェースをとるための推奨される方法は、いわゆるJSON入出力インターフェースです。
+これは特に複雑で自動化されたセットアップの際に有用です。
+コンパイラのすべてのディストリビューションで同じインタフェースが提供されています。</p>
+<p>そのフィールドは度々変更されることがあり、いくつかはオプションです(このドキュメントに書かれてある通りです)。
+ただし、私達は後方互換性のある変更だけをします。</p>
+<p>コンパイラAPIはJSON形式の入力を要求し、コンパイル結果をJSON形式の出力に出力します。</p>
+<p>以下のサブセクションでは、例を通してその形式を説明します。
+下にあるようなコメントはもちろん使うことはできません。ここでは説明の目的で使用されているだけです。</p>
 <div class="section" id="input-description">
 <h3>Input Description<a class="headerlink" href="#input-description" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
-  // Required: Source code language, such as &quot;Solidity&quot;, &quot;Vyper&quot;, &quot;lll&quot;, &quot;assembly&quot;, etc.
+  // Required: ソースコードの言語。&quot;Solidity&quot;、 &quot;Vyper&quot;、 &quot;lll&quot;、 &quot;assembly&quot;など
   language: &quot;Solidity&quot;,
   // Required
   sources:
   {
-    // The keys here are the &quot;global&quot; names of the source files,
-    // imports can use other files via remappings (see below).
+    // キーはソースファイルのグローバルネームです。
+    // インポートは再マッピングを通して他のファイルを使うことができます(下記を参照してください)
     &quot;myFile.sol&quot;:
     {
-      // Optional: keccak256 hash of the source file
-      // It is used to verify the retrieved content if imported via URLs.
+      // Optional: ソースファイルのkeccak256ハッシュ
+      // URL経由でインポートした場合、取得したコンテンツを検証するために使用されます。
       &quot;keccak256&quot;: &quot;0x123...&quot;,
-      // Required (unless &quot;content&quot; is used, see below): URL(s) to the source file.
-      // URL(s) should be imported in this order and the result checked against the
-      // keccak256 hash (if available). If the hash doesn&#39;t match or none of the
-      // URL(s) result in success, an error should be raised.
+      // Required(&quot;content&quot;が使用されていない限りRequiredです。下記を参照してください): ソースファイルのURLs
+      // URLはこの順番でインポートされ、結果はkeccak256ハッシュ(利用可能な場合)に対してチェックされます。
+      // ハッシュが一致しない場合、またはいずれのURLでも成功しなかった場合は、エラーが発生します。
       &quot;urls&quot;:
       [
         &quot;bzzr://56ab...&quot;,
@@ -342,94 +344,92 @@ Comments are of course not permitted and used here only for explanatory purposes
     },
     &quot;mortal&quot;:
     {
-      // Optional: keccak256 hash of the source file
+      // Optional: ソースファイルのkeccak256ハッシュ
       &quot;keccak256&quot;: &quot;0x234...&quot;,
-      // Required (unless &quot;urls&quot; is used): literal contents of the source file
+      // Required(&quot;urls&quot;が使用されていない限りRequiredです): ソースファイルのリテラル
       &quot;content&quot;: &quot;contract mortal is owned { function kill() { if (msg.sender == owner) selfdestruct(owner); } }&quot;
     }
   },
   // Optional
   settings:
   {
-    // Optional: Sorted list of remappings
+    // Optional: 再マッピングのソート済みリスト
     remappings: [ &quot;:g/dir&quot; ],
-    // Optional: Optimizer settings
+    // Optional: オプティマイザー設定
     optimizer: {
-      // disabled by default
+      // デフォルトではdisabledです
       enabled: true,
-      // Optimize for how many times you intend to run the code.
-      // Lower values will optimize more for initial deployment cost, higher values will optimize more for high-frequency usage.
+      // コードを実行する回数を最適化します。
+      // 値が小さいほどイニシャルデプロイコストが最適化され、値が高いと高頻度で使用するときにより最適化されます。
       runs: 200
     },
-    evmVersion: &quot;byzantium&quot;, // Version of the EVM to compile for. Affects type checking and code generation. Can be homestead, tangerineWhistle, spuriousDragon, byzantium or constantinople
-    // Metadata settings (optional)
+    // コンパイルするEVMのバージョン。型チェックとコード生成に影響します。
+    // homestead、tangerineWhistle、spuriousDragon、byzantium、constantinopleのいずれかです。
+    evmVersion: &quot;byzantium&quot;,
+    // メタデータ設定(optional)
     metadata: {
-      // Use only literal content and not URLs (false by default)
+      // URLではなくリテラルのみを使用(デフォルトではfalseです)
       useLiteralContent: true
     },
-    // Addresses of the libraries. If not all libraries are given here, it can result in unlinked objects whose output data is different.
+    // ライブラリのアドレスです。ここにすべてのライブラリが指定されていないと、出力データがライブラリにリンクされていない異なるオブジェクトになる可能性があります。
     libraries: {
-      // The top level key is the the name of the source file where the library is used.
-      // If remappings are used, this source file should match the global path after remappings were applied.
-      // If this key is an empty string, that refers to a global level.
+      // 最上位のキーは、ライブラリが使用されているソースファイルの名前です。
+      // 再マッピングが使用されている場合、このソースファイルは再マッピングが適用された後のグローバルパスと一致する必要があります。
+      // このキーが空の文字列の場合、グローバルレベルを参照します。
       &quot;myFile.sol&quot;: {
         &quot;MyLib&quot;: &quot;0x123123...&quot;
       }
     }
-    // The following can be used to select desired outputs based
-    // on file and contract names.
-    // If this field is omitted, then the compiler loads and does type checking,
-    // but will not generate any outputs apart from errors.
-    // The first level key is the file name and the second level key is the contract name.
-    // An empty contract name is used for outputs that are not tied to a contract
-    // but to the whole source file like the AST.
-    // A star as contract name refers to all contracts in the file.
-    // Similarly, a star as a file name matches all files.
-    // To select all outputs the compiler can possibly generate, use
-    // &quot;outputSelection: { &quot;*&quot;: { &quot;*&quot;: [ &quot;*&quot; ], &quot;&quot;: [ &quot;*&quot; ] } }&quot;
-    // but note that this might slow down the compilation process needlessly.
+    // 以下は、ファイル名とコントラクト名に基づいて目的の出力を選択するために使用できます。
+    // このフィールドを省略すると、コンパイラは型チェックをロードして実行しますが、エラー以外の出力は生成しません。
+    // ファーストレベルのキーはファイル名、セカンドレベルのキーはコントラクト名です。
+    // 空のコントラクト名は、コントラクトではなくASTのようなソースファイル全体に関連付けられている出力に使用されます。
+    // コントラクト名としてのスター(*)は、ファイル内のすべての契約を表します。
+    // 同様に、ファイル名としてのスター(*)はすべてのファイルに一致します。
+    // コンパイラが生成する可能性のあるすべての出力を選択するには、&quot;outputSelection：{&quot; * &quot;：{&quot; * &quot;：[&quot; * &quot;]、&quot; &quot;：[&quot; * &quot;]}}&quot;を使用します。
+    // ただし、これはコンパイルプロセスを不必要に遅くする可能性があることに留意してください。
     //
-    // The available output types are as follows:
+    // 利用できるアウトプットの型は以下の通りです:
     //
-    // File level (needs empty string as contract name):
-    //   ast - AST of all source files
-    //   legacyAST - legacy AST of all source files
+    // ファイルレベル(コントラクト名として空文字列が必要):
+    //   ast - 全ソースファイルのAST
+    //   legacyAST - 全ソースファイルのlegacy AST
     //
-    // Contract level (needs the contract name or &quot;*&quot;):
+    // コントラクトレベル(コントラクト名か&quot;*&quot;が必要です):
     //   abi - ABI
-    //   devdoc - Developer documentation (natspec)
-    //   userdoc - User documentation (natspec)
-    //   metadata - Metadata
-    //   ir - New assembly format before desugaring
-    //   evm.assembly - New assembly format after desugaring
-    //   evm.legacyAssembly - Old-style assembly format in JSON
-    //   evm.bytecode.object - Bytecode object
-    //   evm.bytecode.opcodes - Opcodes list
-    //   evm.bytecode.sourceMap - Source mapping (useful for debugging)
-    //   evm.bytecode.linkReferences - Link references (if unlinked object)
-    //   evm.deployedBytecode* - Deployed bytecode (has the same options as evm.bytecode)
-    //   evm.methodIdentifiers - The list of function hashes
-    //   evm.gasEstimates - Function gas estimates
-    //   ewasm.wast - eWASM S-expressions format (not supported atm)
-    //   ewasm.wasm - eWASM binary format (not supported atm)
+    //   devdoc - 開発者向けドキュメント(natspec)
+    //   userdoc - ユーザー向けドキュメント(natspec)
+    //   metadata - メタデータ
+    //   ir - desugaringする前の新しいアセンブリフォーマット
+    //   evm.assembly - desugaringした後の新しいアセンブリフォーマット
+    //   evm.legacyAssembly - JSONでの古いスタイルのアセンブリ
+    //   evm.bytecode.object - バイトコードオブジェクト
+    //   evm.bytecode.opcodes - オペコードのリスト
+    //   evm.bytecode.sourceMap - ソースマッピング(デバッグに役立ちます)
+    //   evm.bytecode.linkReferences - リンクリファレンス(もしunlinked objectであれば)
+    //   evm.deployedBytecode* - デプロイ時のバイトコード(evm.bytecodeと同じオプションがあります)
+    //   evm.methodIdentifiers - 関数ハッシュのリスト
+    //   evm.gasEstimates - 関数のガス代の推定
+    //   ewasm.wast - eWASM S-expressionsフォーマット(atmをサポートしていません)
+    //   ewasm.wasm - eWASM binaryフォーマット(atmをサポートしていません)
     //
-    // Note that using a using `evm`, `evm.bytecode`, `ewasm`, etc. will select every
-    // target part of that output. Additionally, `*` can be used as a wildcard to request everything.
+    // `evm` 、` evm.bytecode` 、 `ewasm` などを使用すると、その出力のすべてのターゲット部分が選択されます。
+    // さらに、 `*` はすべてを要求するためのワイルドカードとして使うことができます。
     //
     outputSelection: {
-      // Enable the metadata and bytecode outputs of every single contract.
+      // 各コントラクトのメタデータとバイトコードの出力を有効にします。
       &quot;*&quot;: {
         &quot;*&quot;: [ &quot;metadata&quot;, &quot;evm.bytecode&quot; ]
       },
-      // Enable the abi and opcodes output of MyContract defined in file def.
+      // defに定義されているMyContractのabiおよびオペコード出力を有効にします。
       &quot;def&quot;: {
         &quot;MyContract&quot;: [ &quot;abi&quot;, &quot;evm.bytecode.opcodes&quot; ]
       },
-      // Enable the source map output of every single contract.
+      // 各コントラクトのソースマップ出力を有効にします。
       &quot;*&quot;: {
         &quot;*&quot;: [ &quot;evm.bytecode.sourceMap&quot; ]
       },
-      // Enable the legacy AST output of every single file.
+      // すべての単一ファイルのlegacy AST出力を有効にします。
       &quot;*&quot;: {
         &quot;&quot;: [ &quot;legacyAST&quot; ]
       }
@@ -442,73 +442,73 @@ Comments are of course not permitted and used here only for explanatory purposes
 <div class="section" id="output-description">
 <h3>Output Description<a class="headerlink" href="#output-description" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
-  // Optional: not present if no errors/warnings were encountered
+  // Optional: エラー/警告が発生しなかった場合は存在しません
   errors: [
     {
-      // Optional: Location within the source file.
+      // Optional: ソースファイル内の位置
       sourceLocation: {
         file: &quot;sourceFile.sol&quot;,
         start: 0,
         end: 100
       ],
-      // Mandatory: Error type, such as &quot;TypeError&quot;, &quot;InternalCompilerError&quot;, &quot;Exception&quot;, etc.
-      // See below for complete list of types.
+      // Mandatory: エラータイプ。&quot;TypeError&quot;、&quot;InternalCompilerError&quot;、&quot;Exception&quot;など。
+      // すべての型のリストは以下を参照してください。
       type: &quot;TypeError&quot;,
-      // Mandatory: Component where the error originated, such as &quot;general&quot;, &quot;ewasm&quot;, etc.
+      // Mandatory: エラーが発生したコンポーネント。&quot;general&quot;、&quot;ewasm&quot;など。
       component: &quot;general&quot;,
-      // Mandatory (&quot;error&quot; or &quot;warning&quot;)
+      // Mandatory (&quot;error&quot;もしくは&quot;warning&quot;)
       severity: &quot;error&quot;,
       // Mandatory
       message: &quot;Invalid keyword&quot;
-      // Optional: the message formatted with source location
+      // Optional: ソースの場所でフォーマットされたメッセージ
       formattedMessage: &quot;sourceFile.sol:100: Invalid keyword&quot;
     }
   ],
-  // This contains the file-level outputs. In can be limited/filtered by the outputSelection settings.
+  // これはファイルレベルの出力を含むものです。outputSelectionの設定によって制限/フィルタリングできます。
   sources: {
     &quot;sourceFile.sol&quot;: {
-      // Identifier of the source (used in source maps)
+      // ソースの識別子（ソースマップで使用）
       id: 1,
-      // The AST object
+      // ASTオブジェクト
       ast: {},
-      // The legacy AST object
+      // legacy ASTオブジェクト
       legacyAST: {}
     }
   },
-  // This contains the contract-level outputs. It can be limited/filtered by the outputSelection settings.
+  // これはコントラクトレベルの出力を含むものです。outputSelectionの設定によって制限/フィルタリングできます。
   contracts: {
     &quot;sourceFile.sol&quot;: {
-      // If the language used has no contract names, this field should equal to an empty string.
+      // 使用されている言語にコントラクト名がない場合、このフィールドは空の文字列と等しくなります。
       &quot;ContractName&quot;: {
-        // The Ethereum Contract ABI. If empty, it is represented as an empty array.
-        // See https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
+        // Ethereum Contract ABIです。もし空なら、空配列として表されます。
+        // https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABIを参照してください。
         abi: [],
-        // See the Metadata Output documentation (serialised JSON string)
+        // Metadata Outputのドキュメント(serialised JSON string)を参照してください。
         metadata: &quot;{...}&quot;,
-        // User documentation (natspec)
+        // ユーザードキュメント(natspec)
         userdoc: {},
-        // Developer documentation (natspec)
+        // 開発者向けドキュメント(natspec)
         devdoc: {},
-        // Intermediate representation (string)
+        // 中間表現(string)
         ir: &quot;&quot;,
-        // EVM-related outputs
+        // EVMに関連する出力
         evm: {
           // Assembly (string)
           assembly: &quot;&quot;,
-          // Old-style assembly (object)
+          // 過去の形式のアセンブリ(object)
           legacyAssembly: {},
-          // Bytecode and related details.
+          // バイトコードと関連する詳細
           bytecode: {
-            // The bytecode as a hex string.
+            // hex stringとしてのバイトコード
             object: &quot;00fe&quot;,
-            // Opcodes list (string)
+            // オペコードのリスト(string)
             opcodes: &quot;&quot;,
-            // The source mapping as a string. See the source mapping definition.
+            // 文字列としてのソースマッピング。ソースマッピング定義を参照してください。
             sourceMap: &quot;&quot;,
-            // If given, this is an unlinked object.
+            // もし存在する場合、これはunlinked objectとなります。
             linkReferences: {
               &quot;libraryFile.sol&quot;: {
-                // Byte offsets into the bytecode. Linking replaces the 20 bytes located there.
+                // バイトコードへのバイトオフセット。リンクすると、その位置の20バイトが置き換えられます。
                 &quot;Library1&quot;: [
                   { start: 0, length: 20 },
                   { start: 200, length: 20 }
@@ -516,13 +516,13 @@ Comments are of course not permitted and used here only for explanatory purposes
               }
             }
           },
-          // The same layout as above.
+          // 上記と同じレイアウトです。
           deployedBytecode: { },
-          // The list of function hashes
+          // 関数ハッシュのリスト
           methodIdentifiers: {
             &quot;delegate(address)&quot;: &quot;5c19a95c&quot;
           },
-          // Function gas estimates
+          // ガス代の推定を行う関数
           gasEstimates: {
             creation: {
               codeDepositCost: &quot;420000&quot;,
@@ -537,11 +537,11 @@ Comments are of course not permitted and used here only for explanatory purposes
             }
           }
         },
-        // eWASM related outputs
+        // 出力に関連するeWASM
         ewasm: {
-          // S-expressions format
+          // S-expressionsフォーマット
           wast: &quot;&quot;,
-          // Binary format (hex string)
+          // バイナリ形式(hex string)
           wasm: &quot;&quot;
         }
       }
@@ -553,19 +553,19 @@ Comments are of course not permitted and used here only for explanatory purposes
 <div class="section" id="error-types">
 <h4>Error types<a class="headerlink" href="#error-types" title="Permalink to this headline">¶</a></h4>
 <ol class="arabic simple">
-<li><code class="docutils literal notranslate"><span class="pre">JSONError</span></code>: JSON input doesn’t conform to the required format, e.g. input is not a JSON object, the language is not supported, etc.</li>
-<li><code class="docutils literal notranslate"><span class="pre">IOError</span></code>: IO and import processing errors, such as unresolvable URL or hash mismatch in supplied sources.</li>
-<li><code class="docutils literal notranslate"><span class="pre">ParserError</span></code>: Source code doesn’t conform to the language rules.</li>
-<li><code class="docutils literal notranslate"><span class="pre">DocstringParsingError</span></code>: The NatSpec tags in the comment block cannot be parsed.</li>
-<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: Syntactical error, such as <code class="docutils literal notranslate"><span class="pre">continue</span></code> is used outside of a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop.</li>
-<li><code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code>: Invalid, unresolvable or clashing identifier names. e.g. <code class="docutils literal notranslate"><span class="pre">Identifier</span> <span class="pre">not</span> <span class="pre">found</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>: Error within the type system, such as invalid type conversions, invalid assignments, etc.</li>
-<li><code class="docutils literal notranslate"><span class="pre">UnimplementedFeatureError</span></code>: Feature is not supported by the compiler, but is expected to be supported in future versions.</li>
-<li><code class="docutils literal notranslate"><span class="pre">InternalCompilerError</span></code>: Internal bug triggered in the compiler - this should be reported as an issue.</li>
-<li><code class="docutils literal notranslate"><span class="pre">Exception</span></code>: Unknown failure during compilation - this should be reported as an issue.</li>
-<li><code class="docutils literal notranslate"><span class="pre">CompilerError</span></code>: Invalid use of the compiler stack - this should be reported as an issue.</li>
-<li><code class="docutils literal notranslate"><span class="pre">FatalError</span></code>: Fatal error not processed correctly - this should be reported as an issue.</li>
-<li><code class="docutils literal notranslate"><span class="pre">Warning</span></code>: A warning, which didn’t stop the compilation, but should be addressed if possible.</li>
+<li><code class="docutils literal notranslate"><span class="pre">JSONError</span></code>: JSON入力が必要なフォーマットに準拠していません。入力がJSONオブジェクトではない、言語がサポートされていない、など。</li>
+<li><code class="docutils literal notranslate"><span class="pre">IOError</span></code>: IOとimportプロセスエラーです。利用できないURLや提供されたソースのハッシュの不一致など。</li>
+<li><code class="docutils literal notranslate"><span class="pre">ParserError</span></code>: ソースコードが言語の規則に準拠していません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">DocstringParsingError</span></code>: コメントブロック内のNatSpecタグは解析できません。</li>
+<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: シンタックスエラーです。<code class="docutils literal notranslate"><span class="pre">continue``のような構文エラーは</span> <span class="pre">``for</span></code> ループの外側で使われます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code>: 無効な、解決できない、またはコンフリクトする識別子名です。例えば <code class="docutils literal notranslate"><span class="pre">Identifier</span> <span class="pre">not</span> <span class="pre">found</span></code> など。</li>
+<li><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>: 型システム内のエラーです。invalid type conversions や invalid assignmentsなど。</li>
+<li><code class="docutils literal notranslate"><span class="pre">UnimplementedFeatureError</span></code>: この機能はコンパイラではサポートされていませんが、将来のバージョンでサポートされる予定です。</li>
+<li><code class="docutils literal notranslate"><span class="pre">InternalCompilerError</span></code>: 内部バグがコンパイラで引き起こされました。 -これは問題として報告されるべきです。</li>
+<li><code class="docutils literal notranslate"><span class="pre">Exception</span></code>: コンパイル中にUnknown failureが発生しました。 - これは問題として報告されるべきです。</li>
+<li><code class="docutils literal notranslate"><span class="pre">CompilerError</span></code>: コンパイラスタックの無効な使用が起こりました。 - これは問題として報告されるべきです。</li>
+<li><code class="docutils literal notranslate"><span class="pre">FatalError</span></code>: Fatal errorにより正しく処理されませんでした。 - これは問題として報告されるべきです。</li>
+<li><code class="docutils literal notranslate"><span class="pre">Warning</span></code>: Warningです。コンパイルは止めませんでしたが、可能であれば対処するべきです。</li>
 </ol>
 </div>
 </div>

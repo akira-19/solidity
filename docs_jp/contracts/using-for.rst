@@ -6,30 +6,18 @@
 Using For
 *********
 
-The directive ``using A for B;`` can be used to attach library
-functions (from the library ``A``) to any type (``B``).
-These functions will receive the object they are called on
-as their first parameter (like the ``self`` variable in Python).
+``using A for B;`` という指示はライブラリのファンクション（ ``A`` というライブラリから）をどんな型(``B``)にも加えるのに使うことができます。
+このファンクションは最初のパラメータとして（Pythonの ``self`` の様に）、そのファンクションを呼び出したオブジェクトを受け取ります。
 
-The effect of ``using A for *;`` is that the functions from
-the library ``A`` are attached to *any* type.
+``using A for *;`` というのは、ライブラリ ``A`` のファンクションが *どんな* 型にも追加されるということです。
 
-In both situations, *all* functions in the library are attached,
-even those where the type of the first parameter does not
-match the type of the object. The type is checked at the
-point the function is called and function overload
-resolution is performed.
+いずれの場合でも、最初のパラメータの型がオブジェクトの型と合わなくても、ライブラリ中の *全ての* ファンクションが追加されます。ファンクションが呼ばれた時に型はチェックされ、ファンクションのoverload resolutionが実行されます。
 
-The ``using A for B;`` directive is active only within the current
-contract, including within all of its functions, and has no effect
-outside of the contract in which it is used. The directive
-may only be used inside a contract, not inside any of its functions.
+``using A for B;`` は現在の全てのファンクション内も含むコントラクト内でのみ有効です。そのコントラクトが使用されている外部のコントラクトでは使えません。この指示はファンクション内でなく、コントラクト内でのみ実行可能です。
 
-By including a library, its data types including library functions are
-available without having to add further code.
+ライブラリを含めることにより、ライブラリのファンクションを含むデータタイプが追加のコードなしで使える様になります。
 
-Let us rewrite the set example from the
-:ref:`libraries` in this way::
+:ref:`libraries` の例を書き換えてみます::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -79,7 +67,7 @@ Let us rewrite the set example from the
         }
     }
 
-It is also possible to extend elementary types in that way::
+この様に基本型を拡張することも可能です::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -113,7 +101,4 @@ It is also possible to extend elementary types in that way::
         }
     }
 
-Note that all library calls are actual EVM function calls. This means that
-if you pass memory or value types, a copy will be performed, even of the
-``self`` variable. The only situation where no copy will be performed
-is when storage reference variables are used.
+全てのライブラリのコールは実際のEVMのファンクションコールであるということを覚えておいてください。つまり、もしメモリもしくは値型を渡す時には、``self`` 変数であってもコピーが実行されます。ストレージ参照の変数が使われた時だけ、コピーは実行されません。

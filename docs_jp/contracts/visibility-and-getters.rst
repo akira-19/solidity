@@ -6,50 +6,27 @@
 Visibility and Getters
 **********************
 
-Since Solidity knows two kinds of function calls (internal
-ones that do not create an actual EVM call (also called
-a "message call") and external
-ones that do), there are four types of visibilities for
-functions and state variables.
+Solidityは2しゅるのファンクションコール（実際のEVMコールを作らないinternalのもの（"message call"とも呼ばれます）とEVMコールを作るexternalのもの）があるので、ファンクションと状態変数に対して4種類の可視性があります。
 
-Functions have to be specified as being ``external``,
-``public``, ``internal`` or ``private``.
-For state variables, ``external`` is not possible.
+ファンクションは ``external``、``public``、``internal``、``private`` のいずれかを指定しなければいけません。状態変数には、``external`` は使えません。
 
 ``external``:
-    External functions are part of the contract interface,
-    which means they can be called from other contracts and
-    via transactions. An external function ``f`` cannot be called
-    internally (i.e. ``f()`` does not work, but ``this.f()`` works).
-    External functions are sometimes more efficient when
-    they receive large arrays of data.
+    externalのファンクションはコントラクトインターフェースの一部です。つまり、他のコントラクトからトランザクションを通じて呼び出すことができます。あるexternalのファンクション ``f`` はコントラクト内部では呼び出せません(``f()`` は動きませんが、``this.f()`` は動作します)。
+    大きい配列を受け取る時、externalファンクションは場合によってより効率が良くなります。
 
 ``public``:
-    Public functions are part of the contract interface
-    and can be either called internally or via
-    messages. For public state variables, an automatic getter
-    function (see below) is generated.
+    externalのファンクションはコントラクトインターフェースの一部で、内部でも呼び出せますし、もしくはメッセージを通じて呼び出せます。publicの状態変数は自動的にgetter（下記参照）を生成します。
 
 ``internal``:
-    Those functions and state variables can only be
-    accessed internally (i.e. from within the current contract
-    or contracts deriving from it), without using ``this``.
+    internalのファンクションと状態変数は ``this`` を使わずに、コントラクト内部でのみアクセスできます（現在のコントラクトからか、それを継承したコントラクトから）。
 
 ``private``:
-    Private functions and state variables are only
-    visible for the contract they are defined in and not in
-    derived contracts.
+    privateのファンクションと状態変数はそれが定義されたコントラクト内のみで可視で、継承したコントラクトでは使えません。
 
 .. note::
-    Everything that is inside a contract is visible to
-    all observers external to the blockchain. Making something ``private``
-    only prevents other contracts from accessing and modifying
-    the information, but it will still be visible to the
-    whole world outside of the blockchain.
+    コントラクト内側は全てブロックチェーン外側から可視です。``private`` だけが他のコントラクトがアクセスしたり変更したりするのを防いでくれます。しかし、それでもブロックチェーンの外側から可視です。
 
-The visibility specifier is given after the type for
-state variables and between parameter list and
-return parameter list for functions.
+visibility specifierは状態変数の型の後、パラメータリストとファンクションの返り値リストの間に置かれます。
 
 ::
 
@@ -61,9 +38,7 @@ return parameter list for functions.
         uint public data;
     }
 
-In the following example, ``D``, can call ``c.getData()`` to retrieve the value of
-``data`` in state storage, but is not able to call ``f``. Contract ``E`` is derived from
-``C`` and, thus, can call ``compute``.
+次の例では、``D`` はステートストレージ内の ``data`` の値を引き出すのに ``c.getData()`` を呼び出すことができます。しかし、``D`` は  ``f`` を呼べません。コントラクト ``E`` は ``C`` を継承しているため、``compute`` を呼び出すことができます。
 
 ::
 
@@ -102,12 +77,7 @@ In the following example, ``D``, can call ``c.getData()`` to retrieve the value 
 Getter Functions
 ================
 
-The compiler automatically creates getter functions for
-all **public** state variables. For the contract given below, the compiler will
-generate a function called ``data`` that does not take any
-arguments and returns a ``uint``, the value of the state
-variable ``data``. State variables can be initialized
-when they are declared.
+コンパイラは自動的に **public** の状態変数のgetterを生成します。下のコントラクトでは、コンパイラは ``data`` という引数を取らず、``uint`` 型の状態変数 ``data`` の値を返します。 状態変数は宣言された時に初期化することができます。
 
 ::
 
@@ -124,10 +94,7 @@ when they are declared.
         }
     }
 
-The getter functions have external visibility. If the
-symbol is accessed internally (i.e. without ``this.``),
-it evaluates to a state variable.  If it is accessed externally
-(i.e. with ``this.``), it evaluates to a function.
+getterはexternalの可視性を持っています。ある記号が内部的にアクセス(``this.`` なし)されたら、それは状態変数と評価されます。もし外部的にアクセス(``this.`` あり)されたら、それはファンクションと評価されます。
 
 ::
 
@@ -141,12 +108,7 @@ it evaluates to a state variable.  If it is accessed externally
         }
     }
 
-If you have a ``public`` state variable of array type, then you can only retrieve
-single elements of the array via the generated getter function. This mechanism
-exists to avoid high gas costs when returning an entire array. You can use
-arguments to specify which individual element to return, for example
-``data(0)``. If you want to return an entire array in one call, then you need
-to write a function, for example:
+もし ``public`` の配列型の状態変数を持っていたら、getterではその配列の1要素しか取り出すことができません。配列全体を返したときにガスが高くならない様にこの仕組みはあります。どの要素を返すか、例えば ``data(0)`` の様に引数を使って指定することができます。もし配列全体を返したい場合は、ファンクションを作る必要があります。例えば:
 
 ::
 
@@ -169,10 +131,9 @@ to write a function, for example:
     }
   }
 
-Now you can use ``getArray()`` to retrieve the entire array, instead of
-``myArray(i)``, which returns a single element per call.
+ここで、配列全体を取り出すために、1回の呼び出しで1つの要素を返す ``myArray(i)`` の代わりに、``getArray()`` を使うことができます。
 
-The next example is more complex:
+次の例はもっと複雑です。
 
 ::
 
@@ -187,8 +148,7 @@ The next example is more complex:
         mapping (uint => mapping(bool => Data[])) public data;
     }
 
-It generates a function of the following form. The mapping in the struct is omitted
-because there is no good way to provide the key for the mapping:
+これは次の形のファンクションを生成します。マッピング用のキーを渡す良い方法がないので、構造体のマッピングは省略します。
 
 ::
 

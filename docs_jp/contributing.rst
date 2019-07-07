@@ -16,7 +16,7 @@ Contributing
 このプロジェクト(issues, pull requests, Gitter channels含む) は `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ でリリースされていることに注意してください。
 あなたはこの規約に同意することになります。
 
-issueの報告方法
+How to Report Issues
 ====================
 
 issueの報告には、
@@ -32,7 +32,7 @@ issueの報告には、
 
 issueを再現するために最低限のソースコードにするのは有用で、誤解を明らかにします。
 
-Pull Requestsのためのワークフロー
+Workflow for Pull Requests
 ==========================
 
 貢献するために、 ``develop`` ブランチをフォークし、あなたの変更をそこにいれてください。
@@ -61,7 +61,6 @@ Pull Requestsのためのワークフロー
 あなたの貢献を感謝します。
 
 Running the compiler tests
-コンパイラテストの実行
 ==========================
 
 ``./scripts/tests.sh`` スクリプトはほとんどのSolidityテストを実行し、``aleth`` を走らせます。
@@ -130,7 +129,6 @@ CIはEmscriptenのコンパイルを必要とする追加のテスト( ``solc-js
     現在CIはバージョン ``aleth`` の ``1.5.0-alpha.7`` を使っています。
 
 Writing and running syntax tests
-構文テストの実装と実行
 --------------------------------
 
 構文テストは、コンパイラが無効なコードに正しいエラーメッセージを生成し、適切に有効なコードを受け入れることをチェックします。

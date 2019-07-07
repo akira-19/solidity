@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>コントラクトメタデータ &mdash; Solidity 0.5.4 documentation</title>
+  <title>Contract Metadata &mdash; Solidity 0.5.4 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contract ABI Specification" href="abi-spec.html" />
+    <link rel="next" title="Basic Design" href="abi-spec.html" />
     <link rel="prev" title="Using the compiler" href="using-the-compiler.html" /> 
 </head>
 
@@ -88,25 +88,37 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">Introduction to Smart Contracts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Solidityをインストールする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">Installing the Solidity Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">Solidity by Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="solidity-in-depth.html">Solidity in Depth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">コントラクトメタデータ</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">バイトコード内のメタデータハッシュのエンコーディング</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#natspec">自動インタフェース生成とNatSpecの使い方</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">ソースコード検証のための使い方</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contract Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#encoding-of-the-metadata-hash-in-the-bytecode">Encoding of the Metadata Hash in the Bytecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-automatic-interface-generation-and-natspec">Usage for Automatic Interface Generation and NatSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-source-code-verification">Usage for Source Code Verification</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -155,7 +167,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>コントラクトメタデータ</li>
+      <li>Contract Metadata</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -174,8 +186,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="id1">
-<h1>コントラクトメタデータ<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="contract-metadata">
+<h1>Contract Metadata<a class="headerlink" href="#contract-metadata" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">SolidityコンパイラはJSONファイル形式でコントラクトのメタデータを自動生成します。
 このメタデータは現在のコントラクト情報を含みます。そして、このJSONファイルを使って、コンパイラバージョンやソースコード、ABIやNatSpec(Ethereum Natural Language Specification Format)のドキュメントなど、ソースコードを検証しコントラクトをより安全に利用するための情報を知ることができます。</p>
 <p>EVMコンパイラはこのメタデータのSwarmハッシュを各コントラクトにおけるバイトコードの末尾に追加します。
@@ -256,8 +268,8 @@
 <p class="first admonition-title">Note</p>
 <p class="last">上記のABIの定義には決まった順序はありません。コンパイラのバージョンによって変わる可能性があります。</p>
 </div>
-<div class="section" id="id2">
-<h2>バイトコード内のメタデータハッシュのエンコーディング<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="encoding-of-the-metadata-hash-in-the-bytecode">
+<h2>Encoding of the Metadata Hash in the Bytecode<a class="headerlink" href="#encoding-of-the-metadata-hash-in-the-bytecode" title="Permalink to this headline">¶</a></h2>
 <p>将来的にメタデータファイルを取得する他の方法がサポートされる可能性があるため、 <code class="docutils literal notranslate"><span class="pre">{&quot;bzzr0&quot;:</span> <span class="pre">&lt;Swarm</span> <span class="pre">hash&gt;}</span></code> のマッピングは <a class="reference external" href="https://tools.ietf.org/html/rfc7049">CBOR</a> でエンコードされ保存されます。このエンコーディングの始点を見つけることは簡単ではありません。そのため、そのエンコーディング長は2バイトのビッグエンディアンで追加されます。Solidityコンパイラの現在のバージョンでは、デプロイされたバイトコードの末尾まで以下のように追加します:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="mh">0xa1</span> <span class="mh">0x65</span> <span class="s">&#39;b&#39;</span> <span class="s">&#39;z&#39;</span> <span class="s">&#39;z&#39;</span> <span class="s">&#39;r&#39;</span> <span class="s">&#39;0&#39;</span> <span class="mh">0x58</span> <span class="mh">0x20</span> <span class="o">&lt;</span><span class="mi">32</span> <span class="kt">bytes</span> <span class="n">swarm</span> <span class="n">hash</span><span class="o">&gt;</span> <span class="mh">0x00</span> <span class="mh">0x29</span>
 </pre></div>
@@ -271,15 +283,15 @@
 このCBORストラクチャに他のデータを追加するでしょう。そのため、ベストな選択肢は適切なCBORパーサーを使用することです。</p>
 </div>
 </div>
-<div class="section" id="natspec">
-<h2>自動インタフェース生成とNatSpecの使い方<a class="headerlink" href="#natspec" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usage-for-automatic-interface-generation-and-natspec">
+<h2>Usage for Automatic Interface Generation and NatSpec<a class="headerlink" href="#usage-for-automatic-interface-generation-and-natspec" title="Permalink to this headline">¶</a></h2>
 <p>次の方法でメタデータは使用されます: コントラクトと関わるコンポーネント(e.g. Mistやその他のウォレット)がコントラクトコードを取得します。そして、Swarmハッシュを取得します。ファイルは上記のようにJSON形式でデコードされています。
 その後、コンポーネントはABIをもとにコントラクトにおける基本的なユーザーインターフェースを自動生成します。</p>
 <p>さらに、ウォレットはNatSpecユーザードキュメントを利用して、ユーザーがコントラクトと対話するときはいつでもトランザクション署名の許可を要求するとともに、確認メッセージをユーザーに表示することができます。</p>
 <p>Ethereum Natural Specification (NatSpec)に関する詳しい情報は <a class="reference external" href="https://github.com/ethereum/wiki/wiki/Ethereum-Natural-Specification-Format">ここ</a> で参照することができます。</p>
 </div>
-<div class="section" id="id4">
-<h2>ソースコード検証のための使い方<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usage-for-source-code-verification">
+<h2>Usage for Source Code Verification<a class="headerlink" href="#usage-for-source-code-verification" title="Permalink to this headline">¶</a></h2>
 <p>コンパイル検証のために、メタデータファイル内のリンクを通じてSwarmからソースを取得することができます。正しいバージョンのコンパイラ(“official”なコンパイラとして確認されているもの)が指定の設定のもと呼び出されます。そして、結果として得られるバイトコードはトランザクション生成のデータや <code class="docutils literal notranslate"><span class="pre">CREATE</span></code> オペコードのデータなどと比べられます。ここでハッシュはバイトコードの一部であるため、自動的にメタデータを検証します。
 残りのデータはコンストラクタにおける入力データに相当します。これはインタフェースに従ってデコードされ、ユーザに提示されるべきです。</p>
 </div>
@@ -293,7 +305,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="abi-spec.html" class="btn btn-neutral float-right" title="Contract ABI Specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="abi-spec.html" class="btn btn-neutral float-right" title="Basic Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="using-the-compiler.html" class="btn btn-neutral float-left" title="Using the compiler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

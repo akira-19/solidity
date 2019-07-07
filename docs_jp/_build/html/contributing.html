@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>貢献 &mdash; Solidity 0.5.4 documentation</title>
+  <title>Contributing &mdash; Solidity 0.5.4 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="よくある質問" href="frequently-asked-questions.html" />
-    <link rel="prev" title="既知のバグ" href="bugs.html" /> 
+    <link rel="next" title="Frequently Asked Questions" href="frequently-asked-questions.html" />
+    <link rel="prev" title="List of Known Bugs" href="bugs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
@@ -111,15 +111,19 @@
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">貢献</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#issue">issueの報告方法</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pull-requests">Pull Requestsのためのワークフロー</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-report-issues">How to Report Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-for-pull-requests">Workflow for Pull Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-compiler-tests">Running the compiler tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#writing-and-running-syntax-tests">Writing and running syntax tests</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#running-the-fuzzer-via-afl">Running the Fuzzer via AFL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#whiskers">Whiskers</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -168,7 +172,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>貢献</li>
+      <li>Contributing</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -187,8 +191,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="id1">
-<h1>貢献<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
 <p>貢献はいつでも歓迎します</p>
 <p>始めるには、まず、Solidityのコンポーネントとビルドプロセスを理解するため、<a class="reference internal" href="installing-solidity.html#building-from-source"><span class="std std-ref">Building from Source</span></a> を確認してください。
 また、Solidityでスマートコントラクトを書くことに精通することも役立つでしょう。</p>
@@ -200,8 +204,8 @@
 </ul>
 <p>このプロジェクト(issues, pull requests, Gitter channels含む) は <a class="reference external" href="https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a> でリリースされていることに注意してください。
 あなたはこの規約に同意することになります。</p>
-<div class="section" id="issue">
-<h2>issueの報告方法<a class="headerlink" href="#issue" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-to-report-issues">
+<h2>How to Report Issues<a class="headerlink" href="#how-to-report-issues" title="Permalink to this headline">¶</a></h2>
 <p>issueの報告には、
 <a class="reference external" href="https://github.com/ethereum/solidity/issues">GitHub issues tracker</a>
 を使って、以下の項目を含めるようにしてください。</p>
@@ -215,8 +219,8 @@
 </ul>
 <p>issueを再現するために最低限のソースコードにするのは有用で、誤解を明らかにします。</p>
 </div>
-<div class="section" id="pull-requests">
-<h2>Pull Requestsのためのワークフロー<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="workflow-for-pull-requests">
+<h2>Workflow for Pull Requests<a class="headerlink" href="#workflow-for-pull-requests" title="Permalink to this headline">¶</a></h2>
 <p>貢献するために、 <code class="docutils literal notranslate"><span class="pre">develop</span></code> ブランチをフォークし、あなたの変更をそこにいれてください。
 コミットメッセージには、あなたの変更(小さな変更でなければ)の <em>what</em> に加えて <em>why</em> を詳細にいれるべきです。</p>
 <p>もしあなたが変更を加えた後に <code class="docutils literal notranslate"><span class="pre">develop</span></code> からpullする必要がある場合(例えばコンフリクトのマージする)、
@@ -233,9 +237,9 @@
 を尊重してください。
 私たちがCIテストを実行してはいますが、pull requestsを送る前にはローカルでテストしビルドするようにしてください。</p>
 <p>あなたの貢献を感謝します。</p>
-<p>Running the compiler tests
-コンパイラテストの実行
-==========================</p>
+</div>
+<div class="section" id="running-the-compiler-tests">
+<h2>Running the compiler tests<a class="headerlink" href="#running-the-compiler-tests" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">./scripts/tests.sh</span></code> スクリプトはほとんどのSolidityテストを実行し、<code class="docutils literal notranslate"><span class="pre">aleth</span></code> を走らせます。
 <code class="docutils literal notranslate"><span class="pre">aleth</span></code> がパスに見つかる場合は実行しますが、ダウンロードは行いませんので、最初にインストールしておく必要があります。
 詳細を確認してください。</p>
@@ -286,9 +290,8 @@ The option <code class="docutils literal notranslate"><span class="pre">--no-smt
 SolidityのCIで使っているものと同じバージョンを使うことを推奨します。
 現在CIはバージョン <code class="docutils literal notranslate"><span class="pre">aleth</span></code> の <code class="docutils literal notranslate"><span class="pre">1.5.0-alpha.7</span></code> を使っています。</p>
 </div>
-<p>Writing and running syntax tests
-構文テストの実装と実行
-——————————–</p>
+<div class="section" id="writing-and-running-syntax-tests">
+<h3>Writing and running syntax tests<a class="headerlink" href="#writing-and-running-syntax-tests" title="Permalink to this headline">¶</a></h3>
 <p>構文テストは、コンパイラが無効なコードに正しいエラーメッセージを生成し、適切に有効なコードを受け入れることをチェックします。
 それらは <code class="docutils literal notranslate"><span class="pre">tests/libsolidity/syntaxTests</span></code> フォルダ内へ個別のファイルに格納されます。
 それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
@@ -318,7 +321,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 <span class="c1">// DeclarationError: (36-52): Identifier already declared.</span>
 </pre></div>
 </div>
-<p>再度 <a href="#id2"><span class="problematic" id="id3">``</span></a>./build/test/isoltest``を実行すると失敗します。</p>
+<p>再度 <a href="#id1"><span class="problematic" id="id2">``</span></a>./build/test/isoltest``を実行すると失敗します。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">syntaxTests</span><span class="o">/</span><span class="n">double_stateVariable_declaration</span><span class="p">.</span><span class="n">sol</span><span class="o">:</span> <span class="n">FAIL</span>
     <span class="n">Contract</span><span class="o">:</span>
         <span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
@@ -357,6 +360,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 <p class="last">そのテストを説明するコントラクトファイルの名前を選んでみてください。例えば、<code class="docutils literal notranslate"><span class="pre">double_variable_declaration.sol</span></code> などです。
 継承のテストやクロスコントラクトのテスト以外で、1つのファイルに複数のコントラクトを配置していはいけません。
 各ファイルは新しい機能の側面のみテストすべきです。</p>
+</div>
 </div>
 </div>
 <div class="section" id="running-the-fuzzer-via-afl">
@@ -453,10 +457,10 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="frequently-asked-questions.html" class="btn btn-neutral float-right" title="よくある質問" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="frequently-asked-questions.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="bugs.html" class="btn btn-neutral float-left" title="既知のバグ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="bugs.html" class="btn btn-neutral float-left" title="List of Known Bugs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

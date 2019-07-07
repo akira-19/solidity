@@ -1,5 +1,5 @@
 #################
-コントラクトメタデータ
+Contract Metadata
 #################
 
 .. index:: metadata, contract verification
@@ -36,7 +36,7 @@ EVMコンパイラはこのメタデータのSwarmハッシュを各コントラ
       sources:
       {
         "myFile.sol": {
-          // Required: ソースファイルのkeccak256ハッシュ 
+          // Required: ソースファイルのkeccak256ハッシュ
           "keccak256": "0x123...",
           // Required ("content"を使用していない場合):
           // ソートされたソースファイルに対応するURL。

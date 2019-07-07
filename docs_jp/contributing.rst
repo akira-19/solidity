@@ -1,5 +1,5 @@
 ############
-貢献
+Contributing
 ############
 
 貢献はいつでも歓迎します
@@ -90,14 +90,14 @@ The option ``--no-smt`` disables the tests that require ``libz3`` and
 ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
 `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_
 をインストールします。
-その後、テストモードで実行します。 
+その後、テストモードで実行します。
 ``aleth --db memorydb --test -d /tmp/testeth``
 
 実際のテストを実行するには、 ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc`` を使います。
 
 テストの一部を実行する場合は、フィルタを使います。
 ``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``
-``TestName`` はワイルドカードを指定できます。 ``*`` 
+``TestName`` はワイルドカードを指定できます。 ``*``
 
 例えば、実行したテストがあるとして、
 ``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``
@@ -213,7 +213,7 @@ Writing and running syntax tests
 
 
 .. note::
-    そのテストを説明するコントラクトファイルの名前を選んでみてください。例えば、``double_variable_declaration.sol`` などです。 
+    そのテストを説明するコントラクトファイルの名前を選んでみてください。例えば、``double_variable_declaration.sol`` などです。
     継承のテストやクロスコントラクトのテスト以外で、1つのファイルに複数のコントラクトを配置していはいけません。
     各ファイルは新しい機能の側面のみテストすべきです。
 

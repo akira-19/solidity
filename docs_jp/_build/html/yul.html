@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Style Guide" href="style-guide.html" />
-    <link rel="prev" title="Basic Design" href="abi-spec.html" /> 
+    <link rel="prev" title="Contract ABI Specification" href="abi-spec.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,20 +94,8 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Yul</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#specification-of-yul">Specification of Yul</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#restrictions-on-the-grammar">Restrictions on the Grammar</a></li>
@@ -126,9 +114,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -777,7 +765,7 @@ to memory at position dst</td>
 <div class="code highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// コードは単一のオブジェクトで構成されています。単一の &quot;code&quot;ノードはオブジェクトのコードです。</span>
 <span class="c1">// すべての（他の）名前付きオブジェクトまたはデータセクションはシリアライズされ、</span>
 <span class="c1">// 特別な組み込み関数 datacopy/dataoffset/datasize にアクセスできるようになります。</span>
-<span class="c1">// ネストされたオブジェクトへのアクセスは ``.`` を使って名前を結合することによって可能です。</span>
+<span class="c1">// ネストされたオブジェクトへのアクセスは&quot;.&quot;を使って名前を結合することによって可能です。</span>
 <span class="c1">// 現在のオブジェクト、現在のオブジェクト内のサブオブジェクト、およびデータ項目は、ネストアクセスなしでスコープ内にあります。</span>
 <span class="n">object</span> <span class="s">&quot;Contract1&quot;</span> <span class="p">{</span>
     <span class="n">code</span> <span class="p">{</span>
@@ -847,7 +835,7 @@ to memory at position dst</td>
         <a href="style-guide.html" class="btn btn-neutral float-right" title="Style Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="abi-spec.html" class="btn btn-neutral float-left" title="Basic Design" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="abi-spec.html" class="btn btn-neutral float-left" title="Contract ABI Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

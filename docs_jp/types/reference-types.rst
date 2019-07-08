@@ -81,7 +81,7 @@ Arrays
 
 配列の要素はマッピングや構造体含めてどの型でも構いません。全般的な制限として、マッピングは ``storage`` にのみ保存され、publicなファンクションは :ref:`ABI types <ABI>` であるパラメータが必要になります。
 
-配列に ``public`` をつけることでSolidityが :ref:`getter <visibility-and-getters>`を生成します。
+配列に ``public`` をつけることでSolidityが :ref:`getter <visibility-and-getters>` を生成します。
 インデックスがgetterのパラメータになります。
 
 そのサイズ以上の配列要素にアクセスしようとするとフェイルアサーションが発生します。新しい要素を配列の最後に追加するために ``.push()`` が、新しいサイズを指定するのに ``.length`` :ref:`member <array-members>` が使用できます（下記補足を参照ください）。

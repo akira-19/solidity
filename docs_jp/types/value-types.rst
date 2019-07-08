@@ -152,16 +152,15 @@ Type conversions:
 外部のファンクションの署名では、``address`` は ``address`` 型、``address payable`` 型両方で使用されます。
 
 .. note::
-    おそらく、``address``
-    と ``address payable`` の違いを気にする必要はあまりなく、どこでも``address`` を使うことになるでしょう。例えば、もし、:ref:`withdrawal pattern<withdrawal_pattern>` を使うと、``address payable`` である ``msg.sender`` で ``transfer`` を使うので、``address`` としてアドレスを保存できます（するべきです）。
+    おそらく、``address`` と ``address payable`` の違いを気にする必要はあまりなく、どこでも ``address`` を使うことになるでしょう。例えば、もし、:ref:`withdrawal pattern<withdrawal_pattern>` を使うと、``address payable`` である ``msg.sender`` で ``transfer`` を使うので、``address`` としてアドレスを保存できます（するべきです）。
 
 Operators:
 
 * ``<=``, ``<``, ``==``, ``!=``, ``>=`` and ``>``
 
 .. warning::
-    もし``address`` 型よりも大きなサイズの型、例えば、``bytes32``、から変換しようとすると、``address`` は切り詰められます。
-    変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``　です。
+    もし ``address`` 型よりも大きなサイズの型、例えば、``bytes32``、から変換しようとすると、``address`` は切り詰められます。
+    変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC`` です。
 
     ``0x111122223333444455556666777788889999aAaa`` となる ``address(uint160(bytes20(b)))`` もしくは、``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc`` となる ``address(uint160(uint256(b)))`` が使えます。
 
@@ -219,8 +218,7 @@ Example::
 .. note::
     以前のバージョンではこれらのファンクションで任意の引数を取ることができ、``bytes4`` 型の第一引数を異なる方法で処理することができました。そのようなエッジケースはバージョン0.5.0で削除されました。
 
-供給されたガスを``.gas()``
-It is possible to adjust the supplied gas with the ``.gas()`` modifierで調整することができます::
+供給されたガスを ``.gas()`` modifierで調整することができます::
 
     address(nameReg).call.gas(1000000)(abi.encodeWithSignature("register(string)", "MyName"));
 
@@ -280,7 +278,7 @@ Contract Types
 Fixed-size byte arrays
 ----------------------
 
-値型である``bytes1``、``bytes2``、``bytes3`` ... ``bytes32`` は1から32までバイト列を保持しています。
+値型である ``bytes1``、``bytes2``、``bytes3`` ... ``bytes32`` は1から32までバイト列を保持しています。
 ``byte`` は ``byte1`` のエイリアスです。
 
 Operators:
@@ -374,7 +372,7 @@ Rational and Integer Literals
 String Literals and Types
 -------------------------
 
-文字列リテラルはダブルもしくはシングルクオテーション(``"foo"`` もしくは ``'bar'``)で記述されます。これらはC言語の様な後置ゼロにはなりません。``"foo"`` は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、``bytes1`` ... ``bytes32`` に暗黙的に変換可能です。もしサイズが合えば``bytes`` と ``string`` にも変換可能です。
+文字列リテラルはダブルもしくはシングルクオテーション(``"foo"`` もしくは ``'bar'``)で記述されます。これらはC言語の様な後置ゼロにはなりません。``"foo"`` は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、``bytes1`` ... ``bytes32`` に暗黙的に変換可能です。もしサイズが合えば ``bytes`` と ``string`` にも変換可能です。
 
 例えば、``bytes32 samevar = "stringliteral"`` では、文字列リテラルは ``bytes32`` 型に割り当てられる時に、その生のバイト構造で解釈されます。
 

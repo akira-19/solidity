@@ -8,7 +8,7 @@ Structure of a Contract
 
 Solidityのコントラクトはオブジェクト志向の言語のクラスに似ています。各コントラクトは :ref:`structure-state-variables`、:ref:`structure-functions`、:ref:`structure-function-modifiers`、:ref:`structure-events`、:ref:`structure-struct-types`、:ref:`structure-enum-types` の宣言を含んでいます。更に、コントラクトは他のコントラクトを継承できます。
 
- :ref:`ライブラリ<libraries>` と :ref:`インターフェース<interfaces>` と呼ばれる特別な種類のコントラクトもあります。
+:ref:`ライブラリ<libraries>` と :ref:`インターフェース<interfaces>` と呼ばれる特別な種類のコントラクトもあります。
 
 :ref:`コントラクト<contracts>` に関するセクションはより詳細な説明があります。このセクションは簡単な全体像です。
 

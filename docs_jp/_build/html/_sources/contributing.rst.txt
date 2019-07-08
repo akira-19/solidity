@@ -77,14 +77,9 @@ Solidityは様々なテストを含んでおり、ほとんどが ``soltest`` �
 .. note ::
 
     Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
-    ``./build/test/Release/soltest.exe -- --no-ipc --no-smt`` このコマンドを実行する必要があるでしょう。
-    Those working in a Windows environment wanting to run the above basic sets without aleth or libz3 in Git Bash, you would have to do: ``./build/test/Release/soltest.exe -- --no-ipc --no-smt``.
-    もし標準のコマンドプロンプトで実行する場合は、 ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt`` を実行します。
-    If you're running this in plain Command Prompt, use ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt``.
+    ``./build/test/Release/soltest.exe -- --no-ipc --no-smt`` このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、 ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt`` を実行します。
 
 ``--no-smt`` オプションは ``libz3`` を必要とするテストを無効にし、 ``--no-ipc`` オプションは ``aleth`` を必要とするテストを無効にします。
-The option ``--no-smt`` disables the tests that require ``libz3`` and
-``--no-ipc`` disables those that require ``aleth``.
 
 ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
 `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_
@@ -96,7 +91,7 @@ ipcテスト(生成されたコードのセマンティックをテストする�
 
 テストの一部を実行する場合は、フィルタを使います。
 ``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``
-``TestName`` はワイルドカードを指定できます。 ``*``
+``TestName`` はワイルドカードを指定できます ``*``。
 
 例えば、実行したテストがあるとして、
 ``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-ipc --no-smt``
@@ -152,10 +147,10 @@ Writing and running syntax tests
 数字の範囲は、エラーが発生したソースコードの場所を指定しています。
 コントラクトにエラーやワーニングなしでコンパイルしたい場合、セパレータとコメントを削除することができます。
 
-上記の例だと、``variable``変数は２度宣言されてます。
+上記の例だと、``variable`` 変数は２度宣言されてます。
 これは、すでに宣言されていますという識別子の ``DeclarationError`` となります。
 
-``isoltest``というツールはこれらのテストに使え、 ``./build/test/tools/`` にあります。
+``isoltest`` というツールはこれらのテストに使え、``./build/test/tools/`` にあります。
 このツールは、対話的に、お好みのエディタを使って、失敗しているコントラクトを編集することができます。
 ``variable`` を削除して、このテストを突破してみましょう！
 
@@ -167,7 +162,7 @@ Writing and running syntax tests
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
-再度 ``./build/test/isoltest``を実行すると失敗します。
+再度 ``./build/test/isoltest`` を実行すると失敗します。
 
 ::
 
@@ -186,7 +181,7 @@ Writing and running syntax tests
 
 失敗してるテストのためにいくつかの選択肢を提供します。
 
-- ``edit``: ``isoltest`` はエディタでコントラクトを開こうとし、修正できるます。 ``isoltest --editor /path/to/editor`` としてコマンドラインで与えられたエディタか、,``EDITOR`` 環境変数で設定されいてるものか ``/usr/bin/editor`` を使います。(この順番で設定されます).
+- ``edit``: ``isoltest`` はエディタでコントラクトを開こうとし、修正できるます。 ``isoltest --editor /path/to/editor`` としてコマンドラインで与えられたエディタか、``EDITOR`` 環境変数で設定されいてるものか ``/usr/bin/editor`` を使います。(この順番で設定されます).
 - ``update``: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。
 - ``skip``: 特定のテストの実行をスキップします。
 - ``quit``: ``isoltest`` を終了します。

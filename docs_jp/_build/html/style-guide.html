@@ -94,20 +94,8 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Style Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -148,9 +136,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -232,7 +220,7 @@
 <blockquote>
 <div>このスタイルガイドは一貫性(consistency)について述べます。このスタイルガイドのconsistencyは重要です。もっというと、プロジェクトのconsistencyはもっと重要です。
 さらには、1つのモジュールにおけるconsistency、1つの関数におけるconsistencyはより重要なものです。
-しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。 – 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！</div></blockquote>
+しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。– 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！</div></blockquote>
 </div>
 <div class="section" id="code-layout">
 <h2>Code Layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
@@ -612,8 +600,8 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>これらのレコメンデーションは``if`` や <code class="docutils literal notranslate"><span class="pre">else</span></code> 、 <code class="docutils literal notranslate"><span class="pre">while</span></code> 、 <code class="docutils literal notranslate"><span class="pre">for</span></code> といった制御構造にも適用されます。</p>
-<p>さらに、制御構造 <code class="docutils literal notranslate"><span class="pre">if</span></code> 、 <code class="docutils literal notranslate"><span class="pre">while</span></code> 、 <code class="docutils literal notranslate"><span class="pre">for</span></code> と、条件を表す括弧ブロックの間、
+<p>これらのレコメンデーションは <code class="docutils literal notranslate"><span class="pre">if</span></code> や <code class="docutils literal notranslate"><span class="pre">else</span></code>、<code class="docutils literal notranslate"><span class="pre">while</span></code>、<code class="docutils literal notranslate"><span class="pre">for</span></code> といった制御構造にも適用されます。</p>
+<p>さらに、制御構造 <code class="docutils literal notranslate"><span class="pre">if</span></code>、<code class="docutils literal notranslate"><span class="pre">while</span></code>、<code class="docutils literal notranslate"><span class="pre">for</span></code> と、条件を表す括弧ブロックの間、
 および条件括弧ブロックと括弧の間には、シングルスペースがあるべきです。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>
@@ -653,7 +641,7 @@
     <span class="p">}));</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">else</span></code> または <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> 節を持つ <code class="docutils literal notranslate"><span class="pre">if</span></code> ブロックの場合、 <code class="docutils literal notranslate"><span class="pre">else``は</span> <span class="pre">``if</span></code> の閉じ括弧と同じ行に配置する必要があります。
+<p><code class="docutils literal notranslate"><span class="pre">else</span></code> または <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> 節を持つ <code class="docutils literal notranslate"><span class="pre">if</span></code> ブロックの場合、<code class="docutils literal notranslate"><span class="pre">else</span></code> は <code class="docutils literal notranslate"><span class="pre">if</span></code> の閉じ括弧と同じ行に配置する必要があります。
 これは他のブロックのような構造の規則と比較して例外です。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
@@ -963,7 +951,7 @@
 <div class="section" id="mappings">
 <h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this headline">¶</a></h3>
 <p>変数の宣言時には、キーワード <code class="docutils literal notranslate"><span class="pre">mapping</span></code> をその型とスペースで区切らないでください。
-また、ネストされた `` mapping``キーワードをそのタイプとスペースで区切らないでください。</p>
+また、ネストされた <code class="docutils literal notranslate"><span class="pre">mapping</span></code> キーワードをそのタイプとスペースで区切らないでください。</p>
 <p>Yes:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">mapping</span><span class="p">(</span><span class="kt">uint</span> <span class="o">=&gt;</span> <span class="kt">uint</span><span class="p">)</span> <span class="n">map</span><span class="p">;</span>
 <span class="kd">mapping</span><span class="p">(</span><span class="kt">address</span> <span class="o">=&gt;</span> <span class="kt">bool</span><span class="p">)</span> <span class="n">registeredAddresses</span><span class="p">;</span>
@@ -1102,7 +1090,7 @@
 <div class="section" id="contract-and-library-names">
 <h3>Contract and Library Names<a class="headerlink" href="#contract-and-library-names" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。 例: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code> 、 <code class="docutils literal notranslate"><span class="pre">SmartBank</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Player</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Congress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Owned</span></code> など。</li>
+<li>コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code>、<code class="docutils literal notranslate"><span class="pre">SmartBank</span></code>、<code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code>、<code class="docutils literal notranslate"><span class="pre">Player</span></code>、<code class="docutils literal notranslate"><span class="pre">Congress</span></code>、<code class="docutils literal notranslate"><span class="pre">Owned</span></code> など。</li>
 <li>コントラクトとライブラリの名前もそれらのファイル名と一致する必要があります。</li>
 <li>コントラクトファイルに複数のコントラクトやライブラリが含まれている場合、ファイル名は <em>core contract</em> と一致させる必要があります。ただしこの構造はお勧めできないため、でいるだけ回避しましょう。</li>
 </ul>
@@ -1168,36 +1156,36 @@
 </div>
 <div class="section" id="struct-names">
 <h3>Struct Names<a class="headerlink" href="#struct-names" title="Permalink to this headline">¶</a></h3>
-<p>構造体はCapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Position</span></code> 、 <code class="docutils literal notranslate"><span class="pre">PositionXY</span></code> など。</p>
+<p>構造体はCapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code>、<code class="docutils literal notranslate"><span class="pre">Position</span></code>、<code class="docutils literal notranslate"><span class="pre">PositionXY</span></code> など。</p>
 </div>
 <div class="section" id="event-names">
 <h3>Event Names<a class="headerlink" href="#event-names" title="Permalink to this headline">¶</a></h3>
-<p>イベントはCapWordsスタイルを使って命名されるべきです。例: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Transfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Approval</span></code> 、 <code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code> など。</p>
+<p>イベントはCapWordsスタイルを使って命名されるべきです。例: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code>、<code class="docutils literal notranslate"><span class="pre">Transfer</span></code>、<code class="docutils literal notranslate"><span class="pre">Approval</span></code>、<code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code>、<code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code> など。</p>
 </div>
 <div class="section" id="function-names">
 <h3>Function Names<a class="headerlink" href="#function-names" title="Permalink to this headline">¶</a></h3>
-<p>コンストラクタ以外の関数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code> 、 <code class="docutils literal notranslate"><span class="pre">transfer</span></code> 、 <code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code> 、 <code class="docutils literal notranslate"><span class="pre">addMember</span></code> 、 <code class="docutils literal notranslate"><span class="pre">changeOwner</span></code> など。</p>
+<p>コンストラクタ以外の関数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code>、<code class="docutils literal notranslate"><span class="pre">transfer</span></code>、<code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code>、<code class="docutils literal notranslate"><span class="pre">addMember</span></code>、<code class="docutils literal notranslate"><span class="pre">changeOwner</span></code> など。</p>
 </div>
 <div class="section" id="function-argument-names">
 <h3>Function Argument Names<a class="headerlink" href="#function-argument-names" title="Permalink to this headline">¶</a></h3>
-<p>関数の引数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">account</span></code> 、 <code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">senderAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">newOwner</span></code> など。</p>
+<p>関数の引数はmixedCaseを使用するべきです。例: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code>、<code class="docutils literal notranslate"><span class="pre">account</span></code>、<code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code>、<code class="docutils literal notranslate"><span class="pre">senderAddress</span></code>、<code class="docutils literal notranslate"><span class="pre">newOwner</span></code> など。</p>
 <p>カスタム構造体を操作するライブラリ関数を書くときは、その構造体を最初の引数にして、常に <code class="docutils literal notranslate"><span class="pre">self</span></code> という名前にします。</p>
 </div>
 <div class="section" id="local-and-state-variable-names">
 <h3>Local and State Variable Names<a class="headerlink" href="#local-and-state-variable-names" title="Permalink to this headline">¶</a></h3>
-<p>mixedCaseを使用してください。 例: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code> 、 <code class="docutils literal notranslate"><span class="pre">balancesOf</span></code> 、 <code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code> 、 <code class="docutils literal notranslate"><span class="pre">isPreSale</span></code> 、 <code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code> など。</p>
+<p>mixedCaseを使用してください。例: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code>、<code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code>、<code class="docutils literal notranslate"><span class="pre">balancesOf</span></code>、<code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code>、<code class="docutils literal notranslate"><span class="pre">isPreSale</span></code>、<code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code> など。</p>
 </div>
 <div class="section" id="constants">
 <h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
-<p>定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code> 、 <code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code> 、 <code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code> など。</p>
+<p>定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code>、<code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code>、<code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code>、<code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code> など。</p>
 </div>
 <div class="section" id="modifier-names">
 <h3>Modifier Names<a class="headerlink" href="#modifier-names" title="Permalink to this headline">¶</a></h3>
-<p>mixedCaseを使用してください。 例: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code> 、 <code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code> 、 <code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code> など。</p>
+<p>mixedCaseを使用してください。例: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code>、<code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code>、<code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code> など。</p>
 </div>
 <div class="section" id="enums">
 <h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
-<p>列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Frame</span></code> 、 <code class="docutils literal notranslate"><span class="pre">HashStyle</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code> など。</p>
+<p>列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code>、<code class="docutils literal notranslate"><span class="pre">Frame</span></code>、<code class="docutils literal notranslate"><span class="pre">HashStyle</span></code>、<code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code> など。</p>
 </div>
 <div class="section" id="avoiding-naming-collisions">
 <h3>Avoiding Naming Collisions<a class="headerlink" href="#avoiding-naming-collisions" title="Permalink to this headline">¶</a></h3>

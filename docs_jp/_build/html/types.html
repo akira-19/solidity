@@ -128,7 +128,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#conversions-between-literals-and-elementary-types">Conversions between Literals and Elementary Types</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#integer-types">Integer Types</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id21">Fixed-Size Byte Arrays</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Fixed-Size Byte Arrays</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#addresses">Addresses</a></li>
 </ul>
 </li>
@@ -145,7 +145,7 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
@@ -162,9 +162,9 @@
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -368,8 +368,7 @@ Solidityはいくつかの基本的なタイプを持ち、それらは結びつ
 外部のファンクションの署名では、<code class="docutils literal notranslate"><span class="pre">address</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span></code> 型、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> 型両方で使用されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">おそらく、<code class="docutils literal notranslate"><span class="pre">address</span></code>
-と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> の違いを気にする必要はあまりなく、どこでも``address`` を使うことになるでしょう。例えば、もし、<a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdrawal pattern</span></a> を使うと、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> である <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> で <code class="docutils literal notranslate"><span class="pre">transfer</span></code> を使うので、<code class="docutils literal notranslate"><span class="pre">address</span></code> としてアドレスを保存できます（するべきです）。</p>
+<p class="last">おそらく、<code class="docutils literal notranslate"><span class="pre">address</span></code> と <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> の違いを気にする必要はあまりなく、どこでも <code class="docutils literal notranslate"><span class="pre">address</span></code> を使うことになるでしょう。例えば、もし、<a class="reference internal" href="common-patterns.html#withdrawal-pattern"><span class="std std-ref">withdrawal pattern</span></a> を使うと、<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> である <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> で <code class="docutils literal notranslate"><span class="pre">transfer</span></code> を使うので、<code class="docutils literal notranslate"><span class="pre">address</span></code> としてアドレスを保存できます（するべきです）。</p>
 </div>
 <p>Operators:</p>
 <ul class="simple">
@@ -377,8 +376,8 @@ Solidityはいくつかの基本的なタイプを持ち、それらは結びつ
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>もし``address`` 型よりも大きなサイズの型、例えば、<code class="docutils literal notranslate"><span class="pre">bytes32</span></code>、から変換しようとすると、<code class="docutils literal notranslate"><span class="pre">address</span></code> は切り詰められます。
-変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、<code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC</span></code>　です。</p>
+<p>もし <code class="docutils literal notranslate"><span class="pre">address</span></code> 型よりも大きなサイズの型、例えば、<code class="docutils literal notranslate"><span class="pre">bytes32</span></code>、から変換しようとすると、<code class="docutils literal notranslate"><span class="pre">address</span></code> は切り詰められます。
+変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、<code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC</span></code> です。</p>
 <p class="last"><code class="docutils literal notranslate"><span class="pre">0x111122223333444455556666777788889999aAaa</span></code> となる <code class="docutils literal notranslate"><span class="pre">address(uint160(bytes20(b)))</span></code> もしくは、<code class="docutils literal notranslate"><span class="pre">0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc</span></code> となる <code class="docutils literal notranslate"><span class="pre">address(uint160(uint256(b)))</span></code> が使えます。</p>
 </div>
 <div class="admonition note">
@@ -433,8 +432,7 @@ Solidityはいくつかの基本的なタイプを持ち、それらは結びつ
 <p class="first admonition-title">Note</p>
 <p class="last">以前のバージョンではこれらのファンクションで任意の引数を取ることができ、<code class="docutils literal notranslate"><span class="pre">bytes4</span></code> 型の第一引数を異なる方法で処理することができました。そのようなエッジケースはバージョン0.5.0で削除されました。</p>
 </div>
-<p>供給されたガスを``.gas()``
-It is possible to adjust the supplied gas with the <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> modifierで調整することができます:</p>
+<p>供給されたガスを <code class="docutils literal notranslate"><span class="pre">.gas()</span></code> modifierで調整することができます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">address</span><span class="p">(</span><span class="n">nameReg</span><span class="p">).</span><span class="nf">call</span><span class="p">.</span><span class="n">gas</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)(</span><span class="nb">abi.encodeWithSignature</span><span class="p">(</span><span class="s">&quot;register(string)&quot;</span><span class="p">,</span> <span class="s">&quot;MyName&quot;</span><span class="p">));</span>
 </pre></div>
 </div>
@@ -480,7 +478,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 </div>
 <div class="section" id="fixed-size-byte-arrays">
 <span id="index-7"></span><h3>Fixed-size byte arrays<a class="headerlink" href="#fixed-size-byte-arrays" title="Permalink to this headline">¶</a></h3>
-<p>値型である``bytes1``、<code class="docutils literal notranslate"><span class="pre">bytes2</span></code>、<code class="docutils literal notranslate"><span class="pre">bytes3</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> は1から32までバイト列を保持しています。
+<p>値型である <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>、<code class="docutils literal notranslate"><span class="pre">bytes2</span></code>、<code class="docutils literal notranslate"><span class="pre">bytes3</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> は1から32までバイト列を保持しています。
 <code class="docutils literal notranslate"><span class="pre">byte</span></code> は <code class="docutils literal notranslate"><span class="pre">byte1</span></code> のエイリアスです。</p>
 <p>Operators:</p>
 <ul class="simple">
@@ -557,7 +555,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 </div>
 <div class="section" id="string-literals-and-types">
 <span id="string-literals"></span><span id="index-10"></span><h3>String Literals and Types<a class="headerlink" href="#string-literals-and-types" title="Permalink to this headline">¶</a></h3>
-<p>文字列リテラルはダブルもしくはシングルクオテーション(<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>)で記述されます。これらはC言語の様な後置ゼロにはなりません。<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、<code class="docutils literal notranslate"><span class="pre">bytes1</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> に暗黙的に変換可能です。もしサイズが合えば``bytes`` と <code class="docutils literal notranslate"><span class="pre">string</span></code> にも変換可能です。</p>
+<p>文字列リテラルはダブルもしくはシングルクオテーション(<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>)で記述されます。これらはC言語の様な後置ゼロにはなりません。<code class="docutils literal notranslate"><span class="pre">&quot;foo&quot;</span></code> は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、<code class="docutils literal notranslate"><span class="pre">bytes1</span></code> … <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> に暗黙的に変換可能です。もしサイズが合えば <code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> にも変換可能です。</p>
 <p>例えば、<code class="docutils literal notranslate"><span class="pre">bytes32</span> <span class="pre">samevar</span> <span class="pre">=</span> <span class="pre">&quot;stringliteral&quot;</span></code> では、文字列リテラルは <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> 型に割り当てられる時に、その生のバイト構造で解釈されます。</p>
 <p>文字列リテラルは以下のエスケープキャラクターをサポートします:</p>
 <blockquote>
@@ -812,7 +810,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 <p>インデックスはゼロベースで、アクセスする際には宣言とは逆方向でアクセスします。</p>
 <p>例えば、もし <code class="docutils literal notranslate"><span class="pre">uint[][5]</span> <span class="pre">x</span> <span class="pre">memory</span></code> を持っていたら、3つ目の動的配列に入っている2つ目の <code class="docutils literal notranslate"><span class="pre">uint</span></code> には <code class="docutils literal notranslate"><span class="pre">x[2][1]</span></code> でアクセスできます。また、3つ目の動的配列自体には <code class="docutils literal notranslate"><span class="pre">x[2]</span></code> でアクセスします。繰り返しですが、<code class="docutils literal notranslate"><span class="pre">T[5]</span> <span class="pre">a</span></code> という配列（<code class="docutils literal notranslate"><span class="pre">T</span></code> 自体は配列でも良い）を持っていたら、<code class="docutils literal notranslate"><span class="pre">a[2]</span></code> というのは常に <code class="docutils literal notranslate"><span class="pre">T</span></code> という型になります。</p>
 <p>配列の要素はマッピングや構造体含めてどの型でも構いません。全般的な制限として、マッピングは <code class="docutils literal notranslate"><span class="pre">storage</span></code> にのみ保存され、publicなファンクションは <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI types</span></a> であるパラメータが必要になります。</p>
-<p>配列に <code class="docutils literal notranslate"><span class="pre">public</span></code> をつけることでSolidityが :ref:<a href="#id16"><span class="problematic" id="id17">`</span></a>getter &lt;visibility-and-getters&gt;`を生成します。
+<p>配列に <code class="docutils literal notranslate"><span class="pre">public</span></code> をつけることでSolidityが <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">getter</span></a> を生成します。
 インデックスがgetterのパラメータになります。</p>
 <p>そのサイズ以上の配列要素にアクセスしようとするとフェイルアサーションが発生します。新しい要素を配列の最後に追加するために <code class="docutils literal notranslate"><span class="pre">.push()</span></code> が、新しいサイズを指定するのに <code class="docutils literal notranslate"><span class="pre">.length</span></code> <a class="reference internal" href="#array-members"><span class="std std-ref">member</span></a> が使用できます（下記補足を参照ください）。</p>
 <div class="section" id="bytes-and-strings-as-arrays">
@@ -875,7 +873,7 @@ It is possible to adjust the supplied gas with the <code class="docutils literal
 <p>この制約は将来的には削除する予定ですが、ABI内で配列の受け渡し方で複雑になってしまいます。</p>
 </div>
 <div class="section" id="array-members">
-<span id="index-18"></span><span id="id18"></span><h4>Array Members<a class="headerlink" href="#array-members" title="Permalink to this headline">¶</a></h4>
+<span id="index-18"></span><span id="id16"></span><h4>Array Members<a class="headerlink" href="#array-members" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><strong>length</strong>:</dt>
 <dd>配列はその要素の長さを含む <code class="docutils literal notranslate"><span class="pre">length</span></code> というメンバを持っています。
@@ -994,7 +992,7 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 </div>
 </div>
 <div class="section" id="structs">
-<span id="index-19"></span><span id="id19"></span><h3>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h3>
+<span id="index-19"></span><span id="id17"></span><h3>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h3>
 <p>Solidityでは次の例の様に構造体として新しい型を定義する方法があります:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">11</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
@@ -1053,7 +1051,7 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 </div>
 </div>
 <div class="section" id="mapping-types">
-<span id="index-20"></span><span id="id20"></span><h2>Mapping Types<a class="headerlink" href="#mapping-types" title="Permalink to this headline">¶</a></h2>
+<span id="index-20"></span><span id="id18"></span><h2>Mapping Types<a class="headerlink" href="#mapping-types" title="Permalink to this headline">¶</a></h2>
 <p>マッピング型は <code class="docutils literal notranslate"><span class="pre">mapping(_KeyType</span> <span class="pre">=&gt;</span> <span class="pre">_ValueType)</span></code> という構文で宣言します。<code class="docutils literal notranslate"><span class="pre">_KeyType</span></code> はどの基本型でも入ります。つまりどのビルトインの型に加え、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> が使えます。ユーザー定義、もしくはコントラクト型、enum、マッピング、構造体、<code class="docutils literal notranslate"><span class="pre">bytes</span></code> と <code class="docutils literal notranslate"><span class="pre">string</span></code> を除いた配列は使用できません。<code class="docutils literal notranslate"><span class="pre">_ValueType</span></code> はマッピングを含めて、どの型でもとることができます。</p>
 <p>マッピングはどんなキーも存在し、そのバイト表現は全てゼロ（型の <a class="reference internal" href="control-structures.html#default-value"><span class="std std-ref">デフォルト値</span></a>）で実質的に初期化されている <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">hash tables</a> の様に考えることができます。ただ似ているのはそれだけで、キーデータはマッピングには保存されず、その <code class="docutils literal notranslate"><span class="pre">keccak256</span></code> ハッシュだけが値を検索するのに使用されます。</p>
 <p>そのため、マッピングは長さを持たず、キーの概念やセットする値などはありません。</p>
@@ -1174,8 +1172,8 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 </pre></div>
 </div>
 </div>
-<div class="section" id="id21">
-<h3>Fixed-Size Byte Arrays<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id19">
+<h3>Fixed-Size Byte Arrays<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 <p>10進数の数字リテラルは暗黙的に固定サイズのバイト配列に変換できません。16進数の数字リテラルはバイト型のサイズと桁数がぴったり合っている場合のみ変換可能です。10進数、16進数両者の唯一の例外として、値が0であればどの固定サイズのバイト型に変換できます:</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">bytes2</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">54321</span><span class="p">;</span> <span class="c1">// not allowed</span>
 <span class="kt">bytes2</span> <span class="n">b</span> <span class="o">=</span> <span class="mh">0x12</span><span class="p">;</span> <span class="c1">// not allowed</span>
@@ -1198,7 +1196,7 @@ memory配列の長さは作成時に固定されます（動的配列はラン�
 </div>
 <div class="section" id="addresses">
 <h3>Addresses<a class="headerlink" href="#addresses" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="#address-literals"><span class="std std-ref">Address Literals</span></a> で説明したように、チェックサムテストが通る正しいサイズの16進数リテラルは <code class="docutils literal notranslate"><span class="pre">アドレス</span></code> 型です。他のリテラルは暗黙的に``アドレス`` 型への変換はできません。</p>
+<p><a class="reference internal" href="#address-literals"><span class="std std-ref">Address Literals</span></a> で説明したように、チェックサムテストが通る正しいサイズの16進数リテラルは <code class="docutils literal notranslate"><span class="pre">アドレス</span></code> 型です。他のリテラルは暗黙的に <code class="docutils literal notranslate"><span class="pre">アドレス</span></code> 型への変換はできません。</p>
 <p><code class="docutils literal notranslate"><span class="pre">bytes20</span></code> もしくは他の整数型から <code class="docutils literal notranslate"><span class="pre">address</span></code> への明示的な変換を行うと <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> になります。</p>
 </div>
 </div>

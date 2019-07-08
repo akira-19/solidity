@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="コントラクトメタデータ" href="metadata.html" />
+    <link rel="next" title="Contract Metadata" href="metadata.html" />
     <link rel="prev" title="Resources" href="resources.html" /> 
 </head>
 
@@ -109,26 +109,14 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -557,7 +545,7 @@
 <li><code class="docutils literal notranslate"><span class="pre">IOError</span></code>: IOとimportプロセスエラーです。利用できないURLや提供されたソースのハッシュの不一致など。</li>
 <li><code class="docutils literal notranslate"><span class="pre">ParserError</span></code>: ソースコードが言語の規則に準拠していません。</li>
 <li><code class="docutils literal notranslate"><span class="pre">DocstringParsingError</span></code>: コメントブロック内のNatSpecタグは解析できません。</li>
-<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: シンタックスエラーです。<code class="docutils literal notranslate"><span class="pre">continue``のような構文エラーは</span> <span class="pre">``for</span></code> ループの外側で使われます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: シンタックスエラーです。<code class="docutils literal notranslate"><span class="pre">continue</span></code> のような構文エラーは <code class="docutils literal notranslate"><span class="pre">for</span></code> ループの外側で使われます。</li>
 <li><code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code>: 無効な、解決できない、またはコンフリクトする識別子名です。例えば <code class="docutils literal notranslate"><span class="pre">Identifier</span> <span class="pre">not</span> <span class="pre">found</span></code> など。</li>
 <li><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>: 型システム内のエラーです。invalid type conversions や invalid assignmentsなど。</li>
 <li><code class="docutils literal notranslate"><span class="pre">UnimplementedFeatureError</span></code>: この機能はコンパイラではサポートされていませんが、将来のバージョンでサポートされる予定です。</li>
@@ -580,7 +568,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="metadata.html" class="btn btn-neutral float-right" title="コントラクトメタデータ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="metadata.html" class="btn btn-neutral float-right" title="Contract Metadata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="resources.html" class="btn btn-neutral float-left" title="Resources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

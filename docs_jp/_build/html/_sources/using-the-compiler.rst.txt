@@ -177,7 +177,7 @@ Input Description
         },
         // コンパイルするEVMのバージョン。型チェックとコード生成に影響します。
         // homestead、tangerineWhistle、spuriousDragon、byzantium、constantinopleのいずれかです。
-        evmVersion: "byzantium", 
+        evmVersion: "byzantium",
         // メタデータ設定(optional)
         metadata: {
           // URLではなくリテラルのみを使用(デフォルトではfalseです)
@@ -201,7 +201,7 @@ Input Description
         // コンパイラが生成する可能性のあるすべての出力を選択するには、"outputSelection：{" * "：{" * "：[" * "]、" "：[" * "]}}"を使用します。
         // ただし、これはコンパイルプロセスを不必要に遅くする可能性があることに留意してください。
         //
-        // 利用できるアウトプットの型は以下の通りです: 
+        // 利用できるアウトプットの型は以下の通りです:
         //
         // ファイルレベル(コントラクト名として空文字列が必要):
         //   ast - 全ソースファイルのAST
@@ -227,7 +227,7 @@ Input Description
         //
         // `evm` 、` evm.bytecode` 、 `ewasm` などを使用すると、その出力のすべてのターゲット部分が選択されます。
         // さらに、 `*` はすべてを要求するためのワイルドカードとして使うことができます。
-        // 
+        //
         outputSelection: {
           // 各コントラクトのメタデータとバイトコードの出力を有効にします。
           "*": {
@@ -371,7 +371,7 @@ Error types
 2. ``IOError``: IOとimportプロセスエラーです。利用できないURLや提供されたソースのハッシュの不一致など。
 3. ``ParserError``: ソースコードが言語の規則に準拠していません。
 4. ``DocstringParsingError``: コメントブロック内のNatSpecタグは解析できません。
-5. ``SyntaxError``: シンタックスエラーです。``continue``のような構文エラーは ``for`` ループの外側で使われます。
+5. ``SyntaxError``: シンタックスエラーです。``continue`` のような構文エラーは ``for`` ループの外側で使われます。
 6. ``DeclarationError``: 無効な、解決できない、またはコンフリクトする識別子名です。例えば ``Identifier not found`` など。
 7. ``TypeError``: 型システム内のエラーです。invalid type conversions や invalid assignmentsなど。
 8. ``UnimplementedFeatureError``: この機能はコンパイラではサポートされていませんが、将来のバージョンでサポートされる予定です。

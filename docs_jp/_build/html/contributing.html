@@ -95,19 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
@@ -251,14 +239,9 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
-<code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> このコマンドを実行する必要があるでしょう。
-Those working in a Windows environment wanting to run the above basic sets without aleth or libz3 in Git Bash, you would have to do: <code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.
-もし標準のコマンドプロンプトで実行する場合は、 <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。
-If you’re running this in plain Command Prompt, use <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、 <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。</p>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするテストを無効にし、 <code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">aleth</span></code> を必要とするテストを無効にします。
-The option <code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> disables the tests that require <code class="docutils literal notranslate"><span class="pre">libz3</span></code> and
-<code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> disables those that require <code class="docutils literal notranslate"><span class="pre">aleth</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするテストを無効にし、 <code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">aleth</span></code> を必要とするテストを無効にします。</p>
 <p>ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
 <a class="reference external" href="https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz">aleth</a>
 をインストールします。
@@ -267,7 +250,7 @@ The option <code class="docutils literal notranslate"><span class="pre">--no-smt
 <p>実際のテストを実行するには、 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code> を使います。</p>
 <p>テストの一部を実行する場合は、フィルタを使います。
 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">TestSuite/TestName</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code>
-<code class="docutils literal notranslate"><span class="pre">TestName</span></code> はワイルドカードを指定できます。 <code class="docutils literal notranslate"><span class="pre">*</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">TestName</span></code> はワイルドカードを指定できます <code class="docutils literal notranslate"><span class="pre">*</span></code>。</p>
 <p>例えば、実行したテストがあるとして、
 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">&quot;yulOptimizerTests/disambiguator/*&quot;</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code>
 を実行すると、disambiguatorの全てのテストが実行されます。</p>
@@ -309,9 +292,9 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 セパレータに続くコメントは、正しいコンパイラエラーやワーニングを記述するのに使われます。
 数字の範囲は、エラーが発生したソースコードの場所を指定しています。
 コントラクトにエラーやワーニングなしでコンパイルしたい場合、セパレータとコメントを削除することができます。</p>
-<p>上記の例だと、<code class="docutils literal notranslate"><span class="pre">variable``変数は２度宣言されてます。</span>
-<span class="pre">これは、すでに宣言されていますという識別子の</span> <span class="pre">``DeclarationError</span></code> となります。</p>
-<p><code class="docutils literal notranslate"><span class="pre">isoltest``というツールはこれらのテストに使え、</span> <span class="pre">``./build/test/tools/</span></code> にあります。
+<p>上記の例だと、<code class="docutils literal notranslate"><span class="pre">variable</span></code> 変数は２度宣言されてます。
+これは、すでに宣言されていますという識別子の <code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code> となります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">isoltest</span></code> というツールはこれらのテストに使え、<code class="docutils literal notranslate"><span class="pre">./build/test/tools/</span></code> にあります。
 このツールは、対話的に、お好みのエディタを使って、失敗しているコントラクトを編集することができます。
 <code class="docutils literal notranslate"><span class="pre">variable</span></code> を削除して、このテストを突破してみましょう！</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
@@ -321,7 +304,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 <span class="c1">// DeclarationError: (36-52): Identifier already declared.</span>
 </pre></div>
 </div>
-<p>再度 <a href="#id1"><span class="problematic" id="id2">``</span></a>./build/test/isoltest``を実行すると失敗します。</p>
+<p>再度 <code class="docutils literal notranslate"><span class="pre">./build/test/isoltest</span></code> を実行すると失敗します。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">syntaxTests</span><span class="o">/</span><span class="n">double_stateVariable_declaration</span><span class="p">.</span><span class="n">sol</span><span class="o">:</span> <span class="n">FAIL</span>
     <span class="n">Contract</span><span class="o">:</span>
         <span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
@@ -337,7 +320,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 <p><code class="docutils literal notranslate"><span class="pre">isoltest</span></code> は得られた結果の次に期待する結果を表示します。また、現在のコントラクトの編集や更新、スキップする方法や、アプリケーションを終了する方法など方法も提供します。</p>
 <p>失敗してるテストのためにいくつかの選択肢を提供します。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> はエディタでコントラクトを開こうとし、修正できるます。 <code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code> としてコマンドラインで与えられたエディタか、,``EDITOR`` 環境変数で設定されいてるものか <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> を使います。(この順番で設定されます).</li>
+<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> はエディタでコントラクトを開こうとし、修正できるます。 <code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code> としてコマンドラインで与えられたエディタか、<code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> 環境変数で設定されいてるものか <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> を使います。(この順番で設定されます).</li>
 <li><code class="docutils literal notranslate"><span class="pre">update</span></code>: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。</li>
 <li><code class="docutils literal notranslate"><span class="pre">skip</span></code>: 特定のテストの実行をスキップします。</li>
 <li><code class="docutils literal notranslate"><span class="pre">quit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> を終了します。</li>

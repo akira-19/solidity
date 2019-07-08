@@ -18,10 +18,10 @@ Introduction
 
 また、このガイドの目的は、堅実なコードを書くための正しい方法や最良の方法を提供することではありません。
 ガイドのゴールは、Solidityにおける *consistency* について知ってもらうことです。pythonの `pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_ からの引用により、この目的を達成できるようします。
-    
+
     このスタイルガイドは一貫性(consistency)について述べます。このスタイルガイドのconsistencyは重要です。もっというと、プロジェクトのconsistencyはもっと重要です。
     さらには、1つのモジュールにおけるconsistency、1つの関数におけるconsistencyはより重要なものです。
-    しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。 -- 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！
+    しかし最も重要なものとして: 一貫性のない(incosistentな)実装を行うほうが良い場合について知ることです。-- 時にはスタイルガイドが適用されないことがあります。疑わしいときは、あなたの最善の判断に従ってください。他の例を見て、最も良く見えるものを選んでください。そしてそうすることに躊躇しないでください！
 
 ***********
 Code Layout
@@ -423,9 +423,9 @@ No::
         }
     }
 
-これらのレコメンデーションは``if`` や ``else`` 、 ``while`` 、 ``for`` といった制御構造にも適用されます。
+これらのレコメンデーションは ``if`` や ``else``、``while``、``for`` といった制御構造にも適用されます。
 
-さらに、制御構造 ``if`` 、 ``while`` 、 ``for`` と、条件を表す括弧ブロックの間、
+さらに、制御構造 ``if``、``while``、``for`` と、条件を表す括弧ブロックの間、
 および条件括弧ブロックと括弧の間には、シングルスペースがあるべきです。
 
 Yes::
@@ -467,7 +467,7 @@ No::
             value: 42
         }));
 
-``else`` または ``else if`` 節を持つ ``if`` ブロックの場合、 ``else``は ``if`` の閉じ括弧と同じ行に配置する必要があります。
+``else`` または ``else if`` 節を持つ ``if`` ブロックの場合、``else`` は ``if`` の閉じ括弧と同じ行に配置する必要があります。
 これは他のブロックのような構造の規則と比較して例外です。
 
 Yes::
@@ -789,7 +789,7 @@ Mappings
 ========
 
 変数の宣言時には、キーワード ``mapping`` をその型とスペースで区切らないでください。
-また、ネストされた `` mapping``キーワードをそのタイプとスペースで区切らないでください。
+また、ネストされた ``mapping`` キーワードをそのタイプとスペースで区切らないでください。
 
 Yes::
 
@@ -870,7 +870,7 @@ No::
 Order of Layout
 ***************
 
-コントラクト内にある要素のレイアウトは次の順序に従ってください: 
+コントラクト内にある要素のレイアウトは次の順序に従ってください:
 
 1. Pragma statements
 2. Import statements
@@ -878,7 +878,7 @@ Order of Layout
 4. Libraries
 5. Contracts
 
-各コントラクトやライブラリ、インターフェース内においては次の順序に従ってください: 
+各コントラクトやライブラリ、インターフェース内においては次の順序に従ってください:
 
 1. 型宣言
 2. 状態変数
@@ -886,7 +886,7 @@ Order of Layout
 4. 関数
 
 .. note::
-    
+
     イベントや状態変数での使用に近い型を宣言する方が明確な場合があります。
 
 ******************
@@ -930,7 +930,7 @@ Names to Avoid
 Contract and Library Names
 ==========================
 
-* コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。 例: ``SimpleToken`` 、 ``SmartBank`` 、 ``CertificateHashRepository`` 、 ``Player`` 、 ``Congress`` 、 ``Owned`` など。
+* コントラクトとライブラリは、CapWordsスタイルを使用して命名する必要があります。例: ``SimpleToken``、``SmartBank``、``CertificateHashRepository``、``Player``、``Congress``、``Owned`` など。
 * コントラクトとライブラリの名前もそれらのファイル名と一致する必要があります。
 * コントラクトファイルに複数のコントラクトやライブラリが含まれている場合、ファイル名は *core contract* と一致させる必要があります。ただしこの構造はお勧めできないため、でいるだけ回避しましょう。
 
@@ -999,25 +999,25 @@ No::
 Struct Names
 ==========================
 
-構造体はCapWordsスタイルを使用して命名する必要があります。例: ``MyCoin`` 、 ``Position`` 、 ``PositionXY`` など。
+構造体はCapWordsスタイルを使用して命名する必要があります。例: ``MyCoin``、``Position``、``PositionXY`` など。
 
 
 Event Names
 ===========
 
-イベントはCapWordsスタイルを使って命名されるべきです。例: ``Deposit`` 、 ``Transfer`` 、 ``Approval`` 、 ``BeforeTransfer`` 、 ``AfterTransfer`` など。
+イベントはCapWordsスタイルを使って命名されるべきです。例: ``Deposit``、``Transfer``、``Approval``、``BeforeTransfer``、``AfterTransfer`` など。
 
 
 Function Names
 ==============
 
-コンストラクタ以外の関数はmixedCaseを使用するべきです。例: ``getBalance`` 、 ``transfer`` 、 ``verifyOwner`` 、 ``addMember`` 、 ``changeOwner`` など。
+コンストラクタ以外の関数はmixedCaseを使用するべきです。例: ``getBalance``、``transfer``、``verifyOwner``、``addMember``、``changeOwner`` など。
 
 
 Function Argument Names
 =======================
 
-関数の引数はmixedCaseを使用するべきです。例: ``initialSupply`` 、 ``account`` 、 ``recipientAddress`` 、 ``senderAddress`` 、 ``newOwner`` など。
+関数の引数はmixedCaseを使用するべきです。例: ``initialSupply``、``account``、``recipientAddress``、``senderAddress``、``newOwner`` など。
 
 カスタム構造体を操作するライブラリ関数を書くときは、その構造体を最初の引数にして、常に ``self`` という名前にします。
 
@@ -1025,26 +1025,26 @@ Function Argument Names
 Local and State Variable Names
 ==============================
 
-mixedCaseを使用してください。 例: ``totalSupply`` 、 ``remainingSupply`` 、 ``balancesOf`` 、 ``creatorAddress`` 、 ``isPreSale`` 、 ``tokenExchangeRate`` など。
+mixedCaseを使用してください。例: ``totalSupply``、``remainingSupply``、``balancesOf``、``creatorAddress``、``isPreSale``、``tokenExchangeRate`` など。
 
 
 Constants
 =========
 
-定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: ``MAX_BLOCKS`` 、 ``TOKEN_NAME`` 、 ``TOKEN_TICKER`` 、 ``CONTRACT_VERSION`` など。
+定数は単語を区切るアンダースコア付きのすべて大文字で名前を付ける必要があります。例: ``MAX_BLOCKS``、``TOKEN_NAME``、``TOKEN_TICKER``、``CONTRACT_VERSION`` など。
 
 
 
 Modifier Names
 ==============
 
-mixedCaseを使用してください。 例: ``onlyBy`` 、 ``onlyAfter`` 、 ``onlyDuringThePreSale`` など。
+mixedCaseを使用してください。例: ``onlyBy``、``onlyAfter``、``onlyDuringThePreSale`` など。
 
 
 Enums
 =====
 
-列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: ``TokenGroup`` 、 ``Frame`` 、 ``HashStyle`` 、 ``CharacterLocation`` など。
+列挙型は、単純な型宣言において、CapWordsスタイルを使用して命名する必要があります。例: ``TokenGroup``、``Frame``、``HashStyle``、``CharacterLocation`` など。
 
 
 Avoiding Naming Collisions

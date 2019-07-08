@@ -120,14 +120,26 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -217,7 +229,7 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>最初の行はこのソースコードがSolidity 0.4.0もしくはそれより新しい機能を損なわず動作するバージョンで書かれていることを示しています。（0.6.0未満のバージョンまで）。これはこのコントラクトが新しい(互換性のない)バージョンのコンパイラでは異なる挙動をする恐れがあるため、コンパイルできないことを明らかにするためです。Pragmaはソースコードをどの様に取り扱うかコンパイラに指示するための一般的な命令です（例：<a class="reference external" href="https://en.wikipedia.org/wiki/Pragma_once">pragma once</a>）。</p>
+<p>最初の行はSolidityバージョン0.4.0もしくはそれより新しいものであればこのソースコードが機能を損なわず動作するバージョンで書かれていることを示しています（0.6.0未満のバージョンまで）。これはこのコントラクトが新しい(互換性のない)バージョンのコンパイラでは異なる挙動をする恐れがあるため、コンパイルできないことを明らかにするためです。Pragmaはソースコードをどの様に取り扱うかコンパイラに指示するための一般的な命令です（例：<a class="reference external" href="https://en.wikipedia.org/wiki/Pragma_once">pragma once</a>）。</p>
 <p>Solidity上でのコントラクトというのはコード（その <em>function</em> たち）とEthereumブロックチェーン上の特定のアドレスに存在するデータ（その <em>状態</em> ）の集合です。 <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">storedData;</span></code> の行では <code class="docutils literal notranslate"><span class="pre">uint</span></code> （256bitの符号無し整数）型の <code class="docutils literal notranslate"><span class="pre">storedData</span></code> という状態変数を宣言しています。
 データベース上で検索可能かつある機能を呼び出すことによって変更可能なデータの様なものだと思ってください。Ethereumの場合、コントラクトが常にそのデータを所有しています。今回の場合、 <code class="docutils literal notranslate"><span class="pre">set</span></code> 関数と <code class="docutils literal notranslate"><span class="pre">get</span></code> 関数は変数の値を修正もしくは取得する場合に使用することができます。
 状態変数にアクセスするのに他の言語でよく使われる <code class="docutils literal notranslate"><span class="pre">this.</span></code> は必要ありません。

@@ -119,7 +119,7 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
@@ -136,9 +136,9 @@
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">貢献</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -341,8 +341,8 @@
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><a href="#id5"><span class="problematic" id="id6">``</span></a>ecrecover``は``address``を返し、<a href="#id7"><span class="problematic" id="id8">``</span></a>address
-payable``は返しません。復元されたアドレスで送金を行いたい場合には、変換するために:ref:<cite>address payable&lt;address&gt;</cite> を参照ください。</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">ecrecover</span></code> は <code class="docutils literal notranslate"><span class="pre">address</span></code> を返し、<code class="docutils literal notranslate"><span class="pre">address</span>
+<span class="pre">payable</span></code> は返しません。復元されたアドレスで送金を行いたい場合には、変換するために <a class="reference internal" href="types.html#address"><span class="std std-ref">address payable</span></a> を参照ください。</p>
 </div>
 <p><em>プライベートなブロックチェーン</em> 上では <code class="docutils literal notranslate"><span class="pre">sha256</span></code>、<code class="docutils literal notranslate"><span class="pre">ripemd160</span></code> もしくは <code class="docutils literal notranslate"><span class="pre">ecrecover</span></code> でガス不足になるかもしれません。理由としては、これらはいわゆるプレコンパイルされたコントラクトとして実行され、そのコントラクトが本当に存在するのは、最初のメッセージを受け取った後だからです（そのコントラクトはハードコードですが）。存在しないコントラクトへのメッセージは高価なため、ガス不足になります。この問題の回避策としては例えば実際のコントラクトでそのファンクションを使う前に最初に1Weiをそのコントラクトに送ることです。メインネットやテストネットではこの問題は起こりません。</p>
 <div class="admonition note">
@@ -395,7 +395,7 @@ payable``は返しません。復元されたアドレスで送金を行いた�
 <dt><code class="docutils literal notranslate"><span class="pre">this</span></code> (現在のコントラクトの型):</dt>
 <dd>現在のコントラクト、明示的に <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> と変換可能です。</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code>:</dt>
-<dd>現在のコントラクトを破壊し、与えられた:ref:<a href="#id9"><span class="problematic" id="id10">`</span></a>address`にファンドを送ります。</dd>
+<dd>現在のコントラクトを破壊し、与えられた:ref:<a href="#id5"><span class="problematic" id="id6">`</span></a>address`にファンドを送ります。</dd>
 </dl>
 <p>さらに、現在のコントラクトの全てのファンクションは現在のファンクションを含めて直接呼ぶことができます。</p>
 <div class="admonition note">

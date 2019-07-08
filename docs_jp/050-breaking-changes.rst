@@ -36,11 +36,9 @@ Semantic and Syntactic Changes
 このセクションではシンタックスとセマンティクスに関連する変更を紹介します。
 
 * ``.call()``、``.delegatecall()``、``staticcall()``、``keccak256()``、``sha256()``、``ripemd160()`` は1つの ``bytes`` 引数だけを受け入れます。さらに引数はパディングされません。これは引数がどのように連結させるかをわかりやすくするためです。
-全ての ``.call()`` (and family) を ``.call("")`` に代えてください。``.call(signature, a,
-  b, c)`` の代わりに ``.call(abi.encodeWithSignature(signature, a, b, c))`` (最後のものは値型にしか使えません)を使ってください。また、``keccak256(a, b, c)`` を ``keccak256(abi.encodePacked(a, b, c))`` に代えてください。ブレーキングチェンジではありませんが、``x.call(bytes4(keccak256("f(uint256)"), a, b)`` から ``x.call(abi.encodeWithSignature("f(uint256)", a, b))`` に代えることをお勧めします。
+全ての ``.call()`` (and family) を ``.call("")`` に代えてください。``.call(signature, a, b, c)`` の代わりに ``.call(abi.encodeWithSignature(signature, a, b, c))`` (最後のものは値型にしか使えません)を使ってください。また、``keccak256(a, b, c)`` を ``keccak256(abi.encodePacked(a, b, c))`` に代えてください。ブレーキングチェンジではありませんが、``x.call(bytes4(keccak256("f(uint256)"), a, b)`` から ``x.call(abi.encodeWithSignature("f(uint256)", a, b))`` に代えることをお勧めします。
 
-* ``.call()``、``.delegatecall()``、``.staticcall()`` は返ってきたデータにアクセスできるように現在 ``(bool, bytes memory)`` を返します。``bool success = otherContract.call("f")`` を ``(bool success, bytes memory
-data) = otherContract.call("f")`` に変更して下さい。
+* ``.call()``、``.delegatecall()``、``.staticcall()`` は返ってきたデータにアクセスできるように現在 ``(bool, bytes memory)`` を返します。``bool success = otherContract.call("f")`` を ``(bool success, bytes memory data) = otherContract.call("f")`` に変更して下さい。
 
 * Solidityは現在ファンクションのローカル変数に対してC99-styleのスコーピングのルールを使っています。その中で、変数は宣言された後でのみ有効で、同じもしくはネストされたスコープでのみ使えます。``for`` ループの初期化ブロックの中で宣言された変数はループ内のどこでも有効です。
 
@@ -52,14 +50,12 @@ Explicitness Requirements
 
 * 明示的なファンクションの可視性は現在必須です。可視性を特に指示していないものに関して、ファンクションとコンストラクタには ``public`` を追加し、fallbackとインターフェースには ``external`` を追加して下さい。
 
-* 構造体、配列、マッピングに関して明示的なデータロケーションは現在必須です。これはファンクションのパラメータや返り値にも適用されます。例えば、``uint[] x = m_x`` は ``uint[] storage x =
-m_x`` に、``function f(uint[][] x)`` は ``function f(uint[][] memory x)`` に代えてください。
+* 構造体、配列、マッピングに関して明示的なデータロケーションは現在必須です。これはファンクションのパラメータや返り値にも適用されます。例えば、``uint[] x = m_x`` は ``uint[] storage x = m_x`` に、``function f(uint[][] x)`` は ``function f(uint[][] memory x)`` に代えてください。
 ここで、``memory`` はデータロケーションで、場合によって ``storage`` や ``calldata`` に置き換えられます。``external`` のファンクションはデータロケーションとして　``calldata`` が必要なことを覚えておいてください。
 
 * 名前空間を分けるために、コントラクト型は ``address`` メンバをもう持っていません。そのため、``address`` メンバを使う前に明示的にコントラクト型の値をアドレスに変換する必要があります。例： ``c`` がコントラクトの場合、``c.transfer(...)`` から ``address(c).transfer(...)`` に、``c.balance`` は ``address(c).balance`` に代えてください。
 
-* 関係ないコントラクト型同士の明示的な変換は現在できません。あるコントラクト型から、そのベースもしくは親（祖先）のコントラクト型への変換のみ可能です。もし継承していないのにも関わらず、あるコントラクトから別のコントラクトへの変換ができると考えているのであれば、まず ``address`` へ変換することで対処できます。
-例: ``A`` と ``B`` がコントラクト型で``B`` が ``A`` を継承しておらず、``b`` が ``B`` 型のコントラクトである場合、``A(address(b))`` を使うことで ``b`` を ``A`` 型に変換できます。
+* 関係ないコントラクト型同士の明示的な変換は現在できません。あるコントラクト型から、そのベースもしくは親（祖先）のコントラクト型への変換のみ可能です。もし継承していないのにも関わらず、あるコントラクトから別のコントラクトへの変換ができると考えているのであれば、まず ``address`` へ変換することで対処できます。例: ``A`` と ``B`` がコントラクト型で ``B`` が ``A`` を継承しておらず、``b`` が ``B`` 型のコントラクトである場合、``A(address(b))`` を使うことで ``b`` を ``A`` 型に変換できます。
 下記で説明されている通り、payable fallbackファンクションのマッチングに気をつける必要があります。
 
 * ``address`` 型は ``address`` と ``address payable`` に分けられ、``address payable`` だけが ``transfer`` ファンクションを使えます。``address payable`` は直接 ``address`` に変換可能ですが、逆はできません。``address`` から ``address payable`` への変換は ``uint160`` を通じて行うことで可能です。``c`` がコントラクトで、payable fallbackファンクションを持っていた場合、``address(c)`` は ``address payable`` になります。もし :ref:`withdraw pattern<withdrawal_pattern>` を使っているのであれば、コードを変える必要はきっとないでしょう。なぜなら、``transfer`` は 保存されているアドレスの代わりに ``msg.sender`` にのみ使われ、``msg.sender`` は ``address payable`` だからです。
@@ -79,8 +75,7 @@ Deprecated Elements
 Command Line and JSON Interfaces
 --------------------------------
 
-* コマンドラインオプションの ``--formal`` （形式的検証のため以前はWhy3のアウトプットを生成していた）は非推奨隣、現在は削除されました。新しい形式的検証のモジュールのSMTCheckerは ``pragma
-experimental SMTChecker;`` で使うことができます。
+* コマンドラインオプションの ``--formal`` （形式的検証のため以前はWhy3のアウトプットを生成していた）は非推奨隣、現在は削除されました。新しい形式的検証のモジュールのSMTCheckerは ``pragma experimental SMTChecker;`` で使うことができます。
 
 * 中間言語の名前が ``Julia`` から ``Yul`` へ変更になったためコマンドラインオプションの ``--julia`` は ``--yul`` へ名前が変更されました。
 
@@ -88,7 +83,7 @@ experimental SMTChecker;`` で使うことができます。
 
 * 空の接頭辞での理マッピングはできません。
 
-* JSON ASTフィールドの``constant`` と ``payable`` は削除されました。その情報は現在 ``stateMutability`` フィールドにあります。
+* JSON ASTフィールドの ``constant`` と ``payable`` は削除されました。その情報は現在 ``stateMutability`` フィールドにあります。
 
 * JSON ASTフィールドの ``FunctionDefinition`` ノード
 の ``isConstructor`` は ``kind`` というフィールドに置き換えられ、``"constructor"``、``"fallback"``、``"function"` という値を持つことができます。

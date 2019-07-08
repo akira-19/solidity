@@ -113,14 +113,26 @@
 <li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">コントラクトメタデータ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bugs.html">既知のバグ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">よくある質問</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequently-asked-questions.html">Frequently Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lll.html">LLL</a></li>
 </ul>
 
@@ -193,8 +205,7 @@
   <div class="section" id="structure-of-a-contract">
 <span id="contract-structure"></span><span id="index-0"></span><h1>Structure of a Contract<a class="headerlink" href="#structure-of-a-contract" title="Permalink to this headline">¶</a></h1>
 <p>Solidityのコントラクトはオブジェクト志向の言語のクラスに似ています。各コントラクトは <a class="reference internal" href="#structure-state-variables"><span class="std std-ref">State Variables</span></a>、<a class="reference internal" href="#structure-functions"><span class="std std-ref">Functions</span></a>、<a class="reference internal" href="#structure-function-modifiers"><span class="std std-ref">Function Modifiers</span></a>、<a class="reference internal" href="#structure-events"><span class="std std-ref">Events</span></a>、<a class="reference internal" href="#structure-struct-types"><span class="std std-ref">Struct Types</span></a>、<a class="reference internal" href="#structure-enum-types"><span class="std std-ref">Enum Types</span></a> の宣言を含んでいます。更に、コントラクトは他のコントラクトを継承できます。</p>
-<blockquote>
-<div><a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">ライブラリ</span></a> と <a class="reference internal" href="contracts.html#interfaces"><span class="std std-ref">インターフェース</span></a> と呼ばれる特別な種類のコントラクトもあります。</div></blockquote>
+<p><a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">ライブラリ</span></a> と <a class="reference internal" href="contracts.html#interfaces"><span class="std std-ref">インターフェース</span></a> と呼ばれる特別な種類のコントラクトもあります。</p>
 <p><a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">コントラクト</span></a> に関するセクションはより詳細な説明があります。このセクションは簡単な全体像です。</p>
 <div class="section" id="state-variables">
 <span id="structure-state-variables"></span><h2>State Variables<a class="headerlink" href="#state-variables" title="Permalink to this headline">¶</a></h2>

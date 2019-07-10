@@ -35,12 +35,12 @@ issueを再現するために最低限のソースコードにするのは有用
 Workflow for Pull Requests
 ==========================
 
-貢献するために、 ``develop`` ブランチをフォークし、あなたの変更をそこにいれてください。
+貢献するために、``develop`` ブランチをフォークし、あなたの変更をそこにいれてください。
 コミットメッセージには、あなたの変更(小さな変更でなければ)の *what* に加えて *why* を詳細にいれるべきです。
 
 もしあなたが変更を加えた後に ``develop`` からpullする必要がある場合(例えばコンフリクトのマージする)、
 私たちがあなたの変更のレビューをするのを簡単にするため、
-``git merge`` を使うことは避けて、 ``git rebase`` を使ってください。
+``git merge`` を使うことは避けて、``git rebase`` を使ってください。
 
 また、追加の機能を実装している場合、適切なテストケースを ``test/`` に追加してください。(下記参照)
 
@@ -77,9 +77,9 @@ Solidityは様々なテストを含んでおり、ほとんどが ``soltest`` �
 .. note ::
 
     Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
-    ``./build/test/Release/soltest.exe -- --no-ipc --no-smt`` このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、 ``.\build\test\Release\soltest.exe -- --no-ipc --no-smt`` を実行します。
+    ``./build/test/Release/soltest.exe -- --no-ipc --no-smt`` このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、``.\build\test\Release\soltest.exe -- --no-ipc --no-smt`` を実行します。
 
-``--no-smt`` オプションは ``libz3`` を必要とするテストを無効にし、 ``--no-ipc`` オプションは ``aleth`` を必要とするテストを無効にします。
+``--no-smt`` オプションは ``libz3`` を必要とするテストを無効にし、``--no-ipc`` オプションは ``aleth`` を必要とするテストを無効にします。
 
 ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
 `aleth <https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz>`_
@@ -87,7 +87,7 @@ ipcテスト(生成されたコードのセマンティックをテストする�
 その後、テストモードで実行します。
 ``aleth --db memorydb --test -d /tmp/testeth``
 
-実際のテストを実行するには、 ``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc`` を使います。
+実際のテストを実行するには、``./scripts/soltest.sh --ipcpath /tmp/testeth/geth.ipc`` を使います。
 
 テストの一部を実行する場合は、フィルタを使います。
 ``./scripts/soltest.sh -t TestSuite/TestName --ipcpath /tmp/testeth/geth.ipc``
@@ -131,7 +131,7 @@ Writing and running syntax tests
 それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
 テストスイートは、正しい結果に対してチェックしコンパイルします。
 
-例えば、 ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol`` では、
+例えば、``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol`` では、
 
 ::
 
@@ -181,8 +181,8 @@ Writing and running syntax tests
 
 失敗してるテストのためにいくつかの選択肢を提供します。
 
-- ``edit``: ``isoltest`` はエディタでコントラクトを開こうとし、修正できるます。 ``isoltest --editor /path/to/editor`` としてコマンドラインで与えられたエディタか、``EDITOR`` 環境変数で設定されいてるものか ``/usr/bin/editor`` を使います。(この順番で設定されます).
-- ``update``: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。
+- ``edit``: ``isoltest`` はエディタでコントラクトを開こうとし、修正できるます。``isoltest --editor /path/to/editor`` としてコマンドラインで与えられたエディタか、``EDITOR`` 環境変数で設定されいてるものか ``/usr/bin/editor`` を使います。(この順番で設定されます).
+- ``update``: テストのコントラクトの期待値を更新します。満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。
 - ``skip``: 特定のテストの実行をスキップします。
 - ``quit``: ``isoltest`` を終了します。
 
@@ -220,7 +220,7 @@ Fuzzingは例外的な状態(segmentation faults, exceptions, etc)を見つけ�
 内部コンパイラエラー、やsegmentation faultや類似のエラーが発生した時は失敗しますが、
 コードにエラーが含まれていても失敗しません。こうして、fuzzingツールはコンパイラの中の内部的な問題を見つけることができます。
 
-私たちは主に、 `AFL <http://lcamtuf.coredump.cx/afl/>` をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
+私たちは主に、`AFL <http://lcamtuf.coredump.cx/afl/>` をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
 次に、自分用のコンパイラとしてAFLとSolidityをビルドします（もしくは、単に ``solfuzzer`` バイナリを使います）。
 
 ::
@@ -294,7 +294,7 @@ fuzzerを実行してください( ``-m`` はメモリサイズを60 MBへ拡張
     afl-fuzz -m 60 -i /tmp/test_cases -o /tmp/fuzzer_reports -- /path/to/solfuzzer
 
 fuzzerは ``/tmp/fuzzer_reports`` に失敗するソースファイルを生成します。
-同じエラーを発生させる似たソースファイルがあることもありますが、 ``scripts/uniqueErrors.sh`` を使うとユニークなエラーのみ絞り込むことができます。
+同じエラーを発生させる似たソースファイルがあることもありますが、``scripts/uniqueErrors.sh`` を使うとユニークなエラーのみ絞り込むことができます。
 
 Whiskers
 ========
@@ -302,8 +302,8 @@ Whiskers
 *Whiskers* は `Mustache <https://mustache.github.io>` と似た文字型テンプレートシステムです。
 コードの保守性や検証可能性、可読性のため、様々な場所でコンパイラが使います。
 
-シンタックスはMustacheと大きく異なり、 ``{{`` と ``}}`` は　``<`` と ``>`` に置き換わっています。
-それはパースしやすくするのと、 :ref:`inline-assembly` とコンフリクトするのを避けるためです(インラインアセンブラでは ``<`` と ``>`` は不正ですが、 ``{`` と ``}`` はブロックを区切るのに使います)
+シンタックスはMustacheと大きく異なり、``{{`` と ``}}`` は　``<`` と ``>`` に置き換わっています。
+それはパースしやすくするのと、:ref:`inline-assembly` とコンフリクトするのを避けるためです(インラインアセンブラでは ``<`` と ``>`` は不正ですが、``{`` と ``}`` はブロックを区切るのに使います)
 リストは１階層のみ処理され再帰しない、という制限がありますが、将来は変更されるでしょう。
 
 A rough specification is the following:

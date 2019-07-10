@@ -16,10 +16,10 @@ Solidityで投票やクラウドファンディング、匿名のオークショ
 
 コントラクトをデプロイする際には最新バージョンのSolidityを使うことが推奨されています。これは新しい機能やバグ修正に加えbreaking changesが定期的に導入されているためです。現在0.xバージョンです[これはこの早い変化を示しています。](https://semver.org/#spec-item-4)
 
-ドキュメンテーション
+Language Documentation
 ----------------------
 
-もしスマートコントラクトというコンセプトが初めてなのであればSolidityで書かれた :ref:`スマートコントラクトの例 <simple-smart-contract>` を推奨します。もっと詳細な情報が欲しい場合は :doc:`"具体例で見るSolidity" <solidity-by-example>` and :doc:`"" <solidity-in-depth>` セクションを読むことをお勧めします。
+もしスマートコントラクトという概念が初めてなのであればSolidityで書かれた :ref:`スマートコントラクトの例 <simple-smart-contract>` を推奨します。もっと詳細な情報が欲しい場合は :doc:`"Solidity by Example" <solidity-by-example>` と :doc:`"Solidity in Depth" <solidity-in-depth>` セクションを読むことをお勧めします。
 
 .. hint::
     `Remix IDE <https://remix.ethereum.org>`_ でいつでもサンプルコードを試すことができます。RemixはブラウザベースのIDEでSolidityでスマートコントラクトが書け、デプロイしてスマートコントラクトを動かすことができます。しばらく時間がかかる場合もありますが、気長にお待ちください。
@@ -31,7 +31,7 @@ Solidityで投票やクラウドファンディング、匿名のオークショ
 
 Solidityやこのドキュメントをより良くするアイデアはいつでも大歓迎です。詳細は :doc:`contributors guide <contributing>` を参照ください。
 
-翻訳
+Translations
 ------------
 
 コミュニティのボランティアがこのドキュメントの翻訳をいくつかの言語で行なっています。進捗具合は言語によって異なりますが、英語のバージョンがリファレンスとして使われています。

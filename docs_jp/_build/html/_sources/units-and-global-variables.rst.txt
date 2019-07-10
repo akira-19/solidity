@@ -66,7 +66,7 @@ Block and Transaction Properties
 - ``msg.sender`` (``address payable``): メッセージの送信者
 - ``msg.sig`` (``bytes4``): コールデータの始め4byte（例：ファンクションの識別子）
 - ``msg.value`` (``uint``): メッセージと一緒に送られたweiの量
-- ``now`` (``uint``): 現在のブロックのタイムスタンプ (``block.timestamp``のエイリアス)
+- ``now`` (``uint``): 現在のブロックのタイムスタンプ ( ``block.timestamp`` のエイリアス)
 - ``tx.gasprice`` (``uint``): トランザクションのガスプライス
 - ``tx.origin`` (``address payable``): トランザクションの送信者 (フルコールチェーン)
 
@@ -172,7 +172,7 @@ Members of Address Types
 
 詳細は :ref:`address` を参照ください。
 
-.. 警告::
+.. warning::
     タイプチェックやファンクションの存在チェック、引数のパッキングをバイパスするため、他のコントラクトのファンクションを実行する際には極力 ``.call()`` の使用を避けてください。
 
 .. warning::
@@ -201,7 +201,7 @@ Contract Related
     現在のコントラクト、明示的に :ref:`address` と変換可能です。
 
 ``selfdestruct(address payable recipient)``:
-    現在のコントラクトを破壊し、与えられた:ref:`address`にファンドを送ります。
+    現在のコントラクトを破壊し、与えられた :ref:`address` にファンドを送ります。
 
 さらに、現在のコントラクトの全てのファンクションは現在のファンクションを含めて直接呼ぶことができます。
 

@@ -120,19 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Basic Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector">Function selector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
-<li class="toctree-l1"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
 <li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
@@ -264,7 +252,7 @@
 <li><code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): メッセージの送信者</li>
 <li><code class="docutils literal notranslate"><span class="pre">msg.sig</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes4</span></code>): コールデータの始め4byte（例：ファンクションの識別子）</li>
 <li><code class="docutils literal notranslate"><span class="pre">msg.value</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): メッセージと一緒に送られたweiの量</li>
-<li><code class="docutils literal notranslate"><span class="pre">now</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): 現在のブロックのタイムスタンプ (<a href="#id2"><span class="problematic" id="id3">``</span></a>block.timestamp``のエイリアス)</li>
+<li><code class="docutils literal notranslate"><span class="pre">now</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): 現在のブロックのタイムスタンプ ( <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> のエイリアス)</li>
 <li><code class="docutils literal notranslate"><span class="pre">tx.gasprice</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): トランザクションのガスプライス</li>
 <li><code class="docutils literal notranslate"><span class="pre">tx.origin</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): トランザクションの送信者 (フルコールチェーン)</li>
 </ul>
@@ -369,6 +357,10 @@
 <p>詳細は <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> を参照ください。</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
+<p class="last">タイプチェックやファンクションの存在チェック、引数のパッキングをバイパスするため、他のコントラクトのファンクションを実行する際には極力 <code class="docutils literal notranslate"><span class="pre">.call()</span></code> の使用を避けてください。</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
 <p class="last"><code class="docutils literal notranslate"><span class="pre">send</span></code> を使うことにはいくつかの危険があります: コールスタックの深さが1024で送金は失敗します（これは呼び出し元によっていつも強制されます）。そして、受領者のガスが不足した際にも送金は失敗します。そのため、安全にEtherを送るために、常に <code class="docutils literal notranslate"><span class="pre">send</span></code> の返り値を確認する、もしくは <code class="docutils literal notranslate"><span class="pre">transfer</span></code> を使用してください。もっと良い手段は受領者がお金を引き出す時のパターンを使用することです。</p>
 </div>
 <div class="admonition note">
@@ -395,7 +387,7 @@
 <dt><code class="docutils literal notranslate"><span class="pre">this</span></code> (現在のコントラクトの型):</dt>
 <dd>現在のコントラクト、明示的に <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> と変換可能です。</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code>:</dt>
-<dd>現在のコントラクトを破壊し、与えられた:ref:<a href="#id5"><span class="problematic" id="id6">`</span></a>address`にファンドを送ります。</dd>
+<dd>現在のコントラクトを破壊し、与えられた <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> にファンドを送ります。</dd>
 </dl>
 <p>さらに、現在のコントラクトの全てのファンクションは現在のファンクションを含めて直接呼ぶことができます。</p>
 <div class="admonition note">

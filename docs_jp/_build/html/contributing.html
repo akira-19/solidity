@@ -209,11 +209,11 @@
 </div>
 <div class="section" id="workflow-for-pull-requests">
 <h2>Workflow for Pull Requests<a class="headerlink" href="#workflow-for-pull-requests" title="Permalink to this headline">¶</a></h2>
-<p>貢献するために、 <code class="docutils literal notranslate"><span class="pre">develop</span></code> ブランチをフォークし、あなたの変更をそこにいれてください。
+<p>貢献するために、<code class="docutils literal notranslate"><span class="pre">develop</span></code> ブランチをフォークし、あなたの変更をそこにいれてください。
 コミットメッセージには、あなたの変更(小さな変更でなければ)の <em>what</em> に加えて <em>why</em> を詳細にいれるべきです。</p>
 <p>もしあなたが変更を加えた後に <code class="docutils literal notranslate"><span class="pre">develop</span></code> からpullする必要がある場合(例えばコンフリクトのマージする)、
 私たちがあなたの変更のレビューをするのを簡単にするため、
-<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span></code> を使うことは避けて、 <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> を使ってください。</p>
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span></code> を使うことは避けて、<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code> を使ってください。</p>
 <p>また、追加の機能を実装している場合、適切なテストケースを <code class="docutils literal notranslate"><span class="pre">test/</span></code> に追加してください。(下記参照)</p>
 <p>しかし、もし大きな変更をする場合、まず、
 <a class="reference external" href="https://gitter.im/ethereum/solidity-dev">Solidity Development Gitter channel</a>
@@ -239,15 +239,15 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Windows環境のこれらの作業で、上記の基本的なテストセットをGit Bash上でalethやlibz3なしで実行したい場合、
-<code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、 <code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。</p>
+<code class="docutils literal notranslate"><span class="pre">./build/test/Release/soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> このコマンドを実行する必要があるでしょう。もし標準のコマンドプロンプトで実行する場合は、<code class="docutils literal notranslate"><span class="pre">.\build\test\Release\soltest.exe</span> <span class="pre">--</span> <span class="pre">--no-ipc</span> <span class="pre">--no-smt</span></code> を実行します。</p>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするテストを無効にし、 <code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">aleth</span></code> を必要とするテストを無効にします。</p>
+<p><code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">libz3</span></code> を必要とするテストを無効にし、<code class="docutils literal notranslate"><span class="pre">--no-ipc</span></code> オプションは <code class="docutils literal notranslate"><span class="pre">aleth</span></code> を必要とするテストを無効にします。</p>
 <p>ipcテスト(生成されたコードのセマンティックをテストするもの)を実行したい場合、
 <a class="reference external" href="https://github.com/ethereum/aleth/releases/download/v1.5.0-alpha.7/aleth-1.5.0-alpha.7-linux-x86_64.tar.gz">aleth</a>
 をインストールします。
 その後、テストモードで実行します。
 <code class="docutils literal notranslate"><span class="pre">aleth</span> <span class="pre">--db</span> <span class="pre">memorydb</span> <span class="pre">--test</span> <span class="pre">-d</span> <span class="pre">/tmp/testeth</span></code></p>
-<p>実際のテストを実行するには、 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code> を使います。</p>
+<p>実際のテストを実行するには、<code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code> を使います。</p>
 <p>テストの一部を実行する場合は、フィルタを使います。
 <code class="docutils literal notranslate"><span class="pre">./scripts/soltest.sh</span> <span class="pre">-t</span> <span class="pre">TestSuite/TestName</span> <span class="pre">--ipcpath</span> <span class="pre">/tmp/testeth/geth.ipc</span></code>
 <code class="docutils literal notranslate"><span class="pre">TestName</span></code> はワイルドカードを指定できます <code class="docutils literal notranslate"><span class="pre">*</span></code>。</p>
@@ -279,7 +279,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 それらは <code class="docutils literal notranslate"><span class="pre">tests/libsolidity/syntaxTests</span></code> フォルダ内へ個別のファイルに格納されます。
 それらのファイルは、個別のテストケースの正しい結果とアノテーションを含んでいます。
 テストスイートは、正しい結果に対してチェックしコンパイルします。</p>
-<p>例えば、 <code class="docutils literal notranslate"><span class="pre">./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol</span></code> では、</p>
+<p>例えば、<code class="docutils literal notranslate"><span class="pre">./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol</span></code> では、</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kd">contract</span> <span class="n">test</span> <span class="p">{</span>
     <span class="kt">uint256</span> <span class="n">variable</span><span class="p">;</span>
     <span class="kt">uint128</span> <span class="n">variable</span><span class="p">;</span>
@@ -320,8 +320,8 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 <p><code class="docutils literal notranslate"><span class="pre">isoltest</span></code> は得られた結果の次に期待する結果を表示します。また、現在のコントラクトの編集や更新、スキップする方法や、アプリケーションを終了する方法など方法も提供します。</p>
 <p>失敗してるテストのためにいくつかの選択肢を提供します。</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> はエディタでコントラクトを開こうとし、修正できるます。 <code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code> としてコマンドラインで与えられたエディタか、<code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> 環境変数で設定されいてるものか <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> を使います。(この順番で設定されます).</li>
-<li><code class="docutils literal notranslate"><span class="pre">update</span></code>: テストのコントラクトの期待値を更新します。 満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。</li>
+<li><code class="docutils literal notranslate"><span class="pre">edit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> はエディタでコントラクトを開こうとし、修正できるます。<code class="docutils literal notranslate"><span class="pre">isoltest</span> <span class="pre">--editor</span> <span class="pre">/path/to/editor</span></code> としてコマンドラインで与えられたエディタか、<code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> 環境変数で設定されいてるものか <code class="docutils literal notranslate"><span class="pre">/usr/bin/editor</span></code> を使います。(この順番で設定されます).</li>
+<li><code class="docutils literal notranslate"><span class="pre">update</span></code>: テストのコントラクトの期待値を更新します。満たされていない期待値を取り除き、不足している期待値を追加することアノテーションを更新します。このテストは再度実行されます。</li>
 <li><code class="docutils literal notranslate"><span class="pre">skip</span></code>: 特定のテストの実行をスキップします。</li>
 <li><code class="docutils literal notranslate"><span class="pre">quit</span></code>: <code class="docutils literal notranslate"><span class="pre">isoltest</span></code> を終了します。</li>
 </ul>
@@ -353,7 +353,7 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 インプットとして、ソースコードをとる <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> と呼ばれる特別なバイナリがあります。
 内部コンパイラエラー、やsegmentation faultや類似のエラーが発生した時は失敗しますが、
 コードにエラーが含まれていても失敗しません。こうして、fuzzingツールはコンパイラの中の内部的な問題を見つけることができます。</p>
-<p>私たちは主に、 <cite>AFL &lt;http://lcamtuf.coredump.cx/afl/&gt;</cite> をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
+<p>私たちは主に、<cite>AFL &lt;http://lcamtuf.coredump.cx/afl/&gt;</cite> をfuzzingに使います。リポジトリ(afl, afl-clang)からAFLパッケージをダウンロードしインストールか、手動でビルドする必要があります。
 次に、自分用のコンパイラとしてAFLとSolidityをビルドします（もしくは、単に <code class="docutils literal notranslate"><span class="pre">solfuzzer</span></code> バイナリを使います）。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
 <span class="err">#</span> <span class="k">if</span> <span class="n">needed</span>
@@ -414,14 +414,14 @@ SolidityのCIで使っているものと同じバージョンを使うことを�
 </pre></div>
 </div>
 <p>fuzzerは <code class="docutils literal notranslate"><span class="pre">/tmp/fuzzer_reports</span></code> に失敗するソースファイルを生成します。
-同じエラーを発生させる似たソースファイルがあることもありますが、 <code class="docutils literal notranslate"><span class="pre">scripts/uniqueErrors.sh</span></code> を使うとユニークなエラーのみ絞り込むことができます。</p>
+同じエラーを発生させる似たソースファイルがあることもありますが、<code class="docutils literal notranslate"><span class="pre">scripts/uniqueErrors.sh</span></code> を使うとユニークなエラーのみ絞り込むことができます。</p>
 </div>
 <div class="section" id="whiskers">
 <h2>Whiskers<a class="headerlink" href="#whiskers" title="Permalink to this headline">¶</a></h2>
 <p><em>Whiskers</em> は <cite>Mustache &lt;https://mustache.github.io&gt;</cite> と似た文字型テンプレートシステムです。
 コードの保守性や検証可能性、可読性のため、様々な場所でコンパイラが使います。</p>
-<p>シンタックスはMustacheと大きく異なり、 <code class="docutils literal notranslate"><span class="pre">{{</span></code> と <code class="docutils literal notranslate"><span class="pre">}}</span></code> は　<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> に置き換わっています。
-それはパースしやすくするのと、 <a class="reference internal" href="assembly.html#inline-assembly"><span class="std std-ref">Inline Assembly</span></a> とコンフリクトするのを避けるためです(インラインアセンブラでは <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> は不正ですが、 <code class="docutils literal notranslate"><span class="pre">{</span></code> と <code class="docutils literal notranslate"><span class="pre">}</span></code> はブロックを区切るのに使います)
+<p>シンタックスはMustacheと大きく異なり、<code class="docutils literal notranslate"><span class="pre">{{</span></code> と <code class="docutils literal notranslate"><span class="pre">}}</span></code> は　<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> に置き換わっています。
+それはパースしやすくするのと、<a class="reference internal" href="assembly.html#inline-assembly"><span class="std std-ref">Inline Assembly</span></a> とコンフリクトするのを避けるためです(インラインアセンブラでは <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> と <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> は不正ですが、<code class="docutils literal notranslate"><span class="pre">{</span></code> と <code class="docutils literal notranslate"><span class="pre">}</span></code> はブロックを区切るのに使います)
 リストは１階層のみ処理され再帰しない、という制限がありますが、将来は変更されるでしょう。</p>
 <p>A rough specification is the following:
 大まかな仕様として以下があります。</p>

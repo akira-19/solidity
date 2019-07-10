@@ -56,9 +56,9 @@ Workflow for Pull Requests
 最後に、このプロジェクトでは、`coding style
 <https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md>`_
 を尊重してください。
-私たちがCIテストを実行してはいますが、pull requestsを送る前にはローカルでテストしビルドするようにしてください。
+私たちはCIテストを実行してはいますが、pull requestsを送る前にはローカルでテストしビルドするようにしてください。
 
-あなたの貢献を感謝します。
+あなたの貢献に感謝いたします。
 
 Running the compiler tests
 ==========================

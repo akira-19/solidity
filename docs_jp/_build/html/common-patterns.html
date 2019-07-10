@@ -181,19 +181,9 @@
 <h1>Common Patterns<a class="headerlink" href="#common-patterns" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="withdrawal-from-contracts">
 <span id="withdrawal-pattern"></span><span id="index-0"></span><h2>Withdrawal from Contracts<a class="headerlink" href="#withdrawal-from-contracts" title="Permalink to this headline">¶</a></h2>
-<p>The recommended method of sending funds after an effect
-is using the withdrawal pattern. Although the most intuitive
-method of sending Ether, as a result of an effect, is a
-direct <code class="docutils literal notranslate"><span class="pre">transfer</span></code> call, this is not recommended as it
-introduces a potential security risk. You may read
-more about this on the <a class="reference internal" href="security-considerations.html#security-considerations"><span class="std std-ref">Security Considerations</span></a> page.</p>
-<p>The following is an example of the withdrawal pattern in practice in
-a contract where the goal is to send the most money to the
-contract in order to become the “richest”, inspired by
-<a class="reference external" href="https://www.kingoftheether.com/">King of the Ether</a>.</p>
-<p>In the following contract, if you are usurped as the richest,
-you will receive the funds of the person who has gone on to
-become the new richest.</p>
+<p>発行の後にファンドを送る方法としてお勧めなのはwithdrawalパターンを使うことです。直接 <code class="docutils literal notranslate"><span class="pre">transfer</span></code> コールするのは直感的なEtherの送金方法ですが、潜在的にセキュリティリスクを実装することになるので、推奨しません。これに関しての詳しい情報は、<a class="reference internal" href="security-considerations.html#security-considerations"><span class="std std-ref">Security Considerations</span></a> を読んでください。</p>
+<p>次の例はあるコントラクトにおける実際のwithdrawalパターンです。このコントラクトの目的は”richest”（ <a class="reference external" href="https://www.kingoftheether.com/">King of the Ether</a> に触発されました）になるためにたくさんのお金をコントラクトに送ることです。</p>
+<p>下記のコントラクトでは、richestの座を奪われたら、新しくrichestになった人のファンドを受け取れます。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">WithdrawalContract</span> <span class="p">{</span>
@@ -228,7 +218,7 @@ become the new richest.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>This is as opposed to the more intuitive sending pattern:</p>
+<p>次は逆にもっと直感的な送金パターンです。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">^</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">SendContract</span> <span class="p">{</span>
@@ -254,34 +244,15 @@ become the new richest.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Notice that, in this example, an attacker could trap the
-contract into an unusable state by causing <code class="docutils literal notranslate"><span class="pre">richest</span></code> to be
-the address of a contract that has a fallback function
-which fails (e.g. by using <code class="docutils literal notranslate"><span class="pre">revert()</span></code> or by just
-consuming more than the 2300 gas stipend transferred to them). That way,
-whenever <code class="docutils literal notranslate"><span class="pre">transfer</span></code> is called to deliver funds to the
-“poisoned” contract, it will fail and thus also <code class="docutils literal notranslate"><span class="pre">becomeRichest</span></code>
-will fail, with the contract being stuck forever.</p>
-<p>In contrast, if you use the “withdraw” pattern from the first example,
-the attacker can only cause his or her own withdraw to fail and not the
-rest of the contract’s workings.</p>
+<p>気づいて頂きたいのは、この例では攻撃者が、<code class="docutils literal notranslate"><span class="pre">richest</span></code> に、失敗する（例えば、<code class="docutils literal notranslate"><span class="pre">revert()</span></code> を使ったり、2300ガス以上を消費したりすることで）フォールバックファンクションを持ったコントラクトアドレスを入れることで、通常ではない状態をコントラクトに仕込めるということです。こういう方法によって、”毒された”コントラクトにファンドを送るために <code class="docutils literal notranslate"><span class="pre">transfer</span></code> が呼ばれると常に失敗し、その結果、<code class="docutils literal notranslate"><span class="pre">becomeRichest</span></code> が失敗し、コントラクトは永遠に動かなくなります。</p>
+<p>一方、もし最初の例の”withdraw”パターンを使うと、攻撃者は自分のwithdrawの失敗しか起こせないので、他のコントラクトの機能は損なわれません。</p>
 </div>
 <div class="section" id="restricting-access">
 <span id="index-1"></span><h2>Restricting Access<a class="headerlink" href="#restricting-access" title="Permalink to this headline">¶</a></h2>
-<p>Restricting access is a common pattern for contracts.
-Note that you can never restrict any human or computer
-from reading the content of your transactions or
-your contract’s state. You can make it a bit harder
-by using encryption, but if your contract is supposed
-to read the data, so will everyone else.</p>
-<p>You can restrict read access to your contract’s state
-by <strong>other contracts</strong>. That is actually the default
-unless you declare your state variables <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p>
-<p>Furthermore, you can restrict who can make modifications
-to your contract’s state or call your contract’s
-functions and this is what this section is about.</p>
-<p id="index-2">The use of <strong>function modifiers</strong> makes these
-restrictions highly readable.</p>
+<p>アクセス制限はコントラクトの共通パターンです。他の人やコンピューターがトランザクションやコントラクトのステートを読み取ることを制限することはできないということを覚えておいてください。暗号化で少し難しくはできますが、もしコントラクトがデータを読み込めるなら、他の人もできます。</p>
+<p><strong>他のコントラクト</strong> によるあなたのコントラクトのステートへの読み込みのアクセスは制限できます。状態変数を <code class="docutils literal notranslate"><span class="pre">public</span></code> で宣言しなければ、これはデフォルトでそうなっています。</p>
+<p>さらに、誰があなたのコントラクトのステートを変更したり、ファンクションを呼び出したりできるか制限することができます。そしてこれがこのセクションで説明することです。</p>
+<p id="index-2"><strong>function modifiers</strong> を使うことでこれらの制限をとても読みやすくします。</p>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 
 <span class="kd">contract</span> <span class="n">AccessRestriction</span> <span class="p">{</span>
@@ -369,58 +340,28 @@ restrictions highly readable.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A more specialised way in which access to function
-calls can be restricted will be discussed
-in the next example.</p>
+<p>どのファンクションコールへのアクセスが制限できるかというもっと特殊な方法は次の例で説明します。</p>
 </div>
 <div class="section" id="state-machine">
 <span id="index-3"></span><h2>State Machine<a class="headerlink" href="#state-machine" title="Permalink to this headline">¶</a></h2>
-<p>Contracts often act as a state machine, which means
-that they have certain <strong>stages</strong> in which they behave
-differently or in which different functions can
-be called. A function call often ends a stage
-and transitions the contract into the next stage
-(especially if the contract models <strong>interaction</strong>).
-It is also common that some stages are automatically
-reached at a certain point in <strong>time</strong>.</p>
-<p>An example for this is a blind auction contract which
-starts in the stage “accepting blinded bids”, then
-transitions to “revealing bids” which is ended by
-“determine auction outcome”.</p>
-<p id="index-4">Function modifiers can be used in this situation
-to model the states and guard against
-incorrect usage of the contract.</p>
+<p>コントラクトはよくステートマシンとして振舞います。つまり、異なる挙動をする、もしくは異なるファンクションがコールされるいくつかの <strong>ステージ</strong> を持っています。ファンクションコールはしばしばステージを終わらせ、コントラクトを次のステージへ以降させます（特にコントラクトに <strong>相互作用</strong> があった場合）。いくつかのステージは自動的にあるポイントに <strong>そのうちに</strong> なっていることもよくあります。</p>
+<p>この例としてブラインドオークションのコントラクトがあります。このコントラクトでは”ブラインドビッドの承認”ステージから始まり、”オークションの結果”で終わる”ビッドの公開”に移行します。</p>
+<p id="index-4">このシチュエーションで、ステートを作って、コントラクトの間違った使用法から守るため、ファンクションmodifierを使うことができます。</p>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
-<p>In the following example,
-the modifier <code class="docutils literal notranslate"><span class="pre">atStage</span></code> ensures that the function can
-only be called at a certain stage.</p>
-<p>Automatic timed transitions
-are handled by the modifier <code class="docutils literal notranslate"><span class="pre">timeTransitions</span></code>, which
-should be used for all functions.</p>
+<p>次の例では、modifier <code class="docutils literal notranslate"><span class="pre">atStage</span></code> はあるステージの時にのみファンクションが呼ばれるようにすることができます。</p>
+<p>自動でのある時間での変遷はmodifier <code class="docutils literal notranslate"><span class="pre">timeTransitions</span></code> でコントロールすることができ、全てのファンクションで使えます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Modifier Order Matters</strong>.
-If atStage is combined
-with timedTransitions, make sure that you mention
-it after the latter, so that the new stage is
-taken into account.</p>
+<p class="last"><strong>modifierの順番は重要です。</strong>
+atStageがtimedTransitionsと一緒にする場合、timedTransitionsの後にatStageを付けてください。そうすることで新しいステージが考慮されます。</p>
 </div>
-<p>Finally, the modifier <code class="docutils literal notranslate"><span class="pre">transitionNext</span></code> can be used
-to automatically go to the next stage when the
-function finishes.</p>
+<p>最後に、modifier <code class="docutils literal notranslate"><span class="pre">transitionNext</span></code> はファンクションが終わった時に自動的に次のステージに行くために使用できます。</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Modifier May be Skipped</strong>.
-This only applies to Solidity before version 0.4.0:
-Since modifiers are applied by simply replacing
-code and not by using a function call,
-the code in the transitionNext modifier
-can be skipped if the function itself uses
-return. If you want to do that, make sure
-to call nextStage manually from those functions.
-Starting with version 0.4.0, modifier code
-will run even if the function explicitly returns.</p>
+<p class="last"><strong>modifierはスキップされるかもしれません。</strong>
+これはSolidityバージョン0.4.0より前にのみ適用されます。modifierはファンクションコールを使うのではなく、単純にコードを別の所に書くことで適用されているので、もしファンクションがreturnを使っていたら、transitionNext内のコードはスキップされるかもしれません。もしスキップさせたくないのであれば、ファンクション内マニュアルでnextStageを呼び出してください。
+バージョン0.4.0からはファンクションが明示的にreturnしていても、modifierコードは実行されます。</p>
 </div>
 <div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="kr">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.4</span><span class="p">.</span><span class="mi">22</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 

@@ -6,23 +6,18 @@
 Structure of a Contract
 ***********************
 
-Contracts in Solidity are similar to classes in object-oriented languages.
-Each contract can contain declarations of :ref:`structure-state-variables`, :ref:`structure-functions`,
-:ref:`structure-function-modifiers`, :ref:`structure-events`, :ref:`structure-struct-types` and :ref:`structure-enum-types`.
-Furthermore, contracts can inherit from other contracts.
+Solidityのコントラクトはオブジェクト志向の言語のクラスに似ています。各コントラクトは :ref:`structure-state-variables`、:ref:`structure-functions`、:ref:`structure-function-modifiers`、:ref:`structure-events`、:ref:`structure-struct-types`、:ref:`structure-enum-types` の宣言を含んでいます。更に、コントラクトは他のコントラクトを継承できます。
 
-There are also special kinds of contracts called :ref:`libraries<libraries>` and :ref:`interfaces<interfaces>`.
+:ref:`ライブラリ<libraries>` と :ref:`インターフェース<interfaces>` と呼ばれる特別な種類のコントラクトもあります。
 
-The section about :ref:`contracts<contracts>` contains more details than this section,
-which serves to provide a quick overview.
+:ref:`コントラクト<contracts>` に関するセクションはより詳細な説明があります。このセクションは簡単な全体像です。
 
 .. _structure-state-variables:
 
 State Variables
 ===============
 
-State variables are variables whose values are permanently stored in contract
-storage.
+状態変数とは値が永久的にコントラクトのストレージに保存される値です。
 
 ::
 
@@ -33,16 +28,14 @@ storage.
         // ...
     }
 
-See the :ref:`types` section for valid state variable types and
-:ref:`visibility-and-getters` for possible choices for
-visibility.
+有効な状態変数のタイプは :ref:`types` を、可視性の実行可能な選択肢については :ref:`visibility-and-getters` を参照ください。
 
 .. _structure-functions:
 
 Functions
 =========
 
-Functions are the executable units of code within a contract.
+ファンクションはコントラクト内にある実行可能なコードの一式です。
 
 ::
 
@@ -54,18 +47,14 @@ Functions are the executable units of code within a contract.
         }
     }
 
-:ref:`function-calls` can happen internally or externally
-and have different levels of :ref:`visibility<visibility-and-getters>`
-towards other contracts. :ref:`Functions<functions>` accept :ref:`parameters and return variables<function-parameters-return-variables>` to pass parameters
-and values between them.
+:ref:`function-calls` は内部でも外部でも行うことができ、他のコントラクトに対して異なったレベルの :ref:`visibility<visibility-and-getters>` を持ちます。パラメータや値を受け渡しするために、:ref:`Functions<functions>` は :ref:`parameters and return variables<function-parameters-return-variables>` を受け入れます。
 
 .. _structure-function-modifiers:
 
 Function Modifiers
 ==================
 
-Function modifiers can be used to amend the semantics of functions in a declarative way
-(see :ref:`modifiers` in the contracts section).
+ファンクションModifierは宣言的な方法でファンクションのセマンティクスを修正することができます(コントラクトセクションの :ref:`modifiers` を参照ください)。
 
 ::
 
@@ -92,7 +81,7 @@ Function modifiers can be used to amend the semantics of functions in a declarat
 Events
 ======
 
-Events are convenience interfaces with the EVM logging facilities.
+イベントはEVMのロギング機能で使われる便利なインターフェースです。
 
 ::
 
@@ -107,16 +96,14 @@ Events are convenience interfaces with the EVM logging facilities.
         }
     }
 
-See :ref:`events` in contracts section for information on how events are declared
-and can be used from within a dapp.
+DApp内でイベントがどの様に宣言され、使用されるかはコントラクトセクションの :ref:`events` を参照ください。
 
 .. _structure-struct-types:
 
 Struct Types
 =============
 
-Structs are custom defined types that can group several variables (see
-:ref:`structs` in types section).
+構造体は複数の変数をグループ化できるカスタム定義されたタイプです (タイプセクションの :ref:`structs` を参照下さい)。
 
 ::
 
@@ -136,8 +123,7 @@ Structs are custom defined types that can group several variables (see
 Enum Types
 ==========
 
-Enums can be used to create custom types with a finite set of 'constant values' (see
-:ref:`enums` in types section).
+Enumsは有限個の'constant values'を持つカスタムタイプを作成するのに使用されます(タイプセクションの :ref:`enums` を参照ください)。
 
 ::
 

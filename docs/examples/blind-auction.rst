@@ -4,29 +4,14 @@
 Blind Auction
 *************
 
-In this section, we will show how easy it is to create a
-completely blind auction contract on Ethereum.
-We will start with an open auction where everyone
-can see the bids that are made and then extend this
-contract into a blind auction where it is not
-possible to see the actual bid until the bidding
-period ends.
+このセクションではEthereum上で完全なブラインドオークションを作成するのがいかに簡単かお見せします。
 
 .. _simple_auction:
 
 Simple Open Auction
 ===================
 
-The general idea of the following simple auction contract
-is that everyone can send their bids during
-a bidding period. The bids already include sending
-money / ether in order to bind the bidders to their
-bid. If the highest bid is raised, the previously
-highest bidder gets her money back.
-After the end of the bidding period, the
-contract has to be called manually for the
-beneficiary to receive their money - contracts cannot
-activate themselves.
+全員が期間内に入札できるというのが次の単純なオークションのコントラクトの大まかな考え方です。オークション参加者が入札を取り消すことが無いようにするために入札はお金/etherを既に含んでいます。もし最高額が更新されたらその前の最高額を入札していた人に返金します。入札の金額の受領者がお金を受け取るために、コントラクトは入札期間終了後にマニュアルで呼び出されなければいけません。コントラクトは自動でこれを行えません。
 
 ::
 
@@ -158,39 +143,14 @@ activate themselves.
 Blind Auction
 =============
 
-The previous open auction is extended to a blind auction
-in the following. The advantage of a blind auction is
-that there is no time pressure towards the end of
-the bidding period. Creating a blind auction on a
-transparent computing platform might sound like a
-contradiction, but cryptography comes to the rescue.
+前のオープンオークションを次はブラインドオークションに拡張します。ブラインドオークションのメリットは入札期限間際の時間に対するプレッシャーが無いことです。ブラインドオークションを誰からも見れるプラットフォームで行うというのは変な感じがしますが、暗号学が助けてくれます。
 
-During the **bidding period**, a bidder does not
-actually send her bid, but only a hashed version of it.
-Since it is currently considered practically impossible
-to find two (sufficiently long) values whose hash
-values are equal, the bidder commits to the bid by that.
-After the end of the bidding period, the bidders have
-to reveal their bids: They send their values
-unencrypted and the contract checks that the hash value
-is the same as the one provided during the bidding period.
+**入札期間** に入札者は実際に入札を行いません。しかし、ハッシュ化されたものだけ送ります。現在、（十分に長い）二つのハッシュ値が同じ値を見つけるのは実用上不可能なので、入札者はその入札値を変更することはできません。
+入札期間の終了後入札者は入札値を公開する必要があります。暗号化されていない値を送り、コントラクトはその値をハッシュ化したものが入札期間に送られたハッシュ値と同じか確認します。
 
-Another challenge is how to make the auction
-**binding and blind** at the same time: The only way to
-prevent the bidder from just not sending the money
-after they won the auction is to make her send it
-together with the bid. Since value transfers cannot
-be blinded in Ethereum, anyone can see the value.
+もう一つの問題はどうやってオークションに **強制力を持たせ、かつブラインド** にするかです。落札した入札者が送金しないことを防ぐ唯一の方法は入札時にお金を支払わせることです。Ethereumでは送金はオープンなので誰でも金額を見ることができます。
 
-The following contract solves this problem by
-accepting any value that is larger than the highest
-bid. Since this can of course only be checked during
-the reveal phase, some bids might be **invalid**, and
-this is on purpose (it even provides an explicit
-flag to place invalid bids with high value transfers):
-Bidders can confuse competition by placing several
-high or low invalid bids.
-
+次のコントラクトではこの問題を最高額の入札以上のどんな値でも受け入れることで解決しています。もちろんこれは値が公開された時にしか行えないので、いくつかの入札は無効の可能性があり、かつそれは故意的な可能性もあります（高額送金を伴った無効な入札をするために明らかなフラグを立てることもあります）。入札者は高いもしくは低い入札で他の入札者を混乱させることができます。
 
 ::
 

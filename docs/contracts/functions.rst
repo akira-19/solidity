@@ -11,17 +11,14 @@ Functions
 Function Parameters and Return Variables
 ========================================
 
-As in JavaScript, functions may take parameters as input. Unlike in JavaScript
-and C, functions may also return an arbitrary number of values as output.
+JavaScriptに見られる様に、ファンクションは入力としてパラメータをとります。JavaScriptやCと違い、ファンクションは任意の数の値を出力できます。
 
 Function Parameters
 -------------------
 
-Function parameters are declared the same way as variables, and the name of
-unused parameters can be omitted.
+ファンクションのパラメータは変数と同じ様に宣言されます。使われなかったパラメータは省略されます。
 
-For example, if you want your contract to accept one kind of external call
-with two integers, you would use something like::
+例えば、もし2つの整数でexternal callをしたい場合、次の様にできます::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -32,28 +29,22 @@ with two integers, you would use something like::
         }
     }
 
-Function parameters can be used as any other local variable and they can also be assigned to.
+ファンクションパラメータはローカル変数としても使えますし、その値を割り当てすることもできます。
 
 .. note::
 
-  An :ref:`external function<external-function-calls>` cannot accept a
-  multi-dimensional array as an input
-  parameter. This functionality is possible if you enable the new
-  experimental ``ABIEncoderV2`` feature by adding ``pragma experimental ABIEncoderV2;`` to your source file.
+  :ref:`external function<external-function-calls>` は入力パラメータとして多次元配列を受け入れません。この機能に関しては、ソースファイルに ``pragma experimental ABIEncoderV2;`` を追加して、新しい実験的な ``ABIEncoderV2`` 機能を有効にすれば使うことができます。
 
-  An :ref:`internal function<external-function-calls>` can accept a
-  multi-dimensional array without enabling the feature.
+  :ref:`internal function<external-function-calls>` はこの機能を有効にしなくても多次元配列を使うことができます。
 
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
 Return Variables
 ----------------
 
-Function return variables are declared with the same syntax after the
-``returns`` keyword.
+ファンクションの返り値は ``returns`` キーワードの後、同じシンタックスで宣言されます。
 
-For example, suppose you want to return two results: the sum and the product of
-two integers passed as function parameters, then you use something like::
+例えば2つの結果が欲しい時: ファンクションパラメータとして渡された2つの整数の和と積が欲しい時、次の様に書けます::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -68,15 +59,9 @@ two integers passed as function parameters, then you use something like::
         }
     }
 
-The names of return variables can be omitted.
-Return variables can be used as any other local variable and they
-are initialized with their :ref:`default value <default-value>` and have that value unless explicitly set.
+返り値の名前は省略可能です。返り値は他のローカル変数として使えます。返り値は :ref:`default value <default-value>` で初期化されており、明示的に値をセットしない限りその値を持ちます。
 
-You can either explicitly assign to return variables and
-then leave the function using ``return;``,
-or you can provide return values
-(either a single or :ref:`multiple ones<multi-return>`) directly with the ``return``
-statement::
+明示的に変数に値を割り当て、``return;`` を使うか、直接 ``return`` に返り値（1つもしくは :ref:`multiple ones<multi-return>` ）を入れるかいずれかが可能です::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -90,24 +75,19 @@ statement::
         }
     }
 
-This form is equivalent to first assigning values to the
-return variables and then using ``return;`` to leave the function.
+これは返り値を変数に割り当てて ``return;`` を使って返す方法と結果は同じです。
 
 .. note::
-    You cannot return some types from non-internal functions, notably
-    multi-dimensional dynamic arrays and structs. If you enable the
-    new experimental ``ABIEncoderV2`` feature by adding ``pragma experimental
-    ABIEncoderV2;`` to your source file then more types are available, but
-    ``mapping`` types are still limited to inside a single contract and you
-    cannot transfer them.
+    internalでないファンクションからいくつかの型は返すことはできません。特に多次元動的配列と構造体です。ソースファイルに ``pragma experimental
+    ABIEncoderV2;`` を加えて新しい実験的な ``ABIEncoderV2`` 機能を有効にすればもっと他の型も使える様になります。しかし、``mapping`` 型はそれでも1つのコントラクト内でしか扱うことができず、転送することはできません。
 
 .. _multi-return:
 
 Returning Multiple Values
 -------------------------
 
-When a function has multiple return types, the statement ``return (v0, v1, ..., vn)`` can be used to return multiple values.
-The number of components must be the same as the number of return types.
+ファンクションが複数の返り値の型を持つ時、``return (v0, v1, ..., vn)`` という宣言が複数の型を返すのに使用されます。
+要素の数は返す値の数と同じでなければいけません。
 
 .. index:: ! view function, function;view
 
@@ -116,27 +96,21 @@ The number of components must be the same as the number of return types.
 View Functions
 ==============
 
-Functions can be declared ``view`` in which case they promise not to modify the state.
+ステートを変えない場合ファンクションは ``view`` を宣言できます。
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode
-  ``STATICCALL`` is used for ``view`` functions which enforces the state
-  to stay unmodified as part of the EVM execution. For library ``view`` functions
-  ``DELEGATECALL`` is used, because there is no combined ``DELEGATECALL`` and ``STATICCALL``.
-  This means library ``view`` functions do not have run-time checks that prevent state
-  modifications. This should not impact security negatively because library code is
-  usually known at compile-time and the static checker performs compile-time checks.
+  もしコンパイラのEVMターゲットかByzantiumより新しい場合、EVM実行の一部としてステートの変更をさせないopcode ``STATICCALL`` が ``view`` ファンクションに使われます。ライブラリの ``view`` ファンクションには ``DELEGATECALL`` が使用されます。なぜなら、``DELEGATECALL`` と ``STATICCALL`` が一緒になったものは存在しないからです。つまり、ライブラリの ``view`` ファンクションはステートの変更を妨げるランタイムチェックを持っていないということです。ライブラリのコードは普通はコンパイル時に既知であり、static checkerがコンパイル時にチェックするため、これはセキュリティ的に問題ないはずです。
 
-The following statements are considered modifying the state:
+下記のリストはステートを変更すると考えられます。
 
-#. Writing to state variables.
-#. :ref:`Emitting events <events>`.
-#. :ref:`Creating other contracts <creating-contracts>`.
-#. Using ``selfdestruct``.
-#. Sending Ether via calls.
-#. Calling any function not marked ``view`` or ``pure``.
-#. Using low-level calls.
-#. Using inline assembly that contains certain opcodes.
+#. 状態変数を書く。
+#. :ref:`イベントのemit <events>`。
+#. :ref:`他のコントラクトを作る <creating-contracts>`。
+#. ``selfdestruct`` を使う
+#. callを通じてEtherを送る。
+#. ``view`` や ``pure`` の付いていないファンクションを呼び出す。
+#. 低レベルcallを使う。
+#. あるopcodeの入ったインラインアセンブリを使う。
 
 ::
 
@@ -149,18 +123,15 @@ The following statements are considered modifying the state:
     }
 
 .. note::
-  ``constant`` on functions used to be an alias to ``view``, but this was dropped in version 0.5.0.
+  ファンクションで ``constant`` は ``view`` のエイリアスとして使われていましたが、バージョン0.5.0でドロップされました。
 
 .. note::
-  Getter methods are automatically marked ``view``.
+  getterメソッドは自動的に ``view`` がつきます。
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``view`` functions.
-  This enabled state modifications in ``view`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``view`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  バージョン0.5.0以前ではコンパイラは ``view`` ファンクションに ``STATICCALL`` を使っていませんでした。
+  これは、無効な明示的型変換を使うことで、``view`` ファンクションでのステートの変更を可能にしていました。
+  ``STATICCALL`` を ``view`` ファンクションに使うことで、EVM上ではステートの変更を行うことができなくなりました。
 
 .. index:: ! pure function, function;pure
 
@@ -169,19 +140,19 @@ The following statements are considered modifying the state:
 Pure Functions
 ==============
 
-Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
+何も読まない、ステートも変更しない場合、ファンクションで ``pure`` を宣言できます。
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode ``STATICCALL`` is used,
-  which does not guarantee that the state is not read, but at least that it is not modified.
+  コンパイラのEVMターゲットがByzantium以降であれば、opcode ``STATICCALL`` が使えます。ステートが読まれないかは保証しませんが、少なくともステートが変更されていないことは保証されます。
 
-In addition to the list of state modifying statements explained above, the following are considered reading from the state:
 
-#. Reading from state variables.
-#. Accessing ``address(this).balance`` or ``<address>.balance``.
-#. Accessing any of the members of ``block``, ``tx``, ``msg`` (with the exception of ``msg.sig`` and ``msg.data``).
-#. Calling any function not marked ``pure``.
-#. Using inline assembly that contains certain opcodes.
+ステートを変更する上記のリストに加えて、下記はステートを読み込むとされる処理のリストです。
+
+#. 状態変数から読み込む。
+#. ``address(this).balance`` もしくは ``<address>.balance`` にアクセスする。
+#. ``block``、``tx``、``msg`` ( ``msg.sig`` と ``msg.data`` は除く)のどれかにアクセスする。
+#. ``pure`` が付いていないファンクションを呼び出す。
+#. あるopcodeの入ったインラインアセンブリを使う。
 
 ::
 
@@ -193,34 +164,24 @@ In addition to the list of state modifying statements explained above, the follo
         }
     }
 
-Pure functions are able to use the `revert()` and `require()` functions to revert
-potential state changes when an :ref:`error occurs <assert-and-require>`.
+Pureファンクションは :ref:`エラーが起きた <assert-and-require>` 時に、潜在的なステートの変更を元に戻すため `revert()` と `require()` を使えます。
 
-Reverting a state change is not considered a "state modification", as only changes to the
-state made previously in code that did not have the ``view`` or ``pure`` restriction
-are reverted and that code has the option to catch the ``revert`` and not pass it on.
+ステートを元に戻すのは"ステートの変更"とは見なされません。
+なぜなら、``view`` もしくは ``pure`` がないコードで以前に作られたステートへの変更だけがrevertされていたためです。さらに、そのコードは ``revert`` をキャッチし、受け渡ししないオプションがあります。
 
-This behaviour is also in line with the ``STATICCALL`` opcode.
+この挙動は ``STATICCALL`` opcodeにも合っています。
 
 .. warning::
-  It is not possible to prevent functions from reading the state at the level
-  of the EVM, it is only possible to prevent them from writing to the state
-  (i.e. only ``view`` can be enforced at the EVM level, ``pure`` can not).
+  EVMレベルではファンクションがステートを読み込むことを止めることはできません。できるのは書き込みを止めることだけです（ ``view`` がEVMレベルで強制されますが、``pure`` はされません）。
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``pure`` functions.
-  This enabled state modifications in ``pure`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``pure`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  バージョン0.5.0以前ではコンパイラは ``pure`` ファンクションに ``STATICCALL`` を使っていませんでした。
+  これは、無効な明示的型変換を使うことで、``view`` ファンクションでのステートの変更を可能にしていました。
+  ``STATICCALL`` を ``pure`` ファンクションに使うことで、EVM上ではステートの変更を行うことができなくなりました。
 
 .. note::
-  Prior to version 0.4.17 the compiler did not enforce that ``pure`` is not reading the state.
-  It is a compile-time type check, which can be circumvented doing invalid explicit conversions
-  between contract types, because the compiler can verify that the type of the contract does
-  not do state-changing operations, but it cannot check that the contract that will be called
-  at runtime is actually of that type.
+  バージョン0.4.17以前では、コンパイラは ``pure`` にステートを読まなせないということを強制していませんでした。
+  コンパイル時の型チェックで、コントラクト型間での無効な明示的変換を避けることができます。なぜなら、コンパイラがそのタイプのコントラクトはステートを変える操作をしないと証明するからです。ただ、ランタイム時に呼ばれるコントラクトに関しては実際にそのタイプかどうかはチェックしません。
 
 .. index:: ! fallback function, function;fallback
 
@@ -229,53 +190,36 @@ This behaviour is also in line with the ``STATICCALL`` opcode.
 Fallback Function
 =================
 
-A contract can have exactly one unnamed function. This function cannot have
-arguments, cannot return anything and has to have ``external`` visibility.
-It is executed on a call to the contract if none of the other
-functions match the given function identifier (or if no data was supplied at
-all).
+コントラクトは1つだけ名前の付いていないファンクションを持つことができます。そのファンクションは引数を持てず、何も返せません。そして可視性は ``external`` である必要があります。
+もし、他のファンクションが与えられたファンクションの識別子になかった場合（もしくは何のデータも渡されなかった場合）、そのコントラクトが呼ばれた時に実行されます。
 
-Furthermore, this function is executed whenever the contract receives plain
-Ether (without data). To receive Ether and add it to the total balance of the contract, the fallback function
-must be marked ``payable``. If no such function exists, the contract cannot receive
-Ether through regular transactions and throws an exception.
+さらに、このファンクションはコントラクトが（データなしの）Etherを受け取った時は実行されます。Etherを受け取って、コントラクトのトータルバランスにそれを追加するにはフォールバックファンクションは ``payable`` でなければいけません。もしそのようなファンクションがない場合、コントラクトは通常のトランザクションを通じてEtherを受け取れず、例外を投げます。
 
-In the worst case, the fallback function can only rely on 2300 gas being
-available (for example when `send` or `transfer` is used), leaving little
-room to perform other operations except basic logging. The following operations
-will consume more gas than the 2300 gas stipend:
+最悪の場合、フォールバックファンクションは2300ガスだけを利用可能（例えば `send` か `transfer` を使うのに）とします。基本的なログの機能以外に他の演算のための余力をほとんど残しません。下記の演算は固定で2300ガス以上使う演算です。
 
-- Writing to storage
-- Creating a contract
-- Calling an external function which consumes a large amount of gas
-- Sending Ether
+- ストレージに書き込む
+- コントラクトを作る
+- ガスを多く使う外部ファンクションを呼び出す
+- Etherを送る
 
-Like any function, the fallback function can execute complex operations as long as there is enough gas passed on to it.
+他のファンクションのように、フォールバックファンクションは十分なガスが渡される限り、複雑な演算も実行可能です。
 
 .. note::
-    Even though the fallback function cannot have arguments, one can still use ``msg.data`` to retrieve
-    any payload supplied with the call.
+    フォールバックファンクションは引数を持てませんが、呼び出しで供給されたペイロードを引き出すのに、``msg.data`` を使うことができます。
 
 .. warning::
-    The fallback function is also executed if the caller meant to call
-    a function that is not available. If you want to implement the fallback
-    function only to receive ether, you should add a check
-    like ``require(msg.data.length == 0)`` to prevent invalid calls.
+    呼び出し元が利用不可なファンクションを呼び出した時にもフォールバックファンクションは実行されます。Etherを受け取るためだけにフォールバックファンクションを実行したい場合、不正な呼び出しを防ぐために ``require(msg.data.length == 0)`` を追加した方が良いでしょう。
 
 .. warning::
-    Contracts that receive Ether directly (without a function call, i.e. using ``send`` or ``transfer``)
-    but do not define a fallback function
-    throw an exception, sending back the Ether (this was different
-    before Solidity v0.4.0). So if you want your contract to receive Ether,
-    you have to implement a payable fallback function.
+    Etherを直接受け取る（ファンクションコール、つまり ``send`` か ``transfer`` を伴わない）が、フォールバックファンクションを定義しないコントラクトは例外を投げ、Etherを送り返します（Solidityバージョン0.4.0以前では違いました）。そのため、コントラクトでEtherを受け取りたい場合、payableのフォールバックファンクションを実装しなければいけません。
 
 .. warning::
-    A contract without a payable fallback function can receive Ether as a recipient of a `coinbase transaction` (aka `miner block reward`)
-    or as a destination of a ``selfdestruct``.
+    payableフォールバックファンクションがないコントラクトは `coinbase transaction` (もしくは `miner block reward`)として、もしくは ``selfdestruct`` の送り先としてEtherを受け取ることができます。
 
-    A contract cannot react to such Ether transfers and thus also cannot reject them. This is a design choice of the EVM and Solidity cannot work around it.
+    コントラクトはそのようなEtherの送金に関して何の反応もできないため、それを拒否することもできません。
+    これはEVMの設計であるため、Solidityではどうにもできません。
 
-    It also means that ``address(this).balance`` can be higher than the sum of some manual accounting implemented in a contract (i.e. having a counter updated in the fallback function).
+    これは、``address(this).balance`` がコントラクト内で処理された手動の会計処理の合計より高くなりうることを意味しています（フォールバックファンクションでアプデートされるカウンタを持っているということです）。
 
 ::
 
@@ -322,11 +266,9 @@ Like any function, the fallback function can execute complex operations as long 
 Function Overloading
 ====================
 
-A contract can have multiple functions of the same name but with different parameter
-types.
-This process is called "overloading" and also applies to inherited functions.
-The following example shows overloading of the function
-``f`` in the scope of contract ``A``.
+コントラクトは異なるパラメータを持つ、同じ名前のファンクションを複数持つことができます。
+このプロセスは"オーバーロード"といわれ、継承されたファンクションにも適用されます。
+コントラクト ``A`` のスコープに入っているファンクション ``f`` のオーバーロードの例を下記に示します。
 
 ::
 
@@ -343,8 +285,7 @@ The following example shows overloading of the function
         }
     }
 
-Overloaded functions are also present in the external interface. It is an error if two
-externally visible functions differ by their Solidity types but not by their external types.
+オーバーロードされたファンクションは外部インターフェースの中にもあります。もし2つの外部的に可視なファンクションが外部としての型ではなく、Solidityの型として異なる場合エラーになります。
 
 ::
 
@@ -364,20 +305,16 @@ externally visible functions differ by their Solidity types but not by their ext
     contract B {
     }
 
-
-Both ``f`` function overloads above end up accepting the address type for the ABI although
-they are considered different inside Solidity.
+両方の ``f`` ファンクションはABIとしてはアドレス型を受け入れてオーバーロードしますが、Solidity内では違うものとして考えられます。
 
 Overload resolution and Argument matching
 -----------------------------------------
 
-Overloaded functions are selected by matching the function declarations in the current scope
-to the arguments supplied in the function call. Functions are selected as overload candidates
-if all arguments can be implicitly converted to the expected types. If there is not exactly one
-candidate, resolution fails.
+オーバーロードされたファンクションは、現在のスコープ内のファンクションの宣言をファンクションコール内で渡された引数に合わせることによって選択されます。
+全ての引数が暗示的に期待する型に変換できる場合、ファンクションはオーバーロードの候補として選ばれます。もし候補がなければ、そのresolutionは失敗します。
 
 .. note::
-    Return parameters are not taken into account for overload resolution.
+    返ってくるパラメータはオーバーロードresolutionに考慮されません。
 
 ::
 
@@ -393,6 +330,5 @@ candidate, resolution fails.
         }
     }
 
-Calling ``f(50)`` would create a type error since ``50`` can be implicitly converted both to ``uint8``
-and ``uint256`` types. On another hand ``f(256)`` would resolve to ``f(uint256)`` overload as ``256`` cannot be implicitly
-converted to ``uint8``.
+``50`` ``uint8`` と ``uint256`` どちらにも暗示的に変換できるため、``f(50)`` の呼び出しは型エラーを生成します。
+一方で、``256`` は暗示的に ``uint8`` に変換できないため ``f(256)`` は ``f(uint256)`` オーバーロードします。

@@ -4,25 +4,15 @@
 Constant State Variables
 ************************
 
-State variables can be declared as ``constant``. In this case, they have to be
-assigned from an expression which is a constant at compile time. Any expression
-that accesses storage, blockchain data (e.g. ``now``, ``address(this).balance`` or
-``block.number``) or
-execution data (``msg.value`` or ``gasleft()``) or makes calls to external contracts is disallowed. Expressions
-that might have a side-effect on memory allocation are allowed, but those that
-might have a side-effect on other memory objects are not. The built-in functions
-``keccak256``, ``sha256``, ``ripemd160``, ``ecrecover``, ``addmod`` and ``mulmod``
-are allowed (even though, with the exception of ``keccak256``, they do call external contracts).
+状態変数は ``constant`` として宣言することができます。この場合、コンパイル時に定数となる式で値が割り当てされている必要があります。ストレージ、ブロックチェーンデータ (例: ``now``、``address(this).balance``、``block.number``)、
+実行データ (``msg.value``、``gasleft()``) にアクセスする式、もしくは外部のコントラクトを呼び出す式は使えません。メモリ位置の変更に影響があるかもしれない式は使えますが、メモリのオブジェクトに影響があるかもしれない式は使えません。組み込みファンクションの ``keccak256``、``sha256``、``ripemd160``、``ecrecover``、``addmod``、``mulmod`` は使用可能です（ ``keccak256`` の例外は外部コントラクトを呼び出しますが）。
 
-The reason behind allowing side-effects on the memory allocator is that it
-should be possible to construct complex objects like e.g. lookup-tables.
-This feature is not yet fully usable.
+メモリ位置への影響を許容する理由としては、lookup-tablesの様な複雑なオブジェクトの作成が可能であるべきだからです。
+ただ、この機能はまだ完全に使用可能というわけではありません。
 
-The compiler does not reserve a storage slot for these variables, and every occurrence is
-replaced by the respective constant expression (which might be computed to a single value by the optimizer).
+コンパイラはこの変数のためのストレージスロットを保持しません。結果は全て各定数式で置き換えられます（オプティマイザによって1つの値に計算されるかもしれません）。
 
-Not all types for constants are implemented at this time. The only supported types are
-value types and strings.
+全ての型の定数がここで実行される訳ではありません。値型と文字列だけサポートされています。
 
 ::
 

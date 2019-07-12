@@ -4,32 +4,25 @@
 Creating Contracts
 ******************
 
-Contracts can be created "from outside" via Ethereum transactions or from within Solidity contracts.
+コントラクトはEthreumトランザクションを通じて"外部から"、もしくはSolidityコントラクトの内側から作成可能です。
 
-IDEs, such as `Remix <https://remix.ethereum.org/>`_, make the creation process seamless using UI elements.
+`Remix <https://remix.ethereum.org/>`_ の様なIDEはUIの要素を使って、シームレスに生成プロセスを作ります。
 
-Creating contracts programmatically on Ethereum is best done via using the JavaScript API `web3.js <https://github.com/ethereum/web3.js>`_.
-It has a function called `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
-to facilitate contract creation.
+Ethreum上にプログラムでコントラクトを作成するにはJavaScript API `web3.js <https://github.com/ethereum/web3.js>`_ を使うのがベストです。
+web3.jsは簡単にコントラクトを作るための `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_ というファンクションを持っています。
 
-When a contract is created, its :ref:`constructor <constructor>`  (a function declared with the ``constructor`` keyword) is executed once.
+コントラクトが作られた時、:ref:`constructor <constructor>`  ( ``constructor`` キーワードで宣言されるファンクション)が一度だけ実行されます。
 
-A constructor is optional. Only one constructor is allowed, which means
-overloading is not supported.
+コンストラクタはオプションです。1つのコンストラクタだけ使えます。つまりオーバーロードはサポートされていません。
 
-After the constructor has executed, the final code of the contract is deployed to the
-blockchain. This code includes all public and external functions and all functions
-that are reachable from there through function calls. The deployed code does not
-include the constructor code or internal functions only called from the constructor.
+コンストラクタが実行された後、最終的なコントラクトのコードがブロックチェーン上にデプロイされます。このコードは全てのpublic、externalのファンクションを含んでおり、全てのファンクションはファンクションコールを通じてそのコードからアクセスできます。デプロイされたコードはコンストラクタもしくはコンストラクタによって呼ばれたinternalのファンクションだけ含んでいません。
 
 .. index:: constructor;arguments
 
-Internally, constructor arguments are passed :ref:`ABI encoded <ABI>` after the code of
-the contract itself, but you do not have to care about this if you use ``web3.js``.
+内部的にはコントラクトのコードの後、コンストラクタの引数は :ref:`ABI encoded <ABI>` されて渡されますが、もし ``web3.js`` を使っているのであればきにする必要はありません。
 
-If a contract wants to create another contract, the source code
-(and the binary) of the created contract has to be known to the creator.
-This means that cyclic creation dependencies are impossible.
+もしコントラクトが別のコントラクトを作りたい場合、作成されたコントラクトのソースコード（とそのバイナリ）は作成者によって把握されている必要があります。
+つまり、cyclic creation dependenciesは出来ないということです。
 
 ::
 

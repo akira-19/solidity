@@ -4,111 +4,92 @@
 Value Types
 ===========
 
-The following types are also called value types because variables of these
-types will always be passed by value, i.e. they are always copied when they
-are used as function arguments or in assignments.
+次の型も常に値として渡されるため値型と呼ばれています。引数や割り当て時にはこれらは常にコピーされます。
 
 .. index:: ! bool, ! true, ! false
 
 Booleans
 --------
 
-``bool``: The possible values are constants ``true`` and ``false``.
+``bool``: 取りうる値は ``true`` と ``false``
 
 Operators:
 
-*  ``!`` (logical negation)
-*  ``&&`` (logical conjunction, "and")
-*  ``||`` (logical disjunction, "or")
-*  ``==`` (equality)
-*  ``!=`` (inequality)
+*  ``!`` (論理否定)
+*  ``&&`` (論理積, "and")
+*  ``||`` (論理和, "or")
+*  ``==`` (等価)
+*  ``!=`` (不等価)
 
-The operators ``||`` and ``&&`` apply the common short-circuiting rules. This means that in the expression ``f(x) || g(y)``, if ``f(x)`` evaluates to ``true``, ``g(y)`` will not be evaluated even if it may have side-effects.
+``||`` と ``&&`` 演算子は一般的な短絡評価のルールに従います。つまり、``f(x) || g(y)`` という表現において、もし ``f(x)`` が``true`` と評価された場合、たとえ副次的な作用があったとしても ``g(y)`` は評価されません。
 
 .. index:: ! uint, ! int, ! integer
 
 Integers
 --------
 
-``int`` / ``uint``: Signed and unsigned integers of various sizes. Keywords ``uint8`` to ``uint256`` in steps of ``8`` (unsigned of 8 up to 256 bits) and ``int8`` to ``int256``. ``uint`` and ``int`` are aliases for ``uint256`` and ``int256``, respectively.
+``int`` / ``uint``: 色々なサイズの符号付と符号なし整数です。``uint8`` から ``uint256`` まで8ずつ（符号なしの8から256ビットまで）と``int8`` から ``int256`` まで上がっていきます。``uint`` と ``int`` はそれぞれ ``uint256`` と ``int256`` のエイリアスです。
 
 Operators:
 
-* Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
-* Bit operators: ``&``, ``|``, ``^`` (bitwise exclusive or), ``~`` (bitwise negation)
-* Shift operators: ``<<`` (left shift), ``>>`` (right shift)
-* Arithmetic operators: ``+``, ``-``, unary ``-``, ``*``, ``/``, ``%`` (modulo), ``**`` (exponentiation)
+* 比較: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (``bool`` で評価)
+* ビット演算子: ``&``, ``|``, ``^`` (ビット排他論理和), ``~`` (ビット否定)
+* シフト演算子: ``<<`` (左シフト), ``>>`` (右シフト)
+* 算術演算子: ``+``, ``-``, unary ``-``, ``*``, ``/``, ``%`` (modulo), ``**`` (累乗)
 
 .. warning::
 
-  Integers in Solidity are restricted to a certain range. For example, with ``uint32``, this is ``0`` up to ``2**32 - 1``.
-  If the result of some operation on those numbers does not fit inside this range, it is truncated. These truncations can have
-  serious consequences that you should :ref:`be aware of and mitigate against<underflow-overflow>`.
+  Solidityの整数はある範囲に制限されています。例えば、``uint32`` であれば ``0`` から最大 ``2**32 - 1`` までです。
+  もし計算結果がこの範囲に収まらない場合には、切り捨てられます。この切り捨てによって起こる結果は :ref:`be 知っておくべきです<underflow-overflow>` 。
 
 Comparisons
 ^^^^^^^^^^^
 
-The value of a comparison is the one obtained by comparing the integer value.
+比較の値は整数値を比較することによって得られます。
 
 Bit operations
 ^^^^^^^^^^^^^^
 
-Bit operations are performed on the two's complement representation of the number.
-This means that, for example ``~int256(0) == int256(-1)``.
+ビット演算子の計算は2の補数表現で行われます。例えば、 ``~int256(0) == int256(-1)`` です。
 
 Shifts
 ^^^^^^
 
-The result of a shift operation has the type of the left operand. The
-expression ``x << y`` is equivalent to ``x * 2**y``, and, for positive integers,
-``x >> y`` is equivalent to ``x / 2**y``. For negative ``x``, ``x >> y``
-is equivalent to dividing by a power of ``2`` while rounding down (towards negative infinity).
-Shifting by a negative amount throws a runtime exception.
+シフト演算の結果は左オペランドの型となります。``x << y`` という表現は ``x * 2**y`` と等価です。さらに正の整数に関しては ``x >> y`` と ``x / 2**y`` が等価です。負の ``x`` に対して ``x >> y`` は、``2`` のべき乗で除し、切り捨てしたもの（負の無限大で）と等価です。
+負の数でシフトするとランタイム例外が投げられます。
+
 
 .. warning::
-    Before version ``0.5.0`` a right shift ``x >> y`` for negative ``x`` was equivalent to ``x / 2**y``,
-    i.e. right shifts used rounding towards zero instead of rounding towards negative infinity.
+    バージョン``0.5.0``の前までは、負の ``x`` に対して右シフト ``x >> y`` は ``x / 2**y`` と等価でした。例えば右シフトは負の無限大での切り捨ての代わりに、0の位での切り捨てを行なっていました。
 
 Addition, Subtraction and Multiplication
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Addition, subtraction and multiplication have the usual semantics.
-They wrap in two's complement representation, meaning that
-for example ``uint256(0) - uint256(1) == 2**256 - 1``. You have to take these overflows
-into account when designing safe smart contracts.
+加算、減算、乗算は通常のセマンティクスです。
+これらは2の補数表現で使用されます。つまり、例えば ``uint256(0) - uint256(1) == 2**256 - 1`` です。安全なスマートコントラクトを作成するときには、このオーバーフローを考慮する必要があります。
 
-The expression ``-x`` is equivalent to ``(T(0) - x)`` where
-``T`` is the type of ``x``. This means that ``-x`` will not be negative
-if the type of ``x`` is an unsigned integer type. Also, ``-x`` can be
-positive if ``x`` is negative. There is another caveat also resulting
-from two's complement representation::
+``T`` が ``x`` の型であるとき ``-x`` という表現は ``(T(0) - x)`` と等価です。つまり、``x`` の型が符号なし整数のときに ``-x`` は負の数にはなりません。また、``x`` が負の数であれば ``-x`` は正の数になりえます。さらに、別の2の補数表現による注意があります::
 
     int x = -2**255;
     assert(-x == x);
 
-This means that even if a number is negative, you cannot assume that
-its negation will be positive.
+これが意味するのは、たとえある数字が負の数でも、それにマイナスをつけたものが正の数になるとは限らないということです。
 
 
 Division
 ^^^^^^^^
 
-Since the type of the result of an operation is always the type of one of
-the operands, division on integers always results in an integer.
-In Solidity, division rounds towards zero. This mean that ``int256(-5) / int256(2) == int256(-2)``.
+ある演算の出力の型は常に演算対象の型と同じなので、整数の除算の結果は整数になります。Solidityでは、除算は1の位までの概算になります。つまり、``int256(-5) / int256(2) == int256(-2)`` となります。
 
-Note that in contrast, division on :ref:`literals<rational_literals>` results in fractional values
-of arbitrary precision.
+一方で、:ref:`リテラル<rational_literals>` での除算は任意の精度での少数値が結果として出力されるということに注意して下さい。
 
 .. note::
-  Division by zero causes a failing assert.
+  ゼロでの除算はフェイルアサーションが発生します。
 
 Modulo
 ^^^^^^
 
-The modulo operation ``a % n`` yields the remainder ``r`` after the division of the operand ``a``
-by the operand ``n``, where ``q = int(a / n)`` and ``r = a - (n * q)``. This means that modulo
-results in the same sign as its left operand (or zero) and ``a % n == -(abs(a) % n)`` holds for negative ``a``:
+剰余演算 ``a % n`` は ``a`` を ``n`` で割ったときの 余り ``r`` を結果として返します（``q = int(a / n)`` で ``r = a - (n * q)`` です）。つまり、剰余演算の答えは左オペランドと同じ符号（もしくはゼロ）で、負の数 ``a`` に対して ``a % n == -(abs(a) % n)`` となります:
 
  * ``int256(5) % int256(2) == int256(1)``
  * ``int256(5) % int256(-2) == int256(1)``
@@ -116,16 +97,15 @@ results in the same sign as its left operand (or zero) and ``a % n == -(abs(a) %
  * ``int256(-5) % int256(-2) == int256(-1)``
 
 .. note::
-  Modulo with zero causes a failing assert.
+  0での剰余演算はフェイルアサーションが発生します。
 
 Exponentiation
 ^^^^^^^^^^^^^^
 
-Exponentiation is only available for unsigned types. Please take care that the types
-you are using are large enough to hold the result and prepare for potential wrapping behaviour.
+指数演算は符号なしの型でのみ使用可能です。使っている型が指数演算の結果を包括するのに、また将来的に起こりうるラッピングに対して十分な大きさであることを確認してください。
 
 .. note::
-  Note that ``0**0`` is defined by the EVM as ``1``.
+  EVMでは ``0**0`` は ``1`` と定義されています。
 
 .. index:: ! ufixed, ! fixed, ! fixed point number
 
@@ -133,12 +113,9 @@ Fixed Point Numbers
 -------------------
 
 .. warning::
-    Fixed point numbers are not fully supported by Solidity yet. They can be declared, but
-    cannot be assigned to or from.
+    固定小数点はまだSolidityでは完全にサポートされていません。宣言はできますが、値を割り当てたりはできません。
 
-``fixed`` / ``ufixed``: Signed and unsigned fixed point number of various sizes. Keywords ``ufixedMxN`` and ``fixedMxN``, where ``M`` represents the number of bits taken by
-the type and ``N`` represents how many decimal points are available. ``M`` must be divisible by 8 and goes from 8 to 256 bits. ``N`` must be between 0 and 80, inclusive.
-``ufixed`` and ``fixed`` are aliases for ``ufixed128x18`` and ``fixed128x18``, respectively.
+``fixed`` / ``ufixed``: いくつかのサイズがある符号付、符号なし固定小数点です。``ufixedMxN`` と ``fixedMxN`` で ``M`` はその型で取れるビットの数で、``N`` は、何桁の10進数少数点が取れるかを表しています。``M`` は8で割り切れる数で、8から256ビットまでとれます。``N`` は0から80までとることができます。``ufixed`` と ``fixed`` はそれぞれ ``ufixed128x18`` と ``fixed128x18`` のエイリアスです。
 
 Operators:
 
@@ -146,10 +123,7 @@ Operators:
 * Arithmetic operators: ``+``, ``-``, unary ``-``, ``*``, ``/``, ``%`` (modulo)
 
 .. note::
-    The main difference between floating point (``float`` and ``double`` in many languages, more precisely IEEE 754 numbers) and fixed point numbers is
-    that the number of bits used for the integer and the fractional part (the part after the decimal dot) is flexible in the former, while it is strictly
-    defined in the latter. Generally, in floating point almost the entire space is used to represent the number, while only a small number of bits define
-    where the decimal point is.
+    浮動小数と固定小数の主な違いですが、前者では整数部分と小数部分（多くの言語では ``float`` と ``double`` です。より詳細な情報はIEEE 754で確認してください）の桁数がフレキシブルで、後者では厳密に決められていることです。一般的に、浮動小数点数はほぼ全てのスペースをその数を表すのに使用し、少しのビットで小数点の長さを表します。
 
 .. index:: address, balance, send, call, callcode, delegatecall, staticcall, transfer
 
@@ -158,63 +132,52 @@ Operators:
 Address
 -------
 
-The address type comes in two flavours, which are largely identical:
+アドレス型は広義的には同じである2つの種類があります:
 
- - ``address``: Holds a 20 byte value (size of an Ethereum address).
- - ``address payable``: Same as ``address``, but with the additional members ``transfer`` and ``send``.
+ - ``address``: 20バイトの値 (Ethereumアドレスの大きさ)です。
+ - ``address payable``: ``address`` と同じですが、追加のメンバ ``transfer`` と ``send`` が使えます。
 
-The idea behind this distinction is that ``address payable`` is an address you can send Ether to,
-while a plain ``address`` cannot be sent Ether.
+この特徴が意味するのは、``address payable`` にはEtherを送ることができますが、ただの ``address`` にはできません。
+
 
 Type conversions:
 
-Implicit conversions from ``address payable`` to ``address`` are allowed, whereas conversions from ``address`` to ``address payable`` are
-not possible (the only way to perform such a conversion is by using an intermediate conversion to ``uint160``).
+``address payable`` から ``address`` への暗黙的な変換は可能ですが、``address`` から ``address payable`` にはできません（唯一 ``uint160`` を中継することで変換可能です）。
 
-:ref:`Address literals<address_literals>` can be implicitly converted to ``address payable``.
+:ref:`アドレスリテラル<address_literals>` は暗黙的に ``address payable`` に変換可能です。
 
-Explicit conversions to and from ``address`` are allowed for integers, integer literals, ``bytes20`` and contract types with the following
-caveat:
-Conversions of the form ``address payable(x)`` are not allowed. Instead the result of a conversion of the form ``address(x)``
-has the type ``address payable``, if ``x`` is of integer or fixed bytes type, a literal or a contract with a payable fallback function.
-If ``x`` is a contract without payable fallback function, then ``address(x)`` will be of type ``address``.
-In external function signatures ``address`` is used for both the ``address`` and the ``address payable`` type.
+``address`` への、もしくは ``address`` からの明示的な変換は整数、整数リテラル、``bytes20``、コントラクト型で可能ですが下記の注意事項を参照ください:
+``address payable(x)`` という形での変換はできません。代わりに、``address(x)`` という変換結果が ``address payable`` もしくは、もし ``x`` が整数もしくは固定サイズのバイト型であれば、リテラルかpayableのフォールバックファンクションを持つコントラクトになります。
+もし ``x`` がpayableのフォールバックファンクションを持たないコントラクトであれば、``address(x)`` は ``address`` になります。
+外部のファンクションの署名では、``address`` は ``address`` 型、``address payable`` 型両方で使用されます。
 
 .. note::
-    It might very well be that you do not need to care about the distinction between ``address``
-    and ``address payable`` and just use ``address`` everywhere. For example,
-    if you are using the :ref:`withdrawal pattern<withdrawal_pattern>`, you can (and should) store the
-    address itself as ``address``, because you invoke the ``transfer`` function on
-    ``msg.sender``, which is an ``address payable``.
+    おそらく、``address`` と ``address payable`` の違いを気にする必要はあまりなく、どこでも ``address`` を使うことになるでしょう。例えば、もし、:ref:`withdrawal pattern<withdrawal_pattern>` を使うと、``address payable`` である ``msg.sender`` で ``transfer`` を使うので、``address`` としてアドレスを保存できます（するべきです）。
 
 Operators:
 
 * ``<=``, ``<``, ``==``, ``!=``, ``>=`` and ``>``
 
 .. warning::
-    If you convert a type that uses a larger byte size to an ``address``, for example ``bytes32``, then the ``address`` is truncated.
-    To reduce conversion ambiguity version 0.4.24 and higher of the compiler force you make the truncation explicit in the conversion.
-    Take for example the address ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
+    もし ``address`` 型よりも大きなサイズの型、例えば、``bytes32``、から変換しようとすると、``address`` は切り詰められます。
+    変換時の曖昧さを減らすためにバージョン0.4.24からは変換時にコンパイラは切り捨てを明示的にすることを要求します。例えば、``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC`` です。
 
-    You can use ``address(uint160(bytes20(b)))``, which results in ``0x111122223333444455556666777788889999aAaa``,
-    or you can use ``address(uint160(uint256(b)))``, which results in ``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc``.
+    ``0x111122223333444455556666777788889999aAaa`` となる ``address(uint160(bytes20(b)))`` もしくは、``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc`` となる ``address(uint160(uint256(b)))`` が使えます。
 
 .. note::
-    The distinction between ``address`` and ``address payable`` was introduced with version 0.5.0.
-    Also starting from that version, contracts do not derive from the address type, but can still be explicitly converted to
-    ``address`` or to ``address payable``, if they have a payable fallback function.
+    ``address`` と ``address payable`` の違いはバージョン0.5.0で導入されました。
+    また、コントラクトはアドレス型からは生成されませんが、もしpayableのフォールバックファンクションを持っていれば、``address`` もしくは ``address payable`` に明示的に変換できるという機能がバージョン0.5.0から導入されました。
 
 .. _members-of-addresses:
 
 Members of Addresses
 ^^^^^^^^^^^^^^^^^^^^
 
-For a quick reference of all members of address, see :ref:`address_related`.
+アドレス型の全てのメンバのクイックリファレンスは  :ref:`address_related` を参照ください。
 
 * ``balance`` and ``transfer``
 
-It is possible to query the balance of an address using the property ``balance``
-and to send Ether (in units of wei) to a payable address using the ``transfer`` function:
+``balance`` プロパティであるアドレスのバランスを確認できます。また、``transfer`` でpayableなアドレスにEther（単位はwei）を送ることができます:
 
 ::
 
@@ -222,33 +185,26 @@ and to send Ether (in units of wei) to a payable address using the ``transfer`` 
     address myAddress = address(this);
     if (x.balance < 10 && myAddress.balance >= 10) x.transfer(10);
 
-The ``transfer`` function fails if the balance of the current contract is not large enough
-or if the Ether transfer is rejected by the receiving account. The ``transfer`` function
-reverts on failure.
+現在のコントラクトのバランスが十分大きくないか、受け取り側のアカウントでEtherの送金が拒否された場合、``transfer``ファンクションは失敗し、送金前の状態に戻ります。
 
 .. note::
-    If ``x`` is a contract address, its code (more specifically: its :ref:`fallback-function`, if present) will be executed together with the ``transfer`` call (this is a feature of the EVM and cannot be prevented). If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.
+    もし ``x`` がコントラクトアドレスだった場合、そのコード（具体的には、もしあれば :ref:`fallback-function`）は ``transfer`` と一緒に実行されます（これはEVMの特徴で、止めることはできません）。もしこの実行時にガス不足になったり、他の理由でフェイルした場合は、Etherの送金はキャンセル、元の状態に戻り、現在のコントラクトは例外と共にストップします。
 
 * ``send``
 
-Send is the low-level counterpart of ``transfer``. If the execution fails, the current contract will not stop with an exception, but ``send`` will return ``false``.
+Sendは ``transfer`` の低レベルバージョンです。もし実行が失敗したら、現在のコントラクトは例外と共にストップしない代わりに、``send`` が ``false`` を返します。
 
 .. warning::
-    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
-    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
-    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
-    use a pattern where the recipient withdraws the money.
+    ``send`` を使うといくつかの危険が伴います:
+    送金はコールスタックの深さが1024でフェイルします（これは常に呼び出し元によって行われます）。そして、もし受領者がガスを使い切ってもフェイルします。そのため、安全なEtherの送金のために、常に ``send`` の返り値を確認する、もしくは ``transfer`` を使ってください。さらに良いのは:
+    受領者がお金を引き出す時の様式を使用することです。
+
 
 * ``call``, ``delegatecall`` and ``staticcall``
 
-In order to interface with contracts that do not adhere to the ABI,
-or to get more direct control over the encoding,
-the functions ``call``, ``delegatecall`` and ``staticcall`` are provided.
-They all take a single ``bytes memory`` parameter and
-return the success condition (as a ``bool``) and the returned data
-(``bytes memory``).
-The functions ``abi.encode``, ``abi.encodePacked``, ``abi.encodeWithSelector``
-and ``abi.encodeWithSignature`` can be used to encode structured data.
+ABIに従わないコントラクトと繋げるために、もしくはエンコードに対してもっと直接的なコントロールを得るために、``call``、``delegatecall``、``staticcall`` ファンクションを使うことができます。
+これらは全て一つの ``bytes memory`` パラメータを引数とし、（``bool`` で）成否と ``bytes memory`` の返ってきたデータを返します。
+``abi.encode``、``abi.encodePacked``、``abi.encodeWithSelector``、``abi.encodeWithSignature`` は体系的なデータをエンコードするために使用することができます。
 
 Example::
 
@@ -257,44 +213,36 @@ Example::
     require(success);
 
 .. warning::
-    All these functions are low-level functions and should be used with care.
-    Specifically, any unknown contract might be malicious and if you call it, you
-    hand over control to that contract which could in turn call back into
-    your contract, so be prepared for changes to your state variables
-    when the call returns. The regular way to interact with other contracts
-    is to call a function on a contract object (``x.f()``).
+    これら全てのファンクションは低級のファンクションで、使う際には注意が必要です。特に、未知のコントラクトは悪意を持っている可能性があり、もしそのコントラクトを呼び出すと、あなたのコントラクトに次々とコールバックを投げるコントラクトにコントロールを渡してしまうかもしれません。そのため、その呼び出しが返ってきたときに、状態変数の変化に対して準備をしておいてください。他のコントラクトと繋がる一般的な方法はコントラクトオブジェクト(``x.f()``)上でファンクションを呼び出すことです。
 
 .. note::
-    Previous versions of Solidity allowed these functions to receive
-    arbitrary arguments and would also handle a first argument of type
-    ``bytes4`` differently. These edge cases were removed in version 0.5.0.
+    以前のバージョンではこれらのファンクションで任意の引数を取ることができ、``bytes4`` 型の第一引数を異なる方法で処理することができました。そのようなエッジケースはバージョン0.5.0で削除されました。
 
-It is possible to adjust the supplied gas with the ``.gas()`` modifier::
+供給されたガスを ``.gas()`` modifierで調整することができます::
 
     address(nameReg).call.gas(1000000)(abi.encodeWithSignature("register(string)", "MyName"));
 
-Similarly, the supplied Ether value can be controlled too::
+同様に、供給されたEtherの値もコントロールすることができます::
 
     address(nameReg).call.value(1 ether)(abi.encodeWithSignature("register(string)", "MyName"));
 
-Lastly, these modifiers can be combined. Their order does not matter::
+最後に、これらのmodifierは結合させることができます。順番は関係ありません::
 
     address(nameReg).call.gas(1000000).value(1 ether)(abi.encodeWithSignature("register(string)", "MyName"));
 
-In a similar way, the function ``delegatecall`` can be used: the difference is that only the code of the given address is used, all other aspects (storage, balance, ...) are taken from the current contract. The purpose of ``delegatecall`` is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
+似たような方法で、``delegatecall`` は使用されます: 違いは与えられたアドレスのコードだけ使われ、他の要素（storage、balance等）は現在のコントラクトから使われます。``delegatecall`` の目的は別のコントラクトに保存されているライブラリを使用することです。ユーザはstorageの構造がどちらのコントラクトでもdelegatecallを使用するのに適切であることを確認しなければいけません。
 
 .. note::
-    Prior to homestead, only a limited variant called ``callcode`` was available that did not provide access to the original ``msg.sender`` and ``msg.value`` values. This function was removed in version 0.5.0.
+    homestead以前は、``callcode`` という制限のある変形型のみが使用可能でしたが、オリジナルの ``msg.sender`` と ``msg.value`` にアクセス不可でした。このファンクションはバージョン0.5.0で削除されました。
 
-Since byzantium ``staticcall`` can be used as well. This is basically the same as ``call``, but will revert if the called function modifies the state in any way.
+Byzantiumから ``staticcall`` も使うことができます。基本的には ``call`` と同じですが、もし呼ばれたファンクションがステートを変更したらリバートします。
 
-All three functions ``call``, ``delegatecall`` and ``staticcall`` are very low-level functions and should only be used as a *last resort* as they break the type-safety of Solidity.
+``call``、``delegatecall``、``staticcall`` の3つのファンクションは全てとても低級のファンクションで、Solidityの型安全性を破るため、*最終手段* として使用してください。
 
-The ``.gas()`` option is available on all three methods, while the ``.value()`` option is not supported for ``delegatecall``.
+``.gas()`` オプションは全てのメソッドで使用可能ですが、``.value()`` は ``delegatecall`` ではサポートされません。
 
 .. note::
-    All contracts can be converted to ``address`` type, so it is possible to query the balance of the
-    current contract using ``address(this).balance``.
+    全てのコントラクトは ``address`` に変換できるため、``address(this).balance`` で現在のコントラクトにそのバランスをクエリすることができます。
 
 .. index:: ! contract type, ! type; contract
 
@@ -303,76 +251,65 @@ The ``.gas()`` option is available on all three methods, while the ``.value()`` 
 Contract Types
 --------------
 
-Every :ref:`contract<contracts>` defines its own type.
-You can implicitly convert contracts to contracts they inherit from.
-Contracts can be explicitly converted to and from all other contract types
-and the ``address`` type.
+全ての :ref:`contract<contracts>` は自分自身の型を定義します。
+あるコントラクトからそのコントラクトが継承しているコントラクトへ暗黙的に変換することができます。
+コントラクトは他のコントラクト型から、もしくは他のコントラクト型へ明示的に変換することができます。さらに ``address`` 型への変換も可能です。
 
-Explicit conversion to and from the ``address payable`` type
-is only possible if the contract type has a payable fallback function.
-The conversion is still performed using ``address(x)`` and not
-using ``address payable(x)``. You can find more information in the section about
-the :ref:`address type<address>`.
+コントラクト型がpayableのフォールバックファンクションを持っている時のみ、``address payable`` 型から、もしくは ``address payable`` 型への明示的な変換が可能です。
+その変換は ``address(x)`` では行われますが、``address payable(x)`` では行われません。詳細な情報は　:ref:`address type<address>` を参照ください。
 
 .. note::
-    Before version 0.5.0, contracts directly derived from the address type
-    and there was no distinction between ``address`` and ``address payable``.
+    バージョン0.5.0以前では、コントラクトは直接アドレス型から得られており、``address`` と ``address payable`` に違いはありませんでした。
 
-If you declare a local variable of contract type (`MyContract c`), you can call
-functions on that contract. Take care to assign it from somewhere that is the
-same contract type.
+もしコントラクト型（`MyContract c`）のローカル変数を宣言した場合、そのコントラクト上でファンクションを呼び出すことができます。同じコントラクト型からその変数を割り当てる様にして下さい。
 
-You can also instantiate contracts (which means they are newly created). You
-can find more details in the :ref:`'Contracts via new'<creating-contracts>`
-section.
+コントラクトのインスタンスも作成可能です（つまり新しくそのコントラクトが作られるということです）。詳細は :ref:`'Contracts via new'<creating-contracts>` を参照ください。
 
-The data representation of a contract is identical to that of the ``address``
-type and this type is also used in the :ref:`ABI<ABI>`.
+コントラクトのデータ表現は ``address`` 型のデータ表現と同じで、この型は :ref:`ABI<ABI>` でも使われています。
 
-Contracts do not support any operators.
+コントラクト型はどんな演算子もサポートしません。
 
-The members of contract types are the external functions of the contract
-including public state variables.
+コントラクト型のメンバはpublicの状態変数を含んだそのコントラクトのexternalのファンクションです。
 
-For a contract ``C`` you can use ``type(C)`` to access
-:ref:`type information<meta-type>` about the contract.
+あるコントラクト ``C`` に対して、そのコントラクトの :ref:`type information<meta-type>` にアクセスするために ``type(C)`` を使うことができます。
 
 .. index:: byte array, bytes32
 
 Fixed-size byte arrays
 ----------------------
 
-The value types ``bytes1``, ``bytes2``, ``bytes3``, ..., ``bytes32``
-hold a sequence of bytes from one to up to 32.
-``byte`` is an alias for ``bytes1``.
+値型である ``bytes1``、``bytes2``、``bytes3`` ... ``bytes32`` は1から32までバイト列を保持しています。
+``byte`` は ``byte1`` のエイリアスです。
 
 Operators:
 
-* Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
+* Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (``bool`` を返します)
 * Bit operators: ``&``, ``|``, ``^`` (bitwise exclusive or), ``~`` (bitwise negation)
 * Shift operators: ``<<`` (left shift), ``>>`` (right shift)
 * Index access: If ``x`` is of type ``bytesI``, then ``x[k]`` for ``0 <= k < I`` returns the ``k`` th byte (read-only).
 
-The shifting operator works with any integer type as right operand (but
-returns the type of the left operand), which denotes the number of bits to shift by.
-Shifting by a negative amount causes a runtime exception.
+* 比較: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (``bool`` で評価)
+* ビット演算子: ``&``, ``|``, ``^`` (ビット排他論理和), ``~`` (ビット否定)
+* シフト演算子: ``<<`` (左シフト), ``>>`` (右シフト)
+* インデックスアクセス: もし ``x`` が ``bytesI`` 型なら ``0 <= k < I`` の元で ``x[k]`` は ``k`` 番目のバイトを返します（読み取り専用）。
+
+どれだけのビット数をシフトさせるか決める右オペランドがどの整数型でもシフト演算子は動作します（結果は左オペランドの型で返ります）。
+負の数でのシフトはランタイムの例外を生成します。
 
 Members:
 
-* ``.length`` yields the fixed length of the byte array (read-only).
+* ``.length`` は固定長さのバイト配列を返します（読み取り専用）。
 
 .. note::
-    The type ``byte[]`` is an array of bytes, but due to padding rules, it wastes
-    31 bytes of space for each element (except in storage). It is better to use the ``bytes``
-    type instead.
+    ``byte[]`` はバイトの配列ですがパディングのため、各要素の間の31バイトを無駄にしています（storage以外）。代わりに、``bytes`` を使用する方が良いでしょう。
 
 Dynamically-sized byte array
 ----------------------------
 
 ``bytes``:
-    Dynamically-sized byte array, see :ref:`arrays`. Not a value-type!
+    動的サイズのバイト配列です。:ref:`arrays` を参照ください。値型ではありません。
 ``string``:
-    Dynamically-sized UTF-8-encoded string, see :ref:`arrays`. Not a value-type!
+    動的サイズのUTF-8でエンコードされた文字列です。:ref:`arrays` を参照ください。値型ではありません。
 
 .. index:: address, literal;address
 
@@ -381,11 +318,8 @@ Dynamically-sized byte array
 Address Literals
 ----------------
 
-Hexadecimal literals that pass the address checksum test, for example
-``0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF`` are of ``address payable`` type.
-Hexadecimal literals that are between 39 and 41 digits
-long and do not pass the checksum test produce
-a warning and are treated as regular rational number literals.
+アドレスのチェックサムをパスする16進数のリテラル、例えば ``0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF`` は ``address payable`` 型です。
+39から41文字で、チェックサムにパスしない16進数リテラルは警告を発し、通常の有理数リテラルとして扱われます。
 
 .. note::
     The mixed-case address checksum format is defined in `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_.
@@ -397,54 +331,35 @@ a warning and are treated as regular rational number literals.
 Rational and Integer Literals
 -----------------------------
 
-Integer literals are formed from a sequence of numbers in the range 0-9.
-They are interpreted as decimals. For example, ``69`` means sixty nine.
-Octal literals do not exist in Solidity and leading zeros are invalid.
+整数リテラルは0から9までの数字から形成され、10進数として認識されます。例えば、``69`` は六十九のことです。
 
-Decimal fraction literals are formed by a ``.`` with at least one number on
-one side.  Examples include ``1.``, ``.1`` and ``1.3``.
+10進数の小数リテラルは ``.`` を使って形成され、少なくとも1文字片側に数字があります。例えば、``1.``、``.1``、``1.3`` です。
 
-Scientific notation is also supported, where the base can have fractions, while the exponent cannot.
-Examples include ``2e10``, ``-2e10``, ``2e-10``, ``2.5e1``.
+指数表記もサポートされています。基数は小数を取れますが、指数はできません。
+例えば、``2e10``、``-2e10``、``2e-10``、``2.5e1``です。
 
-Underscores can be used to separate the digits of a numeric literal to aid readability.
-For example, decimal ``123_000``, hexadecimal ``0x2eff_abde``, scientific decimal notation ``1_2e345_678`` are all valid.
-Underscores are only allowed between two digits and only one consecutive underscore is allowed.
-There is no additional semantic meaning added to a number literal containing underscores,
-the underscores are ignored.
+アンダースコアは数字リテラルの読みやすさを改善するために数字を分けるのに使用することができます。
+例えば、10進数 ``123_000``、16進数の ``0x2eff_abde``、10進数の指数表記 ``1_2e345_678`` は全て有効です。
+アンダースコアは2つの数字の間でのみ有効で、1つのアンダースコアしか使うことができません（2つ連続でアンダースコアを使うことはできません）。セマンティクス的な意味は何もありません。アンダースコアを含む数字リテラルでアンダースコアは無視されます。
 
-Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
-using them together with a non-literal expression or by explicit conversion).
-This means that computations do not overflow and divisions do not truncate
-in number literal expressions.
+数字リテラルは非リテラル型に（例えば非リテラル型と一緒に使うか、明示的な変換によって）変換されるまで任意の精度を持ちます。
+つまり数字リテラル表現では、計算してもオーバーフローしませんし、除算では切り捨ては起きません。
 
-For example, ``(2**800 + 1) - 2**800`` results in the constant ``1`` (of type ``uint8``)
-although intermediate results would not even fit the machine word size. Furthermore, ``.5 * 8`` results
-in the integer ``4`` (although non-integers were used in between).
+例えば、中間の計算結果は機械語のサイズに収まっていませんが、``(2**800 + 1) - 2**800`` の結果は（``uint8`` 型の）定数 ``1`` になります。さらに（非整数が使われていますが）``.5 * 8`` の結果は整数 ``4`` になります。
 
-Any operator that can be applied to integers can also be applied to number literal expressions as
-long as the operands are integers. If any of the two is fractional, bit operations are disallowed
-and exponentiation is disallowed if the exponent is fractional (because that might result in
-a non-rational number).
+計算対象が整数で有る限り、整数に使える演算子は全て数字リテラルで使用することができます。
+もし片方でも小数を含んでいた場合、ビット演算子は使うことはできません。また、指数部分に小数は使えません（結果が非有理数になる可能性があるため）。
 
 .. note::
-    Solidity has a number literal type for each rational number.
-    Integer literals and rational number literals belong to number literal types.
-    Moreover, all number literal expressions (i.e. the expressions that
-    contain only number literals and operators) belong to number literal
-    types.  So the number literal expressions ``1 + 2`` and ``2 + 1`` both
-    belong to the same number literal type for the rational number three.
+    Solidityは各有理数に対して数字リテラル型が使えます。整数リテラルと有理数リテラルは数字リテラル型に属します。
+    さらに、全ての数字リテラル表現（数字リテラルと演算子のみを含む表現）は数字リテラル型に属します。そのため、数字リテラル表現の ``1 + 2`` と ``2 + 1`` の結果である有理数の3は両方とも同じ数字リテラル型に属します。
 
 .. warning::
-    Division on integer literals used to truncate in Solidity prior to version 0.4.0, but it now converts into a rational number, i.e. ``5 / 2`` is not equal to ``2``, but to ``2.5``.
+    バージョン0.4.0以前では整数リテラルの除算の結果は切り捨てされていましたが、現在は有理数に変換されます。例えば、``5 / 2`` は ``2`` ではなく、``2.5`` です。
 
 .. note::
-    Number literal expressions are converted into a non-literal type as soon as they are used with non-literal
-    expressions. Disregarding types, the value of the expression assigned to ``b``
-    below evaluates to an integer. Because ``a`` is of type ``uint128``, the
-    expression ``2.5 + a`` has to have a proper type, though. Since there is no common type
-    for the type of ``2.5`` and ``uint128``, the Solidity compiler does not accept
-    this code.
+    数字リテラル表現は非数字リテラル表現が使われたタイミングで非数字リテラル型に変換されます。
+    型を無視し、下記の ``b`` に割り当てられている式の値は整数となります。``a`` は ``uint128`` 型であるため、``2.5 + a`` はある適切な型を持っていなければいけませんが、``2.5`` の型と ``uint128`` 型に共通した型が存在しないため、Solidityのコンパイラはこのコードを処理しません。
 
 ::
 
@@ -457,11 +372,11 @@ a non-rational number).
 String Literals and Types
 -------------------------
 
-String literals are written with either double or single-quotes (``"foo"`` or ``'bar'``).  They do not imply trailing zeroes as in C; ``"foo"`` represents three bytes, not four.  As with integer literals, their type can vary, but they are implicitly convertible to ``bytes1``, ..., ``bytes32``, if they fit, to ``bytes`` and to ``string``.
+文字列リテラルはダブルもしくはシングルクオテーション(``"foo"`` もしくは ``'bar'``)で記述されます。これらはC言語の様な後置ゼロにはなりません。``"foo"`` は3バイトを表します。4バイトではありません。整数リテラルは複数の型をとりうりますが、``bytes1`` ... ``bytes32`` に暗黙的に変換可能です。もしサイズが合えば ``bytes`` と ``string`` にも変換可能です。
 
-For example, with ``bytes32 samevar = "stringliteral"`` the string literal is interpreted in its raw byte form when assigned to a ``bytes32`` type.
+例えば、``bytes32 samevar = "stringliteral"`` では、文字列リテラルは ``bytes32`` 型に割り当てられる時に、その生のバイト構造で解釈されます。
 
-String literals support the following escape characters:
+文字列リテラルは以下のエスケープキャラクターをサポートします:
 
  - ``\<newline>`` (escapes an actual newline)
  - ``\\`` (backslash)
@@ -476,29 +391,26 @@ String literals support the following escape characters:
  - ``\xNN`` (hex escape, see below)
  - ``\uNNNN`` (unicode escape, see below)
 
-``\xNN`` takes a hex value and inserts the appropriate byte, while ``\uNNNN`` takes a Unicode codepoint and inserts an UTF-8 sequence.
+``\xNN`` は16進数をとり、適切なバイトを挿入します。一方で、``\uNNNN`` はUnicodeのコードポイントをとり、UTF-8のシーケンスを挿入します。
 
-The string in the following example has a length of ten bytes.
-It starts with a newline byte, followed by a double quote, a single
-quote a backslash character and then (without separator) the
-character sequence ``abcdef``.
+以下の例の中の文字列は10バイトの長さを持ちます。
+新しい行で始まり、ダブルクオート、シングルクオート、バックスラッシュと続き、（区切りなく）``abcdef`` という文字が続きます。
 
 ::
 
     "\n\"\'\\abc\
     def"
 
-Any unicode line terminator which is not a newline (i.e. LF, VF, FF, CR, NEL, LS, PS) is considered to
-terminate the string literal. Newline only terminates the string literal if it is not preceded by a ``\``.
+改行コード(例えばLF、VF、FF、CR、NEL、LS、PS)でないどんなユニコードのラインターミネータは文字列リテラルを終了させると考えられています。もし ``\`` で処理されていないのであれば、改行は文字列リテラルを終了させるだけです。
 
 .. index:: literal, bytes
 
 Hexadecimal Literals
 --------------------
 
-Hexadecimal literals are prefixed with the keyword ``hex`` and are enclosed in double or single-quotes (``hex"001122FF"``). Their content must be a hexadecimal string and their value will be the binary representation of those values.
+16進数リテラルは ``hex`` という接頭辞をつけて、ダブルかシングルクオートで囲まれます（``hex"001122FF"``）。中身は16進数の文字列でなければなりません。そしてその値は2進数表現になります。
 
-Hexadecimal literals behave like :ref:`string literals <string_literals>` and have the same convertibility restrictions.
+16進数リテラルは :ref:`string literals <string_literals>` の様に振る舞い、変換に関して同じ制限を持っています。
 
 .. index:: enum
 
@@ -507,13 +419,10 @@ Hexadecimal literals behave like :ref:`string literals <string_literals>` and ha
 Enums
 -----
 
-Enums are one way to create a user-defined type in Solidity. They are explicitly convertible
-to and from all integer types but implicit conversion is not allowed.  The explicit conversion
-from integer checks at runtime that the value lies inside the range of the enum and causes a failing assert otherwise.
-Enums needs at least one member.
+列挙型はSolidityでのユーザー定義型の1つです。明示的に整数型から、もしくは整数型に変換可能ですが、暗黙的には変換できません。整数型からの明示的な変換では実行時にその値が列挙型の範囲内に収まっているかチェックし、範囲外である場合にはフェイルアサーションを起こします。
+列挙型は少なくとも1つの要素が必要です。
 
-The data representation is the same as for enums in C: The options are represented by
-subsequent unsigned integer values starting from ``0``.
+そのデータ表現はC言語の列挙型と同じです。オプションは ``0`` で始まる符号なし整数値によって表されます。
 
 
 ::
@@ -550,72 +459,45 @@ subsequent unsigned integer values starting from ``0``.
 Function Types
 --------------
 
-Function types are the types of functions. Variables of function type
-can be assigned from functions and function parameters of function type
-can be used to pass functions to and return functions from function calls.
-Function types come in two flavours - *internal* and *external* functions:
+ファンクション型はファンクションの型です。
+ファンクション型の変数はファンクションから割り当てられ、ファンクションコールにファンクションを渡す、またはファンクションコールからファンクションをリターンするためにファンクション型のパラメータは使用されます。
+ファンクション型は2種類あります - *internal* と *external* ファンクションです:
 
-Internal functions can only be called inside the current contract (more specifically,
-inside the current code unit, which also includes internal library functions
-and inherited functions) because they cannot be executed outside of the
-context of the current contract. Calling an internal function is realized
-by jumping to its entry label, just like when calling a function of the current
-contract internally.
+現在のコントラクトの外からは実行することができないため、internalファンクションは現在のコントラクト内でのみ呼び出すことができます（具体的には、internalのライブラリファンクションや継承したファンクションも含むコード内）。internalのファンクションは、現在のコントラクト内部でファンクションを呼び出す様に、そのファンクションのエントリポイントにジャンプすることによって実行されます。
 
-External functions consist of an address and a function signature and they can
-be passed via and returned from external function calls.
+Externalファンクションはアドレスとファンクションの署名によって構成され、外部からのファンクションコールを通し、返ってきます。
 
-Function types are notated as follows::
+ファンクションの種類は下記の様に表されます::
 
     function (<parameter types>) {internal|external} [pure|view|payable] [returns (<return types>)]
 
-In contrast to the parameter types, the return types cannot be empty - if the
-function type should not return anything, the whole ``returns (<return types>)``
-part has to be omitted.
+parameter typesと異なり、return typesは空ではいけません。もしファンクションが何も返さないのであれば、``returns (<return types>)`` 部分は除外しなければなりません。
 
-By default, function types are internal, so the ``internal`` keyword can be
-omitted. Note that this only applies to function types. Visibility has
-to be specified explicitly for functions defined in contracts, they
-do not have a default.
+デフォルトでは、ファンクション型はinternalで、``internal`` というキーワードは削除できます。これはファンクション型でのみ可能です。コントラクト内で定義されたファンクションはデフォルトで定義されておらず、可視性を明示しなければいけません。
 
 Conversions:
 
-A value of external function type can be explicitly converted to ``address``
-resulting in the address of the contract of the function.
+externalファンクション型の値は明示的に ``address`` に変換可能で、そのファンクションのコントラクトのアドレスになります。
 
-A function type ``A`` is implicitly convertible to a function type ``B`` if and only if
-their parameter types are identical, their return types are identical,
-their internal/external property is identical and the state mutability of ``A``
-is not more restrictive than the state mutability of ``B``. In particular:
+もしパラメータの型、返り値の型が同じであり、internal/externalのプロパティも同じ、さらに ``A`` のミュータビリティの制限が ``B`` に比べて厳しくない場合あるファンクション型 ``A`` は 別のファンクション型 ``B`` に暗黙的に変換可能です。特に:
 
- - ``pure`` functions can be converted to ``view`` and ``non-payable`` functions
- - ``view`` functions can be converted to ``non-payable`` functions
- - ``payable`` functions can be converted to ``non-payable`` functions
+ - ``pure`` ファンクションは ``view`` と ``non-payable`` ファンクションに変換可能
+ - ``view`` ファンクションは ``non-payable`` ファンクションに変換可能
+ - ``payable`` は ``non-payable`` ファンクションに変換可能
 
-No other conversions between function types are possible.
+他のファンクション型間の変換はできません。
 
-The rule about ``payable`` and ``non-payable`` might be a little
-confusing, but in essence, if a function is ``payable``, this means that it
-also accepts a payment of zero Ether, so it also is ``non-payable``.
-On the other hand, a ``non-payable`` function will reject Ether sent to it,
-so ``non-payable`` functions cannot be converted to ``payable`` functions.
+``payable`` と ``non-payable`` 間のルールは少し分かりづらいかもしれません。しかし、大事なことは、``payable`` ファンクションは0 etherの支払いを容認し、同様に ``non-payable`` ファンクションもそれを容認することです。一方で、``non-payable`` はEtherの受け取りを拒否するため、``non-payable`` ファンクションは ``payable`` ファンクションに変換できません。
 
-If a function type variable is not initialised, calling it results
-in a failed assertion. The same happens if you call a function after using ``delete``
-on it.
+ファンクション型の変数が初期化されていない場合、その変数を呼び出してもフェイルアサーションとなります。``delete`` をその変数に対して使った後に呼び出した場合も同じことが起きます。
 
-If external function types are used outside of the context of Solidity,
-they are treated as the ``function`` type, which encodes the address
-followed by the function identifier together in a single ``bytes24`` type.
+もしexternalのファンクション型がSolidityのコンテキスト外で使用された場合、ファンクション型として扱われます。そして、それはそのファンクションの識別子とその後のアドレスを一緒に1つの ``bytes24`` 型にエンコードします。
 
-Note that public functions of the current contract can be used both as an
-internal and as an external function. To use ``f`` as an internal function,
-just use ``f``, if you want to use its external form, use ``this.f``.
+現在のコントラクトのpublicのファンクションはinternalファンクションとしてもexternalファンクションとしても使用可能です。``f`` をinternalファンクションとして使用したい場合には、単純に ``f`` を、もしexternalファンクションとして使用した場合には、``this.f`` を使用してください。
 
 Members:
 
-Public (or external) functions also have a special member called ``selector``,
-which returns the :ref:`ABI function selector <abi_function_selector>`::
+Public（もしくはexternal）のファンクションは ``selector`` という特別なメンバも持っています。これは :ref:`ABI function selector <abi_function_selector>` を返します::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -625,7 +507,7 @@ which returns the :ref:`ABI function selector <abi_function_selector>`::
       }
     }
 
-Example that shows how to use internal function types::
+internalのファンクション型の使用例です::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -676,7 +558,7 @@ Example that shows how to use internal function types::
       }
     }
 
-Another example that uses external function types::
+externalファンクション型の別の使用例です::
 
     pragma solidity >=0.4.22 <0.6.0;
 
@@ -713,4 +595,4 @@ Another example that uses external function types::
     }
 
 .. note::
-    Lambda or inline functions are planned but not yet supported.
+    ラムダ式もしくはインラインファンクションの導入が予定されていますが、まだサポートされていません。

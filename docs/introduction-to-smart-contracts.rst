@@ -8,9 +8,7 @@ Introduction to Smart Contracts
 A Simple Smart Contract
 ***********************
 
-Let us begin with a basic example that sets the value of a variable and exposes
-it for other contracts to access. It is fine if you do not understand
-everything right now, we will go into more detail later.
+まずは値をセットし、他のコントラクトから呼び出せるような基本的なコントラクトの例から始めましょう。今は全てを理解する必要はありません。後ほど細かく説明します。
 
 Storage
 =======
@@ -31,80 +29,47 @@ Storage
         }
     }
 
-The first line simply tells that the source code is written for
-Solidity version 0.4.0 or anything newer that does not break functionality
-(up to, but not including, version 0.6.0). This is to ensure that the
-contract is not compilable with a new (breaking) compiler version, where it could behave differently.
-So-called pragmas are common instructions for compilers about how to treat the
-source code (e.g. `pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_).
+最初の行はSolidityバージョン0.4.0もしくはそれより新しいものであればこのソースコードが機能を損なわず動作するバージョンで書かれていることを示しています（0.6.0未満のバージョンまで）。これはこのコントラクトが新しい(互換性のない)バージョンのコンパイラでは異なる挙動をする恐れがあるため、コンパイルできないことを明らかにするためです。Pragmaはソースコードをどの様に取り扱うかコンパイラに指示するための一般的な命令です（例：`pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_）。
 
-A contract in the sense of Solidity is a collection of code (its *functions*) and
-data (its *state*) that resides at a specific address on the Ethereum
-blockchain. The line ``uint storedData;`` declares a state variable called ``storedData`` of
-type ``uint`` (*u*\nsigned *int*\eger of *256* bits). You can think of it as a single slot
-in a database that can be queried and altered by calling functions of the
-code that manages the database. In the case of Ethereum, this is always the owning
-contract. And in this case, the functions ``set`` and ``get`` can be used to modify
-or retrieve the value of the variable.
-
-To access a state variable, you do not need the prefix ``this.`` as is common in
-other languages.
-
-This contract does not do much yet apart from (due to the infrastructure
-built by Ethereum) allowing anyone to store a single number that is accessible by
-anyone in the world without a (feasible) way to prevent you from publishing
-this number. Of course, anyone could just call ``set`` again with a different value
-and overwrite your number, but the number will still be stored in the history
-of the blockchain. Later, we will see how you can impose access restrictions
-so that only you can alter the number.
+Solidity上でのコントラクトというのはコード（その *function* たち）とEthereumブロックチェーン上の特定のアドレスに存在するデータ（その *状態* ）の集合です。 ``uint storedData;`` の行では ``uint`` （256bitの符号無し整数）型の ``storedData`` という状態変数を宣言しています。
+データベース上で検索可能かつある機能を呼び出すことによって変更可能なデータの様なものだと思ってください。Ethereumの場合、コントラクトが常にそのデータを所有しています。今回の場合、 ``set`` 関数と ``get`` 関数は変数の値を修正もしくは取得する場合に使用することができます。
+状態変数にアクセスするのに他の言語でよく使われる ``this.`` は必要ありません。
+このコントラクトでは世界中誰でも数値を格納することが可能ということ以外には機能はありません。そしてあなたにはそれを防ぐ手段はありません。誰でも ``set`` を呼び出して好きな数字を上書きができます。しかし一度セットされた値はブロックチェーン上に残ります。あなただけが数値を変更できる様な制限を加える方法は後ほど説明します。
 
 .. note::
-    All identifiers (contract names, function names and variable names) are restricted to
-    the ASCII character set. It is possible to store UTF-8 encoded data in string variables.
+    全ての識別子（コントラクト名、function名、変数名）はASCII文字に制限されています。UTF-8コードデータを文字列型に格納することは可能です。
 
 .. warning::
-    Be careful with using Unicode text, as similar looking (or even identical) characters can
-    have different code points and as such will be encoded as a different byte array.
+    似た様な見た目のUnicodeテキストを使う際には注意してください。異なったバイト配列としてエンコードされてしまいます。
 
 .. index:: ! subcurrency
 
 Subcurrency Example
 ===================
 
-The following contract will implement the simplest form of a
-cryptocurrency. It is possible to generate coins out of thin air, but
-only the person that created the contract will be able to do that (it is easy
-to implement a different issuance scheme).
-Furthermore, anyone can send coins to each other without a need for
-registering with username and password — all you need is an Ethereum keypair.
-
+以下のコントラクトは最も単純な仮想通貨を扱います。コインを0から生成することは可能ですが、コントラクトの作成者だけが実行可能です（異なる発行スキームの実行は簡単です）。さらにユーザー名やパスワードの登録無しに誰でもお互いにコインを送ることができます。必要なのはEthereumのキーペアだけです。
 
 ::
 
     pragma solidity ^0.5.0;
-
     contract Coin {
-        // The keyword "public" makes those variables
-        // easily readable from outside.
+        // "public" というキーワードは値を
+        // 外部から読み込み可能にさせます。
         address public minter;
         mapping (address => uint) public balances;
-
-        // Events allow light clients to react to
-        // changes efficiently.
+        // イベントは軽量クライアントが変更に対する反応を
+        // 効率的に行うことを可能にします。
         event Sent(address from, address to, uint amount);
-
-        // This is the constructor whose code is
-        // run only when the contract is created.
+        // これはコントラクトが作られた時にだけ動作する
+        // コンストラクタです。
         constructor() public {
             minter = msg.sender;
         }
-
         function mint(address receiver, uint amount) public {
             require(msg.sender == minter);
             require(amount < 1e60);
             balances[receiver] += amount;
         }
-
         function send(address receiver, uint amount) public {
             require(amount <= balances[msg.sender], "Insufficient balance.");
             balances[msg.sender] -= amount;
@@ -113,60 +78,33 @@ registering with username and password — all you need is an Ethereum keypair.
         }
     }
 
-This contract introduces some new concepts, let us go through them one by one.
+このコントラクトはいくつかの新しい機能が備わっていますので、一つずつ見ていきましょう。
 
-The line ``address public minter;`` declares a state variable of type address
-that is publicly accessible. The ``address`` type is a 160-bit value
-that does not allow any arithmetic operations. It is suitable for
-storing addresses of contracts or of keypairs belonging to external
-persons. The keyword ``public`` automatically generates a function that
-allows you to access the current value of the state variable
-from outside of the contract.
-Without this keyword, other contracts have no way to access the variable.
-The code of the function generated by the compiler is roughly equivalent
-to the following (ignore ``external`` and ``view`` for now)::
+``address public minter;`` と書いてある行はパブリックにアクセス可能なアドレス型の変数を宣言しています。``address`` 型は160ビットの算術演算不可の値です。これはコントラクトのアドレスか外部の人間が持っているキーペアを保存するのに適しています。``public`` というキーワードは自動的にコントラクトの外側から現在の状態変数の中身にアクセスできる様にする機能を生成します（つまりgetterを生成します）。
+このキーワードなしでは他のコントラクトからはこの変数にアクセスできません。
+コンパイラで生成されたこの機能は下記のコードとほぼイコールです（今は ``external`` と ``view`` は無視してください）::
 
     function minter() external view returns (address) { return minter; }
 
-Of course, adding a function exactly like that will not work
-because we would have a
-function and a state variable with the same name, but hopefully, you
-get the idea - the compiler figures that out for you.
+
+もちろんファンクション名と状態変数が同じ名前のため、この様なファンクションを追加しても動きませんが、コンパイラがこの様に解釈するということを理解して頂けると幸いです。
 
 .. index:: mapping
 
-The next line, ``mapping (address => uint) public balances;`` also
-creates a public state variable, but it is a more complex datatype.
-The type maps addresses to unsigned integers.
-Mappings can be seen as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_ which are
-virtually initialized such that every possible key exists from the start and is mapped to a
-value whose byte-representation is all zeros. This analogy does not go
-too far, though, as it is neither possible to obtain a list of all keys of
-a mapping, nor a list of all values. So either keep in mind (or
-better, keep a list or use a more advanced data type) what you
-added to the mapping or use it in a context where this is not needed.
-The :ref:`getter function<getter-functions>` created by the ``public`` keyword
-is a bit more complex in this case. It roughly looks like the
-following::
+次の行の ``mapping (address => uint) public balances;`` は同様にパブリックな状態変数を生成しますが、もう少し複雑なデータタイプです。
+これはaddressに符号無しのinteger型を割り当てます。Mappingは `hash table <https://en.wikipedia.org/wiki/Hash_table>`_ として扱うことができます。そしてそれは事実上初期化され、そのため全てのpossible keyは最初から存在し、バイト表現で0となる値に割り当てられます。しかしhash tableと全く同じではありません。mappingではキーや値のリストを取得することはできません。そのため、何をmappingに追加したか覚えておいてください（もしくはリストを保存するか他の高度なデータタイプを使ってください）。もしくはそんなことをしなくて済む様な場合において使用して下さい。
+
+今回の場合 ``public`` で作られた :ref:`getter function<getter-functions>` はもう少し複雑でおおまかには下記の様になります::
 
     function balances(address _account) external view returns (uint) {
         return balances[_account];
     }
 
-As you see, you can use this function to easily query the balance of a
-single account.
+見ての通り、あるアカウントの残高をクエリするのにこのfunctionが利用できます。
 
 .. index:: event
 
-The line ``event Sent(address from, address to, uint amount);`` declares
-a so-called "event" which is emitted in the last line of the function
-``send``. User interfaces (as well as server applications of course) can
-listen for those events being emitted on the blockchain without much
-cost. As soon as it is emitted, the listener will also receive the
-arguments ``from``, ``to`` and ``amount``, which makes it easy to track
-transactions. In order to listen for this event, you would use the following
-JavaScript code (which assumes that ``Coin`` is a contract object created via
-web3.js or a similar module)::
+``event Sent(address from, address to, uint amount);`` の行は ``send`` ファンクションの最終行でemitされています、いわゆる"event"を宣言しています。ユーザーインターフェース（ともちろんサーバーサイドのアプリケーション）は多くのコストを支払わずにブロックチェーン上でemitされたそれらのイベントをリッスンすることができます。emitされるとすぐにlistenerは ``from`` 、``to`` そして ``amount`` を引数として受け取り、トランザクションをトラックするのに役立ちます。このイベントをリッスンするために下記のJavaScriptコードを使います（``Coin`` はweb3.jsもしくは似た様なモジュールを用いて作られたコントラクトオブジェクトです。）::
 
     Coin.Sent().watch({}, '', function(error, result) {
         if (!error) {
@@ -179,39 +117,20 @@ web3.js or a similar module)::
         }
     })
 
-Note how the automatically generated function ``balances`` is called from
-the user interface.
+``balances`` ファンクションがユーザーインターフェースから自動的にどの様に呼ばれるか確認してください。
 
 .. index:: coin
 
-The constructor is a special function which is run during creation of the contract and
-cannot be called afterwards. It permanently stores the address of the person creating the
-contract: ``msg`` (together with ``tx`` and ``block``) is a special global variable that
-contains some properties which allow access to the blockchain. ``msg.sender`` is
-always the address where the current (external) function call came from.
+コンストラクタはコントラクトが作成される時に1回だけ呼ばれる特別なファンクションで、その後コンストラクタを呼ぶことはできません。このコンストラクタではコントラクトを作った人のアドレスを永久的に保存しています。``msg`` （``tx`` と ``block`` も同様に）は特別なグローバル変数で、ブロックチェーンにアクセスできるいくつかのプロパティを含んでいます。``msg.sender`` は外部からファンクションが呼んだアカウントのアドレスを常に返します。
 
-Finally, the functions that will actually end up with the contract and can be called
-by users and contracts alike are ``mint`` and ``send``.
-If ``mint`` is called by anyone except the account that created the contract,
-nothing will happen. This is ensured by the special function ``require`` which
-causes all changes to be reverted if its argument evaluates to false.
-The second call to ``require`` ensures that there will not be too many coins,
-which could cause overflow errors later.
+コントラクトの最後にあり、ユーザもしくはコントラクトによって呼び出される ``mint`` と ``send`` です。
+もし ``mint`` がコントラクトを作ったアカウント以外の誰かに呼ばれても何も起きません。これは特別なファンクション ``require`` によって保証されています。これは引数がfalseだった場合に全ての変更を元に戻す機能を持っています。
+2つ目の ``require`` は後にオーバーフローを起こす様な大量のコインがないことを保証しています。
 
-On the other hand, ``send`` can be used by anyone (who already
-has some of these coins) to send coins to anyone else. If you do not have
-enough coins to send, the ``require`` call will fail and also provide the
-user with an appropriate error message string.
+一方で、``send`` は誰にでも（コインを持っていれば）コインを誰かに送ることができます。送るのに十分なコインを持っていなかった場合、``require`` はプロセスを中止し、適切なエラーメッセージの文字列を返します。
 
 .. note::
-    If you use
-    this contract to send coins to an address, you will not see anything when you
-    look at that address on a blockchain explorer, because the fact that you sent
-    coins and the changed balances are only stored in the data storage of this
-    particular coin contract. By the use of events it is relatively easy to create
-    a "blockchain explorer" that tracks transactions and balances of your new coin,
-    but you have to inspect the coin contract address and not the addresses of the
-    coin owners.
+    もしあなたがコインをどこかに送るためにこのコントラクトを使うのであれば、ブロックチェーンエクスプローラ上のアドレスを見ても何も詳細を見ることができません。これはあなたがコインを送り、残高が変わったという事実はこの特定のコインコントラクトのデータストレージにのみ保存されるためです。イベントを使うことで比較的簡単にトランザクションと残高ををトラックする"ブロックチェーンエクスプローラ"を作成することが可能ですが、コインオーナーではなく、コントラクト作成者のあなたがコインコントラクトを検査する必要があります。
 
 .. _blockchain-basics:
 
@@ -219,69 +138,38 @@ user with an appropriate error message string.
 Blockchain Basics
 *****************
 
-Blockchains as a concept are not too hard to understand for programmers. The reason is that
-most of the complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.)
-are just there to provide a certain set of features and promises for the platform. Once you accept these
-features as given, you do not have to worry about the underlying technology - or do you have
-to know how Amazon's AWS works internally in order to use it?
+ブロックチェーンのコンセプトを理解することはプログラマーにとってさほど難しいことではありません。その理由はほとんどの複雑なこと（mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.）はただプラットフォームに機能と約束を与えているだけだからです。これらの機能をそういうものとして受け入れれば、内部のテクノロジーについて心配する必要はありません。（AmazonのAWSを使うのに内部でどの様に動作しているか知る必要ありますか？）
 
 .. index:: transaction
 
 Transactions
 ============
 
-A blockchain is a globally shared, transactional database.
-This means that everyone can read entries in the database just by participating in the network.
-If you want to change something in the database, you have to create a so-called transaction
-which has to be accepted by all others.
-The word transaction implies that the change you want to make (assume you want to change
-two values at the same time) is either not done at all or completely applied. Furthermore,
-while your transaction is being applied to the database, no other transaction can alter it.
+ブロックチェーンはグローバルにシェアされたトランザクションのデータベースです。
+つまり誰でもネットワークに接続するだけでこのデータベース上の項目を読み込むことができます。もしデータベース上の何かを変えたいときはいわゆるトランザクションを発行し、他の全員の同意を得る必要があります。トランザクションという言葉はあなたがしたい変更が（例えばあなたが2つの値を同時に変えたいとすると）その両方ともが変わらないか、両方とも変更されることを意味しています。さらに、あなたのトランザクションがデータベースに登録されている最中に他のトランザクションはそのトランザクションを変更することはできません。
 
-As an example, imagine a table that lists the balances of all accounts in an
-electronic currency. If a transfer from one account to another is requested,
-the transactional nature of the database ensures that if the amount is
-subtracted from one account, it is always added to the other account. If due
-to whatever reason, adding the amount to the target account is not possible,
-the source account is also not modified.
+例として、ある電子通貨の残高リストのテーブルを想像してください。もしあるアカウントから別のアカウントへの送金がリクエストされた際に、データベースのトランザクションの基本として、もしあるアカウントの残高から送金分が引かれたら、別のアカウントの残高には送金分が常に追加されなければいけません。何かの理由でその別のアカウント残高に送金分が追加されないのであれば、送金元のアカウントの残高も元のままでなければいけません。
 
-Furthermore, a transaction is always cryptographically signed by the sender (creator).
-This makes it straightforward to guard access to specific modifications of the
-database. In the example of the electronic currency, a simple check ensures that
-only the person holding the keys to the account can transfer money from it.
+更にトランザクションは常に送信者（作成者）によって暗号学的に署名されます。これによりデータベースのある種の改ざんを防ぐことができます。電子通貨の例で言えば、単純なチェックでキーを持っている人だけがお金を送ることができます。
 
 .. index:: ! block
 
 Blocks
 ======
 
-One major obstacle to overcome is what (in Bitcoin terms) is called a "double-spend attack":
-What happens if two transactions exist in the network that both want to empty an account?
-Only one of the transactions can be valid, typically the one that is accepted first.
-The problem is that "first" is not an objective term in a peer-to-peer network.
+解決しなければならない大きな問題の一つとして（Bitcoinの用語で）"二重支払い攻撃"があります。もしあるアカウントを空にする様な2つのトランザクションが同時に存在していたらどうなるでしょうか。基本的には最初に承認された最初のトランザクションのみが有効です。しかし問題は"最初の"というのはpeer-to-peerネットワークにおいて客観的ではないのです。
 
-The abstract answer to this is that you do not have to care. A globally accepted order of the transactions
-will be selected for you, solving the conflict. The transactions will be bundled into what is called a "block"
-and then they will be executed and distributed among all participating nodes.
-If two transactions contradict each other, the one that ends up being second will
-be rejected and not become part of the block.
+理論的にはこの問題は気にする必要がありません。グローバルに承認された順番のトランザクションが選ばれ、このコンフリクトが解消します。いくつかのトランザクションはブロックと言われるもので一まとめにされ、全ての参加しているノードの間で処理されます。
+もし2つの矛盾したトランザクションがあった場合には、2つ目のトランザクションはリジェクトされブロックの一部として組み込まれることはありません。
 
-These blocks form a linear sequence in time and that is where the word "blockchain"
-derives from. Blocks are added to the chain in rather regular intervals - for
-Ethereum this is roughly every 17 seconds.
+これらのブロックは一つのシーケンスを作るためブロックチェーンという名前がつけられました。ブロックは定期的に追加され、Ethereumでは約17秒ごとに1つ追加されます。
 
-As part of the "order selection mechanism" (which is called "mining") it may happen that
-blocks are reverted from time to time, but only at the "tip" of the chain. The more
-blocks are added on top of a particular block, the less likely this block will be reverted. So it might be that your transactions
-are reverted and even removed from the blockchain, but the longer you wait, the less
-likely it will be.
+順序選択メカニズム（マイニング）では、ブロックが取り消されることもあります。しかしこれはチェーンの先端でだけで起こり、ブロックが追加されるごとに取り消される可能性が減ります。そのため、あなたのトランザクションは取り消されるもしくは削除される可能性もありますが、長く待てば待つほどその可能性は低くなります。
 
 .. note::
-    Transactions are not guaranteed to be included in the next block or any specific future block,
-    since it is not up to the submitter of a transaction, but up to the miners to determine in which block the transaction is included.
+    トランザクションは次のブロックやある特定の未来のブロックに組み込まれる保証はありません。これはトランザクションを送った人にではなく、マイナーにどのトランザクションをブロックに組み込むかの権限があるためです。
 
-    If you want to schedule future calls of your contract, you can use
-    the `alarm clock <http://www.ethereum-alarm-clock.com/>`_ or a similar oracle service.
+    もしあなたのコントラクトである未来の時間でコールしたい場合には `alarm clock <http://www.ethereum-alarm-clock.com/>`_ もしくは似た様なoracleのサービスが使用可能です。
 
 .. _the-ethereum-virtual-machine:
 
@@ -294,228 +182,132 @@ The Ethereum Virtual Machine
 Overview
 ========
 
-The Ethereum Virtual Machine or EVM is the runtime environment
-for smart contracts in Ethereum. It is not only sandboxed but
-actually completely isolated, which means that code running
-inside the EVM has no access to network, filesystem or other processes.
-Smart contracts even have limited access to other smart contracts.
+Ethereum Virtual Machine（EVM）はEthereum上のスマートコントラクトのためのruntime環境です。サンドボックス化されているだけでなく、実際には完全に独立しています。つまりEVM内部のコードはネットワークやファイルシステム、または他のプロセスにアクセスしません。
+スマートコントラクトですら他のスマートコントラクトへのアクセスは制限されています。
 
 .. index:: ! account, address, storage, balance
 
 Accounts
 ========
 
-There are two kinds of accounts in Ethereum which share the same
-address space: **External accounts** that are controlled by
-public-private key pairs (i.e. humans) and **contract accounts** which are
-controlled by the code stored together with the account.
+Ethereumには2種類のアカウントがあります。両方とも同じアドレスを共有しています。**外部アカウント** は公開・秘密鍵のペアで管理されており、**コントラクトアカウント** はアカウントと一緒に保存されたコードによってコントロールされています。
 
-The address of an external account is determined from
-the public key while the address of a contract is
-determined at the time the contract is created
-(it is derived from the creator address and the number
-of transactions sent from that address, the so-called "nonce").
+外部アカウントのアドレスは公開鍵から決まる一方で、コントラクトのアドレスはコントラクトが作られた時に決まります。（コントラクトの作成者のアドレスと送られたトランザクションの数いわゆる"nonce"によって決まります。）
 
-Regardless of whether or not the account stores code, the two types are
-treated equally by the EVM.
+アカウントがコードを保存するかどうかに関わらず、EVMはこの2つのタイプを同様に扱います。
 
-Every account has a persistent key-value store mapping 256-bit words to 256-bit
-words called **storage**.
+全てのアカウントは **storage** という256ビットのワードにmappingされた256ビットのkey-valueを持っています。
 
-Furthermore, every account has a **balance** in
-Ether (in "Wei" to be exact, `1 ether` is `10**18 wei`) which can be modified by sending transactions that
-include Ether.
+さらに、全てのアカウントは **balance** をEther（"Wei"でいうと `1 ether` は `10**18 wei` です）で持っており、Etherを含んだトランザクションを送ることでこの値は変化します。
 
 .. index:: ! transaction
 
 Transactions
 ============
 
-A transaction is a message that is sent from one account to another
-account (which might be the same or empty, see below).
-It can include binary data (which is called "payload") and Ether.
+トランザクションはあるアカウントから別のアカウント（これは同じアカウントもしくは空のアカウントの場合もある。下記をご参照ください）へのメッセージです。これはバイナリーデータ（"payload"と呼ばれます）とEtherを含んでいます。
 
-If the target account contains code, that code is executed and
-the payload is provided as input data.
+送信先のアカウントがコードを含んでいた場合、そのコードは実行され、payloadはインプットデータとして提供されます。
 
-If the target account is not set (the transaction does not have
-a recipient or the recipient is set to ``null``), the transaction
-creates a **new contract**.
-As already mentioned, the address of that contract is not
-the zero address but an address derived from the sender and
-its number of transactions sent (the "nonce"). The payload
-of such a contract creation transaction is taken to be
-EVM bytecode and executed. The output data of this execution is
-permanently stored as the code of the contract.
-This means that in order to create a contract, you do not
-send the actual code of the contract, but in fact code that
-returns that code when executed.
+もし送信先のアカウントがセットされていなかったら（トランザクションが受信者情報を持っていないか、受信者が ``null`` だった場合には）、トランザクションは **新しいコントラクト** を生成します。先にも言及した通り、コントラクトのアドレスはゼロアドレスではなく送信者やトランザクションの数（nonce）によって決まります。
+この様なコントラクト作成のトランザクションのpayloadはEVM bytecodeに変換され、実行されます。この実行のアウトプットデータはコントラクトのコードとして永久的に保存されます。
+これが意味するのはコントラクトを生成するために実際のコントラクトのコードを送るのではなく、コードが実行された時にそのコードを返すコードを送っています。
 
 .. note::
-  While a contract is being created, its code is still empty.
-  Because of that, you should not call back into the
-  contract under construction until its constructor has
-  finished executing.
+    コントラクトが作られている間、そのコードはまだ空です。そのため、コンストラクタの実行が終了するまで、作成中のこのコントラクトを呼ぶべきではありません。
 
 .. index:: ! gas, ! gas price
 
 Gas
 ===
 
-Upon creation, each transaction is charged with a certain amount of **gas**,
-whose purpose is to limit the amount of work that is needed to execute
-the transaction and to pay for this execution at the same time. While the EVM executes the
-transaction, the gas is gradually depleted according to specific rules.
+トランザクションの生成にあたり、各トランザクションはある量の **gas** を要求します。この目的は必要な処理の量を制限し、この処理に対しての報酬を同時に行うためです。EVMがトランザクションを実行している間、gasはあるルールに則り、徐々に減っていきます。
 
-The **gas price** is a value set by the creator of the transaction, who
-has to pay ``gas_price * gas`` up front from the sending account.
-If some gas is left after the execution, it is refunded to the creator in the same way.
+**gas price** とはトランザクションの作成者によってセットされる値であり、この作成者は ``gas_price * gas`` を送信するアカウントから支払う必要があります。もしトランザクションの実行後にgasが残っていたら、作成者に返金されます。
 
-If the gas is used up at any point (i.e. it would be negative),
-an out-of-gas exception is triggered, which reverts all modifications
-made to the state in the current call frame.
+もしgasはある値より多く使われたら（負の値になりえます）、gas不足の例外が投げられ、現在の呼び出されたフレーム内での変更は全て取り消されます。
 
 .. index:: ! storage, ! memory, ! stack
 
 Storage, Memory and the Stack
 =============================
 
-The Ethereum Virtual Machine has three areas where it can store data-
-storage, memory and the stack, which are explained in the following
-paragraphs.
+Ethereum Virtual Machineはデータを保存できる場所が3つあります。それはstorage、memory、stackです。以下で説明していきます。
 
-Each account has a data area called **storage**, which is persistent between function calls
-and transactions.
-Storage is a key-value store that maps 256-bit words to 256-bit words.
-It is not possible to enumerate storage from within a contract and it is
-comparatively costly to read, and even more to modify storage.
-A contract can neither read nor write to any storage apart from its own.
+各アカウントは **storage** と呼ばれるデータエリアを持っており、functionの呼び出しからトランザクションまで残ります。
+Storageは256bitのワードを256bitのワードにマッピングしているkey-value storeです。
+コントラクト内ではstorageを列挙することはできません。また、storageの読み込みは比較的高価ですし、変更はさらに高価です。コントラクト外からstorageを読み書きすることはできません。
 
-The second data area is called **memory**, of which a contract obtains
-a freshly cleared instance for each message call. Memory is linear and can be
-addressed at byte level, but reads are limited to a width of 256 bits, while writes
-can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
-accessing (either reading or writing) a previously untouched memory word (i.e. any offset
-within a word). At the time of expansion, the cost in gas must be paid. Memory is more
-costly the larger it grows (it scales quadratically).
+2つ目のデータエリアは **memory** と呼ばれ、コントラクトは各メッセージの呼び出しに対してクリアされたインスタンスを取得します。memoryはバイトレベルのリニアアドレスですが、読み取りは256bitに制限され、書き込みは8bitもしくは256bitに制限されます。過去に変更がないmemoryの単語にアクセスした際にmemoryは256-bitの単語に拡張されます（例えば単語のオフセット）。拡張の際にはgasは支払われます。memoryは成長すればするほど高くなります。（二次関数的に大きくなります。）
 
-The EVM is not a register machine but a stack machine, so all
-computations are performed on a data area called the **stack**. It has a maximum size of
-1024 elements and contains words of 256 bits. Access to the stack is
-limited to the top end in the following way:
-It is possible to copy one of
-the topmost 16 elements to the top of the stack or swap the
-topmost element with one of the 16 elements below it.
-All other operations take the topmost two (or one, or more, depending on
-the operation) elements from the stack and push the result onto the stack.
-Of course it is possible to move stack elements to storage or memory
-in order to get deeper access to the stack,
-but it is not possible to just access arbitrary elements deeper in the stack
-without first removing the top of the stack.
+EVMは登録機械ではなくstack machineです。そのため全ての計算は **stack** と呼ばれるデータエリアで行われます。最大1024要素であり、256-bitの単語を含みます。stackへのアクセスは下記のようにトップエンドに制限されます。
+トップの16要素の内の1要素を一番トップの要素にコピーするか、一番トップの要素をその下の16要素の内の一つと交換することができます。他のオペレーションはstackからトップ二つの要素（オペレーションによるが一つか二つ以上の場合もある）を取り出し、stackに追加します。
+もちろん、stackの深い要素にアクセスするために、stackの要素をstorageやmemoryに移動するのは可能です。
+しかし、stackのトップを最初に削除しないでstackの深いところにある任意の要素にアクセスすることはできません。
 
 .. index:: ! instruction
 
 Instruction Set
 ===============
 
-The instruction set of the EVM is kept minimal in order to avoid
-incorrect or inconsistent implementations which could cause consensus problems.
-All instructions operate on the basic data type, 256-bit words or on slices of memory
-(or other byte arrays).
-The usual arithmetic, bit, logical and comparison operations are present.
-Conditional and unconditional jumps are possible. Furthermore,
-contracts can access relevant properties of the current block
-like its number and timestamp.
+EVMのインストラクションは間違った、もしくは矛盾したコンセンサス問題を起こしうる実行を避けるために最小限に保たれています。
+全てのインストラクションは基本的なデータタイプ、256-bitのワードもしくはmemory（もしくは他のバイト配列）の元で成り立っています。
 
-For a complete list, please see the :ref:`list of opcodes <opcodes>` as part of the inline
-assembly documentation.
+基本的な算術、ビット、論理、比較計算は使うことができます。条件付き分岐も可能です。更にコントラクトはブロック番号やタイムスタンプの様なプロパティにアクセスできます。
+
+完全な表は :ref:`list of opcodes <opcodes>` をインラインアセンブリのドキュメントの一部として参照下さい。
 
 .. index:: ! message call, function;call
 
 Message Calls
 =============
 
-Contracts can call other contracts or send Ether to non-contract
-accounts by the means of message calls. Message calls are similar
-to transactions, in that they have a source, a target, data payload,
-Ether, gas and return data. In fact, every transaction consists of
-a top-level message call which in turn can create further message calls.
+コントラクトは他のコントラクトを呼び出したり、message callを使ってEtherをコントラクトアカウントではないアカウントに送ることができます。message callはソース、送信先、データpayload、Ether、gas、返り値がある点でトランザクションに似ています。実際に全てのトランザクションは次のメッセージコールを作るトップレベルメッセージコールで構成されています。
 
-A contract can decide how much of its remaining **gas** should be sent
-with the inner message call and how much it wants to retain.
-If an out-of-gas exception happens in the inner call (or any
-other exception), this will be signaled by an error value put onto the stack.
-In this case, only the gas sent together with the call is used up.
-In Solidity, the calling contract causes a manual exception by default in
-such situations, so that exceptions "bubble up" the call stack.
+コントラクトは残っている **gas** をどれだけ送るか、そしてどのくらい残すかを内部のmessage callで決めることができます。内部呼び出しでgas不足の例外（もしくは他の例外）が発生したら、スタックに追加されることによりエラーが伝えられます。この場合、呼び出しと一緒に送られたgasのみが使用されます。その様な状況においてSolidityではデフォルトでコントラクトの呼び出しは手動の例外を起こし、例外は呼び出しのスタックから呼び出されます。
 
-As already said, the called contract (which can be the same as the caller)
-will receive a freshly cleared instance of memory and has access to the
-call payload - which will be provided in a separate area called the **calldata**.
-After it has finished execution, it can return data which will be stored at
-a location in the caller's memory preallocated by the caller.
-All such calls are fully synchronous.
+既に議論した様に、呼び出されたコントラクト（呼び出し元と同じになる場合もあります）はクリアされたmemoryのインスタンスを受け取り、**calldata** と呼ばれる別のエリアにあるコールpayloadにアクセスできます。
+このコントラクト実行後に、このコントラクトは呼び出し元が事前に割り振ったmemoryの場所に保存されていたデータを返します。
+これら全ての呼び出しは同時に起きます。
 
-Calls are **limited** to a depth of 1024, which means that for more complex
-operations, loops should be preferred over recursive calls. Furthermore,
-only 63/64th of the gas can be forwarded in a message call, which causes a
-depth limit of a little less than 1000 in practice.
+呼び出しは1024の深さに **制限** されます。これが意味するのはもっと複雑な運用においてループ処理は再帰的な呼び出しより好まれるということです。更に、63/64番目のgasだけはmessage callの中に送られるため、実際には深さは1000より少し小さくなります。
 
 .. index:: delegatecall, callcode, library
 
 Delegatecall / Callcode and Libraries
 =====================================
 
-There exists a special variant of a message call, named **delegatecall**
-which is identical to a message call apart from the fact that
-the code at the target address is executed in the context of the calling
-contract and ``msg.sender`` and ``msg.value`` do not change their values.
+**delegatecall** と呼ばれる特別なメッセージコールの変異型があります。これはメッセージコールと同じですが、送信先のアドレスのコードが呼び出し元のコントラクトのコンテキストで実行されるということと ``msg.sender`` と ``msg.value`` はその値を変えません。
 
-This means that a contract can dynamically load code from a different
-address at runtime. Storage, current address and balance still
-refer to the calling contract, only the code is taken from the called address.
+つまりコントラクトは動的に違うアドレスからコードをロードできるということです。Storage、つまり現在のアドレスとバランスはまだ呼び出し元のコントラクトを参照していますが、コードだけは呼び出されたアドレスから取得されています。
 
-This makes it possible to implement the "library" feature in Solidity:
-Reusable library code that can be applied to a contract's storage, e.g. in
-order to implement a complex data structure.
+これはSolidityにおいて"ライブラリ"機能を実装可能としています。例えば複雑なデータ構造を実行するために、再利用可能なライブラリのコードをコントラクトのstorageに保存できます。
 
 .. index:: log
 
 Logs
 ====
 
-It is possible to store data in a specially indexed data structure
-that maps all the way up to the block level. This feature called **logs**
-is used by Solidity in order to implement :ref:`events <events>`.
-Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the blockchain.
-Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
-possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole blockchain
-(so-called "light clients") can still find these logs.
+特別にインデックスされ、ブロックレベルで全てマッピングされたデータ構造の中にデータを保存することができます。この **logs** と呼ばれる機能は :ref:`events <events>` を実行するためにSolidityによって使用されています。コントラクトは作成後はログデータにアクセスできませんがブロックチェーンの外側から効率的にアクセスできます。いくつかのログデータは `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_ に保存されるため、このデータは効率的かつ暗号学的に安全な方法で検索できます。そのためブロックチェーン全てをダウンロードしていないネットワーク上のpeer（いわゆる"light clients"）でもこれらのログを見つけることがきます。
 
 .. index:: contract creation
 
 Create
 ======
 
-Contracts can even create other contracts using a special opcode (i.e.
-they do not simply call the zero address as a transaction would). The only difference between
-these **create calls** and normal message calls is that the payload data is
-executed and the result stored as code and the caller / creator
-receives the address of the new contract on the stack.
+コントラクトは特別なopcodeを使って他のコントラクトを作ることもできます（コントラクトはトランザクションがする様に単純にゼロアドレスをコールしません）。これら **create calls** と通常のmessage callの唯一の違いはpayloadデータが実行され、結果がコードとして保存され、呼び出し元と作成者がスタック上にある新しいコントラクトのアドレスを受け取ります。
 
 .. index:: selfdestruct, self-destruct, deactivate
 
 Deactivate and Self-destruct
 ============================
 
-The only way to remove code from the blockchain is when a contract at that address performs the ``selfdestruct`` operation. The remaining Ether stored at that address is sent to a designated target and then the storage and code is removed from the state. Removing the contract in theory sounds like a good idea, but it is potentially dangerous, as if someone sends Ether to removed contracts, the Ether is forever lost.
+ブロックチェーン からコードを削除する唯一の手段はコントラクトが ``selfdestruct`` を実行する時のみです。そのアドレスに残っているEtherが設定されていた送信先に送られた時にstorageとコードは削除されます。コントラクトの削除は理論上は良いアイデアの様に聞こえますが、潜在的に危険をはらんでいます。誰かが削除されたコントラクトにEtherを送り、そのEtherは永遠に失われる様なことが起こり得ます。
 
 .. note::
-    Even if a contract's code does not contain a call to ``selfdestruct``, it can still perform that operation using ``delegatecall`` or ``callcode``.
+    もしコントラクトのコードが ``selfdestruct`` を含んでいなかったとしても、``delegatecall`` もしくは ``callcode`` を使うことで実行可能です。
 
-If you want to deactivate your contracts, you should instead **disable** them by changing some internal state which causes all functions to revert. This makes it impossible to use the contract, as it returns Ether immediately.
+もしコントラクトを無効化したいのであれば、代わりに全てのfunctionを元に戻させる内部の状態（機能）を変更することでコントラクトを無効化すべきです。これによりコントラクトがEtherを返すとすぐにそのコントラクトを使えなくします。
 
 .. warning::
-    Even if a contract is removed by "selfdestruct", it is still part of the history of the blockchain and probably retained by most Ethereum nodes. So using "selfdestruct" is not the same as deleting data from a hard disk.
+    もしコントラクトを"selfdestruct"で削除したとしても、ブロックチェーン上の履歴には残りますし、きっとほぼ全てのノードにより保持されます。つまり"selfdestruct"はハードディスクからデータを消すのとは異なるということです。

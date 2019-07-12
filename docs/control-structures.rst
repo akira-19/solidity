@@ -10,17 +10,13 @@ Expressions and Control Structures
 Control Structures
 ===================
 
-Most of the control structures known from curly-braces languages are available in Solidity:
+Curly-braces languageで使われる様な制御構造のほとんどはSolidityでも使用可能です:
 
-There is: ``if``, ``else``, ``while``, ``do``, ``for``, ``break``, ``continue``, ``return``, with
-the usual semantics known from C or JavaScript.
+CやJavaScriptで知られる通常のセマンティクスに加えて、``if``、``else``、``while``、``do``、``for``、``break``、``continue``、``return`` があります。
 
-Parentheses can *not* be omitted for conditionals, but curly brances can be omitted
-around single-statement bodies.
+条件文では括弧は省略できませんが、単文の周りの波括弧は省略可能です。
 
-Note that there is no type conversion from non-boolean to boolean types as
-there is in C and JavaScript, so ``if (1) { ... }`` is *not* valid
-Solidity.
+CやJavaScriptの様に非ブーリアンをブーリアンに変換することはできません。つまり ``if (1) { ... }`` はSolidityでは有効ではありません。
 
 .. index:: ! function;call, function;internal, function;external
 
@@ -34,8 +30,7 @@ Function Calls
 Internal Function Calls
 -----------------------
 
-Functions of the current contract can be called directly ("internally"), also recursively, as seen in
-this nonsensical example::
+現在のコントラクトのファンクションは直接（"内部的に"）呼び出すことができます。また、下記の無意味な例の様に再帰的に呼び出すこともできます。::
 
     pragma solidity >=0.4.16 <0.6.0;
 
@@ -44,33 +39,24 @@ this nonsensical example::
         function f() internal pure returns (uint ret) { return g(7) + f(); }
     }
 
-These function calls are translated into simple jumps inside the EVM. This has
-the effect that the current memory is not cleared, i.e. passing memory references
-to internally-called functions is very efficient. Only functions of the same
-contract can be called internally.
+これらのファンクションの呼び出しはEVM内部で単純なジャンプとして変換されます。これには現在のメモリがクリアされないという影響があります。例えば、メモリの参照を内部で呼ばれたファンクションに渡すことは非常に効率的です。同じコントラクトのファンクションのみが内部的に呼び出すことが可能です。
 
-You should still avoid excessive recursion, as every internal function call
-uses up at least one stack slot and there are at most 1024 slots available.
+全てのinternalファンクションの呼び出しは少なくとも1つのスタックのスロットを使い、最大で1024個しかそのスロットは使えないので、余計な再帰処理は避けたほうが良いでしょう。
 
 .. _external-function-calls:
 
 External Function Calls
 -----------------------
 
-The expressions ``this.g(8);`` and ``c.g(2);`` (where ``c`` is a contract
-instance) are also valid function calls, but this time, the function
-will be called "externally", via a message call and not directly via jumps.
-Please note that function calls on ``this`` cannot be used in the constructor,
-as the actual contract has not been created yet.
+``this.g(8);`` と ``c.g(2);`` という表現（``c`` はコントラクトのインスタンス）も有効なファンクションの呼び出しですが、今回はファンクションは直接ジャンプするのではなく、メッセージコールを通じて "外部的に" 呼び出されます。
+実際のコントラクトは未だ作られていないため、``this`` でのファンクションの呼び出しはコンストラクタでは使用することができないということを覚えておいてください。
 
-Functions of other contracts have to be called externally. For an external call,
-all function arguments have to be copied to memory.
+他のコントラクトのファンクションは外部的に呼び出す必要があります。外部コールに関して、全てのファンクションの引数はmemoryにコピーされなければいけません。
 
 .. note::
-    A function call from one contract to another does not create its own transaction,
-    it is a message call as part of the overall transaction.
+    あるコントラクトから別のコントラクトへのファンクションコールはトランザクションを生成しません。トランザクション全体の一部としてのメッセージコールとなります。
 
-When calling functions of other contracts, you can specify the amount of Wei or gas sent with the call with the special options ``.value()`` and ``.gas()``, respectively. Any Wei you send to the contract is added to the total balance of the contract:
+他のコントラクトのファンクションを呼び出すときに、送るWeiの量やガスを特別なオプション ``.value()`` と ``.gas()`` を使ってそれぞれ決めることができます。送ったWeiは全てコントラクトのトータルバランスに追加されます。
 
 
 ::
@@ -87,38 +73,21 @@ When calling functions of other contracts, you can specify the amount of Wei or 
         function callFeed() public { feed.info.value(10).gas(800)(); }
     }
 
-You need to use the modifier ``payable`` with the ``info`` function because
-otherwise, the ``.value()`` option would not be available.
+``info`` ファンクションではmodifierの ``payable`` を使う必要があります。使わない場合、``.value()`` オプションが使えません。
 
 .. warning::
-  Be careful that ``feed.info.value(10).gas(800)`` only locally sets the ``value`` and amount of ``gas`` sent with the function call, and the parentheses at the end perform the actual call. So in this case, the function is not called.
+  ``feed.info.value(10).gas(800)`` は ``value`` とファンクションコールと一緒に送信される ``gas`` 量をローカルにセットするだけです。そして、最後の括弧が実際にファンクションをコールしています。そのため、このケースではファンクションは呼ばれていません。
 
-Function calls cause exceptions if the called contract does not exist (in the
-sense that the account does not contain code) or if the called contract itself
-throws an exception or goes out of gas.
+呼ばれたコントラクトが存在しない場合（アカウントがコードを含んでいない場合）、もしくは呼ばれたコントラクト自体がエラーを投げた場合、ガス不足の場合にはファンクションが呼ばれると例外が発生します。
 
 .. warning::
-    Any interaction with another contract imposes a potential danger, especially
-    if the source code of the contract is not known in advance. The
-    current contract hands over control to the called contract and that may potentially
-    do just about anything. Even if the called contract inherits from a known parent contract,
-    the inheriting contract is only required to have a correct interface. The
-    implementation of the contract, however, can be completely arbitrary and thus,
-    pose a danger. In addition, be prepared in case it calls into other contracts of
-    your system or even back into the calling contract before the first
-    call returns. This means
-    that the called contract can change state variables of the calling contract
-    via its functions. Write your functions in a way that, for example, calls to
-    external functions happen after any changes to state variables in your contract
-    so your contract is not vulnerable to a reentrancy exploit.
+    他のコントラクトのやり取りは、潜在的な危険をはらんでいます。特に、事前にそのコントラクトのソースコードを知らなかった場合には危険です。現在のコントラクトは呼ばれたコントラクトにコントロールを渡すと、潜在的には何でもできてしまうかもしれません。たとえ呼ばれたコントラクトが既知の親コントラクトを継承していたとしても、継承したコントラクトは正しいインターフェースを持てば良いだけです。しかし、そのコントラクトの実行は完全に任意ですので、危険をもたらします。また、そのコントラクトがあなたのシステムの他のコントラクトを呼び出したり、初めの呼び出しが帰って来る前に呼び出し元のコントラクトを呼び返す様な事態に備えてください。つまり呼ばれたコントラクトはファンクションを通じて呼び出し元のコントラクトの状態変数を変えることができます。例えば、コントラクト内の状態変数の変更の後に外部のファンクションを呼び出すような形でファンクションを作ってください。そうすれば、あなたのコントラクトはリエントラントの悪用に対して攻撃されにくくなるでしょう。
+
 
 Named Calls and Anonymous Function Parameters
 ---------------------------------------------
 
-Function call arguments can be given by name, in any order,
-if they are enclosed in ``{ }`` as can be seen in the following
-example. The argument list has to coincide by name with the list of
-parameters from the function declaration, but can be in arbitrary order.
+ファンクションよ呼ぶ際の引数は ``{ }`` で囲えば下記の例のように任意の順番で、名前を与えることができます。引数の名前はファンクションの宣言の際のパラメータと一致する必要がありますが、順番は任意です。
 
 ::
 
@@ -140,8 +109,8 @@ parameters from the function declaration, but can be in arbitrary order.
 Omitted Function Parameter Names
 --------------------------------
 
-The names of unused parameters (especially return parameters) can be omitted.
-Those parameters will still be present on the stack, but they are inaccessible.
+使われなかったパラメータの名前（特に返り値）は省略することができます。
+そのパラメータはスタック上に残りますが、アクセスできません。
 
 ::
 
@@ -162,9 +131,7 @@ Those parameters will still be present on the stack, but they are inaccessible.
 Creating Contracts via ``new``
 ==============================
 
-A contract can create other contracts using the ``new`` keyword. The full
-code of the contract being created has to be known when the creating contract
-is compiled so recursive creation-dependencies are not possible.
+コントラクトは ``new`` というキーワードを使って他のコントラクトを作ることができます。コントラクトを作るコントラクトがコンパイルされる時に、作られるコントラクトのフルコードは既知である必要があります。そうすれば、再帰的なcreation-dependenciesは起きません。
 
 ::
 
@@ -192,20 +159,12 @@ is compiled so recursive creation-dependencies are not possible.
         }
     }
 
-As seen in the example, it is possible to send Ether while creating
-an instance of ``D`` using the ``.value()`` option, but it is not possible
-to limit the amount of gas.
-If the creation fails (due to out-of-stack, not enough balance or other problems),
-an exception is thrown.
+上記の例の様に、``.value()`` オプションを使って、``D`` のインスタンスを作る時に、Etherを送ることができます。しかし、ガス量を制限することはできません。もし生成が失敗（スタックの制限、バランスの不足等で）したら、例外が投げられます。
 
 Order of Evaluation of Expressions
 ==================================
 
-The evaluation order of expressions is not specified (more formally, the order
-in which the children of one node in the expression tree are evaluated is not
-specified, but they are of course evaluated before the node itself). It is only
-guaranteed that statements are executed in order and short-circuiting for
-boolean expressions is done. See :ref:`order` for more information.
+式の評価の順番は決まっていません（正確には、式ツリーの中の1つのノードの子が評価される順番は決まっていませんが、そのノードが評価される前にはもちろん評価されています）。唯一保証されているのは、宣言は順番に実行され、boolean式に対する短絡評価もなされます。詳細は :ref:`order` を参照ください。
 
 .. index:: ! assignment
 
@@ -217,11 +176,10 @@ Assignment
 Destructuring Assignments and Returning Multiple Values
 -------------------------------------------------------
 
-Solidity internally allows tuple types, i.e. a list of objects of potentially different types whose number is a constant at compile-time. Those tuples can be used to return multiple values at the same time.
-These can then either be assigned to newly declared variables or to pre-existing variables (or LValues in general).
+Solidityは内部ではタプル型を許可しています。例えば、コンパイル時に定数を持つ潜在的に異なるタイプのオブジェクトのリストです。
+このタプルは同時に複数の値を返す時に使うことができます。これらは新しく宣言された変数や既に存在している変数（もしくは一般的に左辺値）に割り当てることができます。
 
-Tuples are not proper types in Solidity, they can only be used to form syntactic
-groupings of expressions.
+タプルはSolidityでは適切な型ではありません。式のシンタックスのグルーピングを作るためだけに使用することができます。
 
 ::
 
@@ -245,28 +203,22 @@ groupings of expressions.
         }
     }
 
-It is not possible to mix variable declarations and non-declaration assignments,
-i.e. the following is not valid: ``(x, uint y) = (1, 2);``
+変数の宣言と、宣言なしの値の割り当てを混ぜることはできません。例えば、次の式は無効です: ``(x, uint y) = (1, 2);``
 
 .. note::
-    Prior to version 0.5.0 it was possible to assign to tuples of smaller size, either
-    filling up on the left or on the right side (which ever was empty). This is
-    now disallowed, so both sides have to have the same number of components.
+    バージョン0.5.0以前では、片側が小さいサイズで、左辺か右辺（空の方）を補完する様なタプルを割り当てることができました。
+    現在これは禁止です。つまり両辺とも同じ数の要素を持っている必要があります。
 
 .. warning::
-    Be careful when assigning to multiple variables at the same time when
-    reference types are involved, because it could lead to unexpected
-    copying behaviour.
+    参照型を含む複数の変数を同時に割り当てる際には気をつけてください。予期しないコピーを行う可能性があります。
 
 Complications for Arrays and Structs
 ------------------------------------
 
-The semantics of assignments are a bit more complicated for non-value types like arrays and structs.
-Assigning *to* a state variable always creates an independent copy. On the other hand, assigning to a local variable creates an independent copy only for elementary types, i.e. static types that fit into 32 bytes. If structs or arrays (including ``bytes`` and ``string``) are assigned from a state variable to a local variable, the local variable holds a reference to the original state variable. A second assignment to the local variable does not modify the state but only changes the reference. Assignments to members (or elements) of the local variable *do* change the state.
+配列や構造体の様な非値型に対するアサインのセマンティクスは少し複雑です。
+状態変数に対する割り当ては常に独立したコピーを生成します。一方で、ローカル変数への割り当ては基本型（例えば32バイトに収まる静的タイプ）の時のみ独立したコピーを生成します。もし構造体か配列（``bytes`` や を含んでいる）が状態変数からローカル変数に割り当てられた場合、ローカル変数はオリジナルの状態変数への参照を持ちます。次にローカル変数へ割り当てても、ステートは変わらず、参照先のみ変更します。ローカル変数のメンバ（もしくは要素）への割り当てはステートを *変更します*。
 
-In the example below the call to ``g(x)`` has no effect on ``x`` because it creates
-an independent copy of the storage value in memory. However, ``h(x)`` successfully modifies ``x``
-because only a reference and not a copy is passed.
+下記の例で ``g(x)`` の呼び出しは ``x`` に何の影響も与えません。それはmemoryに独立したstorageの値を生成するからです。しかし、``h(x)`` は ``x`` を変更します。それはコピーではなく参照が渡されているからです。
 
 ::
 
@@ -296,23 +248,13 @@ because only a reference and not a copy is passed.
 Scoping and Declarations
 ========================
 
-A variable which is declared will have an initial default value whose byte-representation is all zeros.
-The "default values" of variables are the typical "zero-state" of whatever the type is. For example, the default value for a ``bool``
-is ``false``. The default value for the ``uint`` or ``int`` types is ``0``. For statically-sized arrays and ``bytes1`` to ``bytes32``, each individual
-element will be initialized to the default value corresponding to its type. Finally, for dynamically-sized arrays, ``bytes``
-and ``string``, the default value is an empty array or string.
+宣言された変数はバイト表現が全てゼロのデフォルト値を与えられます。変数の "デフォルト値" はどの型であれ一般的な "zero-state" です。例えば、``bool`` のデフォルト値は ``false`` です。``uint`` もしくは ``int`` 型のデフォルト値は ``0`` です。静的サイズの配列や ``bytes1`` から ``bytes32`` では、個々の要素がその型に応じたデフォルト値で初期化されます。最後に、動的サイズの配列や ``bytes``、``string`` に関してはデフォルト値は空の配列もしくは空の文字列です。
 
-Scoping in Solidity follows the widespread scoping rules of C99
-(and many other languages): Variables are visible from the point right after their declaration
-until the end of the smallest ``{ }``-block that contains the declaration. As an exception to this rule, variables declared in the
-initialization part of a for-loop are only visible until the end of the for-loop.
+Solidityでのスコープは広く使われているC99のルールに従います: 変数は宣言直後からその宣言を含む最小の ``{ }`` ブロックの最後までvisibleです。このルールの例外として、forループ内の初期化内で宣言された変数はそのforループが終わるまでの間でだけvisibleです。
 
-Variables and other items declared outside of a code block, for example functions, contracts,
-user-defined types, etc., are visible even before they were declared. This means you can
-use state variables before they are declared and call functions recursively.
+コードブロック外で変数や他の宣言されたもの、例えばファンクション、コントラクト、ユーザー定義型などは宣言される前からvisibleです。つまり、宣言前から状態変数を使うことができ、ファンクションを再帰的に呼び出すことができます。
 
-As a consequence, the following examples will compile without warnings, since
-the two variables have the same name but disjoint scopes.
+その結果、2つの変数が同じ名前を持っていますが、バラバラのスコープを持つため、下記の例は警告なしでコンパイルされます。
 
 ::
 
@@ -331,9 +273,7 @@ the two variables have the same name but disjoint scopes.
         }
     }
 
-As a special example of the C99 scoping rules, note that in the following,
-the first assignment to ``x`` will actually assign the outer and not the inner variable.
-In any case, you will get a warning about the outer variable being shadowed.
+特別なC99のスコーピングルールの例として、下記の最初の ``x`` への割り当ては、実際はインナーの変数ではなく、アウターに割り当てられています。どの様な場合でもアウターの変数がシャドーイングされた時に警告が出ます。
 
 ::
 
@@ -351,9 +291,7 @@ In any case, you will get a warning about the outer variable being shadowed.
     }
 
 .. warning::
-    Before version 0.5.0 Solidity followed the same scoping rules as JavaScript, that is, a variable declared anywhere within a function would be in scope
-    for the entire function, regardless where it was declared. The following example shows a code snippet that used
-    to compile but leads to an error starting from version 0.5.0.
+    バージョン0.5.0以前のSolidityではJavaScriptと同じスコーピングのルールに従っていました。そのルールとは、ファンクション内で宣言された変数のスコープは、どこで宣言されたか関係なく、そのファンクション全体というものです。下記の例は、以前はコンパイルされていましたが、バージョン0.5.0以降はエラーとなります。
 
  ::
 
@@ -374,33 +312,24 @@ In any case, you will get a warning about the outer variable being shadowed.
 Error handling: Assert, Require, Revert and Exceptions
 ======================================================
 
-Solidity uses state-reverting exceptions to handle errors. Such an exception will undo all changes made to the
-state in the current call (and all its sub-calls) and also flag an error to the caller.
-The convenience functions ``assert`` and ``require`` can be used to check for conditions and throw an exception
-if the condition is not met. The ``assert`` function should only be used to test for internal errors, and to check invariants.
-The ``require`` function should be used to ensure valid conditions, such as inputs, or contract state variables are met, or to validate return values from calls to external contracts.
-If used properly, analysis tools can evaluate your contract to identify the conditions and function calls which will reach a failing ``assert``. Properly functioning code should never reach a failing assert statement; if this happens there is a bug in your contract which you should fix.
+Solidityはエラーを処理するのにstate-revertingの例外を使っています。現在のコール（とそのサブコール全て）内で変更されたものを全て元に戻し、さらに呼び出し元に対してエラーのフラグをたてます。便利なファンクション ``assert`` と ``require`` はもし条件が満たされていない場合に例外を投げるために使用されます。
+``assert`` は内部エラーのテストと不変条件のチェックのためだけに使用するべきです。
+``require`` は有効な条件を保証するために使用するのが良いでしょう。例えば入力、コントラクトの状態変数が合致しているか、もしくは外部コントラクトから返ってきた値のバリデーションに使うことができます。
+正しく使えば、分析ツールはコントラクトのコンディションとフェイル ``assert`` になるファンクションコールを見極めるためにコントラクトの評価を行うことができます。正しく実装されたコードはフェイルアサートが出ないはずです。もしそれでもアサートが出た場合、それは直さなくてはいけないバグです。
 
-There are two other ways to trigger exceptions: The ``revert`` function can be used to flag an error and
-revert the current call. It is possible to provide a string message containing details about the error
-that will be passed back to the caller.
+例外を引き起こす方法が2つあります: ``revert`` ファンクションはエラーにフラグを立て、現在のコールをrevertするのに使用することができます。呼び出し元に対して、詳細を含むエラーメッセージを返すことができます。
 
 .. note::
-    There used to be a keyword called ``throw`` with the same semantics as ``revert()`` which
-    was deprecated in version 0.4.13 and removed in version 0.5.0.
+    以前は ``throw`` という ``revert()`` と同じセマンティクスのファンクションがありました。バージョン0.4.13で非推奨になり、バージョン0.5.0で削除されました。
 
-When exceptions happen in a sub-call, they "bubble up" (i.e. exceptions are rethrown) automatically. Exceptions to this rule are ``send``
-and the low-level functions ``call``, ``delegatecall`` and ``staticcall`` -- those return ``false`` as their first return value in case
-of an exception instead of "bubbling up".
+サブコールで例外が発生した場合、その例外は自動的にどんどん出てきます（例外が再度投げられます）。このルールに対する例外は、``send`` と低レベルファンクションの ``call``、``delegatecall``、``staticcall`` で、これらは例外がどんどん出てこない代わりに、``false`` を返り値として最初に返します。
 
 .. warning::
-    The low-level functions ``call``, ``delegatecall`` and ``staticcall`` return ``true`` as their first return value if the called account is non-existent, as part of the design of EVM. Existence must be checked prior to calling if desired.
+    低レベルファンクションの ``call``、``delegatecall``、``staticcall`` は、もし呼ばれたアカウントが存在しない場合、EVMの設計上、最初の返り値として ``true`` を返します。もし必要なら、呼び出す前に存在確認をしなければいけません。
 
-Catching exceptions is not yet possible.
+例外のキャッチはまだ可能ではありません。
 
-In the following example, you can see how ``require`` can be used to easily check conditions on inputs
-and how ``assert`` can be used for internal error checking. Note that you can optionally provide
-a message string for ``require``, but not for ``assert``.
+下記の例では、``require`` が入力に対するコンディションチェックを簡単に行なっているか見ることができます。また、``assert`` がどの様に内部エラーのチェックに使用されうるのか確認できます。覚えて欲しいのは、``require`` ではオプションでエラーメッセージを与えることができます。しかし ``assert`` ではできません。
 
 ::
 
@@ -419,34 +348,29 @@ a message string for ``require``, but not for ``assert``.
         }
     }
 
-An ``assert``-style exception is generated in the following situations:
+``assert``-スタイルの例外は下記のシチュエーションで発生します:
 
-#. If you access an array at a too large or negative index (i.e. ``x[i]`` where ``i >= x.length`` or ``i < 0``).
-#. If you access a fixed-length ``bytesN`` at a too large or negative index.
-#. If you divide or modulo by zero (e.g. ``5 / 0`` or ``23 % 0``).
-#. If you shift by a negative amount.
-#. If you convert a value too big or negative into an enum type.
-#. If you call a zero-initialized variable of internal function type.
-#. If you call ``assert`` with an argument that evaluates to false.
+#. 大きすぎるもしくは負のインデックスで配列にアクセスした場合(例： ``x[i]`` において ``i >= x.length`` もしくは ``i < 0``)。
+#. 大きすぎるもしくは負のインデックスで固定長 ``bytesN`` にアクセスした場合。
+#. 0で除算、剰余算を行なった場合(例: ``5 / 0`` もしくは ``23 % 0``)。
+#. 負の数でシフトを行なった場合。
+#. とても大きい、もしくは負の数を列挙型に変換した場合。
+#. インターバルファンクション型のゼロ初期化された変数を呼び出した場合。
+#. falseとなる引数で ``assert`` を呼び出した場合。
 
-A ``require``-style exception is generated in the following situations:
+``require``-スタイルの例外は下記のシチュエーションで発生します:
 
-#. Calling ``require`` with an argument that evaluates to ``false``.
-#. If you call a function via a message call but it does not finish properly (i.e. it runs out of gas, has no matching function, or throws an exception itself), except when a low level operation ``call``, ``send``, ``delegatecall``, ``callcode`` or ``staticcall`` is used.  The low level operations never throw exceptions but indicate failures by returning ``false``.
-#. If you create a contract using the ``new`` keyword but the contract creation does not finish properly (see above for the definition of "not finish properly").
-#. If you perform an external function call targeting a contract that contains no code.
-#. If your contract receives Ether via a public function without ``payable`` modifier (including the constructor and the fallback function).
-#. If your contract receives Ether via a public getter function.
-#. If a ``.transfer()`` fails.
+#. falseとなる引数で ``require`` を呼び出した場合。
+#. メッセージコールを通じてファンクションを呼び出したが、正常に終わらなかった場合（例えば、ガス不足、マッチするファンクションがなかった場合、それ自体が例外を投げた場合）、ただし低レベルのファンクション、``call``、``send``、``delegatecall``、``callcode`` もしくは ``staticcall`` が使用された場合を除きます。低レベルファンクションは例外を投げませんが、``false`` を返すことで失敗を示します。
+#. ``new`` を使ってコントラクトを作ったものの、そのコントラクト作成が正常に終わらなかった場合（"正常に終わらない"の定義は上記参照）。
+#. 何もコードを含まないコントラクトを外から呼び出した場合。
+#. コントラクトが ``payable`` modifierが付いていないpublicのファンクションを通じてEtherを受け取った場合（コンストラクタ、フォールバックファンクションを含む）。
+#. コントラクトがpublicのgetterファンクションを通じてEtherを受け取った場合。
+#. ``.transfer()`` が失敗した場合。
 
-Internally, Solidity performs a revert operation (instruction ``0xfd``) for a ``require``-style exception and executes an invalid operation
-(instruction ``0xfe``) to throw an ``assert``-style exception. In both cases, this causes
-the EVM to revert all changes made to the state. The reason for reverting is that there is no safe way to continue execution, because an expected effect
-did not occur. Because we want to retain the atomicity of transactions, the safest thing to do is to revert all changes and make the whole transaction
-(or at least call) without effect. Note that ``assert``-style exceptions consume all gas available to the call, while
-``require``-style exceptions will not consume any gas starting from the Metropolis release.
+内部では、Solidityは ``require``-スタイルの例外に対してrevert操作（``0xfd`` 命令）を行います。また、``require``-スタイルの例外を投げるために、無効な操作を実行します。どちらのケースにおいても、ステートに対してなされた変更の全てをEVMがrevertする様にします。revertする理由は、期待した効果が実際には起きず、命令の実行を続ける安全な方法がないためです。トランザクションの原子性（一連のやりとりが全て実行されるか、1つも実行されない状態になること）を保ちたいので、最も安全な方法は全ての変更をrevertし、トランザクション全体（もしくは少なくとも呼び出し）の結果を無効にすることです。``assert``-スタイルの例外は全ての使用可能なガスをその呼び出しに使ってしまう一方で、``require``-スタイルの例外はガスを使いません。これはMetropolisがリリースされた時からスタートしました。
 
-The following example shows how an error string can be used together with revert and require:
+以下の例は、どの様にrevertとrequireでエラーメッセージが使われているかを示しています:
 
 ::
 
@@ -465,9 +389,8 @@ The following example shows how an error string can be used together with revert
         }
     }
 
-The provided string will be :ref:`abi-encoded <ABI>` as if it were a call to a function ``Error(string)``.
-In the above example, ``revert("Not enough Ether provided.");`` will cause the following hexadecimal data be
-set as error return data:
+与えられた文字列は、:ref:`abi-encoded <ABI>` となります。そしてそれはまるで ``Error(string)`` ファンクションを呼び出している様なものです。
+上記の例では、``revert("Not enough Ether provided.");`` は下記のエラーの返り値としてセットされた16進数データを生成します:
 
 .. code::
 

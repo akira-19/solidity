@@ -2,277 +2,177 @@
 Solidity v0.5.0 Breaking Changes
 ********************************
 
-This section highlights the main breaking changes introduced in Solidity
-version 0.5.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
+このセクションではSolidityバージョン0.5.0で導入された主要な変更を、変更の理由と影響あるコードをアップデートする方法と共に紹介します。
+フルリストは、`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_ を参照ください。
 
 .. note::
-   Contracts compiled with Solidity v0.5.0 can still interface with contracts
-   and even libraries compiled with older versions without recompiling or
-   redeploying them.  Changing the interfaces to include data locations and
-   visibility and mutability specifiers suffices. See the
-   :ref:`Interoperability With Older Contracts <interoperability>` section below.
+   Solidityのバージョン0.5.0でコンパイルされたコントラクトは古いバージョンでコンパイルされたコントラクトやライブラリを再コンパイルもしくは再デプロイなしに使えます。
+   データロケーション、可視性、ミュータビリティを含めるようにインターフェースを変えれば十分です。下記の :ref:`Interoperability With Older Contracts <interoperability>` を参照ください。
+
 
 Semantic Only Changes
 =====================
 
-This section lists the changes that are semantic-only, thus potentially
-hiding new and different behavior in existing code.
+このセクションはセマンティクス上の変更だけのリストです。そのため、潜在的には現状のコードで、新しいもしくは異なる動作をしてしまうかもしれません。
 
-* Signed right shift now uses proper arithmetic shift, i.e. rounding towards
-  negative infinity, instead of rounding towards zero.  Signed and unsigned
-  shift will have dedicated opcodes in Constantinople, and are emulated by
-  Solidity for the moment.
+* 符号付右シフトは現在適切な算術シフトを使っています。つまり、0への丸めの代わりに負の無限大への丸めとなります。符号付、符号なしのシフトはConstantinopleで専用のopcodeになり、その間Solidityによってエミュレートされます。
 
-* The ``continue`` statement in a ``do...while`` loop now jumps to the
-  condition, which is the common behavior in such cases. It used to jump to the
-  loop body. Thus, if the condition is false, the loop terminates.
+* ``do...while`` ループの中の ``continue`` は現在条件文にjumpします。そのような場合になる一般的な挙動です。以前はループの本体にjumpしていました。もし条件文がfalseだった場合、ループは終了します。
 
-* The functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` do not
-  pad anymore when given a single ``bytes`` parameter.
+* ``bytes`` が1つ与えられた時に、ファンクションの ``.call()``、``.delegatecall()``、``.staticcall()`` はもうパディングしません。
 
-* Pure and view functions are now called using the opcode ``STATICCALL``
-  instead of ``CALL`` if the EVM version is Byzantium or later. This
-  disallows state changes on the EVM level.
+* pureとviewファンクションはEVMバージョンがByzantium以降であれば、``CALL`` の代わりに ``STATICCALL`` を使って呼ばれます。このopcodeではEVMレベルで、状態変更ができません。
 
-* The ABI encoder now properly pads byte arrays and strings from calldata
-  (``msg.data`` and external function parameters) when used in external
-  function calls and in ``abi.encode``. For unpadded encoding, use
-  ``abi.encodePacked``.
+* 外部のファンクションコールと ``abi.encode`` で使われた時、ABIエンコーダは現在calldata（ ``msg.data`` と外部のファンクションパラメータ）のバイト配列と文字列を適切にパディングします。パディングされないエンコードしたい時は、``abi.encodePacked`` を使用してください。
 
-* The ABI decoder reverts in the beginning of functions and in
-  ``abi.decode()`` if passed calldata is too short or points out of bounds.
-  Note that dirty higher order bits are still simply ignored.
+* ABIデコーダは渡されたcalldataが短すぎるもしくは範囲外を指し示していたら、ファンクションの始めと ``abi.decode()`` で状態を全て元に戻します。
+汚れた高次ビットは単純に無視されるということを覚えておいてください。
 
-* Forward all available gas with external function calls starting from
-  Tangerine Whistle.
+* Tangerine Whistleからは外部のファンクションコールで使用可能な全てのガスを転送します。
 
 Semantic and Syntactic Changes
 ==============================
 
-This section highlights changes that affect syntax and semantics.
+このセクションではシンタックスとセマンティクスに関連する変更を紹介します。
 
-* The functions ``.call()``, ``.delegatecall()``, ``staticcall()``,
-  ``keccak256()``, ``sha256()`` and ``ripemd160()`` now accept only a single
-  ``bytes`` argument. Moreover, the argument is not padded. This was changed to
-  make more explicit and clear how the arguments are concatenated. Change every
-  ``.call()`` (and family) to a ``.call("")`` and every ``.call(signature, a,
-  b, c)`` to use ``.call(abi.encodeWithSignature(signature, a, b, c))`` (the
-  last one only works for value types).  Change every ``keccak256(a, b, c)`` to
-  ``keccak256(abi.encodePacked(a, b, c))``. Even though it is not a breaking
-  change, it is suggested that developers change
-  ``x.call(bytes4(keccak256("f(uint256)"), a, b)`` to
-  ``x.call(abi.encodeWithSignature("f(uint256)", a, b))``.
+* ``.call()``、``.delegatecall()``、``staticcall()``、``keccak256()``、``sha256()``、``ripemd160()`` は1つの ``bytes`` 引数だけを受け入れます。さらに引数はパディングされません。これは引数がどのように連結させるかをわかりやすくするためです。
+全ての ``.call()`` (and family) を ``.call("")`` に代えてください。``.call(signature, a, b, c)`` の代わりに ``.call(abi.encodeWithSignature(signature, a, b, c))`` (最後のものは値型にしか使えません)を使ってください。また、``keccak256(a, b, c)`` を ``keccak256(abi.encodePacked(a, b, c))`` に代えてください。ブレーキングチェンジではありませんが、``x.call(bytes4(keccak256("f(uint256)"), a, b)`` から ``x.call(abi.encodeWithSignature("f(uint256)", a, b))`` に代えることをお勧めします。
 
-* Functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` now return
-  ``(bool, bytes memory)`` to provide access to the return data.  Change
-  ``bool success = otherContract.call("f")`` to ``(bool success, bytes memory
-  data) = otherContract.call("f")``.
+* ``.call()``、``.delegatecall()``、``.staticcall()`` は返ってきたデータにアクセスできるように現在 ``(bool, bytes memory)`` を返します。``bool success = otherContract.call("f")`` を ``(bool success, bytes memory data) = otherContract.call("f")`` に変更して下さい。
 
-* Solidity now implements C99-style scoping rules for function local
-  variables, that is, variables can only be used after they have been
-  declared and only in the same or nested scopes. Variables declared in the
-  initialization block of a ``for`` loop are valid at any point inside the
-  loop.
+* Solidityは現在ファンクションのローカル変数に対してC99-styleのスコーピングのルールを使っています。その中で、変数は宣言された後でのみ有効で、同じもしくはネストされたスコープでのみ使えます。``for`` ループの初期化ブロックの中で宣言された変数はループ内のどこでも有効です。
 
 Explicitness Requirements
 =========================
 
-This section lists changes where the code now needs to be more explicit.
-For most of the topics the compiler will provide suggestions.
+このセクションはコードをもっと明示的にする様な変更のリストです。
+ほとんどの場合、コンパイラが忠告を出してくれます。
 
-* Explicit function visibility is now mandatory.  Add ``public`` to every
-  function and constructor, and ``external`` to every fallback or interface
-  function that does not specify its visibility already.
+* 明示的なファンクションの可視性は現在必須です。可視性を特に指示していないものに関して、ファンクションとコンストラクタには ``public`` を追加し、fallbackとインターフェースには ``external`` を追加して下さい。
 
-* Explicit data location for all variables of struct, array or mapping types is
-  now mandatory. This is also applied to function parameters and return
-  variables.  For example, change ``uint[] x = m_x`` to ``uint[] storage x =
-  m_x``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
-  where ``memory`` is the data location and might be replaced by ``storage`` or
-  ``calldata`` accordingly.  Note that ``external`` functions require
-  parameters with a data location of ``calldata``.
+* 構造体、配列、マッピングに関して明示的なデータロケーションは現在必須です。これはファンクションのパラメータや返り値にも適用されます。例えば、``uint[] x = m_x`` は ``uint[] storage x = m_x`` に、``function f(uint[][] x)`` は ``function f(uint[][] memory x)`` に代えてください。
+ここで、``memory`` はデータロケーションで、場合によって ``storage`` や ``calldata`` に置き換えられます。``external`` のファンクションはデータロケーションとして　``calldata`` が必要なことを覚えておいてください。
 
-* Contract types do not include ``address`` members anymore in
-  order to separate the namespaces.  Therefore, it is now necessary to
-  explicitly convert values of contract type to addresses before using an
-  ``address`` member.  Example: if ``c`` is a contract, change
-  ``c.transfer(...)`` to ``address(c).transfer(...)``,
-  and ``c.balance`` to ``address(c).balance``.
+* 名前空間を分けるために、コントラクト型は ``address`` メンバをもう持っていません。そのため、``address`` メンバを使う前に明示的にコントラクト型の値をアドレスに変換する必要があります。例： ``c`` がコントラクトの場合、``c.transfer(...)`` から ``address(c).transfer(...)`` に、``c.balance`` は ``address(c).balance`` に代えてください。
 
-* Explicit conversions between unrelated contract types are now disallowed. You can only
-  convert from a contract type to one of its base or ancestor types. If you are sure that
-  a contract is compatible with the contract type you want to convert to, although it does not
-  inherit from it, you can work around this by converting to ``address`` first.
-  Example: if ``A`` and ``B`` are contract types, ``B`` does not inherit from ``A`` and
-  ``b`` is a contract of type ``B``, you can still convert ``b`` to type ``A`` using ``A(address(b))``.
-  Note that you still need to watch out for matching payable fallback functions, as explained below.
+* 関係ないコントラクト型同士の明示的な変換は現在できません。あるコントラクト型から、そのベースもしくは親（祖先）のコントラクト型への変換のみ可能です。もし継承していないのにも関わらず、あるコントラクトから別のコントラクトへの変換ができると考えているのであれば、まず ``address`` へ変換することで対処できます。例: ``A`` と ``B`` がコントラクト型で ``B`` が ``A`` を継承しておらず、``b`` が ``B`` 型のコントラクトである場合、``A(address(b))`` を使うことで ``b`` を ``A`` 型に変換できます。
+下記で説明されている通り、payable fallbackファンクションのマッチングに気をつける必要があります。
 
-* The ``address`` type  was split into ``address`` and ``address payable``,
-  where only ``address payable`` provides the ``transfer`` function.  An
-  ``address payable`` can be directly converted to an ``address``, but the
-  other way around is not allowed. Converting ``address`` to ``address
-  payable`` is possible via conversion through ``uint160``. If ``c`` is a
-  contract, ``address(c)`` results in ``address payable`` only if ``c`` has a
-  payable fallback function. If you use the :ref:`withdraw pattern<withdrawal_pattern>`,
-  you most likely do not have to change your code because ``transfer``
-  is only used on ``msg.sender`` instead of stored addresses and ``msg.sender``
-  is an ``address payable``.
+* ``address`` 型は ``address`` と ``address payable`` に分けられ、``address payable`` だけが ``transfer`` ファンクションを使えます。``address payable`` は直接 ``address`` に変換可能ですが、逆はできません。``address`` から ``address payable`` への変換は ``uint160`` を通じて行うことで可能です。``c`` がコントラクトで、payable fallbackファンクションを持っていた場合、``address(c)`` は ``address payable`` になります。もし :ref:`withdraw pattern<withdrawal_pattern>` を使っているのであれば、コードを変える必要はきっとないでしょう。なぜなら、``transfer`` は 保存されているアドレスの代わりに ``msg.sender`` にのみ使われ、``msg.sender`` は ``address payable`` だからです。
 
-* Conversions between ``bytesX`` and ``uintY`` of different size are now
-  disallowed due to ``bytesX`` padding on the right and ``uintY`` padding on
-  the left which may cause unexpected conversion results.  The size must now be
-  adjusted within the type before the conversion.  For example, you can convert
-  a ``bytes4`` (4 bytes) to a ``uint64`` (8 bytes) by first converting the
-  ``bytes4`` variable to ``bytes8`` and then to ``uint64``. You get the
-  opposite padding when converting through ``uint32``.
+* 異なるサイズの ``bytesX`` と ``uintY`` 間の変換は現在できません。なぜなら、``bytesX`` は右パディングで ``uintY`` は左パディングのため、予期しない変換結果を生じる可能性があるためです。変換前に型内でサイズは調整される必要があります。例えば、始めに ``bytes4`` を ``bytes8`` に変換してから ``uint64`` に変換することで ``bytes4`` (4 bytes) を ``uint64`` (8 bytes) に変換することができます。``uint32`` を通じて変換すると逆側のパディングをすることになります。
 
-* Using ``msg.value`` in non-payable functions (or introducing it via a
-  modifier) is disallowed as a security feature. Turn the function into
-  ``payable`` or create a new internal function for the program logic that
-  uses ``msg.value``.
+* payableではないファンクションで ``msg.value`` を使うこと（もしくはmodifierを使って実行する）はセキュリティの機能によりできません。
+``payable`` のファンクションに変換するか、``msg.value`` を使う新しいinternalのファンクションを作ってください。
 
-* For clarity reasons, the command line interface now requires ``-`` if the
-  standard input is used as source.
+* 分かりやすくするため、標準入力がソースとして使用される場合、コマンドラインインターフェースに ``-`` が必要です。
 
 Deprecated Elements
 ===================
 
-This section lists changes that deprecate prior features or syntax.  Note that
-many of these changes were already enabled in the experimental mode
-``v0.5.0``.
+このセクションでは以前の機能やシンタックスで非推奨に変更になったリストを紹介します。これらの多くは既に ``v0.5.0`` のexperimental modeでは使用できません。
 
 Command Line and JSON Interfaces
 --------------------------------
 
-* The command line option ``--formal`` (used to generate Why3 output for
-  further formal verification) was deprecated and is now removed.  A new
-  formal verification module, the SMTChecker, is enabled via ``pragma
-  experimental SMTChecker;``.
+* コマンドラインオプションの ``--formal`` （形式的検証のため以前はWhy3のアウトプットを生成していた）は非推奨隣、現在は削除されました。新しい形式的検証のモジュールのSMTCheckerは ``pragma experimental SMTChecker;`` で使うことができます。
 
-* The command line option ``--julia`` was renamed to ``--yul`` due to the
-  renaming of the intermediate language ``Julia`` to ``Yul``.
+* 中間言語の名前が ``Julia`` から ``Yul`` へ変更になったためコマンドラインオプションの ``--julia`` は ``--yul`` へ名前が変更されました。
 
-* The ``--clone-bin`` and ``--combined-json clone-bin`` command line options
-  were removed.
+* コマンドラインオプションの ``--clone-bin`` と ``--combined-json clone-bin`` は削除されました。
 
-* Remappings with empty prefix are disallowed.
+* 空の接頭辞での理マッピングはできません。
 
-* The JSON AST fields ``constant`` and ``payable`` were removed. The
-  information is now present in the ``stateMutability`` field.
+* JSON ASTフィールドの ``constant`` と ``payable`` は削除されました。その情報は現在 ``stateMutability`` フィールドにあります。
 
-* The JSON AST field ``isConstructor`` of the ``FunctionDefinition``
-  node was replaced by a field called ``kind`` which can have the
-  value ``"constructor"``, ``"fallback"`` or ``"function"``.
+* JSON ASTフィールドの ``FunctionDefinition`` ノード
+の ``isConstructor`` は ``kind`` というフィールドに置き換えられ、``"constructor"``、``"fallback"``、``"function"` という値を持つことができます。
 
-* In unlinked binary hex files, library address placeholders are now
-  the first 36 hex characters of the keccak256 hash of the fully qualified
-  library name, surrounded by ``$...$``. Previously,
-  just the fully qualified library name was used.
-  This reduces the chances of collisions, especially when long paths are used.
-  Binary files now also contain a list of mappings from these placeholders
-  to the fully qualified names.
+* リンクしてないbinary hexファイルでは、ライブラリアドレスのプレースホルダは正規のライブラリの名前全体のkeccak256ハッシュの最初の16進数の36文字で、``$...$`` に囲われています。
+以前は正規のライブラリの名前だけ使われていました。これにより、特にパスが長い時は名前が衝突する可能性が減ります。バイナリファイルは現在、このプレースホルダから正規の名前全体のマッピングのリストを含んでいます。
 
 Constructors
 ------------
 
-* Constructors must now be defined using the ``constructor`` keyword.
+* コンストラクトは現在、``constructor`` を使って定義しなければいけません。
 
-* Calling base constructors without parentheses is now disallowed.
+* 括弧なしのベースのコンストラクトを呼び出すことは現在できません。
 
-* Specifying base constructor arguments multiple times in the same inheritance
-  hierarchy is now disallowed.
+* 同じ継承の階層でベースのコンストラクトの引数をな何度も決めることは現在できません。
 
-* Calling a constructor with arguments but with wrong argument count is now
-  disallowed.  If you only want to specify an inheritance relation without
-  giving arguments, do not provide parentheses at all.
+* 間違った数の引数でコンストラクタを呼ぶことはできません。もし引数を渡さないで継承の関係を指定したい場合は、括弧をつけないで下さい。
 
 Functions
 ---------
 
-* Function ``callcode`` is now disallowed (in favor of ``delegatecall``). It
-  is still possible to use it via inline assembly.
+* ``callcode`` ファンクションは現在使えません（）。
+Function ``callcode`` is now disallowed ( ``delegatecall`` が使われます)。インラインアセンブリを使えば使うことができます。
 
-* ``suicide`` is now disallowed (in favor of ``selfdestruct``).
+* ``suicide`` は現在使えません( ``selfdestruct`` が使われます).
 
-* ``sha3`` is now disallowed (in favor of ``keccak256``).
+* ``sha3`` は現在使えません( ``keccak256`` が使われます).
 
-* ``throw`` is now disallowed (in favor of ``revert``, ``require`` and
-  ``assert``).
+* ``throw`` は現在使えません( ``revert``、``require``、``assert`` が使われます)。
 
 Conversions
 -----------
 
-* Explicit and implicit conversions from decimal literals to ``bytesXX`` types
-  is now disallowed.
+* 明示的にも暗示的にも10進数リテラルの ``bytesXX`` 型への変換は現在使えません。
 
-* Explicit and implicit conversions from hex literals to ``bytesXX`` types
-  of different size is now disallowed.
+* 明示的にも暗示的にも16進数リテラルの異なるサイズの ``bytesXX`` 型への変換は現在使えません。
 
 Literals and Suffixes
 ---------------------
 
-* The unit denomination ``years`` is now disallowed due to complications and
-  confusions about leap years.
+* 閏年で混乱してしまうため ``years`` という単位名は現在使えません。数字の後に
 
-* Trailing dots that are not followed by a number are now disallowed.
+* 数字の続かない末尾のドットは使えません。
 
-* Combining hex numbers with unit denominations (e.g. ``0x1e wei``) is now
-  disallowed.
+* 16進数の数字とuintの単位名(例: ``0x1e wei``) は一緒に使えません。
 
-* The prefix ``0X`` for hex numbers is disallowed, only ``0x`` is possible.
+* 16進数に接頭辞 ``0X`` は使えません。``0x`` だけ使えます。
 
 Variables
 ---------
 
-* Declaring empty structs is now disallowed for clarity.
+* 分かりやすさのため、空の構造体の宣言は現在できません。
 
-* The ``var`` keyword is now disallowed to favor explicitness.
+* 分かりやすさのため、現在 ``var`` キーワードは使えません。
 
-* Assignments between tuples with different number of components is now
-  disallowed.
+* タプルへの異なった要素数の割り当ては現在できません。
 
-* Values for constants that are not compile-time constants are disallowed.
+* コンパイル時に定数でない定数値は使えません。
 
-* Multi-variable declarations with mismatching number of values are now
-  disallowed.
+* 値の数と変数の数が合わない複数変数の宣言は現在使えません。
 
-* Uninitialized storage variables are now disallowed.
+* 初期化されていないストレージ変数は現在使えません。
 
-* Empty tuple components are now disallowed.
+* 空のタプル要素は現在使えません。
 
-* Detecting cyclic dependencies in variables and structs is limited in
-  recursion to 256.
+* 変数と構造体の循環参照の検知の繰り返しは256回までと制限されています。
 
-* Fixed-size arrays with a length of zero are now disallowed.
+* 長さが0の固定長さ配列は現在使えません。
 
 Syntax
 ------
 
-* Using ``constant`` as function state mutability modifier is now disallowed.
+* ファンクションのstate mutability modifierとしての ``constant`` は現在使えません。
 
-* Boolean expressions cannot use arithmetic operations.
+* 真偽式は算術演算を行えません。
 
-* The unary ``+`` operator is now disallowed.
+* 単項の ``+`` 演算子は使えません。
 
-* Literals cannot anymore be used with ``abi.encodePacked`` without prior
-  conversion to an explicit type.
+* リテラルは以前の明示的な型への変換なしでは ``abi.encodePacked`` を使えません。
 
-* Empty return statements for functions with one or more return values are now
-  disallowed.
+* 返り値があるファンクションでの空のリターンは現在使えません。
 
-* The "loose assembly" syntax is now disallowed entirely, that is, jump labels,
-  jumps and non-functional instructions cannot be used anymore. Use the new
-  ``while``, ``switch`` and ``if`` constructs instead.
+* "loose assembly"シンタックスは現在完全に使えません。つまりjump label、jump、非ファンクショナルな指示はもう使えません。新しい ``while``、``switch``、``if`` を代わりに使ってください。
 
-* Functions without implementation cannot use modifiers anymore.
+* 実行されないファンクションではmodifierは使えません。
 
-* Function types with named return values are now disallowed.
+* 名前のついた返り値のファンクション型は使えません。
 
-* Single statement variable declarations inside if/while/for bodies that are
-  not blocks are now disallowed.
+* if/while/forのブロックでないボディ内での単文での変数の宣言はできません。
 
 * New keywords: ``calldata`` and ``constructor``.
 
@@ -286,9 +186,8 @@ Syntax
 Interoperability With Older Contracts
 =====================================
 
-It is still possible to interface with contracts written for Solidity versions prior to
-v0.5.0 (or the other way around) by defining interfaces for them.
-Consider you have the following pre-0.5.0 contract already deployed:
+インターフェースを定義すれば、Solidityバージョン0.5.0以前（もしくは以降）で書かれたコントラクトで使うことができます。
+0.5.0以前のバージョンで作った以下のコントラクトを見てください。
 
 ::
 
@@ -304,7 +203,7 @@ Consider you have the following pre-0.5.0 contract already deployed:
       // ...
    }
 
-This will no longer compile with Solidity v0.5.0. However, you can define a compatible interface for it:
+これは0.5.0ではコンパイルできませんが、互換性のあるインターフェースは定義できます。
 
 ::
 
@@ -314,14 +213,12 @@ This will no longer compile with Solidity v0.5.0. However, you can define a comp
       function anotherOldFunction() external returns (bool);
    }
 
-Note that we did not declare ``anotherOldFunction`` to be ``view``, despite it being declared ``constant`` in the original
-contract. This is due to the fact that starting with Solidity v0.5.0 ``staticcall`` is used to call ``view`` functions.
-Prior to v0.5.0 the ``constant`` keyword was not enforced, so calling a function declared ``constant`` with ``staticcall``
-may still revert, since the ``constant`` function may still attempt to modify storage. Consequently, when defining an
-interface for older contracts, you should only use ``view`` in place of ``constant`` in case you are absolutely sure that
-the function will work with ``staticcall``.
 
-Given the interface defined above, you can now easily use the already deployed pre-0.5.0 contract:
+オリジナルのコントラクトでは ``constant`` と宣言されているのにも関わらず、``anotherOldFunction`` を ``view`` で宣言していないことに注目して下さい。これはSolidity v0.5.0から ``staticcall`` が ``view`` ファンクションを呼ぶのに使われ始めたからです。
+v0.5.0以前では ``constant`` キーワードは強制ではありませんでしたので、``constant`` と宣言されたファンクションを ``staticcall`` で呼び出してもrevertする可能性がありました。なぜなら、``constant`` ファンクションはストレージを修正しようとする可能性があったためです。
+結論としては、古いコントラクト用のインターフェースを定義するときには、``staticcall`` で確実にファンクションが動作する様に、``constant`` の代わりに ``view`` を使った方が良いでしょう。
+
+上記で定義されたインターフェースがあれば、もう簡単に0.5.0以前のコントラクトをデプロイできます。
 
 ::
 
@@ -339,9 +236,7 @@ Given the interface defined above, you can now easily use the already deployed p
       }
    }
 
-Similarly, pre-0.5.0 libraries can be used by defining the functions of the library without implementation and
-supplying the address of the pre-0.5.0 library during linking (see :ref:`commandline-compiler` for how to use the
-commandline compiler for linking):
+同様に、0.5.0以前のライブラリは実行せず、リンク中にそのライブラリのアドレスを渡さなくても、そのライブラリのファンクションを定義することで、使用することができます（リンキングにどうやってコマンドラインコンパイラを使うかは :ref:`commandline-compiler` を参照ください）。
 
 ::
 
@@ -361,8 +256,7 @@ commandline compiler for linking):
 Example
 =======
 
-The following example shows a contract and its updated version for Solidity
-v0.5.0 with some of the changes listed in this section.
+下記の例ではあるコントラクトとこのセクションで紹介したいくつかの変更を加えたSolidityバージョン0.5.0のコントラクトを紹介します。
 
 Old version:
 

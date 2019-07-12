@@ -5,47 +5,34 @@
 Reference Types
 ===============
 
-Values of reference type can be modified through multiple different names.
-Contrast this with value types where you get an independent copy whenever
-a variable of value type is used. Because of that, reference types have to be handled
-more carefully than value types. Currently, reference types comprise structs,
-arrays and mappings. If you use a reference type, you always have to explicitly
-provide the data area where the type is stored: ``memory`` (whose lifetime is limited
-to a function call), ``storage`` (the location where the state variables are stored)
-or ``calldata`` (special data location that contains the function arguments,
-only available for external function call parameters).
+参照型の値は複数の異なった名前で修正できます。値型の変数が使用される度に、独立したコピーをとった値型と比較してみて下さい。このことから参照型は値型より気をつけて扱う必要があります。現在、構造体、配列、マッピングは参照型です。もし参照型を使用しているのであれば、値が保存されるデータ領域を常に明示する必要があります: ``memory`` (ライフタイムはファンクションの呼び出し時のみに制限されます)、``storage`` （状態変数が保存されている場所）、もしくは ``calldata`` （特別なデータロケーションで、ファンクションの引数を含み、externalのファンクションコールのパラメータでのみ使用可能です）。
 
-An assignment or type conversion that changes the data location will always incur an automatic copy operation,
-while assignments inside the same data location only copy in some cases for storage types.
+データロケーションを変える値の割り当てや型変換では常に自動でコピー操作が行われる一方で、
+同じデータロケーション内での値の割り当てはただコピーするだけです（いくつかの例ではstorage型で）。
 
 .. _data-location:
 
 Data location
 -------------
 
-Every reference type, i.e. *arrays* and *structs*, has an additional
-annotation, the "data location", about where it is stored. There are three data locations:
-``memory``, ``storage`` and ``calldata``. Calldata is only valid for parameters of external contract
-functions and is required for this type of parameter. Calldata is a non-modifiable,
-non-persistent area where function arguments are stored, and behaves mostly like memory.
+*配列*、*構造体* の様な全ての参照型は"data location"というそれが保存されている場所を表す追加のアノテーションを持っています。``memory``, ``storage`` and ``calldata`` という3つのデータロケーションがあります。Calldataは外部コントラクトのファンクションの参照型のパラメータとして要求される場合にのみ有効です。Calldataは修正不可で、ファンクションの引数が保存される非永続的なエリアで、基本的にはmemoryの様に振舞います。
 
 
 .. note::
-    Prior to version 0.5.0 the data location could be omitted, and would default to different locations
-    depending on the kind of variable, function type, etc., but all complex types must now give an explicit
-    data location.
+    バージョン0.5.0以前では、データロケーションは省略可能ですが、変数の種類やファンクションの種類などによってデフォルトで異なる場所に保存されます。しかし、現在は全ての複雑な型は明示的にデータロケーションを示す必要があります。
 
 .. _data-location-assignment:
 
 Data location and assignment behaviour
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Data locations are not only relevant for persistency of data, but also for the semantics of assignments:
+データロケーションはデータの持続性だけではなく、割り当てのセマンティクスにも関係しています:
 
-* Assignments between ``storage`` and ``memory`` (or from ``calldata``) always create an independent copy.
-* Assignments from ``memory`` to ``memory`` only create references. This means that changes to one memory variable are also visible in all other memory variables that refer to the same data.
-* Assignments from ``storage`` to a local storage variable also only assign a reference.
-* All other assignments to ``storage`` always copy. Examples for this case are assignments to state variables or to members of local variables of storage struct type, even if the local variable itself is just a reference.
+* ``storage`` と ``memory`` (もしくは ``calldata`` から)の間での割り当ては常に独立したコピーを作成します。
+* ``memory`` から ``memory`` への割り当てでは参照のみ作られます。つまり、memory変数への変化は同じデータを参照している他のmemory変数からも可視であるということです。
+* ``storage`` からローカル変数へは参照のみ割り当てられます。
+* 他の ``storage`` への割り当ては常に全てコピーとなります。この例としては、状態変数への割り当てや、たとえローカル変数がただの参照だったとしてもstorageの構造型の要素への割り当てはコピーになります。
+
 
 ::
 
@@ -82,68 +69,43 @@ Data locations are not only relevant for persistency of data, but also for the s
 Arrays
 ------
 
-Arrays can have a compile-time fixed size, or they can have a dynamic size.
+配列はコンパイル時での固定サイズか動的サイズです。
 
-The type of an array of fixed size ``k`` and element type ``T`` is written as ``T[k]``,
-and an array of dynamic size as ``T[]``.
+固定サイズ ``k`` で要素の型が ``T`` の配列は ``T[k]`` の様に記述されます。そして動的サイズの配列は ``T[]`` の様に書けます。
 
-For example, an array of 5 dynamic arrays of ``uint`` is written as
-``uint[][5]``. The notation is reversed compared to some other languages. In
-Solidity, ``X[3]`` is always an array containing three elements of type ``X``,
-even if ``X`` is itself an array. This is not the case in other languages such
-as C.
+例えば、5個の ``uint`` 動的配列の配列は ``uint[][5]`` の様に書けます。この記法は他の記法でも使われています。Solidityでは、たとえ ``X`` 自体が配列だとしても ``X[3]`` は常に3つの要素を含んだ ``X`` 型となります。これは例えばC言語の様な他の言語とは異なっています。
 
-Indices are zero-based, and access is in the opposite direction of the
-declaration.
+インデックスはゼロベースで、アクセスする際には宣言とは逆方向でアクセスします。
 
-For example, if you have a variable ``uint[][5] x memory``, you access the
-second ``uint`` in the third dynamic array using ``x[2][1]``, and to access the
-third dynamic array, use ``x[2]``. Again,
-if you have an array ``T[5] a`` for a type ``T`` that can also be an array,
-then ``a[2]`` always has type ``T``.
+例えば、もし ``uint[][5] x memory`` を持っていたら、3つ目の動的配列に入っている2つ目の ``uint`` には ``x[2][1]`` でアクセスできます。また、3つ目の動的配列自体には ``x[2]`` でアクセスします。繰り返しですが、``T[5] a`` という配列（``T`` 自体は配列でも良い）を持っていたら、``a[2]`` というのは常に ``T`` という型になります。
 
-Array elements can be of any type, including mapping or struct. The general
-restrictions for types apply, in that mappings can only be stored in the
-``storage`` data location and publicly-visible functions need parameters that are :ref:`ABI types <ABI>`.
+配列の要素はマッピングや構造体含めてどの型でも構いません。全般的な制限として、マッピングは ``storage`` にのみ保存され、publicなファンクションは :ref:`ABI types <ABI>` であるパラメータが必要になります。
 
-It is possible to mark arrays ``public`` and have Solidity create a :ref:`getter <visibility-and-getters>`.
-The numeric index becomes a required parameter for the getter.
+配列に ``public`` をつけることでSolidityが :ref:`getter <visibility-and-getters>` を生成します。
+インデックスがgetterのパラメータになります。
 
-Accessing an array past its end causes a failing assertion. You can use the ``.push()`` method to append a new element at the end or assign to the ``.length`` :ref:`member <array-members>` to change the size (see below for caveats).
-method or increase the ``.length`` :ref:`member <array-members>` to add elements.
+そのサイズ以上の配列要素にアクセスしようとするとフェイルアサーションが発生します。新しい要素を配列の最後に追加するために ``.push()`` が、新しいサイズを指定するのに ``.length`` :ref:`member <array-members>` が使用できます（下記補足を参照ください）。
+
 
 ``bytes`` and ``strings`` as Arrays
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Variables of type ``bytes`` and ``string`` are special arrays. A ``bytes`` is similar to ``byte[]``,
-but it is packed tightly in calldata and memory. ``string`` is equal to ``bytes`` but does not allow
-length or index access.
+``bytes`` と ``string`` 型の変数は特別な配列となります。``bytes`` は ``byte[]`` と似ていますが、calldataとmemoryに保存されています。``string`` は ``bytes`` と等価ですが、lengthとインデックスによるアクセスができません。
 
-While Solidity does not have string manipulation functions, you can use
-this implicit conversion for equivalent functionality. For example to compare
-two strings ``keccak256(abi.encode(s1)) == keccak256(abi.encode(s2))``, or to
-concatenate two strings already encoded with ``abi.encodePacked(s1, s2);``.
+SolidityはStringを操作するファンクションがありませんが、同じ機能を使うための暗黙の変換が使えます。例えば、2つのstringを比較するためには ``keccak256(abi.encode(s1)) == keccak256(abi.encode(s2))``、エンコードされた2つのstringを連結させるには ``abi.encodePacked(s1, s2);`` を使うことができます。
 
-You should use ``bytes`` over ``byte[]`` because it is cheaper, since ``byte[]`` adds 31 padding bytes between the elements. As a general rule,
-use ``bytes`` for arbitrary-length raw byte data and ``string`` for arbitrary-length
-string (UTF-8) data. If you can limit the length to a certain number of bytes,
-always use one of the value types ``bytes1`` to ``bytes32`` because they are much cheaper.
+``byte[]`` は要素間を埋めるのに31バイト追加するので、``byte[]`` よりその分安い ``bytes`` を使用する方が良いでしょう。全般的なルールとして、``bytes`` は任意の長さの生のバイトデータを、``string`` を任意の長さのstring (UTF-8)データを使用するために使ってください。もしバイト長に制限を咥えられるのであれば、非常に低コストに抑えられるため、常に``bytes1`` から ``bytes32`` までのいずれかを使用してください。
+
 
 .. note::
-    If you want to access the byte-representation of a string ``s``, use
-    ``bytes(s).length`` / ``bytes(s)[7] = 'x';``. Keep in mind
-    that you are accessing the low-level bytes of the UTF-8 representation,
-    and not the individual characters.
+    もしバイト表現のある文字列 ``s`` にアクセスしたい場合は、``bytes(s).length`` / ``bytes(s)[7] = 'x';`` を使ってください。この際、低レベルのUTF-8表現にアクセスしているのであって、個々の文字にアクセスしている訳ではないということを覚えておいてください。
 
 .. index:: ! array;allocating, new
 
 Allocating Memory Arrays
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You must use the ``new`` keyword to create arrays with a runtime-dependent length in memory.
-As opposed to storage arrays, it is **not** possible to resize memory arrays (e.g. by assigning to
-the ``.length`` member). You either have to calculate the required size in advance
-or create a new memory array and copy every element.
+メモリー内のランタイム依存の長さを持つ配列を作成するには ``new`` というキーワードを使う必要があります。storageの配列とは逆で、（``.length`` を使ったりして）memoryの配列の長さを変えることはできません。事前に長さを計算しておくか、新しいmemoryの配列を作成して全ての要素をコピーする必要があります。
 
 ::
 
@@ -164,15 +126,12 @@ or create a new memory array and copy every element.
 Array Literals
 ^^^^^^^^^^^^^^
 
-An array literal is a comma-separated list of one or more expressions, enclosed
-in square brackets (``[...]``). For example ``[1, a, f(3)]``. There must be a
-common type all elements can be implicitly converted to. This is the elementary
-type of the array.
+配列リテラルは角括弧 (``[...]``)で囲まれ、カンマで区切られた1つ以上のリストを持っています（例えば ``[1, a, f(3)]``）。全ての要素が暗黙的に変換できる共通の型が存在しなければなりません。これはその配列の基本型になります。
 
-Array literals are always statically-sized memory arrays.
+配列リテラルは常に静的サイズのmemoryの配列となります。
 
-In the example below, the type of ``[1, 2, 3]`` is
-``uint8[3] memory``. Because the type of each of these constants is ``uint8``, if you want the result to be a ``uint[3] memory`` type, you need to convert the first element to ``uint``.
+下記の例で、``[1, 2, 3]`` の型は ``uint8[3] memory`` です。各値の型が ``uint8`` ですので、もし ``uint[3] memory`` の結果が欲しい場合には、最初の要素を ``uint`` 型に変換する必要があります。
+
 
 ::
 
@@ -187,7 +146,7 @@ In the example below, the type of ``[1, 2, 3]`` is
         }
     }
 
-Fixed size memory arrays cannot be assigned to dynamically-sized memory arrays, i.e. the following is not possible:
+固定サイズのmemoryの配列は可変サイズのmemoryの配列に割り当てることはできません。例えば、次の例の様なことはできません:
 
 ::
 
@@ -202,8 +161,7 @@ Fixed size memory arrays cannot be assigned to dynamically-sized memory arrays, 
         }
     }
 
-It is planned to remove this restriction in the future, but it creates some
-complications because of how arrays are passed in the ABI.
+この制約は将来的には削除する予定ですが、ABI内で配列の受け渡し方で複雑になってしまいます。
 
 .. index:: ! array;length, length, push, pop, !array;push, !array;pop
 
@@ -213,39 +171,27 @@ Array Members
 ^^^^^^^^^^^^^
 
 **length**:
-    Arrays have a ``length`` member that contains their number of elements.
-    The length of memory arrays is fixed (but dynamic, i.e. it can depend on runtime parameters) once they are created.
-    For dynamically-sized arrays (only available for storage), this member can be assigned to resize the array.
-    Accessing elements outside the current length does not automatically resize the array and instead causes a failing assertion.
-    Increasing the length adds new zero-initialised elements to the array.
-    Reducing the length performs an implicit :ref:``delete`` on each of the
-    removed elements. If you try to resize a non-dynamic array that isn't in
-    storage, you receive a ``Value must be an lvalue`` error.
+    配列はその要素の長さを含む ``length`` というメンバを持っています。
+    memory配列の長さは作成時に固定されます（動的配列はランタイムのパラメータによります）。
+    動的配列（storageでのみ使用可）に関して、このメンバは配列のサイズを変えるのに使用できます。
+    そのサイズ以上の配列要素にアクセスしようとすると、自動でサイズを変更するのではなく、フェイルアサーションが発生します。
+    長さを大きくすると、ゼロ初期化された要素が配列に加わります。長さを減らすと、削除された各要素に対して ``delete`` を暗黙的に行います。もしstorage出ない非動的配列のリサイズを行おうとすると、``Value must be an lvalue`` というエラーが発生します。
 **push**:
-     Dynamic storage arrays and ``bytes`` (not ``string``) have a member function called ``push`` that you can use to append an element at the end of the array. The element will be zero-initialised. The function returns the new length.
+    動的storage配列と ``bytes``（ ``string`` ではなく）は ``push`` というファンクションを持ち、配列の最後に要素を追加することができます。その要素はゼロ初期化されます。ファンクションは新しい長さを返します。
 **pop**:
-     Dynamic storage arrays and ``bytes`` (not ``string``) have a member function called ``pop`` that you can use to remove an element from the end of the array. This also implicitly calls :ref:``delete`` on the removed element.
+    動的storage配列と ``bytes``（ ``string`` ではなく）は ``pop`` というファンクションを持ち、配列の最後から一つの要素を削除することができます。これも暗黙的に削除する要素に対して ``delete`` を呼び出しています。
 
 .. warning::
-    If you use ``.length--`` on an empty array, it causes an underflow and
-    thus sets the length to ``2**256-1``.
+    もし ``.length--`` を空の配列に対して使うのと、アンダーフローし、長さが ``2**256-1`` となってしまいます。
 
 .. note::
-    Increasing the length of a storage array has constant gas costs because
-    storage is assumed to be zero-initialised, while decreasing
-    the length has at least linear cost (but in most cases worse than linear),
-    because it includes explicitly clearing the removed
-    elements similar to calling :ref:``delete`` on them.
+    storageの配列の長さを増やすことで一定のガスがかかります。これはstorageがゼロ初期化されているとみなされているためです。一方で、長さを減らすのは少なくとも比例関数的にコストがかかります（しかしほとんどの場合比例関数より高くなります）。これは、``delete`` を呼び出す様に明示的に削除した要素をクリアする工程を含んでいるためです。
 
 .. note::
-    It is not yet possible to use arrays of arrays in external functions
-    (but they are supported in public functions).
+    まだ配列の配列をexternalのファンクションで使用することはできません（ただし、publicのファンクションではサポートされています）。
 
 .. note::
-    In EVM versions before Byzantium, it was not possible to access
-    dynamic arrays return from function calls. If you call functions
-    that return dynamic arrays, make sure to use an EVM that is set to
-    Byzantium mode.
+    Byzantiumの前のEVMのバージョンではファンクションコールからの返り値として動的配列にはアクセスできませんでした。もし動的配列を返すファンクションんを呼び出すときは、ByzantiumモードがセットされているEVMを使っていることを確認して下さい。
 
 ::
 
@@ -343,8 +289,7 @@ Array Members
 Structs
 -------
 
-Solidity provides a way to define new types in the form of structs, which is
-shown in the following example:
+Solidityでは次の例の様に構造体として新しい型を定義する方法があります:
 
 ::
 
@@ -397,21 +342,10 @@ shown in the following example:
         }
     }
 
-The contract does not provide the full functionality of a crowdfunding
-contract, but it contains the basic concepts necessary to understand structs.
-Struct types can be used inside mappings and arrays and they can itself
-contain mappings and arrays.
+このコントラクトはクラウドファンディングの全機能を備えている訳ではありませんが、構造体を理解するために必要な基本的な概念を含んでいます。構造体型はマッピングや配列の中でも使えますし、構造体の中にマッピングや配列を含むこともできます。
 
-It is not possible for a struct to contain a member of its own type,
-although the struct itself can be the value type of a mapping member
-or it can contain a dynamically-sized array of its type.
-This restriction is necessary, as the size of the struct has to be finite.
+構造体自身はマッピングの要素の値型になったり、自分自身の型の動的配列を含むことはできますが、構造体の中に自分自身の構造体型を含めることはできません。構造体のサイズが有限である様にするためにこの制限が必要となっています。
 
-Note how in all the functions, a struct type is assigned to a local variable
-with data location ``storage``.
-This does not copy the struct but only stores a reference so that assignments to
-members of the local variable actually write to the state.
+これらの全てのファンクションの中で、構造体型がどの様にデータの保存場所である ``storage`` が付いているローカル変数に割り当てられているか注意してください。構造体をコピーしているのではなく、参照先を保存しているだけなので、ローカル変数への割り当ては実際は状態のみを記述しています。
 
-Of course, you can also directly access the members of the struct without
-assigning it to a local variable, as in
-``campaigns[campaignID].amount = 0``.
+もちろん、``campaigns[campaignID].amount = 0`` の様にローカル変数への割り当てをせずに直接構造体へアクセスすることもできます。

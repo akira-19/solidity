@@ -4,22 +4,15 @@
 Inheritance
 ***********
 
-Solidity supports multiple inheritance including polymorphism.
+Solidityはポリモフィズムを含めた多重継承をサポートしています。
 
-All function calls are virtual, which means that the most derived function
-is called, except when the contract name is explicitly given or the
-``super`` keyword is used.
+全てのファンクションコールは仮想です。つまりコントラクト名が明示的に与えられた場合、``super`` が使われた場合を除いて、最後に派生されたファンクションが呼ばれます。
 
-When a contract inherits from other contracts, only a single
-contract is created on the blockchain, and the code from all the base contracts
-is compiled into the created contract.
+あるコントラクトがある他のコントラクトを継承するとき、1つのコントラクトだけがブロックチェーン上に生成されます。全てのベースコントラクトからのコードは生成したコントラクトにコンパイルされます。
 
-The general inheritance system is very similar to
-`Python's <https://docs.python.org/3/tutorial/classes.html#inheritance>`_,
-especially concerning multiple inheritance, but there are also
-some :ref:`differences <multi-inheritance>`.
+継承のシステム全般は `Python <https://docs.python.org/3/tutorial/classes.html#inheritance>`_ にとても似ています。特に多重継承は似ていますが、いくつかの :ref:`違い <multi-inheritance>` もあります。
 
-Details are given in the following example.
+詳細は下記の例で示します。
 
 ::
 
@@ -91,9 +84,7 @@ Details are given in the following example.
        uint info;
     }
 
-Note that above, we call ``mortal.kill()`` to "forward" the
-destruction request. The way this is done is problematic, as
-seen in the following example::
+上記注目して頂きたいのですが、破壊の要求を"転送"するのに ``mortal.kill()`` を呼んでいます。これは下記の例で見られる様に問題があります::
 
     pragma solidity >=0.4.22 <0.6.0;
 
@@ -119,10 +110,7 @@ seen in the following example::
     contract Final is Base1, Base2 {
     }
 
-A call to ``Final.kill()`` will call ``Base2.kill`` as the most
-derived override, but this function will bypass
-``Base1.kill``, basically because it does not even know about
-``Base1``.  The way around this is to use ``super``::
+``Final.kill()`` のコールは、最後にオーバーライドされたものとして ``Base2.kill`` を呼び出し、このファンクションは ``Base1.kill`` をバイパスします。なぜなら、そのファンクションは ``Base1`` を把握していないからです。これの回避策は ``super`` を使うことです::
 
     pragma solidity >=0.4.22 <0.6.0;
 
@@ -149,16 +137,8 @@ derived override, but this function will bypass
     contract Final is Base1, Base2 {
     }
 
-If ``Base2`` calls a function of ``super``, it does not simply
-call this function on one of its base contracts.  Rather, it
-calls this function on the next base contract in the final
-inheritance graph, so it will call ``Base1.kill()`` (note that
-the final inheritance sequence is -- starting with the most
-derived contract: Final, Base2, Base1, mortal, owned).
-The actual function that is called when using super is
-not known in the context of the class where it is used,
-although its type is known. This is similar for ordinary
-virtual method lookup.
+もし ``Base2`` が ``super`` のファンクションを呼び出しても、単純にベースコントラクトの内の1つのこのファンクションを呼び出しません。最終的な継承図の中のベースコントラクトの次のコントラクトのファンクションを呼び出します。そのため、``Base1.kill()`` を呼び出します（最終的な継承の順番は、最後に継承されたコントラクトから始まります: Final、Base2、Base1、mortal、owned）。
+superを使った時に呼び出される実際のファンクションは、型が分かっていても、そのクラスのコンテキストの中ではわかりません。これは一般的な仮想メソッドの検索に似ています。
 
 .. index:: ! constructor
 
@@ -167,24 +147,15 @@ virtual method lookup.
 Constructors
 ============
 
-A constructor is an optional function declared with the ``constructor`` keyword
-which is executed upon contract creation, and where you can run contract
-initialisation code.
+コンストラクタは ``constructor`` キーワードで宣言され、コントラクト生成時に実行される任意のファンクションで、コントラクトの初期化コードを実行できます。
 
-Before the constructor code is executed, state variables are initialised to
-their specified value if you initialise them inline, or zero if you do not.
+コンストラクタが実行される前に、インラインで初期化していれば状態変数はその値で初期化され、していなければ0になります。
 
-After the constructor has run, the final code of the contract is deployed
-to the blockchain. The deployment of
-the code costs additional gas linear to the length of the code.
-This code includes all functions that are part of the public interface
-and all functions that are reachable from there through function calls.
-It does not include the constructor code or internal functions that are
-only called from the constructor.
+コンストラクタが実行された後、コントラクトの最終的なコードがブロックチェーンにデプロイされます。コードのデプロイはコードの長さに比例して追加のガスコストがかかります。
+このコードはpublicインターフェースの一部でありファンクション全てと、ファンクションコールを通じてアクセスできるファンクションを含んでいます。
+このコードはコンストラクタのコードと、コンストラクタからのみ呼ばれるinternalのファンクションは含んでいません。
 
-Constructor functions can be either ``public`` or ``internal``. If there is no
-constructor, the contract will assume the default constructor, which is
-equivalent to ``constructor() public {}``. For example:
+コンストラクタは ``public`` か ``internal`` です。もし、コンストラクタがなかったら、コントラクトはデフォルトのコンストラクタ（ ``constructor() public {}`` と等価の）を想定します。例えば:
 
 ::
 
@@ -202,21 +173,18 @@ equivalent to ``constructor() public {}``. For example:
         constructor() public {}
     }
 
-A constructor set as ``internal`` causes the contract to be marked as :ref:`abstract <abstract-contract>`.
+コンストラクタを ``internal`` でセットすると、そのコントラクトは :ref:`abstract <abstract-contract>` になります。
 
 .. warning ::
-    Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
-    This syntax was deprecated and is not allowed anymore in version 0.5.0.
-
+    0.4.22以前ではコンストラクタはコントラクトと同じ名前のファンクションとして定義されていました。このシンタックスは非推奨となり、バージョン0.5.0で使えなくなりました。
 
 .. index:: ! base;constructor
 
 Arguments for Base Constructors
 ===============================
 
-The constructors of all the base contracts will be called following the
-linearization rules explained below. If the base constructors have arguments,
-derived contracts need to specify all of them. This can be done in two ways::
+全てのベースコントラクトのコンストラクタは下記で説明される線形ルールに則り呼び出されます。もしベースコンストラクタが引数を持っていたら、継承したコントラクトはその全てを指定する必要があります。
+2通りの方法でできます::
 
     pragma solidity >=0.4.22 <0.6.0;
 
@@ -235,19 +203,10 @@ derived contracts need to specify all of them. This can be done in two ways::
         constructor(uint _y) Base(_y * _y) public {}
     }
 
-One way is directly in the inheritance list (``is Base(7)``).  The other is in
-the way a modifier is invoked as part of
-the derived constructor (``Base(_y * _y)``). The first way to
-do it is more convenient if the constructor argument is a
-constant and defines the behaviour of the contract or
-describes it. The second way has to be used if the
-constructor arguments of the base depend on those of the
-derived contract. Arguments have to be given either in the
-inheritance list or in modifier-style in the derived constructor.
-Specifying arguments in both places is an error.
+1つ目の方法は直接継承のリストに入れることです(``is Base(7)``)。もう1つの方法は継承したコンストラクタの一部としてmodifierを呼び出します(``Base(_y * _y)``)。もしコンストラクタの引数が定数で、コントラクトの挙動を決めるもしくは表現するものである場合、最初の方法の方が便利です。もしベースのコンストラクタの引数が継承したコントラクトによるのであれば、2つ目の方法を使う必要があります。引数は継承のリスト、もしくは継承したコンストラクタのmodifierスタイルで与えられる必要があります。
+両方で引数を指定するとエラーとなります。
 
-If a derived contract does not specify the arguments to all of its base
-contracts' constructors, it will be abstract.
+もし継承したコントラクトがベースコントラクトのコンストラクタに対する引数を決めなかった場合、そのコントラクトは抽象コントラクトになります。
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
@@ -256,24 +215,13 @@ contracts' constructors, it will be abstract.
 Multiple Inheritance and Linearization
 ======================================
 
-Languages that allow multiple inheritance have to deal with
-several problems.  One is the `Diamond Problem <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_.
-Solidity is similar to Python in that it uses "`C3 Linearization <https://en.wikipedia.org/wiki/C3_linearization>`_"
-to force a specific order in the directed acyclic graph (DAG) of base classes. This
-results in the desirable property of monotonicity but
-disallows some inheritance graphs. Especially, the order in
-which the base classes are given in the ``is`` directive is
-important: You have to list the direct base contracts
-in the order from "most base-like" to "most derived".
-Note that this order is the reverse of the one used in Python.
+多重継承ができる言語はいくつかの問題を扱わなければいけません。1つは `Diamond Problem <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_ です。SolidityはPythonに似ていて、"`C3 Linearization <https://en.wikipedia.org/wiki/C3_linearization>`_"を使っており、ベースクラスのdirected acyclic graph (DAG)で特定の順番にさせています。これはmonotonicityの理想的な性質を実現していますが、いくつかの継承図を許可していません。
+特に、``is`` で与えられたベースクラスの順番が重要です。直のベースコントラクトを"一番ベースになるもの"から"最後に継承されるもの"の順で並べなければいけません。
+これはPythonとは逆の順序であることに気をつけて下さい。
 
-Another simplifying way to explain this is that when a function is called that
-is defined multiple times in different contracts, the given bases
-are searched from right to left (left to right in Python) in a depth-first manner,
-stopping at the first match. If a base contract has already been searched, it is skipped.
+これを説明する別のシンプルな方法は、異なるコントラクトで何度か定義されたファンクションが呼ばれる時、ベースコントラクトは縦型探索で右から左に調べて（Pythonだと左から右）、最初にマッチしたところで止まります。もしすでにベースコントラクトが検索済みだった場合、それはスキップされます。
 
-In the following code, Solidity will give the
-error "Linearization of inheritance graph impossible".
+下記のコードでは、Solidityは"Linearization of inheritance graph impossible"というエラーを出します。
 
 ::
 
@@ -284,16 +232,11 @@ error "Linearization of inheritance graph impossible".
     // This will not compile
     contract C is A, X {}
 
-The reason for this is that ``C`` requests ``X`` to override ``A``
-(by specifying ``A, X`` in this order), but ``A`` itself
-requests to override ``X``, which is a contradiction that
-cannot be resolved.
-
-
+この理由は、``A`` をオーバーライドするのに ``C`` は ``X`` をリクエストしましたが、``A``　自体は ``X`` をオーバーライドしようとしたので、矛盾が生まれたことです。
 
 Inheriting Different Kinds of Members of the Same Name
 ======================================================
 
-When the inheritance results in a contract with a function and a modifier of the same name, it is considered as an error.
-This error is produced also by an event and a modifier of the same name, and a function and an event of the same name.
-As an exception, a state variable getter can override a public function.
+継承の結果、同じ名前のファンクションとmodifierがあるコントラクトになった場合、エラーになります。
+このエラーは同じイベント名とmodifier名、同じイベント名とファンクション名でも起きます。
+例外として、状態変数のgetterはpublicファンクションをオーバーライドできます。

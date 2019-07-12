@@ -9,83 +9,91 @@ Contract ABI Specification
 Basic Design
 ============
 
-The Contract Application Binary Interface (ABI) is the standard way to interact with contracts in the Ethereum ecosystem, both
-from outside the blockchain and for contract-to-contract interaction. Data is encoded according to its type,
-as described in this specification.  The encoding is not self describing and thus requires a schema in order to decode.
+コントラクトにおけるアプリケーションバイナリインターフェース(Application Binary Interface, ABI)はイーサリアムエコシステム内でコントラクトに接続するスタンダードなインターフェースです。コントラクトもABIもブロックチェーン外で作成され、ABIはコントラクトとコントラクトを接続するために使用されます。このドキュメントで紹介されているように、データはABIに従う形でエンコーディングされます。このエンコーディングのやり方は自己記述的なものではありません。そのため、デコードを行う際には、あるスキーマで行うことが必要になります。
 
-We assume the interface functions of a contract are strongly typed, known at compilation time and static. We assume that all contracts will have the interface definitions of any contracts they call available at compile-time.
+コントラクトのインターフェースは型付けされていることが強制されます。このことはコンパイル時に静的型付けであることとしてすでに知られていることです。すべてのコントラクトは、コンパイル時に呼び出し可能なすべてのコントラクトのインターフェース定義を内包します。
 
-This specification does not address contracts whose interface is dynamic or otherwise known only at run-time.
+この仕様は動的なインターフェースやランタイムにのみ認識されるインターフェースを持つコントラクトには対応しません。
 
 .. _abi_function_selector:
 
-Function Selector
+Function selector
 =================
 
-The first four bytes of the call data for a function call specifies the function to be called. It is the
-first (left, high-order in big-endian) four bytes of the Keccak-256 (SHA-3) hash of the signature of the function. The signature is defined as the canonical expression of the basic prototype without data location specifier, i.e.
-the function name with the parenthesised list of parameter types. Parameter types are split by a single comma - no spaces are used.
+関数呼び出し時のコールデータの最初の4バイトは呼び出す関数を指定しています。関数シグネチャにおけるKeccak-256(SHA-3)ハッシュの最初の4バイト(左から4バイトでビッグ・エンディアンの順序になっています)のことです。このシグネチャはデータ位置指定子(data location specifier)を含まない基本プロトタイプの正規表現として定義されています。例えば、かっこで囲まれたパラメータ型のリストを含む関数名などが挙げられます。パラメータの型は単一のコンマで区切られ、スペースは使用されません。
 
 .. note::
-    The return type of a function is not part of this signature. In :ref:`Solidity's function overloading <overload-function>` return types are not considered. The reason is to keep function call resolution context-independent.
-    The :ref:`JSON description of the ABI<abi_json>` however contains both inputs and outputs.
+    関数の戻り値の型はこのシグニチャの一部ではありません。 :ref:`Solidityの関数のオーバーロード<overload-function>` においては、戻り値の型は考慮されません。これは関数呼び出しを特定のコンテキストに依存しないようにするためです。
+    しかし、:ref:`ABIのJSON記述<abi_json>` は入力値と出力値の両方を含むことに注意が必要です。
 
 Argument Encoding
 =================
 
-Starting from the fifth byte, the encoded arguments follow. This encoding is also used in other places, e.g. the return values and also event arguments are encoded in the same way, without the four bytes specifying the function.
+先頭から数えて5バイト目から、エンコーディングされた引数が続きます。このエンコーディングされた引数は、特定の関数を指定する4バイトを除いて、戻り値などの別の場所でも使用されます。また、イベント引数も同やり方でエンコーディングされます。
 
 Types
 =====
 
-The following elementary types exist:
+基本の型は以下です:
 
-- ``uint<M>``: unsigned integer type of ``M`` bits, ``0 < M <= 256``, ``M % 8 == 0``. e.g. ``uint32``, ``uint8``, ``uint256``.
+- ``uint<M>``:  ``M`` ビットのunsigned int型。 ``0 < M <= 256`` と ``M % 8 == 0`` である必要があります。 ``uint32`` 、``uint8`` 、``uint256`` が挙げられます。
 
-- ``int<M>``: two's complement signed integer type of ``M`` bits, ``0 < M <= 256``, ``M % 8 == 0``.
+- ``int<M>``: 2の補数がつく ``M`` ビットのsigned int型。 ``0 < M <= 256`` 、``M % 8 == 0`` である必要があります。
 
-- ``address``: equivalent to ``uint160``, except for the assumed interpretation and language typing. For computing the function selector, ``address`` is used.
+- ``address``:  ``uint160`` と同等です。ただしこの場合、``uint160`` が暗黙的な値や型であるときを除きます。関数セレクタを計算する際に、``address`` は使用されます。
 
-- ``uint``, ``int``: synonyms for ``uint256``, ``int256`` respectively. For computing the function selector, ``uint256`` and ``int256`` have to be used.
+- ``uint``, ``int``:  ``uint256`` や ``int256`` と同じ意味です。関数セレクタを計算する際に、``uint256`` と ``int256`` は必ず使用されなくてはなりません。
 
-- ``bool``: equivalent to ``uint8`` restricted to the values 0 and 1. For computing the function selector, ``bool`` is used.
+- ``bool``:  ``uint8`` と同等です。ただしこの場合、値は0と1のみである必要があります。 関数セレクタを計算する際に、``bool`` が使用されます。
 
-- ``fixed<M>x<N>``: signed fixed-point decimal number of ``M`` bits, ``8 <= M <= 256``, ``M % 8 ==0``, and ``0 < N <= 80``, which denotes the value ``v`` as ``v / (10 ** N)``.
+- ``fixed<M>x<N>``:  ``M`` ビットの符号付き固定小数点。 ``8 <= M <= 256`` 、``M % 8 ==0``　、``0 < N <= 80`` である必要があり、``v`` as ``v / (10 ** N)`` であることを示します。
 
-- ``ufixed<M>x<N>``: unsigned variant of ``fixed<M>x<N>``.
+- ``ufixed<M>x<N>``:  ``fixed<M>x<N>`` の符号付き変数。
 
-- ``fixed``, ``ufixed``: synonyms for ``fixed128x18``, ``ufixed128x18`` respectively. For computing the function selector, ``fixed128x18`` and ``ufixed128x18`` have to be used.
+- ``fixed``, ``ufixed``:  ``fixed128x18`` や ``ufixed128x18`` と同じ意味です。関数セレクタを計算する際に、``fixed128x18`` と ``ufixed128x18`` は必ず使用されなくてはなりません。
 
-- ``bytes<M>``: binary type of ``M`` bytes, ``0 < M <= 32``.
+- ``bytes<M>``:  ``M`` バイトのバイナリ型。 ``0 < M <= 32`` です。
 
-- ``function``: an address (20 bytes) followed by a function selector (4 bytes). Encoded identical to ``bytes24``.
+- ``function``: アドレス（20バイト）とそれに続く関数セレクタ（4バイト）。 ``bytes24`` と同じエンコーディングです。
 
-The following (fixed-size) array type exists:
+固定長な型は以下です:
 
-- ``<type>[M]``: a fixed-length array of ``M`` elements, ``M >= 0``, of the given type.
+- ``<type>[M]``:  ``M`` 個要素の固定長配列です。与えられた型の ``M >= 0`` になります。
 
-The following non-fixed-size types exist:
+可変長な型は以下です:
 
-- ``bytes``: dynamic sized byte sequence.
+- ``bytes``: 動的サイズのバイトシーケンス。
 
-- ``string``: dynamic sized unicode string assumed to be UTF-8 encoded.
+- ``string``: UTF-8でエンコードされている動的サイズのUnicode文字列。
 
-- ``<type>[]``: a variable-length array of elements of the given type.
+- ``<type>[]``: 指定されたタイプの要素の可変長配列。
 
-Types can be combined to a tuple by enclosing them inside parentheses, separated by commas:
+データ型はカンマで区切って括弧で囲むとタプルにまとめることができます:
 
-- ``(T1,T2,...,Tn)``: tuple consisting of the types ``T1``, ..., ``Tn``, ``n >= 0``
+- ``(T1,T2,...,Tn)``: 同じデータ型 ``T1`` ..., ``Tn``, ``n >= 0`` で構成されたタプル。
 
-It is possible to form tuples of tuples, arrays of tuples and so on.  It is also possible to form zero-tuples (where ``n == 0``).
+また、タプルのタプル、タプルの配列なども形成することができます。ゼロタプル( ``n == 0`` )を作ることもできます。
 
 Mapping Solidity to ABI types
 -----------------------------
+Solidityは上記のすべての型を同じ名前でサポートしています(ただしタプルは例外です)。一方で、SolidityタイプのいくつかはABIにはサポートされていません。次の表は、左列にABIにサポートされていないSolidityのデータ型を、右列にはABI側でのそのデータ型の表記を表しています。
 
-Solidity supports all the types presented above with the same names with the
-exception of tuples. On the other hand, some Solidity types are not supported
-by the ABI.  The following table shows on the left column Solidity types that
-are not part of the ABI, and on the right column the ABI types that represent
-them.
++-------------------------------+-----------------------------------------------------------------------------+
+|      Solidity                 |                                           ABI                               |
++===============================+=============================================================================+
+|:ref:`address payable<address>`|``address``                                                                  |
++-------------------------------+-----------------------------------------------------------------------------+
+|:ref:`contract<contracts>`     |``address``                                                                  |
++-------------------------------+-----------------------------------------------------------------------------+
+|:ref:`enum<enums>`             |すべての値を保持できる大きさの値のなかで最小の ``uint`` 型                           |
+|                               |                                                                             |
+|                               |例えば255個以下の値の ``enum`` は ``uint8`` にマッピングされ、                    |
+|                               |256個の値の ``enum`` は ``uint16`` にマッピングされます                           |
++-------------------------------+-----------------------------------------------------------------------------+
+|:ref:`struct<structs>`         |``tuple``                                                                    |
++-------------------------------+-----------------------------------------------------------------------------+
+
+
 
 +-------------------------------+-----------------------------------------------------------------------------+
 |      Solidity                 |                                           ABI                               |
@@ -102,113 +110,115 @@ them.
 |:ref:`struct<structs>`         |``tuple``                                                                    |
 +-------------------------------+-----------------------------------------------------------------------------+
 
+
 Design Criteria for the Encoding
 ================================
 
-The encoding is designed to have the following properties, which are especially useful if some arguments are nested arrays:
+エンコーディングは次のプロパティを持つように設計されています。これは、引数がネストされた配列の場合に特に便利です。
 
-  1. The number of reads necessary to access a value is at most the depth of the value inside the argument array structure, i.e. four reads are needed to retrieve ``a_i[k][l][r]``. In a previous version of the ABI, the number of reads scaled linearly with the total number of dynamic parameters in the worst case.
+  1. 値にアクセスするのに必要な読み込みの数は、引数となる配列構造内の値の最大の深さに依ります。すなわち、``a_i [k] [l] [r]`` を取得するには4回の読み込みが必要になるということです。以前のバージョンのABIでは、最悪の場合、読み取り数は動的パラメータの総数に比例して増減しました。
 
-  2. The data of a variable or array element is not interleaved with other data and it is relocatable, i.e. it only uses relative "addresses".
-
+  2. 変数または配列要素のデータは他のデータとインターリーブされません。またこれらのデータは再配置可能です。つまり、相対的な「アドレス」のみを使用します。
 
 Formal Specification of the Encoding
 ====================================
 
-We distinguish static and dynamic types. Static types are encoded in-place and dynamic types are encoded at a separately allocated location after the current block.
+静的型と動的型を区別するようにします。静的型はインプレースでエンコードされ、動的型はカレントブロック後に別々に割り当てられた場所でエンコードされます。
 
-**Definition:** The following types are called "dynamic":
+**定義:** 次の型は「動的型」です:
 
 * ``bytes``
 * ``string``
-* ``T[]`` for any ``T``
-* ``T[k]`` for any dynamic ``T`` and any ``k >= 0``
-* ``(T1,...,Tk)`` if ``Ti`` is dynamic for some ``1 <= i <= k``
+* 任意の ``T`` における ``T[]``
+* 任意の動的な ``T`` と任意の ``k >= 0`` における ``T[k]``
+* ``Ti`` が ``1 <= i <= k`` に対して動的である場合の ``(T1,...,Tk)``
 
-All other types are called "static".
+上記以外のすべてのすべての型は「静的型」です。
 
-**Definition:** ``len(a)`` is the number of bytes in a binary string ``a``.
-The type of ``len(a)`` is assumed to be ``uint256``.
+**定義:** ``len(a)`` はバイナリ文字列 ``a`` のバイト数です。``len(a)`` の型は ``uint256`` であると仮定されます。
 
-We define ``enc``, the actual encoding, as a mapping of values of the ABI types to binary strings such
-that ``len(enc(X))`` depends on the value of ``X`` if and only if the type of ``X`` is dynamic.
+実際のエンコーディングである ``enc`` は、ABI型の値を以下のようなバイナリ文字列にマッピングするものとして定義します。``len(enc(X))`` は ``X`` の型が動的である場合に限り、``X`` の値に依存します。
 
-**Definition:** For any ABI value ``X``, we recursively define ``enc(X)``, depending
-on the type of ``X`` being
+**定義:** 任意のABI値 ``X`` に対して、下記の ``X`` の型によって再帰的に ``enc(X)`` を定義します。
 
-- ``(T1,...,Tk)`` for ``k >= 0`` and any types ``T1``, ..., ``Tk``
+- ``k >= 0`` かつ任意の型  ``T1``, ..., ``Tk`` における ``(T1,...,Tk)`` のときは以下の様になります:
 
   ``enc(X) = head(X(1)) ... head(X(k)) tail(X(1)) ... tail(X(k))``
 
-  where ``X = (X(1), ..., X(k))`` and
-  ``head`` and ``tail`` are defined for ``Ti`` being a static type as
+  ``Ti`` が静的型である場合、``X = (X(1)), ..., X(k))`` と ``head`` と ``tail`` は以下のように
 
-    ``head(X(i)) = enc(X(i))`` and ``tail(X(i)) = ""`` (the empty string)
+    ``head(X(i)) = enc(X(i))`` および ``tail(X(i)) = ""`` （空の文字列）
 
-  and as
+  や
 
     ``head(X(i)) = enc(len(head(X(1)) ... head(X(k)) tail(X(1)) ... tail(X(i-1)) ))``
     ``tail(X(i)) = enc(X(i))``
 
-  otherwise, i.e. if ``Ti`` is a dynamic type.
+  となります。
 
-  Note that in the dynamic case, ``head(X(i))`` is well-defined since the lengths of
-  the head parts only depend on the types and not the values. Its value is the offset
-  of the beginning of ``tail(X(i))`` relative to the start of ``enc(X)``.
+  上記以外の場合は、``Ti`` は動的型です。
 
-- ``T[k]`` for any ``T`` and ``k``:
+  動的な場合、``head(X(i))`` は
+  ヘッド部分がそのデータ型にのみ依存し、値には依存しません。またその値は ``enc(X)`` の先頭から ``tail(X(i))`` の先頭までの範囲でのオフセットです。
+
+- 任意の ``T`` と ``k`` における ``T[k]`` のときは以下になります:
 
   ``enc(X) = enc((X[0], ..., X[k-1]))``
 
-  i.e. it is encoded as if it were a tuple with ``k`` elements
-  of the same type.
+  すなわち、同じ型の ``k`` 要素を持つタプルであるかのようにエンコードされます。
 
-- ``T[]`` where ``X`` has ``k`` elements (``k`` is assumed to be of type ``uint256``):
+-  ``X`` が ``k`` 要素を持つとき( ``k`` は ``uint256`` 型であると仮定されます)の ``T[]`` のときは以下になります:
 
   ``enc(X) = enc(k) enc([X[0], ..., X[k-1]])``
 
-  i.e. it is encoded as if it were an array of static size ``k``, prefixed with
-  the number of elements.
+  すなわち、要素数を前に付けた静的サイズの ``k`` の配列であるかのようにエンコードされます。
 
-- ``bytes``, of length ``k`` (which is assumed to be of type ``uint256``):
+- 長さが ``k`` (これは ``uint256`` 型であると仮定されます)の ``bytes`` のときは以下になります:
 
-  ``enc(X) = enc(k) pad_right(X)``, i.e. the number of bytes is encoded as a
-  ``uint256`` followed by the actual value of ``X`` as a byte sequence, followed by
-  the minimum number of zero-bytes such that ``len(enc(X))`` is a multiple of 32.
+  ``enc(X) = enc(k) pad_right(X)``。すなわち、バイト数は
+  ``uint256`` の後にバイトシーケンスとしての ``X`` の実際の値が続き、その後に ``len(enc(X))`` が32の倍数になるような最小ゼロバイト数が続きます。
 
-- ``string``:
+- ``string`` のときは以下になります:
 
-  ``enc(X) = enc(enc_utf8(X))``, i.e. ``X`` is utf-8 encoded and this value is interpreted as of ``bytes`` type and encoded further. Note that the length used in this subsequent encoding is the number of bytes of the utf-8 encoded string, not its number of characters.
+  ``enc(X) = enc(enc_utf8(X))``。すなわち、``X`` はUTF-8でエンコードされており、この値は ``bytes`` 型として解釈され、さらにエンコードされます。この後のエンコーディングで使用される長さは、その文字数ではなく、utf-8でエンコードされた文字列のバイト数です。
 
-- ``uint<M>``: ``enc(X)`` is the big-endian encoding of ``X``, padded on the higher-order (left) side with zero-bytes such that the length is 32 bytes.
-- ``address``: as in the ``uint160`` case
-- ``int<M>``: ``enc(X)`` is the big-endian two's complement encoding of ``X``, padded on the higher-order (left) side with ``0xff`` for negative ``X`` and with zero bytes for positive ``X`` such that the length is 32 bytes.
-- ``bool``: as in the ``uint8`` case, where ``1`` is used for ``true`` and ``0`` for ``false``
-- ``fixed<M>x<N>``: ``enc(X)`` is ``enc(X * 10**N)`` where ``X * 10**N`` is interpreted as a ``int256``.
-- ``fixed``: as in the ``fixed128x18`` case
-- ``ufixed<M>x<N>``: ``enc(X)`` is ``enc(X * 10**N)`` where ``X * 10**N`` is interpreted as a ``uint256``.
-- ``ufixed``: as in the ``ufixed128x18`` case
-- ``bytes<M>``: ``enc(X)`` is the sequence of bytes in ``X`` padded with trailing zero-bytes to a length of 32 bytes.
+- ``uint<M>``: ``enc(X)`` は ``X`` のビッグエンディアンエンコーディングで、長さが32バイトになるように高位(左側)にゼロバイトが埋め込まれます。
 
-Note that for any ``X``, ``len(enc(X))`` is a multiple of 32.
+- ``address``: ``uint160`` の場合と同じです。
+
+- ``int<M>``: ``enc(X)`` は、``X`` のビッグエンディアンの2の補数エンコーディングで、負の ``X`` の場合は高位(左側)に ``0xff`` がパディングされ、長さが32バイトになるような正の ``X`` の場合はゼロバイトがパディングされます。
+
+- ``bool``: ``uint8`` の場合のように、``1`` は ``true`` が使われ、``0`` は ``false`` が使われます。
+
+- ``fixed<M>x<N>``: ``enc(X)`` は ``enc(X * 10**N)`` です。ここで ``X * 10**N`` は ``int256`` として解釈されます。
+
+- ``fixed``: ``fixed128x18`` の場合と同じです。
+
+- ``ufixed<M>x<N>``: ``enc(X)`` は ``enc(X * 10**N)`` です。ここで ``X * 10**N`` は ``uint256`` として解釈されます。
+
+- ``ufixed``: ``fixed128x18`` の場合と同じです。
+
+- ``bytes<M>``: ``enc(X)`` は末尾の0バイトを32バイトの長さまで埋め込んだ ``X`` 内のバイトの並びです。
+
+ 任意の ``X`` において、``len(enc(X))`` は32の倍数であることを念頭に入れてください。
 
 Function Selector and Argument Encoding
 =======================================
 
-All in all, a call to the function ``f`` with parameters ``a_1, ..., a_n`` is encoded as
+たいていの場合、``a_1, ..., a_n`` をパラメータとして関数 ``f`` をコールするときには次のようにエンコーディングされます。
 
   ``function_selector(f) enc((a_1, ..., a_n))``
 
-and the return values ``v_1, ..., v_k`` of ``f`` are encoded as
+また、``f`` の返り値である ``v_1, ..., v_k`` は次のようにエンコーディングされます。
 
   ``enc((v_1, ..., v_k))``
 
-i.e. the values are combined into a tuple and encoded.
+すなわち、値はタプルに組み合わされてエンコードされます。
 
 Examples
 ========
 
-Given the contract:
+次のコントラクトがあります:
 
 ::
 
@@ -220,47 +230,48 @@ Given the contract:
       function sam(bytes memory, bool, uint[] memory) public pure {}
     }
 
+このように ``Foo`` の例では、もしパラメータに「69」と「true」を指定して「baz」を呼び出すなら、合計68バイトを渡します。このことは次のように分割できます。
 
-Thus for our ``Foo`` example if we wanted to call ``baz`` with the parameters ``69`` and ``true``, we would pass 68 bytes total, which can be broken down into:
+- ``0xcdcd77c0``: 指定のメソッドID。これは ``baz(uint32,bool)`` の署名のASCII形式のKeccakハッシュにおける最初の4バイトとして導出されます。
+- ``0x0000000000000000000000000000000000000000000000000000000000000045``: 32バイトにパディングされた最初のパラメータ ``69`` のuint32値。
+- ``0x0000000000000000000000000000000000000000000000000000000000000001``: 32バイトにパディングされた2番目のパラメータ ``true`` のブール値。
 
-- ``0xcdcd77c0``: the Method ID. This is derived as the first 4 bytes of the Keccak hash of the ASCII form of the signature ``baz(uint32,bool)``.
-- ``0x0000000000000000000000000000000000000000000000000000000000000045``: the first parameter, a uint32 value ``69`` padded to 32 bytes
-- ``0x0000000000000000000000000000000000000000000000000000000000000001``: the second parameter - boolean ``true``, padded to 32 bytes
-
-In total:
+これらを連結すると:
 
 .. code-block:: none
 
     0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001
 
-It returns a single ``bool``. If, for example, it were to return ``false``, its output would be the single byte array ``0x0000000000000000000000000000000000000000000000000000000000000000``, a single bool.
+一つの ``bool`` を返します。たとえば、``false`` を返すことになっていたら、その出力はシングルバイト配列 ``0x000000000000000000000000000000000000000000000000000000000000``、シングルブールになります。
 
-If we wanted to call ``bar`` with the argument ``["abc", "def"]``, we would pass 68 bytes total, broken down into:
+これは1つの ``bool`` 値を返します。 もしここで例えばこの値が ``false`` を返すなら、その出力はバイト配列の ``0x0000000000000000000000000000000000000000000000000000000000000000`` となるでしょう。
 
-- ``0xfce353f6``: the Method ID. This is derived from the signature ``bar(bytes3[2])``.
-- ``0x6162630000000000000000000000000000000000000000000000000000000000``: the first part of the first parameter, a ``bytes3`` value ``"abc"`` (left-aligned).
-- ``0x6465660000000000000000000000000000000000000000000000000000000000``: the second part of the first parameter, a ``bytes3`` value ``"def"`` (left-aligned).
+引数 ``["abc"、"def"]`` と共に ``bar`` を呼び出したい場合は、合計68バイトを渡します。これは次のように分割されます:
 
-In total:
+- ``0xfce353f6``: 指定のメソッドID。これは ``bar(bytes3[2])`` の署名から導出されます。
+- ``0x6162630000000000000000000000000000000000000000000000000000000000``: 最初の引数の最初のパート、``bytes3`` の値 ``"abc"`` (左寄せ)。
+- ``0x6465660000000000000000000000000000000000000000000000000000000000``: 最初の引数の2番目のパート、``bytes3`` の値 ``"def"`` (左寄せ)。
+
+これらを連結すると:
 
 .. code-block:: none
 
     0xfce353f661626300000000000000000000000000000000000000000000000000000000006465660000000000000000000000000000000000000000000000000000000000
 
-If we wanted to call ``sam`` with the arguments ``"dave"``, ``true`` and ``[1,2,3]``, we would pass 292 bytes total, broken down into:
+引数として ``"dave"``、``true`` および ``[1,2,3]`` を付けて ``sam`` を呼び出したい場合、合計292バイトを渡します。
 
-- ``0xa5643bf2``: the Method ID. This is derived from the signature ``sam(bytes,bool,uint256[])``. Note that ``uint`` is replaced with its canonical representation ``uint256``.
-- ``0x0000000000000000000000000000000000000000000000000000000000000060``: the location of the data part of the first parameter (dynamic type), measured in bytes from the start of the arguments block. In this case, ``0x60``.
-- ``0x0000000000000000000000000000000000000000000000000000000000000001``: the second parameter: boolean true.
-- ``0x00000000000000000000000000000000000000000000000000000000000000a0``: the location of the data part of the third parameter (dynamic type), measured in bytes. In this case, ``0xa0``.
-- ``0x0000000000000000000000000000000000000000000000000000000000000004``: the data part of the first argument, it starts with the length of the byte array in elements, in this case, 4.
-- ``0x6461766500000000000000000000000000000000000000000000000000000000``: the contents of the first argument: the UTF-8 (equal to ASCII in this case) encoding of ``"dave"``, padded on the right to 32 bytes.
-- ``0x0000000000000000000000000000000000000000000000000000000000000003``: the data part of the third argument, it starts with the length of the array in elements, in this case, 3.
-- ``0x0000000000000000000000000000000000000000000000000000000000000001``: the first entry of the third parameter.
-- ``0x0000000000000000000000000000000000000000000000000000000000000002``: the second entry of the third parameter.
-- ``0x0000000000000000000000000000000000000000000000000000000000000003``: the third entry of the third parameter.
+- ``0xa5643bf2``: 指定のメソッドID。 これは ``sam(bytes,bool,uint256[])`` の署名から導出されます。 ``uint`` はその正規表現 ``uint256`` に置き換えられていることを念頭に入れてください。
+- ``0x0000000000000000000000000000000000000000000000000000000000000060``: 引数ブロックの先頭からのバイト単位で測定された、最初のパラメータ（動的型）のデータ部分の位置。この場合は ``0x60`` です。
+- ``0x0000000000000000000000000000000000000000000000000000000000000001``: 2番目のパラメータ: ``true`` のブール値。
+- ``0x00000000000000000000000000000000000000000000000000000000000000a0``: 3番目のパラメータ(動的型)のデータ部分の位置(バイト単位)。この場合、``0xa0`` です。
+- ``0x0000000000000000000000000000000000000000000000000000000000000004``: 最初の引数のデータ部分。要素のバイト配列の長さで始まります。この場合は4です。
+- ``0x6461766500000000000000000000000000000000000000000000000000000000``: 最初の引数の内容：32バイトまで右側にパディングしたUTF-8(この場合はASCIIに等しくなります)エンコーディング。
+- ``0x0000000000000000000000000000000000000000000000000000000000000003``: 3番目の引数のデータ部分。要素の配列の長さから始まります。この場合は3です。
+- ``0x0000000000000000000000000000000000000000000000000000000000000001``: 3番目のパラメータの最初のデータ
+- ``0x0000000000000000000000000000000000000000000000000000000000000002``: 3番目のパラメータの2番目のデータ
+- ``0x0000000000000000000000000000000000000000000000000000000000000003``: 3番目のパラメータの３番目のデータ
 
-In total:
+これらを連結すると:
 
 .. code-block:: none
 
@@ -269,28 +280,28 @@ In total:
 Use of Dynamic Types
 ====================
 
-A call to a function with the signature ``f(uint,uint32[],bytes10,bytes)`` with values ``(0x123, [0x456, 0x789], "1234567890", "Hello, world!")`` is encoded in the following way:
+ ``(0x123、[0x456、0x789]、"1234567890"、"Hello、world！")`` の値を持つシグネチャ ``f(uint、uint32[]、bytes10、bytes)`` を持つ関数コールは次のようにエンコードされます:
 
-We take the first four bytes of ``sha3("f(uint256,uint32[],bytes10,bytes)")``, i.e. ``0x8be65246``.
-Then we encode the head parts of all four arguments. For the static types ``uint256`` and ``bytes10``, these are directly the values we want to pass, whereas for the dynamic types ``uint32[]`` and ``bytes``, we use the offset in bytes to the start of their data area, measured from the start of the value encoding (i.e. not counting the first four bytes containing the hash of the function signature). These are:
+ ``sha3("f(uint256,uint32[],bytes10,bytes)")`` の最初の4バイトを取ります。すなわち、``0x8be65246`` です。
+それから、4つの引数すべての先頭部分をエンコードします。静的型である ``uint256`` と ``bytes10`` の場合、これらは直接渡したい値ではありますが、動的型の ``uint32[]`` と ``bytes`` の場合は、値エンコーディングの開始から測定された、データ領域の開始までのバイト単位のオフセットを使用します(つまり、関数シグネチャのハッシュを含む最初の4バイトはカウントしません)。これらは:
 
- - ``0x0000000000000000000000000000000000000000000000000000000000000123`` (``0x123`` padded to 32 bytes)
- - ``0x0000000000000000000000000000000000000000000000000000000000000080`` (offset to start of data part of second parameter, 4*32 bytes, exactly the size of the head part)
- - ``0x3132333435363738393000000000000000000000000000000000000000000000`` (``"1234567890"`` padded to 32 bytes on the right)
- - ``0x00000000000000000000000000000000000000000000000000000000000000e0`` (offset to start of data part of fourth parameter = offset to start of data part of first dynamic parameter + size of data part of first dynamic parameter = 4\*32 + 3\*32 (see below))
+ - ``0x0000000000000000000000000000000000000000000000000000000000000123`` (32バイトにパディングされた ``0x123`` の値)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000080`` (2番目のパラメータのデータ部の先頭までのオフセット。4 * 32バイト。正確には先頭部分のサイズ)
+ - ``0x3132333435363738393000000000000000000000000000000000000000000000`` (32バイトに右詰めにパディングされた ``"1234567890"`` の値)
+ - ``0x00000000000000000000000000000000000000000000000000000000000000e0`` (4番目のパラメータのデータ部の先頭までのオフセット = 最初の動的パラメータのデータ部の先頭までのオフセット + 最初の動的パラメータのデータ部のサイズ = 4 \ * 32 + 3 \ * 32(下記を参照してください)))
 
-After this, the data part of the first dynamic argument, ``[0x456, 0x789]`` follows:
+このあと、最初の動的引数のデータ部分である  ``[0x456, 0x789]`` は次のようになります:
 
- - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (number of elements of the array, 2)
- - ``0x0000000000000000000000000000000000000000000000000000000000000456`` (first element)
- - ``0x0000000000000000000000000000000000000000000000000000000000000789`` (second element)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (配列の要素数、2)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000456`` (最初の要素)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000789`` (2番目の要素)
 
-Finally, we encode the data part of the second dynamic argument, ``"Hello, world!"``:
+最後に、2番目の動的引数のデータ部分、``"Hello, world!"`` をエンコードします:
 
- - ``0x000000000000000000000000000000000000000000000000000000000000000d`` (number of elements (bytes in this case): 13)
- - ``0x48656c6c6f2c20776f726c642100000000000000000000000000000000000000`` (``"Hello, world!"`` padded to 32 bytes on the right)
+ - ``0x000000000000000000000000000000000000000000000000000000000000000d`` (要素数(この場合バイトになります): 13)
+ - ``0x48656c6c6f2c20776f726c642100000000000000000000000000000000000000`` (32バイトになるように右側にパディングした ``"Hello, world!"`` )
 
-All together, the encoding is (newline after function selector and each 32-bytes for clarity):
+こうして、エンコーディングは次のとおりです(関数セレクタの後に改行、わかりやすくするために各32バイト):
 
 .. code-block:: none
 
@@ -305,169 +316,168 @@ All together, the encoding is (newline after function selector and each 32-bytes
       000000000000000000000000000000000000000000000000000000000000000d
       48656c6c6f2c20776f726c642100000000000000000000000000000000000000
 
-Let us apply the same principle to encode the data for a function with a signature ``g(uint[][],string[])`` with values ``([[1, 2], [3]], ["one", "two", "three"])`` but start from the most atomic parts of the encoding:
+``([[1、2]、[3]]、["one"、"two"、"three"])`` の値で署名付きの関数 ``g(uint[][],string[])`` に同じ原則を適用します。しかし、エンコーディングの最も基本的な部分から始めましょう:
 
-First we encode the length and data of the first embedded dynamic array ``[1, 2]`` of the first root array ``[[1, 2], [3]]``:
+まずはじめに、最初のルート配列 ``[[1, 2], [3]]`` の最初の動的な要素配列 ``[1, 2]`` の長さとデータをエンコードします。
 
- - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (number of elements in the first array, 2; the elements themselves are ``1``  and ``2``)
- - ``0x0000000000000000000000000000000000000000000000000000000000000001`` (first element)
- - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (second element)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (最初の配列の要素数である2。ただし要素自体は1と2です)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000001`` (最初の要素)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (2番目の要素)
 
-Then we encode the length and data of the second embedded dynamic array ``[3]`` of the first root array ``[[1, 2], [3]]``:
+次に、最初のルート配列 ``[[1、2]、[3]]`` の2番目の動的な要素配列 ``[3]`` の長さとデータをエンコードします。
 
- - ``0x0000000000000000000000000000000000000000000000000000000000000001`` (number of elements in the second array, 1; the element is ``3``)
- - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (first element)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000001`` (2番目の配列の要素数である1。要素は3です)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (最初の要素)
 
-Then we need to find the offsets ``a`` and ``b`` for their respective dynamic arrays  ``[1, 2]`` and ``[3]``. To calculate the offsets we can take a look at the encoded data of the first root array ``[[1, 2], [3]]`` enumerating each line in the encoding:
-
-.. code-block:: none
-
-    0 - a                                                                - offset of [1, 2]
-    1 - b                                                                - offset of [3]
-    2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
-    3 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
-    4 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
-    5 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
-    6 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
-
-Offset ``a`` points to the start of the content of the array ``[1, 2]`` which is line 2 (64 bytes); thus ``a = 0x0000000000000000000000000000000000000000000000000000000000000040``.
-
-Offset ``b`` points to the start of the content of the array ``[3]`` which is line 5 (160 bytes); thus ``b = 0x00000000000000000000000000000000000000000000000000000000000000a0``.
-
-
-Then we encode the embedded strings of the second root array:
-
- - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (number of characters in word ``"one"``)
- - ``0x6f6e650000000000000000000000000000000000000000000000000000000000`` (utf8 representation of word ``"one"``)
- - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (number of characters in word ``"two"``)
- - ``0x74776f0000000000000000000000000000000000000000000000000000000000`` (utf8 representation of word ``"two"``)
- - ``0x0000000000000000000000000000000000000000000000000000000000000005`` (number of characters in word ``"three"``)
- - ``0x7468726565000000000000000000000000000000000000000000000000000000`` (utf8 representation of word ``"three"``)
-
-In parallel to the first root array, since strings are dynamic elements we need to find their offsets ``c``, ``d`` and ``e``:
+それから、それぞれの動的配列 ``[1、2]`` と ``[3]`` に対するオフセット ``a`` と ``b`` を見つける必要があります。オフセットを計算するために、エンコーディングの各行を列挙している最初のルート配列 ``[[1、2]、[3]]`` のエンコードされたデータを見ることができます。
 
 .. code-block:: none
 
-    0 - c                                                                - offset for "one"
-    1 - d                                                                - offset for "two"
-    2 - e                                                                - offset for "three"
-    3 - 0000000000000000000000000000000000000000000000000000000000000003 - count for "one"
-    4 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of "one"
-    5 - 0000000000000000000000000000000000000000000000000000000000000003 - count for "two"
-    6 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of "two"
-    7 - 0000000000000000000000000000000000000000000000000000000000000005 - count for "three"
-    8 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of "three"
+    0 - a                                                                - [1, 2]のオフセット
+    1 - b                                                                - [3]のオフセット
+    2 - 0000000000000000000000000000000000000000000000000000000000000002 - [1, 2]の要素数
+    3 - 0000000000000000000000000000000000000000000000000000000000000001 - 1のエンコーディング
+    4 - 0000000000000000000000000000000000000000000000000000000000000002 - 2のエンコーディング
+    5 - 0000000000000000000000000000000000000000000000000000000000000001 - [3]の要素数
+    6 - 0000000000000000000000000000000000000000000000000000000000000003 - 3のエンコーディング
 
-Offset ``c`` points to the start of the content of the string ``"one"`` which is line 3 (96 bytes); thus ``c = 0x0000000000000000000000000000000000000000000000000000000000000060``.
+オフセット ``a`` は、2行目(64バイト)の配列 ``[1、2]`` の始まりを指しています。したがって、``a = 0x0000000000000000000000000000000000000000000000000000000000000040`` です。
 
-Offset ``d`` points to the start of the content of the string ``"two"`` which is line 5 (160 bytes); thus ``d = 0x00000000000000000000000000000000000000000000000000000000000000a0``.
+オフセット ``b`` は、配列 ``[3]`` の5行目(160バイト)の先頭を指します。したがって、``b = 0x00000000000000000000000000000000000000000000000000000000000000a0`` です。
 
-Offset ``e`` points to the start of the content of the string ``"three"`` which is line 7 (224 bytes); thus ``e = 0x00000000000000000000000000000000000000000000000000000000000000e0``.
+そして、2番目のルート配列の埋め込み文字列をエンコードします:
 
+ - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (単語 ``"one"`` の中の文字数)
+ - ``0x6f6e650000000000000000000000000000000000000000000000000000000000`` (単語 ``"one"`` のutf8での表現)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (単語 ``"two"`` の中の文字数)
+ - ``0x74776f0000000000000000000000000000000000000000000000000000000000`` (単語 ``"two"`` のutf8での表現)
+ - ``0x0000000000000000000000000000000000000000000000000000000000000005`` (単語 ``"three"`` の中の文字数)
+ - ``0x7468726565000000000000000000000000000000000000000000000000000000`` (単語 ``"three"`` のutf8での表現)
 
-Note that the encodings of the embedded elements of the root arrays are not dependent on each other and have the same encodings for a function with a signature ``g(string[],uint[][])``.
-
-Then we encode the length of the first root array:
-
- - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (number of elements in the first root array, 2; the elements themselves are ``[1, 2]``  and ``[3]``)
-
-Then we encode the length of the second root array:
-
- - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (number of strings in the second root array, 3; the strings themselves are ``"one"``, ``"two"`` and ``"three"``)
-
-Finally we find the offsets ``f`` and ``g`` for their respective root dynamic arrays ``[[1, 2], [3]]`` and ``["one", "two", "three"]``, and assemble parts in the correct order:
+最初のルート配列と並行して、文字列は動的要素なので、それらのオフセット ``c`` 、``d`` および ``e`` を見つける必要があります:
 
 .. code-block:: none
 
-    0x2289b18c                                                            - function signature
-     0 - f                                                                - offset of [[1, 2], [3]]
-     1 - g                                                                - offset of ["one", "two", "three"]
-     2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [[1, 2], [3]]
-     3 - 0000000000000000000000000000000000000000000000000000000000000040 - offset of [1, 2]
-     4 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset of [3]
-     5 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
-     6 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
-     7 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
-     8 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
-     9 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
-    10 - 0000000000000000000000000000000000000000000000000000000000000003 - count for ["one", "two", "three"]
-    11 - 0000000000000000000000000000000000000000000000000000000000000060 - offset for "one"
-    12 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset for "two"
-    13 - 00000000000000000000000000000000000000000000000000000000000000e0 - offset for "three"
-    14 - 0000000000000000000000000000000000000000000000000000000000000003 - count for "one"
-    15 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of "one"
-    16 - 0000000000000000000000000000000000000000000000000000000000000003 - count for "two"
-    17 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of "two"
-    18 - 0000000000000000000000000000000000000000000000000000000000000005 - count for "three"
-    19 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of "three"
+    0 - c                                                                - "one"のオフセット
+    1 - d                                                                - "two"のオフセット
+    2 - e                                                                - "three"のオフセット
+    3 - 0000000000000000000000000000000000000000000000000000000000000003 - "one"の文字列数
+    4 - 6f6e650000000000000000000000000000000000000000000000000000000000 - "one"のエンコーディング
+    5 - 0000000000000000000000000000000000000000000000000000000000000003 - "two"の文字列数
+    6 - 74776f0000000000000000000000000000000000000000000000000000000000 - "two"のエンコーディング
+    7 - 0000000000000000000000000000000000000000000000000000000000000005 - "three"の文字列数
+    8 - 7468726565000000000000000000000000000000000000000000000000000000 - "three"のエンコーディング
 
-Offset ``f`` points to the start of the content of the array ``[[1, 2], [3]]`` which is line 2 (64 bytes); thus ``f = 0x0000000000000000000000000000000000000000000000000000000000000040``.
+オフセット ``c``　は、文字列 ``"one"`` の3行目(96バイト)の先頭を指します。したがって、``c = 0x0000000000000000000000000000000000000000000000000000000000000060`` です。
 
-Offset ``g`` points to the start of the content of the array ``["one", "two", "three"]`` which is line 10 (320 bytes); thus ``g = 0x0000000000000000000000000000000000000000000000000000000000000140``.
+オフセット ``d`` は、文字列 ``"two"`` の先頭を指します。これは5行目(160バイト)です。したがって、``d = 0x00000000000000000000000000000000000000000000000000000000000000a0`` です。
+
+オフセット ``e`` は、文字列 ``"three"`` の7行目(224バイト)の先頭を指します。したがって、``e = 0x00000000000000000000000000000000000000000000000000000000000000e0`` です。
+
+ルート配列の埋め込み要素のエンコーディングは互いに依存関係がなく、シグネチャが ``g(string[],uint[][])`` の関数に対して同じエンコーディングを持つことに注意してください。
+
+次に、最初のルート配列の長さをエンコードします:
+
+ - ``0x0000000000000000000000000000000000000000000000000000000000000002`` (最初のルート配列の要素数である2。要素自体は ``[1, 2]`` と ``[3]`` です)
+
+次に、2番目のルート配列の長さをエンコードします:
+
+ - ``0x0000000000000000000000000000000000000000000000000000000000000003`` (2番目のルート配列の文字列数である3。文字列自体は ``"one"``、``"two"`` 及び ``"three"`` です)
+
+最後に、それぞれのルート動的配列 ``[[1, 2], [3]]`` と ``["one", "two", "three"]`` に対するオフセット ``f`` と ``g`` を見つけます。そして、正しい順序でこれらのパーツを組み立てます。
+
+.. code-block:: none
+
+    0x2289b18c                                                            - 関数シグニチャ
+     0 - f                                                                - [[1, 2], [3]]のオフセット
+     1 - g                                                                - ["one", "two", "three"]のオフセット
+     2 - 0000000000000000000000000000000000000000000000000000000000000002 - [[1, 2], [3]]の要素数
+     3 - 0000000000000000000000000000000000000000000000000000000000000040 - [1, 2]のオフセット
+     4 - 00000000000000000000000000000000000000000000000000000000000000a0 - [3]のオフセット
+     5 - 0000000000000000000000000000000000000000000000000000000000000002 - [1, 2]の要素数
+     6 - 0000000000000000000000000000000000000000000000000000000000000001 - 1のエンコーディング
+     7 - 0000000000000000000000000000000000000000000000000000000000000002 - 2のエンコーディング
+     8 - 0000000000000000000000000000000000000000000000000000000000000001 - [3]の要素数
+     9 - 0000000000000000000000000000000000000000000000000000000000000003 - 3のエンコーディング
+    10 - 0000000000000000000000000000000000000000000000000000000000000003 - ["one", "two", "three"]の要素数
+    11 - 0000000000000000000000000000000000000000000000000000000000000060 - "one"のエンコーディング
+    12 - 00000000000000000000000000000000000000000000000000000000000000a0 - "two"のオフセット
+    13 - 00000000000000000000000000000000000000000000000000000000000000e0 - "three"のオフセット
+    14 - 0000000000000000000000000000000000000000000000000000000000000003 - "one"の文字列数
+    15 - 6f6e650000000000000000000000000000000000000000000000000000000000 - "one"のエンコーディング
+    16 - 0000000000000000000000000000000000000000000000000000000000000003 - "two"の文字列数
+    17 - 74776f0000000000000000000000000000000000000000000000000000000000 - "two"のエンコーディング
+    18 - 0000000000000000000000000000000000000000000000000000000000000005 - "three"の文字列数
+    19 - 7468726565000000000000000000000000000000000000000000000000000000 - "three"のエンコーディング
+
+オフセット ``f`` は、配列 ``[[1、2]、[3]]`` の2行目(64バイト)の先頭を指します。したがって、``f = 0x0000000000000000000000000000000000000000000000000000000000000040`` です。
+
+オフセット ``g`` は、配列 ``["one"、"two"、"three"]`` の先頭を指します。これは10行目(320バイト)です。したがって、``g = 0x0000000000000000000000000000000000000000000000000000000000000140`` です。
 
 .. _abi_events:
 
 Events
 ======
 
-Events are an abstraction of the Ethereum logging/event-watching protocol. Log entries provide the contract's address, a series of up to four topics and some arbitrary length binary data. Events leverage the existing function ABI in order to interpret this (together with an interface spec) as a properly typed structure.
+イベントはEthereumロギング/イベント監視プロトコルを抽象化したものです。ログエントリは、コントラクトアドレス、最大4つまでの一連のトピック、及び任意の長さのバイナリデータを提供します。イベントは既存の関数ABIを(インターフェース仕様とともに)正しく型付けされた構造体として解釈するために利用します。
 
-Given an event name and series of event parameters, we split them into two sub-series: those which are indexed and those which are not. Those which are indexed, which may number up to 3, are used alongside the Keccak hash of the event signature to form the topics of the log entry. Those which are not indexed form the byte array of the event.
+イベント名と一連のイベントパラメータが与えられたとき、それらを2つのサブシリーズに分けます。それはインデックスされているものとそうでないものです。インデックス付けされたもの(最大3まで)は、イベント署名のKeccakハッシュと一緒に使用されて、ログエントリのトピックを形成します。インデックスが付けられていないものはイベントのバイト配列を形成します。
 
-In effect, a log entry using this ABI is described as:
+実際には、このABIを使用するログエントリは次のように記述されています:
 
-- ``address``: the address of the contract (intrinsically provided by Ethereum);
-- ``topics[0]``: ``keccak(EVENT_NAME+"("+EVENT_ARGS.map(canonical_type_of).join(",")+")")`` (``canonical_type_of`` is a function that simply returns the canonical type of a given argument, e.g. for ``uint indexed foo``, it would return ``uint256``). If the event is declared as ``anonymous`` the ``topics[0]`` is not generated;
-- ``topics[n]``: ``EVENT_INDEXED_ARGS[n - 1]`` (``EVENT_INDEXED_ARGS`` is the series of ``EVENT_ARGS`` that are indexed);
-- ``data``: ``abi_serialise(EVENT_NON_INDEXED_ARGS)`` (``EVENT_NON_INDEXED_ARGS`` is the series of ``EVENT_ARGS`` that are not indexed, ``abi_serialise`` is the ABI serialisation function used for returning a series of typed values from a function, as described above).
+- ``address``: コントラクトアドレス(Ethereumから提供されるものです)
+- ``topics[0]``: ``keccak(EVENT_NAME+"("+EVENT_ARGS.map(canonical_type_of).join(",")+")")`` ( ``canonical_type_of`` は与えられた引数の標準型を単純に返す関数です。 ``uint indexed foo`` の場合は、``uint256`` を返します。) イベントが ``匿名`` として宣言されている場合、``topics[0]`` は生成されません。
+- ``topics[n]``: ``EVENT_INDEXED_ARGS[n - 1]`` ( ``EVENT_INDEXED_ARGS`` はインデックスが付けられた一連の ``EVENT_ARGS`` です)
+- ``data``: ``abi_serialise(EVENT_NON_INDEXED_ARGS)`` ( ``EVENT_NON_INDEXED_ARGS`` はインデックスされていない一連の ``EVENT_ARGS`` 、``abi_serialise`` は上述のように関数から一連の型付き値を返すために使用されるABIシリアライゼーション関数です)
 
-For all fixed-length Solidity types, the ``EVENT_INDEXED_ARGS`` array contains the 32-byte encoded value directly. However, for *types of dynamic length*, which include ``string``, ``bytes``, and arrays, ``EVENT_INDEXED_ARGS`` will contain the *Keccak hash* of the packed encoded value (see :ref:`abi_packed_mode`), rather than the encoded value directly. This allows applications to efficiently query for values of dynamic-length types (by setting the hash of the encoded value as the topic), but leaves applications unable to decode indexed values they have not queried for. For dynamic-length types, application developers face a trade-off between fast search for predetermined values (if the argument is indexed) and legibility of arbitrary values (which requires that the arguments not be indexed). Developers may overcome this tradeoff and achieve both efficient search and arbitrary legibility by defining events with two arguments — one indexed, one not — intended to hold the same value.
+すべての固定長のSolidityの型において、``EVENT_INDEXED_ARGS`` 配列は32バイトでエンコードされた値を直接含みます。しかし、``string``、``bytes``、配列を含む *動的長* 型の場合、``EVENT_INDEXED_ARGS`` はパックされたエンコード値の *Keccakハッシュ* を含みます( :ref:`abi_packed_mode` を参照ください)。これにより、アプリケーションは(エンコードされた値のハッシュをトピックとして設定することによって)動的長の型の値を効率的に照会できますが、照会していない索引付きの値をデコードできません。動的長型の場合、アプリケーション開発者は、事前定義された値の高速検索(引数がインデックス付けされている場合)と任意の値の読みやすさ(引数にインデックスが付けられていないことが必要)との間のトレードオフに直面します。開発者はこのトレードオフを克服し、同じ値を保持することを目的とした2つの引数(1つはインデックス付き、1つはない)でイベントを定義することによって、効率的な検索と任意の読みやすさの両方を実現できます。
 
 .. _abi_json:
 
 JSON
 ====
 
-The JSON format for a contract's interface is given by an array of function and/or event descriptions.
-A function description is a JSON object with the fields:
+コントラクトインターフェースのJSONフォーマットは、関数やイベントのデスクリプションの配列によって指定されます。
 
-- ``type``: ``"function"``, ``"constructor"``, or ``"fallback"`` (the :ref:`unnamed "default" function <fallback-function>`);
-- ``name``: the name of the function;
-- ``inputs``: an array of objects, each of which contains:
+関数の説明はフィールドを持つJSONオブジェクトです:
 
-  * ``name``: the name of the parameter;
-  * ``type``: the canonical type of the parameter (more below).
-  * ``components``: used for tuple types (more below).
+- ``type``: ``"function"``、``"constructor"``、及び ``"fallback"`` ( :ref:`unnamed "default" function <fallback-function>`)
+- ``name``: 関数の名前
+- ``inputs``: それぞれが含むオブジェクトの配列:
 
-- ``outputs``: an array of objects similar to ``inputs``, can be omitted if function doesn't return anything;
-- ``stateMutability``: a string with one of the following values: ``pure`` (:ref:`specified to not read blockchain state <pure-functions>`), ``view`` (:ref:`specified to not modify the blockchain state <view-functions>`), ``nonpayable`` (function does not accept Ether) and ``payable`` (function accepts Ether);
-- ``payable``: ``true`` if function accepts Ether, ``false`` otherwise;
-- ``constant``: ``true`` if function is either ``pure`` or ``view``, ``false`` otherwise.
+  * ``name``: パラメータの名前
+  * ``type``: パラメータの標準型(詳細は後述)
+  * ``components``: タプル型に使用されます(詳細は後述)
 
-``type`` can be omitted, defaulting to ``"function"``, likewise ``payable`` and ``constant`` can be omitted, both defaulting to ``false``.
+- ``outputs``: functionが何も返さない場合は、``input`` に似たオブジェクトの配列を省略することができます。
+- ``stateMutability``: 以下のいずれかの値を持つ文字列: ``pure`` (:ref:`specified to not read blockchain state <pure-functions>`), ``view`` (:ref:`specified to not modify the blockchain state <view-functions>`), ``nonpayable`` (function does not accept Ether) and ``payable`` (function accepts Ether);
+- ``payable``: もし関数がEtherを受け付けるなら、``true``。そうでないなら、``false``。
+- ``constant``: もし関数が ``pure`` か ``view`` のいづれかなら、``true``。そうでないなら、``false``。
 
-Constructor and fallback function never have ``name`` or ``outputs``. Fallback function doesn't have ``inputs`` either.
+``type`` は省略することができ、``"function"`` にデフォルト設定され、同様に ``payable`` と ``constant`` は省略することができ、両方とも ``false`` にデフォルト設定されます。
+
+コンストラクタとフォールバック関数は、``name`` や ``outputs`` などを持つことはありません。フォールバック関数も ``inputs`` を持つこともありません。
 
 .. warning::
-    The fields ``constant`` and ``payable`` are deprecated and will be removed in the future. Instead, the ``stateMutability`` field can be used to determine the same properties.
+     ``constant`` や ``payable`` は今後廃止予定であり、今後取り除かれます。代わりに、``stateMutability`` 領域が今後は同じプロパティを決定するために使うことができます。
 
 .. note::
-    Sending non-zero Ether to non-payable function will revert the transaction.
+    ゼロ以外の額のイーサリアムをnon-payable functionに送金するときは、トランザクションにリバートが発生します。
 
-An event description is a JSON object with fairly similar fields:
+イベントの詳細は似たフィールドを持つJSONオブジェクトです：
 
-- ``type``: always ``"event"``
-- ``name``: the name of the event;
-- ``inputs``: an array of objects, each of which contains:
+- ``type``: 常に ``"event"`` です。
+- ``name``: イベントの名前;
+- ``inputs``: 以下の値を含むオブジェクトの配列：
 
-  * ``name``: the name of the parameter;
-  * ``type``: the canonical type of the parameter (more below).
-  * ``components``: used for tuple types (more below).
-  * ``indexed``: ``true`` if the field is part of the log's topics, ``false`` if it one of the log's data segment.
+  * ``name``: パラメータの名前
+  * ``type``: 標準的なパラメータの型 (詳細は以下を参照してください)
+  * ``components``: タプルに使用する(詳細は以下を参照してください)
+  * ``indexed``: もしフィールドがログトピックスの一部であるなら、``true``。もしログデータセグメントであるなら ``false``
 
-- ``anonymous``: ``true`` if the event was declared as ``anonymous``.
+- ``anonymous``: もしイベントが ``anonymous`` と宣言されていたなら ``true``
 
-For example,
+例えば、
 
 ::
 
@@ -481,7 +491,7 @@ For example,
       bytes32 b;
     }
 
-would result in the JSON:
+これはJSONで表現すると以下のようになります:
 
 .. code-block:: json
 
@@ -503,18 +513,14 @@ would result in the JSON:
 Handling tuple types
 --------------------
 
-Despite that names are intentionally not part of the ABI encoding they do make a lot of sense to be included
-in the JSON to enable displaying it to the end user. The structure is nested in the following way:
+名前(names)はABIエンコーディングの一部にあたるわけではないですが、ABIに含めることには意味があります。これはJSON形式でエンドユーザーに表示できるという点にあります。
+その構造は次のようにネストされています:
 
-An object with members ``name``, ``type`` and potentially ``components`` describes a typed variable.
-The canonical type is determined until a tuple type is reached and the string description up
-to that point is stored in ``type`` prefix with the word ``tuple``, i.e. it will be ``tuple`` followed by
-a sequence of ``[]`` and ``[k]`` with
-integers ``k``. The components of the tuple are then stored in the member ``components``,
-which is of array type and has the same structure as the top-level object except that
-``indexed`` is not allowed there.
+ ``name`` や ``type``、潜在的には ``components`` などと共にオブジェクトは型付きの変数を記述します。
+正規型はタプル型に達するまで決定され、それまでの文字列の説明は ``type`` プレフィックスに ``tuple`` という語で格納されます。つまり、``tuple`` の後に整数の ``k`` を持つ ``[]`` と ``[k]`` のシーケンスが続きます。
+タプルの構成要素はメンバの構成要素に格納されます。これは配列型で、インデックスが許可されていないことを除いて最上位オブジェクトと同じ構造を持ちます。
 
-As an example, the code
+例として、次のコードは
 
 ::
 
@@ -528,7 +534,7 @@ As an example, the code
       function g() public returns (S memory s, T memory t, uint a);
     }
 
-would result in the JSON:
+以下のようなJSONとなります:
 
 .. code-block:: json
 
@@ -593,25 +599,22 @@ would result in the JSON:
 Strict Encoding Mode
 ====================
 
-Strict encoding mode is the mode that leads to exactly the same encoding as defined in the formal specification above.
-This means offsets have to be as small as possible while still not creating overlaps in the data areas and thus no gaps are
-allowed.
+Strict encoding modeは上記の仕様で定義されているものとまったく同じ符号化につながるモードです。
+これは、データ領域にオーバーラップが発生しないようにしながらオフセットをできるだけ小さくする必要があるため、あらゆるギャップが許容されないことを意味します。
 
-Usually, ABI decoders are written in a straightforward way just following offset pointers, but some decoders
-might enforce strict mode. The Solidity ABI decoder currently does not enforce strict mode, but the encoder
-always creates data in strict mode.
+大抵の場合、ABIデコーダはオフセットポインタの直後に書かれていますが、Strict encoding modeを強制するデコーダもあります。 SolidityのABIデコーダは現在Strict encoding modeを強制しませんが、エンコーダは常にStrict encoding modeでデータを作成します。
 
 Non-standard Packed Mode
 ========================
 
-Through ``abi.encodePacked()``, Solidity supports a non-standard packed mode where:
+ ``abi.encodePacked()`` を通じて、SolidityはNon-standard Packed Modeをサポートしています:
 
-- types shorter than 32 bytes are neither zero padded nor sign extended and
-- dynamic types are encoded in-place and without the length.
+- 32バイトより短い型はゼロパディングも符号拡張もされず、
+- 動的型はその場でlengthを持たずにエンコードされます
 
-This packed mode is mainly used for indexed event parameters.
+Non-standard Packed Modeは主にインデックス付きイベントパラメータに使用されます。
 
-As an example, the encoding of ``int16(-1), bytes1(0x42), uint16(0x03), string("Hello, world!")`` results in:
+例として、``int16(-1), bytes1(0x42), uint16(0x03), string("Hello, world!")`` のエンコーディングは次のようになります:
 
 .. code-block:: none
 
@@ -621,18 +624,15 @@ As an example, the encoding of ``int16(-1), bytes1(0x42), uint16(0x03), string("
             ^^^^                           uint16(0x03)
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ string("Hello, world!") without a length field
 
-More specifically:
- - Each value type takes as many bytes as its range has.
- - The encoding of a struct or fixed-size array is the concatenation of the
-   encoding of its members/elements without any separator or padding.
- - Mapping members of structs are ignored as usual.
- - Dynamically-sized types like ``string``, ``bytes`` or ``uint[]`` are encoded without
-   their length field.
+より詳細にいうと:
+ - 各値型は、その範囲と同じ数のバイトを取ります。
+ - 構造体または固定長配列のエンコーディングは、そのメンバー/要素のエンコーディングを連結したもので、区切り文字やパディングはありません。
+ - 構造体のマッピングメンバーは通常どおり認識されません。
+ - ``string``、``bytes``、``uint []`` のような動的型はそれらのlengthフィールドなしでエンコードされます。
 
-In general, the encoding is ambiguous as soon as there are two dynamically-sized elements,
-because of the missing length field.
+一般に、lengthフィールドが欠落しているため、2つの動的な要素があるとすぐに、エンコードはあいまいなものになってしまいます。
 
-If padding is needed, explicit type conversions can be used: ``abi.encodePacked(uint16(0x12)) == hex"0012"``.
+もしパディングが必要であれば、次のような明示的な型変換が使えるでしょう: ``abi.encodePacked(uint16(0x12)) == hex"0012"``
 
-Since packed encoding is not used when calling functions, there is no special support
-for prepending a function selector. Since the encoding is ambiguous, there is no decoding function.
+パックエンコーディングは関数呼び出しの際に使われるものではないため、関数セレクタを準備するためのサポートがあるわけではありません。
+また、エンコーディングが曖昧であるため、復号化のための関数は存在しません。

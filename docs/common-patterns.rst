@@ -10,21 +10,11 @@ Common Patterns
 Withdrawal from Contracts
 *************************
 
-The recommended method of sending funds after an effect
-is using the withdrawal pattern. Although the most intuitive
-method of sending Ether, as a result of an effect, is a
-direct ``transfer`` call, this is not recommended as it
-introduces a potential security risk. You may read
-more about this on the :ref:`security_considerations` page.
+発行の後にファンドを送る方法としてお勧めなのはwithdrawalパターンを使うことです。直接 ``transfer`` コールするのは直感的なEtherの送金方法ですが、潜在的にセキュリティリスクを実装することになるので、推奨しません。これに関しての詳しい情報は、:ref:`security_considerations` を読んでください。
 
-The following is an example of the withdrawal pattern in practice in
-a contract where the goal is to send the most money to the
-contract in order to become the "richest", inspired by
-`King of the Ether <https://www.kingoftheether.com/>`_.
+次の例はあるコントラクトにおける実際のwithdrawalパターンです。このコントラクトの目的は"richest"（ `King of the Ether <https://www.kingoftheether.com/>`_ に触発されました）になるためにたくさんのお金をコントラクトに送ることです。
 
-In the following contract, if you are usurped as the richest,
-you will receive the funds of the person who has gone on to
-become the new richest.
+下記のコントラクトでは、richestの座を奪われたら、新しくrichestになった人のファンドを受け取れます。
 
 ::
 
@@ -61,7 +51,7 @@ become the new richest.
         }
     }
 
-This is as opposed to the more intuitive sending pattern:
+次は逆にもっと直感的な送金パターンです。
 
 ::
 
@@ -89,18 +79,9 @@ This is as opposed to the more intuitive sending pattern:
         }
     }
 
-Notice that, in this example, an attacker could trap the
-contract into an unusable state by causing ``richest`` to be
-the address of a contract that has a fallback function
-which fails (e.g. by using ``revert()`` or by just
-consuming more than the 2300 gas stipend transferred to them). That way,
-whenever ``transfer`` is called to deliver funds to the
-"poisoned" contract, it will fail and thus also ``becomeRichest``
-will fail, with the contract being stuck forever.
+気づいて頂きたいのは、この例では攻撃者が、``richest`` に、失敗する（例えば、``revert()`` を使ったり、2300ガス以上を消費したりすることで）フォールバックファンクションを持ったコントラクトアドレスを入れることで、通常ではない状態をコントラクトに仕込めるということです。こういう方法によって、"毒された"コントラクトにファンドを送るために ``transfer`` が呼ばれると常に失敗し、その結果、``becomeRichest`` が失敗し、コントラクトは永遠に動かなくなります。
 
-In contrast, if you use the "withdraw" pattern from the first example,
-the attacker can only cause his or her own withdraw to fail and not the
-rest of the contract's workings.
+一方、もし最初の例の"withdraw"パターンを使うと、攻撃者は自分のwithdrawの失敗しか起こせないので、他のコントラクトの機能は損なわれません。
 
 .. index:: access;restricting
 
@@ -108,25 +89,15 @@ rest of the contract's workings.
 Restricting Access
 ******************
 
-Restricting access is a common pattern for contracts.
-Note that you can never restrict any human or computer
-from reading the content of your transactions or
-your contract's state. You can make it a bit harder
-by using encryption, but if your contract is supposed
-to read the data, so will everyone else.
+アクセス制限はコントラクトの共通パターンです。他の人やコンピューターがトランザクションやコントラクトのステートを読み取ることを制限することはできないということを覚えておいてください。暗号化で少し難しくはできますが、もしコントラクトがデータを読み込めるなら、他の人もできます。
 
-You can restrict read access to your contract's state
-by **other contracts**. That is actually the default
-unless you declare your state variables ``public``.
+**他のコントラクト** によるあなたのコントラクトのステートへの読み込みのアクセスは制限できます。状態変数を ``public`` で宣言しなければ、これはデフォルトでそうなっています。
 
-Furthermore, you can restrict who can make modifications
-to your contract's state or call your contract's
-functions and this is what this section is about.
+さらに、誰があなたのコントラクトのステートを変更したり、ファンクションを呼び出したりできるか制限することができます。そしてこれがこのセクションで説明することです。
 
 .. index:: function;modifier
 
-The use of **function modifiers** makes these
-restrictions highly readable.
+**function modifiers** を使うことでこれらの制限をとても読みやすくします。
 
 ::
 
@@ -216,9 +187,7 @@ restrictions highly readable.
         }
     }
 
-A more specialised way in which access to function
-calls can be restricted will be discussed
-in the next example.
+どのファンクションコールへのアクセスが制限できるかというもっと特殊な方法は次の例で説明します。
 
 .. index:: state machine
 
@@ -226,59 +195,32 @@ in the next example.
 State Machine
 *************
 
-Contracts often act as a state machine, which means
-that they have certain **stages** in which they behave
-differently or in which different functions can
-be called. A function call often ends a stage
-and transitions the contract into the next stage
-(especially if the contract models **interaction**).
-It is also common that some stages are automatically
-reached at a certain point in **time**.
+コントラクトはよくステートマシンとして振舞います。つまり、異なる挙動をする、もしくは異なるファンクションがコールされるいくつかの **ステージ** を持っています。ファンクションコールはしばしばステージを終わらせ、コントラクトを次のステージへ以降させます（特にコントラクトに **相互作用** があった場合）。いくつかのステージは自動的にあるポイントに **そのうちに** なっていることもよくあります。
 
-An example for this is a blind auction contract which
-starts in the stage "accepting blinded bids", then
-transitions to "revealing bids" which is ended by
-"determine auction outcome".
+この例としてブラインドオークションのコントラクトがあります。このコントラクトでは"ブラインドビッドの承認"ステージから始まり、"オークションの結果"で終わる"ビッドの公開"に移行します。
 
 .. index:: function;modifier
 
-Function modifiers can be used in this situation
-to model the states and guard against
-incorrect usage of the contract.
+このシチュエーションで、ステートを作って、コントラクトの間違った使用法から守るため、ファンクションmodifierを使うことができます。
 
 Example
 =======
 
-In the following example,
-the modifier ``atStage`` ensures that the function can
-only be called at a certain stage.
+次の例では、modifier ``atStage`` はあるステージの時にのみファンクションが呼ばれるようにすることができます。
 
-Automatic timed transitions
-are handled by the modifier ``timeTransitions``, which
-should be used for all functions.
+自動でのある時間での変遷はmodifier ``timeTransitions`` でコントロールすることができ、全てのファンクションで使えます。
 
 .. note::
-    **Modifier Order Matters**.
-    If atStage is combined
-    with timedTransitions, make sure that you mention
-    it after the latter, so that the new stage is
-    taken into account.
+    **modifierの順番は重要です。**
+    atStageがtimedTransitionsと一緒にする場合、timedTransitionsの後にatStageを付けてください。そうすることで新しいステージが考慮されます。
 
-Finally, the modifier ``transitionNext`` can be used
-to automatically go to the next stage when the
-function finishes.
+
+最後に、modifier ``transitionNext`` はファンクションが終わった時に自動的に次のステージに行くために使用できます。
 
 .. note::
-    **Modifier May be Skipped**.
-    This only applies to Solidity before version 0.4.0:
-    Since modifiers are applied by simply replacing
-    code and not by using a function call,
-    the code in the transitionNext modifier
-    can be skipped if the function itself uses
-    return. If you want to do that, make sure
-    to call nextStage manually from those functions.
-    Starting with version 0.4.0, modifier code
-    will run even if the function explicitly returns.
+    **modifierはスキップされるかもしれません。**
+    これはSolidityバージョン0.4.0より前にのみ適用されます。modifierはファンクションコールを使うのではなく、単純にコードを別の所に書くことで適用されているので、もしファンクションがreturnを使っていたら、transitionNext内のコードはスキップされるかもしれません。もしスキップさせたくないのであれば、ファンクション内マニュアルでnextStageを呼び出してください。
+    バージョン0.4.0からはファンクションが明示的にreturnしていても、modifierコードは実行されます。
 
 ::
 

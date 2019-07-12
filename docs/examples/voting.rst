@@ -6,29 +6,13 @@
 Voting
 ******
 
-The following contract is quite complex, but showcases
-a lot of Solidity's features. It implements a voting
-contract. Of course, the main problems of electronic
-voting is how to assign voting rights to the correct
-persons and how to prevent manipulation. We will not
-solve all problems here, but at least we will show
-how delegated voting can be done so that vote counting
-is **automatic and completely transparent** at the
-same time.
+次のコントラクトは割と複雑ですが、Solidityのたくさんの機能を表しています。そのコントラクトは投票を実行しています。もちろん、電子投票のメインの問題はどうやって投票権を正しい人に渡すのかということと、どうやって不正操作を防ぐかです。ここでは全ての問題を解決はしませんが、投票がどの様に行われ、そして **自動かつ公正な** 投票数のカウントの方法をお見せします。
 
-The idea is to create one contract per ballot,
-providing a short name for each option.
-Then the creator of the contract who serves as
-chairperson will give the right to vote to each
-address individually.
+そのアイデアとは投票ごとにコントラクトを作り、オプションごとに短い名前をつけるものです。そしてコントラクトの作成者は管理者として各アドレスに投票の権利を付与します。
 
-The persons behind the addresses can then choose
-to either vote themselves or to delegate their
-vote to a person they trust.
+そのアドレスを持っている人は自分で投票するか、投票の権利を信頼している人に譲渡することもできます。
 
-At the end of the voting time, ``winningProposal()``
-will return the proposal with the largest number
-of votes.
+投票の最後に、``winningProposal()`` は現在の最高投票数を獲得している人を表示します。
 
 ::
 
@@ -182,10 +166,3 @@ of votes.
             winnerName_ = proposals[winningProposal()].name;
         }
     }
-
-
-Possible Improvements
-=====================
-
-Currently, many transactions are needed to assign the rights
-to vote to all participants. Can you think of a better way?

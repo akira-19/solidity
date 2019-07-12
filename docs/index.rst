@@ -6,64 +6,41 @@ Solidity
     :alt: Solidity logo
     :align: center
 
-Solidity is an object-oriented, high-level language for implementing smart
-contracts. Smart contracts are programs which govern the behaviour of accounts
-within the Ethereum state.
+Solidityはスマートコントラクトを扱えるオブジェクト指向の高級言語です。スマートコントラクトはEthereum内でアカウントの動作を制御するものです。
 
-Solidity was influenced by C++, Python and JavaScript and is designed to target
-the Ethereum Virtual Machine (EVM).
+SolidityはC++、Python、JavaScriptを参考に、Ethereum Virtual Machine（EVM）の操作を目的に作られています。
 
-Solidity is statically typed, supports inheritance, libraries and complex
-user-defined types among other features.
+Solidityは静的言語で継承やライブラリ、ユーザーが定義した複雑な型をサポートします。
 
-With Solidity you can create contracts for uses such as voting, crowdfunding, blind auctions,
-and multi-signature wallets.
+Solidityで投票やクラウドファンディング、匿名のオークションやマルチシグウォレットを作成することができます。
 
-When deploying contracts, you should use the latest released version of Solidity. This is because breaking changes as well as new features and bug fixes are introduced regularly. We currently use a 0.x version number [to indicate this fast pace of change](https://semver.org/#spec-item-4).
+コントラクトをデプロイする際には最新バージョンのSolidityを使うことが推奨されています。これは新しい機能やバグ修正に加えbreaking changesが定期的に導入されているためです。現在0.xバージョンです[これはこの早い変化を示しています。](https://semver.org/#spec-item-4)
 
 Language Documentation
 ----------------------
 
-If you are new to the concept of smart contracts we recommend you start with
-:ref:`an example smart contract <simple-smart-contract>` written
-in Solidity. When you are ready for more detail, we recommend you read the
-:doc:`"Solidity by Example" <solidity-by-example>` and :doc:`"Solidity in Depth" <solidity-in-depth>` sections to learn the core concepts of the language.
-
-For further reading, try :ref:`the basics of blockchains <blockchain-basics>`
-and details of the :ref:`Ethereum Virtual Machine <the-ethereum-virtual-machine>`.
+もしスマートコントラクトという概念が初めてなのであればSolidityで書かれた :ref:`スマートコントラクトの例 <simple-smart-contract>` を推奨します。もっと詳細な情報が欲しい場合は :doc:`"Solidity by Example" <solidity-by-example>` と :doc:`"Solidity in Depth" <solidity-in-depth>` セクションを読むことをお勧めします。
 
 .. hint::
-  You can always try out code examples in your browser with the
-  `Remix IDE <https://remix.ethereum.org>`_. Remix is a web browser based IDE
-  that allows you to write Solidity smart contracts, then deploy and run the
-  smart contracts. It can take a while to load, so please be patient.
+    `Remix IDE <https://remix.ethereum.org>`_ でいつでもサンプルコードを試すことができます。RemixはブラウザベースのIDEでSolidityでスマートコントラクトが書け、デプロイしてスマートコントラクトを動かすことができます。しばらく時間がかかる場合もありますが、気長にお待ちください。
 
 .. warning::
-    As humans write software, it can have bugs. You should follow established
-    software development best-practices when writing your smart contracts, this
-    includes code review, testing, audits, and correctness proofs. Smart contract
-    users are sometimes more confident with code than their authors, and
-    blockchains and smart contracts have their own unique issues to
-    watch out for, so before working on production code, make sure you read the
-    :ref:`security_considerations` section.
+    人間がコードを書いていますのでバグが発生する可能性があります。スマートコントラクトを書く際にはソフトウェア開発のベストプラクティスを参照することをお勧めします。このベストプラクティスはコードレビュー、テスト、audits、correctness proofsを含んでいます。スマートコントラクトのユーザーは時に作成者よりコードそのものを信用します。そしてブロックチェーンとスマートコントラクトはそれぞれ注意すべき特有の問題を抱えているため、production codeに取り掛かる前に :ref:`security_considerations` セクションを参照してください。
 
-If you have any questions, you can try searching for answers or asking on the
-`Ethereum Stackexchange <https://ethereum.stackexchange.com/>`_, or our `gitter channel <https://gitter.im/ethereum/solidity/>`_.
+もし疑問があれば、`Ethereum Stackexchange <https://ethereum.stackexchange.com/>`_ か `gitter channel <https://gitter.im/ethereum/solidity/>`_ で検索もしくは質問してください。
 
-Ideas for improving Solidity or this documentation are always welcome, read our :doc:`contributors guide <contributing>` for more details.
+Solidityやこのドキュメントをより良くするアイデアはいつでも大歓迎です。詳細は :doc:`contributors guide <contributing>` を参照ください。
 
 Translations
 ------------
 
-Community volunteers help translate this documentation into several languages.
-They have varying degrees of completeness and up-to-dateness. The English
-version stands as a reference.
+コミュニティのボランティアがこのドキュメントの翻訳をいくつかの言語で行なっています。進捗具合は言語によって異なりますが、英語のバージョンがリファレンスとして使われています。
 
-* `Simplified Chinese <http://solidity-cn.readthedocs.io>`_ (in progress)
-* `Spanish <https://solidity-es.readthedocs.io>`_
-* `Russian <https://github.com/ethereum/wiki/wiki/%5BRussian%5D-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity>`_ (rather outdated)
-* `Korean <http://solidity-kr.readthedocs.io>`_ (in progress)
-* `French <http://solidity-fr.readthedocs.io>`_ (in progress)
+* `中国語 <http://solidity-cn.readthedocs.io>`_ (in progress)
+* `スペイン語 <https://solidity-es.readthedocs.io>`_
+* `ロシア語 <https://github.com/ethereum/wiki/wiki/%5BRussian%5D-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity>`_ (rather outdated)
+* `韓国語 <http://solidity-kr.readthedocs.io>`_ (in progress)
+* `フランス語 <http://solidity-fr.readthedocs.io>`_ (in progress)
 
 Contents
 ========

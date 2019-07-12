@@ -6,38 +6,20 @@
 Events
 ******
 
-Solidity events give an abstraction on top of the EVM's logging functionality.
-Applications can subscribe and listen to these events through the RPC interface of an Ethereum client.
+SolidityのイベントでEVMのログ機能からデータを抽出します。アプリケーションはEthereumクライアントのRPCインターフェースを通じてイベントをsubscribeします。
 
-Events are inheritable members of contracts. When you call them, they cause the
-arguments to be stored in the transaction's log - a special data structure
-in the blockchain. These logs are associated with the address of the contract,
-are incorporated into the blockchain, and stay there as long as a block is
-accessible (forever as of the Frontier and Homestead releases, but this might
-change with Serenity). The Log and its event data is not accessible from within
-contracts (not even from the contract that created them).
+イベントは継承可能なコントラクトのメンバです。イベントを呼び出すと、トランザクションのログ内に引数を保存します（ブロックチェーン上の特別なデータ構造です）。これらのログはコントラクトアドレスに結びつき、ブロックにアクセスできる限りそこに保存されます（FrontierとHomesteadからは永久にアクセス出来ますが、Serenityで変わる可能性があります）。ログとイベントデータはコントラクトからはアクセス出来ません（そのイベントを作ったコントラクトからもです）。
 
-It is possible to request a simple payment verification (SPV) for logs, so if
-an external entity supplies a contract with such a verification, it can check
-that the log actually exists inside the blockchain. You have to supply block headers
-because the contract can only see the last 256 block hashes.
+simple payment verification (SPV)にログをリクエスト出来るので、もし外部からその様なverificationでコントラクトを作った場合、そのSPVからその様なログが実際にブロックチェーン上に存在するかチェックすることができます。コントラクトは直近256ブロック分のハッシュしか見れないので、ブロックヘッダを渡す必要があります。
 
-You can add the attribute ``indexed`` to up to three parameters which adds them
-to a special data structure known as :ref:`"topics" <abi_events>` instead of
-the data part of the log. If you use arrays (including ``string`` and ``bytes``)
-as indexed arguments, its Keccak-256 hash is stored as a topic instead, this is
-because a topic can only hold a single word (32 bytes).
+最大3つのパラメータに ``indexed`` 属性を追加することができます。それはログのデータの代わりに :ref:`"topics" <abi_events>` で知られる特別なデータ構造を追加します。インデックスされた引数として配列（``string`` と ``bytes``を含む）を使う場合、Keccak-256ハッシュをtopicとして代わりに保存します。なぜならtopic一つの単語（32バイト）しか保存できないからです。
 
-All parameters without the ``indexed`` attribute are :ref:`ABI-encoded <ABI>`
-into the data part of the log.
+全ての ``indexed`` 属性が付いていないパラメータはログのデータ部に :ref:`ABI-encoded <ABI>` されます。
+
+topicを使うとイベントを検索することができます。例えば、あるイベントに関してブロックシーケンスをフィルターできます。イベントから出たコントラクトアドレスでもイベントをフィルターできます。
 
-Topics allow you to search for events, for example when filtering a sequence of
-blocks for certain events. You can also filter events by the address of the
-contract that emitted the event.
-
-For example, the code below uses the web3.js ``subscribe("logs")``
-`method <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs>`_ to filter
-logs that match a topic with a certain address value:
+例えば以下のコードではあるアドレス値でtopicにマッチするログをフィルターするためにweb3.js ``subscribe("logs")``
+`method <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs>`_ が使われています。
 
 .. code-block:: javascript
 
@@ -56,10 +38,7 @@ logs that match a topic with a certain address value:
         .on("changed", function (log) {
     });
 
-
-The hash of the signature of the event is one of the topics, except if you
-declared the event with the ``anonymous`` specifier. This means that it is
-not possible to filter for specific anonymous events by name.
+イベントを ``anonymous`` で宣言していなければ、イベントの署名のハッシュはtopicの1つとなります。つまり、特定のanonymousイベントに関しては名前でフィルターできません。
 
 ::
 
@@ -82,7 +61,7 @@ not possible to filter for specific anonymous events by name.
         }
     }
 
-The use in the JavaScript API is as follows:
+下記はJavaScript APIにおける使用例です。
 
 ::
 
@@ -107,7 +86,7 @@ The use in the JavaScript API is as follows:
             console.log(result);
     });
 
-The output of the above looks like the following (trimmed):
+上記の出力は以下の様になります（トリムされています）。
 
 .. code-block:: json
 
@@ -128,11 +107,7 @@ The output of the above looks like the following (trimmed):
 Low-Level Interface to Logs
 ===========================
 
-It is also possible to access the low-level interface to the logging
-mechanism via the functions ``log0``, ``log1``, ``log2``, ``log3`` and ``log4``.
-``logi`` takes ``i + 1`` parameter of type ``bytes32``, where the first
-argument will be used for the data part of the log and the others
-as topics. The event call above can be performed in the same way as
+``log0``、``log1``、``log2``、``log3``、``log4`` ファンクションを使うことで、ログ機能の低レベルインターフェースにアクセスすることが可能です。``logi`` は ``bytes32`` 型の ``i + 1`` パラメータをとります。最初の引数はログのデータ部として使用され、他はtopicとして使用されます。上記のイベントコールは下記と同じ様に実行されます。
 
 ::
 
@@ -150,8 +125,7 @@ as topics. The event call above can be performed in the same way as
         }
     }
 
-where the long hexadecimal number is equal to
-``keccak256("Deposit(address,bytes32,uint256)")``, the signature of the event.
+ここで、長い16進数の値はイベントの署名である ``keccak256("Deposit(address,bytes32,uint256)")`` と等しいです。
 
 Additional Resources for Understanding Events
 ==============================================

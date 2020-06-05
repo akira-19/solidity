@@ -6,7 +6,7 @@
 Visibility and Getters
 **********************
 
-Solidityは2しゅるのファンクションコール（実際のEVMコールを作らないinternalのもの（"message call"とも呼ばれます）とEVMコールを作るexternalのもの）があるので、ファンクションと状態変数に対して4種類の可視性があります。
+Solidityは2種類のファンクションコール（実際のEVMコールを作らないinternalのもの（"message call"とも呼ばれます）とEVMコールを作るexternalのもの）があるので、ファンクションと状態変数に対して4種類の可視性があります。
 
 ファンクションは ``external``、``public``、``internal``、``private`` のいずれかを指定しなければいけません。状態変数には、``external`` は使えません。
 
